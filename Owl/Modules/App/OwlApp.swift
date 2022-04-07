@@ -11,11 +11,17 @@ import ComposableArchitecture
 @main
 struct OwlApp: App {
 
+    static let store = Store<AppState, AppAction>(
+        initialState: AppState(),
+        reducer: appReducer,
+        environment: .live
+    )
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
         WindowGroup {
-            AppView(store: self.appDelegate.store)
+            AppView(store: OwlApp.store)
         }
     }
 }

@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 // MARK: - State
 
-struct UserSettings: Codable, Equatable {
+struct AppDelegateState: Codable, Equatable {
 
 }
 
@@ -24,34 +24,35 @@ enum AppDelegateAction: Equatable {
 // MARK: - Environment
 
 struct AppDelegateEnvironment {
-
+    let firebaseClient: FirebaseClient
 }
 
 // MARK: - Reducer
 
-/*
 let appDelegateReducer = Reducer<
-    UserSettings, AppDelegateAction, AppDelegateEnvironment
-> { state, action, environment in
+    AppDelegateState, AppDelegateAction, AppDelegateEnvironment
+> { _, action, environment in
     switch action {
     case .didFinishLaunching:
-        return .none
+        return .merge(
+            environment.firebaseClient.setup().fireAndForget()
+        )
+
     case .didRegisterForRemoteNotifications:
         return .none
     }
 }
-*/
 
 // MARK: - Implementation
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
-    let store = Store(
-        initialState: .init(),
-        reducer: appReducer,
-        environment: .init()
+
+    lazy var appDelegateStore = OwlApp.store.scope(
+        state: \AppState.appDelegate,
+        action: AppAction.appDelegate
     )
     lazy var viewStore = ViewStore(
-        store.scope(state: { _ in () }),
+        appDelegateStore,
         removeDuplicates: ==
     )
 
@@ -59,7 +60,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        viewStore.send(.appDelegate(.didFinishLaunching))
+        viewStore.send(.didFinishLaunching)
         return true
     }
 
@@ -67,7 +68,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
-        viewStore.send(.appDelegate(.didRegisterForRemoteNotifications(.success(deviceToken))))
+        viewStore.send(.didRegisterForRemoteNotifications(.success(deviceToken)))
     }
 
     func application(
@@ -75,7 +76,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         didFailToRegisterForRemoteNotificationsWithError error: Error
     ) {
         viewStore.send(
-            .appDelegate(.didRegisterForRemoteNotifications(.failure(error as NSError)))
+            .didRegisterForRemoteNotifications(.failure(error as NSError))
         )
     }
 }

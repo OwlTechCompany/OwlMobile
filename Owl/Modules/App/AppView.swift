@@ -12,6 +12,7 @@ import SwiftUINavigation
 // MARK: - State
 
 struct AppState: Equatable {
+    var appDelegate: AppDelegateState = AppDelegateState()
     var login: LoginState?
     var main: MainState?
 
@@ -35,18 +36,46 @@ enum AppAction: Equatable {
 // MARK: - Environment
 
 struct AppEnvironment {
+    var firebaseClient: FirebaseClient
+}
+
+extension AppEnvironment {
+    static let live = AppEnvironment(
+        firebaseClient: .live
+    )
+}
+
+extension AppEnvironment {
+    var appDelegate: AppDelegateEnvironment {
+        AppDelegateEnvironment(
+            firebaseClient: firebaseClient
+        )
+    }
+
+    var login: LoginEnvironment {
+        LoginEnvironment(
+            firebaseClient: firebaseClient
+        )
+    }
 
 }
 
 // MARK: - Reducer
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
+    appDelegateReducer
+        .pullback(
+            state: \AppState.appDelegate,
+            action: /AppAction.appDelegate,
+            environment: { $0.appDelegate }
+        ),
+
     loginReducer
         .optional()
         .pullback(
             state: \AppState.login,
             action: /AppAction.login,
-            environment: { _ in LoginEnvironment() }
+            environment: { $0.login }
         ),
 
     mainReducer
@@ -59,6 +88,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
 
     appReducerCore
 )
+.debug()
 
 let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
     switch action {
@@ -87,9 +117,8 @@ struct AppView: View {
     @ObservedObject var viewStore: ViewStore<ViewState, AppAction>
 
     struct ViewState: Equatable {
-        init(state: AppState) {
 
-        }
+        init(state: AppState) { }
     }
 
     init(store: Store<AppState, AppAction>) {

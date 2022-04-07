@@ -11,29 +11,52 @@ import ComposableArchitecture
 // MARK: - State
 
 struct LoginState: Equatable {
+    var phoneNumber: String
 
+    init() {
+        phoneNumber = "+380931314850"
+    }
 }
 
 // MARK: - Action
 
 enum LoginAction: Equatable {
+    case phoneNumberChanged(String)
     case loginSuccess
     case sendPhoneNumber
+    case verificationIDReceived(Result<String, NSError>)
 }
 
 // MARK: - Environment
 
 struct LoginEnvironment {
-
+    let firebaseClient: FirebaseClient
 }
 
 // MARK: - Reducer
 
-let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { _, action, _ in
+let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, action, environment in
     switch action {
+    case let .phoneNumberChanged(newPhoneNumber):
+        state.phoneNumber = newPhoneNumber
+        return .none
+
     case .loginSuccess:
         return .none
+
     case .sendPhoneNumber:
+        return environment.firebaseClient
+            .verifyPhoneNumber(state.phoneNumber)
+            .mapError { $0 as NSError }
+            .catchToEffect(LoginAction.verificationIDReceived)
+            .eraseToEffect()
+
+    case let .verificationIDReceived(.success(verificationId)):
+        print(verificationId)
+        return .none
+
+    case let .verificationIDReceived(.failure(error)):
+        print(error.localizedDescription)
         return .none
     }
 }
@@ -47,15 +70,19 @@ struct LoginView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                Text("Hello, world!")
-                    .foregroundColor(Colors.test.swiftUIColor)
-                    .padding()
+                TextField(
+                    "Phone number",
+                    text: viewStore.binding(
+                        get: \.phoneNumber,
+                        send: LoginAction.phoneNumberChanged
+                    )
+                )
                 Button(
                     action: {
-                        viewStore.send(.loginSuccess)
+                        viewStore.send(.sendPhoneNumber)
                     },
                     label: {
-                        Text("Some")
+                        Text("Next")
                     }
                 )
             }
@@ -68,7 +95,7 @@ struct LoginView_Previews: PreviewProvider {
         LoginView(store: Store(
             initialState: .init(),
             reducer: loginReducer,
-            environment: LoginEnvironment()
+            environment: LoginEnvironment(firebaseClient: .live)
         ))
     }
 }
