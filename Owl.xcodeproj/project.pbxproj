@@ -9,16 +9,31 @@
 /* Begin PBXBuildFile section */
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* ContentView.swift */; };
-		5DA8A75F27FF260900C2ECBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Assets.xcassets */; };
+		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
 		5DA8A76227FF260900C2ECBA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */; };
+		5DA8A76A27FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76927FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		5DA8A76C27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76B27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community */; };
+		5DA8A76E27FF2A8B00C2ECBA /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76D27FF2A8B00C2ECBA /* FirebaseFirestoreCombine-Community */; };
+		5DA8A77027FF2A8B00C2ECBA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76F27FF2A8B00C2ECBA /* FirebaseMessaging */; };
+		5DA8A77227FF2A8B00C2ECBA /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */; };
+		5DA8A77527FF2B1100C2ECBA /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */; };
+		5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */; };
+		5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */; };
+		5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A77E27FF33E100C2ECBA /* Assets.swift */; };
+		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04636015FACA7B079E7B9551 /* Pods_Owl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Owl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug.xcconfig"; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		5DA8A75E27FF260900C2ECBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5DA8A75E27FF260900C2ECBA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,17 +41,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DA8A77027FF2A8B00C2ECBA /* FirebaseMessaging in Frameworks */,
+				5DA8A76E27FF2A8B00C2ECBA /* FirebaseFirestoreCombine-Community in Frameworks */,
+				5DA8A77527FF2B1100C2ECBA /* ComposableArchitecture in Frameworks */,
+				5DA8A77227FF2A8B00C2ECBA /* FirebaseStorageCombine-Community in Frameworks */,
+				5DA8A76A27FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */,
+				5DA8A76C27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community in Frameworks */,
+				DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		45F6E27609A8709BA752DE73 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */,
+				E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		5DA8A74E27FF260700C2ECBA = {
 			isa = PBXGroup;
 			children = (
 				5DA8A75927FF260700C2ECBA /* Owl */,
 				5DA8A75827FF260700C2ECBA /* Products */,
+				45F6E27609A8709BA752DE73 /* Pods */,
+				D3080E831299946BDE92AEDD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,7 +87,8 @@
 			children = (
 				5DA8A75A27FF260700C2ECBA /* OwlApp.swift */,
 				5DA8A75C27FF260700C2ECBA /* ContentView.swift */,
-				5DA8A75E27FF260900C2ECBA /* Assets.xcassets */,
+				5DA8A77D27FF33D300C2ECBA /* Generated */,
+				5DA8A77C27FF313800C2ECBA /* Resources */,
 				5DA8A76027FF260900C2ECBA /* Preview Content */,
 			);
 			path = Owl;
@@ -67,6 +102,31 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		5DA8A77C27FF313800C2ECBA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5DA8A75E27FF260900C2ECBA /* Images.xcassets */,
+				5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5DA8A77D27FF33D300C2ECBA /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				5DA8A77E27FF33E100C2ECBA /* Assets.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		D3080E831299946BDE92AEDD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				04636015FACA7B079E7B9551 /* Pods_Owl.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,15 +134,27 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5DA8A76527FF260900C2ECBA /* Build configuration list for PBXNativeTarget "Owl" */;
 			buildPhases = (
+				1A24762DE6BC95EED44DEDFF /* [CP] Check Pods Manifest.lock */,
+				5DA8A77927FF2FC900C2ECBA /* SwiftGen */,
 				5DA8A75327FF260700C2ECBA /* Sources */,
 				5DA8A75427FF260700C2ECBA /* Frameworks */,
 				5DA8A75527FF260700C2ECBA /* Resources */,
+				5DA8A78027FF34F800C2ECBA /* SwiftLint */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Owl;
+			packageProductDependencies = (
+				5DA8A76927FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport */,
+				5DA8A76B27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community */,
+				5DA8A76D27FF2A8B00C2ECBA /* FirebaseFirestoreCombine-Community */,
+				5DA8A76F27FF2A8B00C2ECBA /* FirebaseMessaging */,
+				5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */,
+				5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */,
+				5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */,
+			);
 			productName = Owl;
 			productReference = 5DA8A75727FF260700C2ECBA /* Owl.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +183,11 @@
 				Base,
 			);
 			mainGroup = 5DA8A74E27FF260700C2ECBA;
+			packageReferences = (
+				5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
+			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,12 +202,74 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */,
 				5DA8A76227FF260900C2ECBA /* Preview Assets.xcassets in Resources */,
-				5DA8A75F27FF260900C2ECBA /* Assets.xcassets in Resources */,
+				5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1A24762DE6BC95EED44DEDFF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Owl-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5DA8A77927FF2FC900C2ECBA /* SwiftGen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftGen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
+		};
+		5DA8A78027FF34F800C2ECBA /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5DA8A75327FF260700C2ECBA /* Sources */ = {
@@ -139,6 +278,7 @@
 			files = (
 				5DA8A75D27FF260700C2ECBA /* ContentView.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
+				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +401,7 @@
 		};
 		5DA8A76627FF260900C2ECBA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -275,6 +416,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -284,12 +426,13 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		5DA8A76727FF260900C2ECBA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -304,6 +447,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -313,7 +457,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -339,6 +483,71 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.34.0;
+			};
+		};
+		5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DA8A76927FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		5DA8A76B27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		5DA8A76D27FF2A8B00C2ECBA /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		5DA8A76F27FF2A8B00C2ECBA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+		5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DA8A74F27FF260700C2ECBA /* Project object */;
 }

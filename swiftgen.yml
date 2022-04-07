@@ -1,0 +1,7 @@
+xcassets:
+  inputs:
+    - Owl/Resources/Images.xcassets
+    - Owl/Resources/Colors.xcassets
+  outputs:
+    - templateName: swift5
+      output: Owl/Generated/Assets.swift
