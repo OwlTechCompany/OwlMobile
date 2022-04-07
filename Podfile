@@ -10,3 +10,13 @@ target 'Owl' do
   pod 'SwiftLint'
 
 end
+
+post_install do |installer|
+  # XCode 12 drop support for iOS 8, keep this until fixed in CocoaPods
+  # source: https://www.jessesquires.com/blog/2020/07/20/xcode-12-drops-support-for-ios-8-fix-for-cocoapods/
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
+  end
+end
