@@ -20,6 +20,7 @@
 		5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */; };
 		5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */; };
 		5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A77E27FF33E100C2ECBA /* Assets.swift */; };
+		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftGen+Ext.swift"; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 			children = (
 				5DA8A75A27FF260700C2ECBA /* OwlApp.swift */,
 				5DA8A75C27FF260700C2ECBA /* ContentView.swift */,
+				5F9F4E3827FF463800915572 /* Extensions */,
 				5DA8A77D27FF33D300C2ECBA /* Generated */,
 				5DA8A77C27FF313800C2ECBA /* Resources */,
 				5DA8A76027FF260900C2ECBA /* Preview Content */,
@@ -117,6 +120,14 @@
 				5DA8A77E27FF33E100C2ECBA /* Assets.swift */,
 			);
 			path = Generated;
+			sourceTree = "<group>";
+		};
+		5F9F4E3827FF463800915572 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D3080E831299946BDE92AEDD /* Frameworks */ = {
@@ -276,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* ContentView.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
