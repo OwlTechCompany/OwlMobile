@@ -13,7 +13,6 @@ xcuserdata
 *.moved-aside
 DerivedData
 *.xcuserstate
-Owl/Generated/Assets.swift
 
 ### Objective-C ###
 # Xcode
