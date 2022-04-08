@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5D35EC7A27FF7A0B00624717 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */; };
 		5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */; };
+		5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8028001E1100624717 /* PushNotificationClient.swift */; };
+		5D35EC832800246900624717 /* AuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC822800246900624717 /* AuthClient.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* LoginView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -36,6 +38,8 @@
 		5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		5D35EC7E27FF846200624717 /* Owl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Owl.entitlements; sourceTree = "<group>"; };
 		5D35EC7F27FF8E5100624717 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5D35EC8028001E1100624717 /* PushNotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationClient.swift; sourceTree = "<group>"; };
+		5D35EC822800246900624717 /* AuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthClient.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
+				5D35EC822800246900624717 /* AuthClient.swift */,
+				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -348,10 +354,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* LoginView.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
+				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,

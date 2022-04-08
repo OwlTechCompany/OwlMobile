@@ -5,8 +5,10 @@
 //  Created by Denys Danyliuk on 07.04.2022.
 //
 
-import SwiftUI
+import UIKit
 import ComposableArchitecture
+import Firebase
+import FirebaseAuth
 
 // MARK: - State
 
@@ -19,12 +21,33 @@ struct AppDelegateState: Codable, Equatable {
 enum AppDelegateAction: Equatable {
     case didFinishLaunching
     case didRegisterForRemoteNotifications(Result<Data, NSError>)
+    case didReceiveRemoteNotification(
+        _ userInfo: [AnyHashable: Any],
+        _ completionHandler: (UIBackgroundFetchResult) -> Void
+    )
+
+    static func == (lhs: AppDelegateAction, rhs: AppDelegateAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.didFinishLaunching, .didFinishLaunching):
+            return true
+
+        case let (.didRegisterForRemoteNotifications(lhs), .didRegisterForRemoteNotifications(rhs)):
+            return lhs == rhs
+
+        case let (.didReceiveRemoteNotification(lhs, _), .didReceiveRemoteNotification(rhs, _)):
+            return lhs.keys == rhs.keys
+
+        default:
+            return false
+        }
+    }
 }
 
 // MARK: - Environment
 
 struct AppDelegateEnvironment {
     let firebaseClient: FirebaseClient
+    let authClient: AuthClient
 }
 
 // MARK: - Reducer
@@ -38,8 +61,22 @@ let appDelegateReducer = Reducer<
             environment.firebaseClient.setup().fireAndForget()
         )
 
-    case .didRegisterForRemoteNotifications:
+    case let .didRegisterForRemoteNotifications(.success(data)):
+        return .merge(
+            environment.authClient
+                .setAPNSToken(data)
+                .fireAndForget()
+        )
+
+    case let .didRegisterForRemoteNotifications(.failure(error)):
         return .none
+
+    case let .didReceiveRemoteNotification(userInfo, completionHandler):
+        return .merge(
+            environment.authClient
+                .canHandleNotification(userInfo, completionHandler)
+                .fireAndForget()
+        )
     }
 }
 
@@ -78,5 +115,13 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         viewStore.send(
             .didRegisterForRemoteNotifications(.failure(error as NSError))
         )
+    }
+
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        viewStore.send(.didReceiveRemoteNotification(userInfo, completionHandler))
     }
 }

@@ -30,7 +30,7 @@ enum LoginAction: Equatable {
 // MARK: - Environment
 
 struct LoginEnvironment {
-    let firebaseClient: FirebaseClient
+    let authClient: AuthClient
 }
 
 // MARK: - Reducer
@@ -45,7 +45,7 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
 
     case .sendPhoneNumber:
-        return environment.firebaseClient
+        return environment.authClient
             .verifyPhoneNumber(state.phoneNumber)
             .mapError { $0 as NSError }
             .catchToEffect(LoginAction.verificationIDReceived)
@@ -86,6 +86,7 @@ struct LoginView: View {
                     }
                 )
             }
+            .padding()
         }
     }
 }
@@ -95,7 +96,7 @@ struct LoginView_Previews: PreviewProvider {
         LoginView(store: Store(
             initialState: .init(),
             reducer: loginReducer,
-            environment: LoginEnvironment(firebaseClient: .live)
+            environment: AppEnvironment.live.login
         ))
     }
 }
