@@ -11,7 +11,7 @@ import ComposableArchitecture
 // MARK: - State
 
 struct LoginState: Equatable {
-    var phoneNumber: String
+    @BindableState var phoneNumber: String
 
     init() {
         phoneNumber = "+380931314850"
@@ -20,11 +20,12 @@ struct LoginState: Equatable {
 
 // MARK: - Action
 
-enum LoginAction: Equatable {
-    case phoneNumberChanged(String)
+enum LoginAction: Equatable, BindableAction {
     case loginSuccess
     case sendPhoneNumber
     case verificationIDReceived(Result<String, NSError>)
+
+    case binding(BindingAction<LoginState>)
 }
 
 // MARK: - Environment
@@ -37,10 +38,6 @@ struct LoginEnvironment {
 
 let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, action, environment in
     switch action {
-    case let .phoneNumberChanged(newPhoneNumber):
-        state.phoneNumber = newPhoneNumber
-        return .none
-
     case .loginSuccess:
         return .none
 
@@ -58,8 +55,15 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
     case let .verificationIDReceived(.failure(error)):
         print(error.localizedDescription)
         return .none
+
+    case .binding(\.$phoneNumber):
+        return .none
+
+    case .binding:
+        return .none
     }
-}
+}.binding()
+
 
 // MARK: - View
 
@@ -70,13 +74,7 @@ struct LoginView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                TextField(
-                    "Phone number",
-                    text: viewStore.binding(
-                        get: \.phoneNumber,
-                        send: LoginAction.phoneNumberChanged
-                    )
-                )
+                TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
                 Button(
                     action: {
                         viewStore.send(.sendPhoneNumber)
