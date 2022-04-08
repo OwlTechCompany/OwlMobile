@@ -91,8 +91,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         ),
 
     appReducerCore
-)
-.debug()
+).debug()
 
 let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
     switch action {
@@ -136,9 +135,9 @@ struct AppView: View {
                 state: \.login,
                 action: AppAction.login
             ),
-            then: { mainStore in
+            then: { loginStore in
                 NavigationView {
-                    LoginView(store: mainStore)
+                    OnboardingView(store: loginStore)
                         .navigationTitle("Login")
                 }
                 .navigationViewStyle(StackNavigationViewStyle())

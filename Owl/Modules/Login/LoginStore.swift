@@ -1,11 +1,10 @@
 //
-//  LoginView.swift
+//  LoginStore.swift
 //  Owl
 //
-//  Created by Anastasia Holovash on 07.04.2022.
+//  Created by Denys Danyliuk on 08.04.2022.
 //
 
-import SwiftUI
 import ComposableArchitecture
 
 // MARK: - State
@@ -42,6 +41,7 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
 
     case .sendPhoneNumber:
+        print(state.phoneNumber)
         return environment.authClient
             .verifyPhoneNumber(state.phoneNumber)
             .mapError { $0 as NSError }
@@ -57,6 +57,8 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
 
     case .binding(\.$phoneNumber):
+        print("Validating")
+        print(state.phoneNumber)
         return .none
 
     case .binding:
@@ -64,37 +66,3 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
     }
 }.binding()
 
-
-// MARK: - View
-
-struct LoginView: View {
-
-    var store: Store<LoginState, LoginAction>
-
-    var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack {
-                TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
-                Button(
-                    action: {
-                        viewStore.send(.sendPhoneNumber)
-                    },
-                    label: {
-                        Text("Next")
-                    }
-                )
-            }
-            .padding()
-        }
-    }
-}
-
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView(store: Store(
-            initialState: .init(),
-            reducer: loginReducer,
-            environment: AppEnvironment.live.login
-        ))
-    }
-}

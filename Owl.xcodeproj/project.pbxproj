@@ -12,7 +12,7 @@
 		5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8028001E1100624717 /* PushNotificationClient.swift */; };
 		5D35EC832800246900624717 /* AuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC822800246900624717 /* AuthClient.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
-		5DA8A75D27FF260700C2ECBA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* LoginView.swift */; };
+		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
 		5DA8A76227FF260900C2ECBA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */; };
 		5DA8A76A27FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76927FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -28,6 +28,8 @@
 		5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3C27FF4CBA00915572 /* AppView.swift */; };
 		5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4327FF502F00915572 /* AppDelegate.swift */; };
 		5F9F4E4727FF52C100915572 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4627FF52C100915572 /* MainView.swift */; };
+		5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E482800434B00915572 /* OnboardingView.swift */; };
+		5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4B280056E900915572 /* LoginStore.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +44,7 @@
 		5D35EC822800246900624717 /* AuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthClient.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
-		5DA8A75C27FF260700C2ECBA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
 		5DA8A75E27FF260900C2ECBA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -51,6 +53,8 @@
 		5F9F4E3C27FF4CBA00915572 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		5F9F4E4327FF502F00915572 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F9F4E4627FF52C100915572 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		5F9F4E4B280056E900915572 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -182,7 +186,9 @@
 		5F9F4E4127FF4F5600915572 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				5DA8A75C27FF260700C2ECBA /* LoginView.swift */,
+				5F9F4E4B280056E900915572 /* LoginStore.swift */,
+				5F9F4E482800434B00915572 /* OnboardingView.swift */,
+				5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -357,12 +363,14 @@
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
-				5DA8A75D27FF260700C2ECBA /* LoginView.swift in Sources */,
+				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
+				5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
+				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
