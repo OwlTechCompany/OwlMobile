@@ -34,11 +34,9 @@ struct EnterPhoneView: View {
     // MARK: - Properties
 
     var store: Store<LoginState, LoginAction>
-//    let previousRouteCasePath = (/OnboardingView.Route.enterPhone)
-
 
     var body: some View {
-        return WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
+        WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
             VStack(spacing: 16) {
                 TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
                     .textFieldStyle(PlainTextFieldStyle())
@@ -82,17 +80,6 @@ private extension LoginState {
     }
 }
 
-//private extension EnterPhoneView.ViewState {
-//    var view: LoginState {
-//        get {
-//
-//        }
-//        set {
-//
-//        }
-//    }
-//}
-
 // MARK: - LoginAction + ViewAction
 
 private extension LoginAction {
@@ -102,7 +89,6 @@ private extension LoginAction {
             return .binding(action.pullback(\.view))
 
         case let .router(action):
-//            LoginState.Route.
             return .router(action.pullback(/OnboardingView.Route.enterPhone))
 
         case .sendPhoneNumber:

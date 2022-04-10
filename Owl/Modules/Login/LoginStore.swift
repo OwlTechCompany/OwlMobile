@@ -46,7 +46,6 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
 
     case .sendPhoneNumber:
-        print(state.phoneNumber)
         return environment.authClient
             .verifyPhoneNumber(state.phoneNumber)
             .mapError { $0 as NSError }
@@ -54,6 +53,7 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
             .eraseToEffect()
 
     case let .verificationIDReceived(.success(verificationId)):
+        // TODO: Set verificationId
         return Effect(value: .navigate(to: .enterPhone(.enterCode)))
             .delay(for: 5, scheduler: DispatchQueue.main)
             .eraseToEffect()
@@ -62,7 +62,6 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return Effect(value: .navigate(to: nil))
 
     case .binding(\.$phoneNumber):
-        print("Validating")
         return .none
 
     case .binding:
