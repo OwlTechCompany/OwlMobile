@@ -30,6 +30,7 @@
 		5F9F4E4727FF52C100915572 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4627FF52C100915572 /* MainView.swift */; };
 		5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E482800434B00915572 /* OnboardingView.swift */; };
 		5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4B280056E900915572 /* LoginStore.swift */; };
+		5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		5F9F4E4627FF52C100915572 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5F9F4E4B280056E900915572 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
+		5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingExtensions.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
+				5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
+				5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

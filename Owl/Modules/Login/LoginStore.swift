@@ -9,22 +9,27 @@ import ComposableArchitecture
 
 // MARK: - State
 
-struct LoginState: Equatable {
+struct LoginState: Equatable, Hashable, RoutableState {
+
     @BindableState var phoneNumber: String
+
+    var currentRoute: OnboardingView.Route?
 
     init() {
         phoneNumber = "+380931314850"
+        currentRoute = nil
     }
 }
 
 // MARK: - Action
 
-enum LoginAction: Equatable, BindableAction {
-    case loginSuccess
+enum LoginAction: Equatable, BindableAction, RoutableAction {
     case sendPhoneNumber
     case verificationIDReceived(Result<String, NSError>)
+    case loginSuccess
 
     case binding(BindingAction<LoginState>)
+    case router(RoutingAction<LoginState.Route>)
 }
 
 // MARK: - Environment
@@ -41,7 +46,6 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
 
     case .sendPhoneNumber:
-        print(state.phoneNumber)
         return environment.authClient
             .verifyPhoneNumber(state.phoneNumber)
             .mapError { $0 as NSError }
@@ -49,20 +53,22 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
             .eraseToEffect()
 
     case let .verificationIDReceived(.success(verificationId)):
-        print(verificationId)
-        return .none
+        // TODO: Set verificationId
+        return Effect(value: .navigate(to: .enterPhone(.enterCode)))
+            .eraseToEffect()
 
     case let .verificationIDReceived(.failure(error)):
-        print(error.localizedDescription)
-        return .none
+        return Effect(value: .navigate(to: nil))
 
     case .binding(\.$phoneNumber):
-        print("Validating")
-        print(state.phoneNumber)
         return .none
 
     case .binding:
         return .none
-    }
-}.binding()
 
+    case .router:
+        return .none
+    }
+}
+.binding()
+.routing()
