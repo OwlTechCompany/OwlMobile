@@ -14,9 +14,10 @@ public protocol RoutableState {
     var currentRoute: Route { get set }
 }
 
-extension Reducer where State: Hashable, Action == RoutingAction<State>{
+extension Reducer where State: Hashable, Action == RoutingAction<State> {
+
     public static func router() -> Reducer {
-        Reducer { currentRoute, action, environment in
+        Reducer { currentRoute, action, _ in
             switch action {
             case let .navigate(to: newRoute):
                 currentRoute = newRoute
@@ -51,7 +52,6 @@ extension Reducer where State: RoutableState {
     }
 }
 
-
 extension Reducer where State: RoutableState, Action: RoutableAction, State.Route == Action.Route {
     public func routing() -> Reducer {
         return routing(
@@ -62,7 +62,7 @@ extension Reducer where State: RoutableState, Action: RoutableAction, State.Rout
 }
 
 public protocol RoutableAction {
-    associatedtype Route: Hashable
+    associatedtype Route: Hashable & ExpressibleByNilLiteral
     static func router(_: RoutingAction<Route>) -> Self
 }
 
@@ -73,12 +73,18 @@ extension RoutableAction {
 }
 
 public enum RoutingAction<Route: Hashable>: Equatable {
+
     case navigate(to: Route)
+
     public var route: Route {
         switch self {
         case let .navigate(to: route):
             return route
         }
+    }
+
+    func pullback<T>(_ casePath: CasePath<T, Route>) -> RoutingAction<T> {
+        .navigate(to: casePath.embed(route))
     }
 }
 

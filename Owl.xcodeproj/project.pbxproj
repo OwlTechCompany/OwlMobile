@@ -160,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
+				5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -191,7 +192,6 @@
 				5F9F4E4B280056E900915572 /* LoginStore.swift */,
 				5F9F4E482800434B00915572 /* OnboardingView.swift */,
 				5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */,
-				5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";

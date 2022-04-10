@@ -8,48 +8,13 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - LoginState + ViewState
-
-private extension LoginState {
-    var view: EnterPhoneView.ViewState {
-        get {
-            EnterPhoneView.ViewState(
-                phoneNumber: phoneNumber,
-                currentRoute: (/OnboardingView.Route.enterPhone).extract(from: currentRoute)
-            )
-        }
-        set {
-            phoneNumber = newValue.phoneNumber
-            currentRoute = (/OnboardingView.Route.enterPhone).embed(newValue.currentRoute)
-        }
-    }
-}
-
-// MARK: - LoginAction + ViewAction
-
-private extension LoginAction {
-    static func view(_ viewAction: EnterPhoneView.ViewAction) -> Self {
-        switch viewAction {
-        case let .binding(action):
-            return .binding(action.pullback(\.view))
-
-        case let .router(action):
-            return .navigate(to: .enterPhone(action.route))
-
-        case .sendPhoneNumber:
-            return .sendPhoneNumber
-        }
-    }
-}
-
-// MARK: - View
-
 struct EnterPhoneView: View {
 
     // MARK: - ViewState
 
     struct ViewState: Equatable, RoutableState {
         @BindableState var phoneNumber: String
+
         var currentRoute: Route?
     }
 
@@ -57,6 +22,7 @@ struct EnterPhoneView: View {
 
     enum ViewAction: Equatable, BindableAction, RoutableAction {
         case sendPhoneNumber
+
         case binding(BindingAction<ViewState>)
         case router(RoutingAction<Route?>)
     }
@@ -68,6 +34,8 @@ struct EnterPhoneView: View {
     // MARK: - Properties
 
     var store: Store<LoginState, LoginAction>
+//    let previousRouteCasePath = (/OnboardingView.Route.enterPhone)
+
 
     var body: some View {
         return WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
@@ -93,6 +61,52 @@ struct EnterPhoneView: View {
                 )
             }
             .padding()
+        }
+    }
+}
+
+// MARK: - LoginState + ViewState
+
+private extension LoginState {
+    var view: EnterPhoneView.ViewState {
+        get {
+            EnterPhoneView.ViewState(
+                phoneNumber: phoneNumber,
+                currentRoute: (/OnboardingView.Route.enterPhone).extract(from: currentRoute)
+            )
+        }
+        set {
+            phoneNumber = newValue.phoneNumber
+            currentRoute = (/OnboardingView.Route.enterPhone).embed(newValue.currentRoute)
+        }
+    }
+}
+
+//private extension EnterPhoneView.ViewState {
+//    var view: LoginState {
+//        get {
+//
+//        }
+//        set {
+//
+//        }
+//    }
+//}
+
+// MARK: - LoginAction + ViewAction
+
+private extension LoginAction {
+    static func view(_ viewAction: EnterPhoneView.ViewAction) -> Self {
+        switch viewAction {
+        case let .binding(action):
+            return .binding(action.pullback(\.view))
+
+        case let .router(action):
+//            LoginState.Route.
+            return .router(action.pullback(/OnboardingView.Route.enterPhone))
+
+        case .sendPhoneNumber:
+            return .sendPhoneNumber
         }
     }
 }

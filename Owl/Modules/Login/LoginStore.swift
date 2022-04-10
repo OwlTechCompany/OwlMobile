@@ -29,9 +29,7 @@ enum LoginAction: Equatable, BindableAction, RoutableAction {
     case loginSuccess
 
     case binding(BindingAction<LoginState>)
-
-    typealias Route = OnboardingView.Route?
-    case router(RoutingAction<Route>)
+    case router(RoutingAction<LoginState.Route>)
 }
 
 // MARK: - Environment
@@ -56,7 +54,7 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
             .eraseToEffect()
 
     case let .verificationIDReceived(.success(verificationId)):
-        return Effect(value: .navigate(to: nil))
+        return Effect(value: .navigate(to: .enterPhone(.enterCode)))
             .delay(for: 5, scheduler: DispatchQueue.main)
             .eraseToEffect()
 

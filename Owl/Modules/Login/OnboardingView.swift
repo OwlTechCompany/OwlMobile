@@ -8,32 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - LoginState + ViewState
-
-private extension LoginState {
-    var view: OnboardingView.ViewState {
-        get {
-            OnboardingView.ViewState(currentRoute: currentRoute)
-        }
-        set {
-            currentRoute = newValue.currentRoute
-        }
-    }
-}
-
-// MARK: - LoginAction + ViewAction
-
-private extension LoginAction {
-    static func view(_ viewAction: OnboardingView.ViewAction) -> Self {
-        switch viewAction {
-        case let .router(route):
-            return .router(route)
-        }
-    }
-}
-
-// MARK: - View
-
 struct OnboardingView: View {
 
     // MARK: - ViewState
@@ -99,6 +73,30 @@ struct OnboardingView: View {
             .padding(20)
         }
 
+    }
+}
+
+// MARK: - LoginState + ViewState
+
+private extension LoginState {
+    var view: OnboardingView.ViewState {
+        get {
+            OnboardingView.ViewState(currentRoute: currentRoute)
+        }
+        set {
+            currentRoute = newValue.currentRoute
+        }
+    }
+}
+
+// MARK: - LoginAction + ViewAction
+
+private extension LoginAction {
+    static func view(_ viewAction: OnboardingView.ViewAction) -> Self {
+        switch viewAction {
+        case let .router(route):
+            return .router(route)
+        }
     }
 }
 
