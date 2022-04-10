@@ -8,15 +8,17 @@
 import ComposableArchitecture
 import SwiftUI
 
-public protocol RoutableState {
+protocol RoutableState {
+
     typealias Action = RoutingAction<Route>
     associatedtype Route: Hashable
     var currentRoute: Route { get set }
+
 }
 
 extension Reducer where State: Hashable, Action == RoutingAction<State> {
 
-    public static func router() -> Reducer {
+    static func router() -> Reducer {
         Reducer { currentRoute, action, _ in
             switch action {
             case let .navigate(to: newRoute):
@@ -25,10 +27,12 @@ extension Reducer where State: Hashable, Action == RoutingAction<State> {
             }
         }
     }
+
 }
 
 extension Reducer {
-    public func routing<Route: Hashable>(
+
+    func routing<Route: Hashable>(
         state toLocalState: WritableKeyPath<State, Route>,
         action toLocalAction: CasePath<Action, RoutingAction<Route>>
     ) -> Reducer {
@@ -42,37 +46,46 @@ extension Reducer {
                 )
         )
     }
+
 }
 
 extension Reducer where State: RoutableState {
-    public func routing(
+
+    func routing(
         action: CasePath<Action, State.Action>
     ) -> Reducer {
         return routing(state: \.currentRoute, action: action)
     }
+
 }
 
 extension Reducer where State: RoutableState, Action: RoutableAction, State.Route == Action.Route {
-    public func routing() -> Reducer {
+
+    func routing() -> Reducer {
         return routing(
             state: \State.currentRoute,
             action: /Action.router
         )
     }
+
 }
 
-public protocol RoutableAction {
+protocol RoutableAction {
+
     associatedtype Route: Hashable & ExpressibleByNilLiteral
     static func router(_: RoutingAction<Route>) -> Self
+
 }
 
 extension RoutableAction {
-    public static func navigate(to route: Route) -> Self {
+
+    static func navigate(to route: Route) -> Self {
         return .router(.navigate(to: route))
     }
+
 }
 
-public enum RoutingAction<Route: Hashable>: Equatable {
+enum RoutingAction<Route: Hashable>: Equatable {
 
     case navigate(to: Route)
 
@@ -86,15 +99,18 @@ public enum RoutingAction<Route: Hashable>: Equatable {
     func pullback<T>(_ casePath: CasePath<T, Route>) -> RoutingAction<T> {
         .navigate(to: casePath.embed(route))
     }
+
 }
 
 extension RoutingAction where Route: ExpressibleByNilLiteral {
-    public static var dismiss: RoutingAction { .navigate(to: nil) }
+
+    static var dismiss: RoutingAction { .navigate(to: nil) }
+
 }
 
 extension NavigationLink {
 
-    public init<
+    init<
         Store: ViewStore<State, Action>,
         State: RoutableState,
         Action: RoutableAction,
