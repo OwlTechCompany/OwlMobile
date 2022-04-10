@@ -105,11 +105,7 @@ extension NavigationLink {
         case casePath: CasePath<State.Route, Case>,
         @ViewBuilder destination: @escaping (Binding<Case>) -> WrappedDestination,
         @ViewBuilder label: @escaping () -> Label
-    ) where
-        Destination == WrappedDestination?,
-        State.Route: ExpressibleByNilLiteral,
-        State.Route == Action.Route {
-
+    ) where Destination == WrappedDestination?, State.Route == Action.Route {
         // TODO: Check if onNavigate needed
         let routeBinding: Binding<State.Route?> = viewStore.binding(
             get: { $0.currentRoute },

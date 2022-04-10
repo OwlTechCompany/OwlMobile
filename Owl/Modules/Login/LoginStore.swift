@@ -16,7 +16,7 @@ struct LoginState: Equatable, Hashable, RoutableState {
     var currentRoute: OnboardingView.Route?
 
     init() {
-        phoneNumber = "+380992177560"
+        phoneNumber = "+380931314850"
         currentRoute = nil
     }
 }
@@ -55,7 +55,6 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
     case let .verificationIDReceived(.success(verificationId)):
         // TODO: Set verificationId
         return Effect(value: .navigate(to: .enterPhone(.enterCode)))
-            .delay(for: 5, scheduler: DispatchQueue.main)
             .eraseToEffect()
 
     case let .verificationIDReceived(.failure(error)):
