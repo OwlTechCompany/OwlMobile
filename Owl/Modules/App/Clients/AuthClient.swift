@@ -17,6 +17,7 @@ struct AuthClient {
         [AnyHashable: Any],
         @escaping (UIBackgroundFetchResult) -> Void
     ) -> Effect<Void, Never>
+    var signIn: (String, String) -> Effect<AuthDataResult, NSError>
 
 }
 
@@ -32,8 +33,6 @@ extension AuthClient {
                             return
                         }
                         completion(.success(verificationID!))
-                        // Sign in using the verificationID and the code sent to the user
-                        // ...
                     }
             }
         },
@@ -47,6 +46,23 @@ extension AuthClient {
             .fireAndForget {
                 if Auth.auth().canHandleNotification(userInfo) {
                     completionHandler(.noData)
+                }
+            }
+        },
+        signIn: { verificationID, verificationCode in
+            .future { completion in
+                let credential = PhoneAuthProvider.provider().credential(
+                    withVerificationID: verificationID,
+                    verificationCode: verificationCode
+                )
+                Auth.auth().signIn(with: credential) { authResult, error in
+                    if let error = error {
+                        completion(.failure(error as NSError))
+                    } else if let authResult = authResult {
+                        completion(.success(authResult))
+                    } else {
+                        completion(.failure(.init(domain: "", code: 1)))
+                    }
                 }
             }
         }

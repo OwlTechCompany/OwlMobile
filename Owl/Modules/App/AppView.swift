@@ -38,13 +38,14 @@ enum AppAction: Equatable {
 struct AppEnvironment {
     var firebaseClient: FirebaseClient
     var authClient: AuthClient
-
+    var userDefaultsClient: UserDefaultsClient
 }
 
 extension AppEnvironment {
     static let live = AppEnvironment(
         firebaseClient: .live,
-        authClient: .live
+        authClient: .live,
+        userDefaultsClient: .live
     )
 }
 
@@ -59,6 +60,7 @@ extension AppEnvironment {
     var login: LoginEnvironment {
         LoginEnvironment(
             authClient: authClient
+            userDefaultsClient: userDefaultsClient
         )
     }
 
