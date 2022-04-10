@@ -9,6 +9,11 @@ import UIKit
 import FirebaseAuth
 import ComposableArchitecture
 
+struct SignInModel {
+    let verificationID: String
+    let verificationCode: String
+}
+
 struct AuthClient {
 
     var verifyPhoneNumber: (String) -> Effect<String, Error>
@@ -17,6 +22,7 @@ struct AuthClient {
         [AnyHashable: Any],
         @escaping (UIBackgroundFetchResult) -> Void
     ) -> Effect<Void, Never>
+    var signIn: (SignInModel) -> Effect<AuthDataResult, NSError>
 
 }
 
@@ -25,6 +31,7 @@ extension AuthClient {
     static let live = AuthClient(
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
+                Auth.auth().settings?.isAppVerificationDisabledForTesting = true
                 PhoneAuthProvider.provider()
                     .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
                         if let error = error {
@@ -32,8 +39,6 @@ extension AuthClient {
                             return
                         }
                         completion(.success(verificationID!))
-                        // Sign in using the verificationID and the code sent to the user
-                        // ...
                     }
             }
         },
@@ -47,6 +52,23 @@ extension AuthClient {
             .fireAndForget {
                 if Auth.auth().canHandleNotification(userInfo) {
                     completionHandler(.noData)
+                }
+            }
+        },
+        signIn: { signInModel in
+            .future { completion in
+                let credential = PhoneAuthProvider.provider().credential(
+                    withVerificationID: signInModel.verificationID,
+                    verificationCode: signInModel.verificationCode
+                )
+                Auth.auth().signIn(with: credential) { authResult, error in
+                    if let error = error {
+                        completion(.failure(error as NSError))
+                    } else if let authResult = authResult {
+                        completion(.success(authResult))
+                    } else {
+                        completion(.failure(.init(domain: "", code: 1)))
+                    }
                 }
             }
         }
