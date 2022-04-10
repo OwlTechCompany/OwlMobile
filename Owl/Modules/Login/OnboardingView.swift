@@ -8,54 +8,49 @@
 import SwiftUI
 import ComposableArchitecture
 
-//// MARK: - LoginState + ViewState
-//
-//private extension LoginState {
-//    var view: OnboardingView.ViewState {
-//        get {
-//            OnboardingView.ViewState(
-//                route: (/LoginState.Route.enterPhone).extract(from: route)
-//            )
-//        }
-//        set {
-//            phoneNumber = newValue.phoneNumber
-//        }
-//    }
-//}
-//
-//// MARK: - LoginAction + ViewAction
-//
-//private extension LoginAction {
-//    static func view(_ viewAction: OnboardingView.ViewAction) -> Self {
-//        switch viewAction {
-//        case let .setRoute(route):
-//            return .setRoute(.enterPhone(route))
-//
-//        case .sendPhoneNumber:
-//            return .sendPhoneNumber
-//        }
-//    }
-//}
+// MARK: - LoginState + ViewState
+
+private extension LoginState {
+    var view: OnboardingView.ViewState {
+        get {
+            OnboardingView.ViewState(currentRoute: currentRoute)
+        }
+        set {
+            currentRoute = newValue.currentRoute
+        }
+    }
+}
+
+// MARK: - LoginAction + ViewAction
+
+private extension LoginAction {
+    static func view(_ viewAction: OnboardingView.ViewAction) -> Self {
+        switch viewAction {
+        case let .router(route):
+            return .router(route)
+        }
+    }
+}
 
 // MARK: - View
 
 struct OnboardingView: View {
 
     // MARK: - ViewState
-//
-//    struct ViewState: Equatable {
-//        var route: Route?
-//    }
-//
-//    // MARK: - ViewAction
-//
-//    enum ViewAction: Equatable, BindableAction {
-//        case setRoute(Route?)
-//    }
+
+    struct ViewState: Equatable, RoutableState {
+        var currentRoute: Route?
+    }
+
+    // MARK: - ViewAction
+
+    enum ViewAction: Equatable, RoutableAction {
+        case router(RoutingAction<Route?>)
+    }
 
     // MARK: - Route
 
-    enum Route: Equatable {
+    enum Route: Equatable, Hashable {
         case enterPhone(EnterPhoneView.Route?)
     }
 
@@ -64,7 +59,7 @@ struct OnboardingView: View {
     var store: Store<LoginState, LoginAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
             VStack {
                 VStack(spacing: 42) {
                     Rectangle()
@@ -80,22 +75,16 @@ struct OnboardingView: View {
 
                 Spacer()
 
-//                NavigationLink(
-//                    isActive: viewStore.binding(get: \.route, send: LoginAction.setRoute).isPresent(/Route.enterPhone),
-//                    destination: { EnterPhoneView(store: store) },
-//                    label: { Text("Link") }
-//                )
                 NavigationLink(
-                    unwrapping: viewStore.binding(get: \.route, send: LoginAction.setRoute),
-                    case: /LoginState.Route.enterPhone,
+                    with: viewStore,
+                    case: /Route.enterPhone,
                     destination: { _ in
                         EnterPhoneView(store: store)
                             .navigationBarTitle("EnterPhoneView")
-                    }, onNavigate: { _ in
-
-                    }, label: {
+                    },
+                    label: {
                         Button {
-                            viewStore.send(.setRoute(.enterPhone(nil)))
+                            viewStore.send(.navigate(to: .enterPhone(nil)))
                         } label: {
                             Text("Start Messaging")
                                 .font(.headline)
@@ -108,12 +97,6 @@ struct OnboardingView: View {
                 )
             }
             .padding(20)
-//            .sheet(isPresented: viewStore.binding(get: \.route, send: LoginAction.setRoute).isPresent(/Route.enterPhone), content: {
-//                NavigationView {
-//                    EnterPhoneView(store: store)
-//                        .navigationBarTitle("Test")
-//                }
-//            })
         }
 
     }
