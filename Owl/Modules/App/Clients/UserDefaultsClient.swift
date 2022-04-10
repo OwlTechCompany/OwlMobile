@@ -9,9 +9,9 @@ import Foundation
 
 struct UserDefaultsClient {
 
-    var setVerificationID: (String) -> ()
+    var setVerificationID: (String) -> Void
     var getVerificationID: () -> (String)
-    
+
 }
 
 extension UserDefaultsClient {

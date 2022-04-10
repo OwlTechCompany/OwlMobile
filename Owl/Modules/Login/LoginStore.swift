@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseAuth
 
 // MARK: - State
 
@@ -29,6 +30,7 @@ enum LoginAction: Equatable, BindableAction, RoutableAction {
     case sendPhoneNumber
     case sendCode
     case verificationIDReceived(Result<String, NSError>)
+    case authDataReceived(Result<AuthDataResult, NSError>)
     case loginSuccess
 
     case binding(BindingAction<LoginState>)
@@ -68,20 +70,43 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
 			Effect(value: .navigate(to: .enterPhone(.enterCode)))
             	.eraseToEffect()
 		)
-		
 
     case let .verificationIDReceived(.failure(error)):
         return Effect(value: .navigate(to: nil))
 
+    case let .authDataReceived(.success(authData)):
+        print(authData.user.phoneNumber)
+        return .none
+
+    case let .authDataReceived(.failure(error)):
+        return Effect(value: .navigate(to: nil))
+
     case .binding(\.$phoneNumber):
+        print("AAAAAAA")
         return .none
 
     case .binding:
+        print(state.verificationCode)
+        if state.verificationCode.count == 6 {
+            let model = SignInModel(
+                verificationID: environment.userDefaultsClient.getVerificationID(),
+                verificationCode: state.verificationCode
+            )
+            return environment.authClient.signIn(model)
+                .catchToEffect(LoginAction.authDataReceived)
+                .eraseToEffect()
+
+        } else {
+            return .none
+        }
+
+    case let .binding(some):
+        print(some)
         return .none
 
     case .router:
         return .none
     }
 }
-.binding()
 .routing()
+.binding()

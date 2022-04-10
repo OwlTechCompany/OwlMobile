@@ -9,6 +9,11 @@ import UIKit
 import FirebaseAuth
 import ComposableArchitecture
 
+struct SignInModel {
+    let verificationID: String
+    let verificationCode: String
+}
+
 struct AuthClient {
 
     var verifyPhoneNumber: (String) -> Effect<String, Error>
@@ -17,7 +22,7 @@ struct AuthClient {
         [AnyHashable: Any],
         @escaping (UIBackgroundFetchResult) -> Void
     ) -> Effect<Void, Never>
-    var signIn: (String, String) -> Effect<AuthDataResult, NSError>
+    var signIn: (SignInModel) -> Effect<AuthDataResult, NSError>
 
 }
 
@@ -26,6 +31,7 @@ extension AuthClient {
     static let live = AuthClient(
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
+                Auth.auth().settings?.isAppVerificationDisabledForTesting = true
                 PhoneAuthProvider.provider()
                     .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
                         if let error = error {
@@ -49,11 +55,11 @@ extension AuthClient {
                 }
             }
         },
-        signIn: { verificationID, verificationCode in
+        signIn: { signInModel in
             .future { completion in
                 let credential = PhoneAuthProvider.provider().credential(
-                    withVerificationID: verificationID,
-                    verificationCode: verificationCode
+                    withVerificationID: signInModel.verificationID,
+                    verificationCode: signInModel.verificationCode
                 )
                 Auth.auth().signIn(with: credential) { authResult, error in
                     if let error = error {

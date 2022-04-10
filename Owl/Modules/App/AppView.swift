@@ -59,7 +59,7 @@ extension AppEnvironment {
 
     var login: LoginEnvironment {
         LoginEnvironment(
-            authClient: authClient
+            authClient: authClient,
             userDefaultsClient: userDefaultsClient
         )
     }

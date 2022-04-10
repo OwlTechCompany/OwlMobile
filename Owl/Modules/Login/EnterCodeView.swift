@@ -68,13 +68,15 @@ struct EnterCodeView: View {
                     TextField("", text: viewStore.binding(\.$verificationCode))
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
                         .tint(.clear)
+                        .textContentType(.oneTimeCode)
                         .accentColor(.clear)
                         .foregroundColor(.clear)
                         .keyboardType(.numberPad)
-                        .focused($focusedField)
-                        .frame(width:
-                                CGFloat((Constants.codeSize * 2 - 1)) * Constants.circleSize
+                        .frame(
+                            width: CGFloat((Constants.codeSize * 2 - 1)) * Constants.circleSize
                         )
+                        .focused($focusedField)
+
                 }
 
                 Button(
@@ -86,7 +88,11 @@ struct EnterCodeView: View {
                 )
             }
             .onAppear {
-                focusedField = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                    withAnimation {
+                        focusedField = true
+                    }
+                }
             }
         }
     }

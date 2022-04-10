@@ -45,10 +45,8 @@ struct EnterPhoneView: View {
                     with: viewStore,
                     case: /Route.enterCode,
                     destination: { _ in
-                        Text("Enter code")
-                            .background(Color.orange)
-                            .navigationBarTitle("Enter code")
-                            .zIndex(100)
+                        EnterCodeView(store: store)
+                            .navigationTitle("Enter code")
                     },
                     label: {
                         Button(
