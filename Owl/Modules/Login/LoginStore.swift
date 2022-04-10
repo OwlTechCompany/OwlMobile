@@ -10,10 +10,19 @@ import ComposableArchitecture
 // MARK: - State
 
 struct LoginState: Equatable {
+
     @BindableState var phoneNumber: String
 
+    var route: OnboardingView.Route?
+
+    typealias Route = OnboardingView.Route
+//    enum Route: Equatable {
+//        case enterPhone(EnterPhoneView.Route)
+//    }
+
     init() {
-        phoneNumber = "+380931314850"
+        phoneNumber = "+380992177560"
+        route = .enterPhone(.enterCode)
     }
 }
 
@@ -21,8 +30,10 @@ struct LoginState: Equatable {
 
 enum LoginAction: Equatable, BindableAction {
     case loginSuccess
+    case setRoute(LoginState.Route?)
     case sendPhoneNumber
     case verificationIDReceived(Result<String, NSError>)
+    case test
 
     case binding(BindingAction<LoginState>)
 }
@@ -37,6 +48,12 @@ struct LoginEnvironment {
 
 let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, action, environment in
     switch action {
+
+    case let .setRoute(route):
+        print("Setting new route \(route)")
+        state.route = route
+        return .none
+
     case .loginSuccess:
         return .none
 
@@ -49,10 +66,18 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
             .eraseToEffect()
 
     case let .verificationIDReceived(.success(verificationId)):
+        state.route = .enterPhone(.enterCode)
         print(verificationId)
+        return Effect(value: .test)
+            .delay(for: 5, scheduler: DispatchQueue.main)
+            .eraseToEffect()
+
+    case .test:
+        state.route = .enterPhone(.enterCode)
         return .none
 
     case let .verificationIDReceived(.failure(error)):
+//        state.route = nil
         print(error.localizedDescription)
         return .none
 
@@ -65,4 +90,3 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .none
     }
 }.binding()
-

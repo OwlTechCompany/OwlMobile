@@ -138,7 +138,6 @@ struct AppView: View {
             then: { loginStore in
                 NavigationView {
                     OnboardingView(store: loginStore)
-                        .navigationTitle("Login")
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
             }
