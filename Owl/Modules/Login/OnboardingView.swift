@@ -8,32 +8,40 @@
 import SwiftUI
 import ComposableArchitecture
 
+// MARK: - State
+
+struct OnboardingState: Equatable {
+}
+
+// MARK: - Action
+
+enum OnboardingAction: Equatable {
+    case startMessaging
+}
+
+// MARK: - Environment
+
+struct OnboardingEnvironment {
+
+}
+
+// MARK: - Reducer
+
+let onboardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnvironment> { state, action, environment in
+    switch action {
+    case .startMessaging:
+        return .none
+    }
+}
+
+// MARK: - View
+
 struct OnboardingView: View {
 
-    // MARK: - ViewState
-
-    struct ViewState: Equatable, RoutableState {
-        var currentRoute: Route?
-    }
-
-    // MARK: - ViewAction
-
-    enum ViewAction: Equatable, RoutableAction {
-        case router(RoutingAction<Route?>)
-    }
-
-    // MARK: - Route
-
-    enum Route: Equatable, Hashable {
-        case enterPhone(EnterPhoneView.Route?)
-    }
-
-    // MARK: - Properties
-
-    var store: Store<LoginState, LoginAction>
+    var store: Store<OnboardingState, OnboardingAction>
 
     var body: some View {
-        WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack {
                 VStack(spacing: 42) {
                     Rectangle()
@@ -49,52 +57,18 @@ struct OnboardingView: View {
 
                 Spacer()
 
-                NavigationLink(
-                    with: viewStore,
-                    case: /Route.enterPhone,
-                    destination: { _ in
-                        EnterPhoneView(store: store)
-                            .navigationBarTitle("EnterPhoneView")
-                    },
-                    label: {
-                        Button {
-                            viewStore.send(.navigate(to: .enterPhone(nil)))
-                        } label: {
-                            Text("Start Messaging")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, minHeight: 50)
-                                .foregroundColor(.white)
-                                .background(Color.blue)
-                                .cornerRadius(6)
-                        }
-                    }
-                )
+                Button {
+                    viewStore.send(.startMessaging)
+                } label: {
+                    Text("Start Messaging")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, minHeight: 50)
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(6)
+                }
             }
             .padding(20)
-        }
-    }
-}
-
-// MARK: - LoginState + ViewState
-
-private extension LoginState {
-    var view: OnboardingView.ViewState {
-        get {
-            OnboardingView.ViewState(currentRoute: currentRoute)
-        }
-        set {
-            currentRoute = newValue.currentRoute
-        }
-    }
-}
-
-// MARK: - LoginAction + ViewAction
-
-private extension LoginAction {
-    static func view(_ viewAction: OnboardingView.ViewAction) -> Self {
-        switch viewAction {
-        case let .router(route):
-            return .router(route)
         }
     }
 }
@@ -104,9 +78,9 @@ private extension LoginAction {
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(store: Store(
-            initialState: LoginState(),
-            reducer: loginReducer,
-            environment: AppEnvironment.live.login
+            initialState: OnboardingState(),
+            reducer: onboardingReducer,
+            environment: OnboardingEnvironment()
         ))
     }
 }

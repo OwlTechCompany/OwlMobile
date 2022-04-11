@@ -35,6 +35,9 @@
 		5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E482800434B00915572 /* OnboardingView.swift */; };
 		5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4B280056E900915572 /* LoginStore.swift */; };
 		5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */; };
+		5FA7D862280435F500AA48B5 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA7D861280435F500AA48B5 /* TCACoordinators */; };
+		5FA7D864280435FF00AA48B5 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */; };
+		5FA7D86628043FE200AA48B5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86528043FE200AA48B5 /* AppCoordinator.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +68,8 @@
 		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5F9F4E4B280056E900915572 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
 		5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingExtensions.swift; sourceTree = "<group>"; };
+		5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		5FA7D86528043FE200AA48B5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +85,7 @@
 				5DA8A76A27FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */,
 				5DA8A76C27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community in Frameworks */,
+				5FA7D862280435F500AA48B5 /* TCACoordinators in Frameworks */,
 				DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +188,7 @@
 				5D35EC7B27FF7AE500624717 /* Clients */,
 				5DA8A75A27FF260700C2ECBA /* OwlApp.swift */,
 				5F9F4E3C27FF4CBA00915572 /* AppView.swift */,
+				5FA7D86528043FE200AA48B5 /* AppCoordinator.swift */,
 				5F9F4E4327FF502F00915572 /* AppDelegate.swift */,
 			);
 			path = App;
@@ -201,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				5F9F4E4B280056E900915572 /* LoginStore.swift */,
+				5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */,
 				5F9F4E482800434B00915572 /* OnboardingView.swift */,
 				5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */,
 				5D35EC842800473400624717 /* EnterCodeView.swift */,
@@ -251,6 +259,7 @@
 				5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */,
 				5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */,
 				5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */,
+				5FA7D861280435F500AA48B5 /* TCACoordinators */,
 			);
 			productName = Owl;
 			productReference = 5DA8A75727FF260700C2ECBA /* Owl.app */;
@@ -284,6 +293,7 @@
 				5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
+				5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
 			projectDirPath = "";
@@ -380,6 +390,7 @@
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
+				5FA7D864280435FF00AA48B5 /* LoginCoordinator.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
 				5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
@@ -388,6 +399,7 @@
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
+				5FA7D86628043FE200AA48B5 /* AppCoordinator.swift in Sources */,
 				5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
@@ -625,6 +637,14 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -662,6 +682,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
 			productName = SwiftUINavigation;
+		};
+		5FA7D861280435F500AA48B5 /* TCACoordinators */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
+			productName = TCACoordinators;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

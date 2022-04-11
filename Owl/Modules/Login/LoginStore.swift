@@ -10,23 +10,20 @@ import FirebaseAuth
 
 // MARK: - State
 
-struct LoginState: Equatable, Hashable, RoutableState {
+struct LoginState: Equatable, Hashable {
 
     @BindableState var phoneNumber: String
     @BindableState var verificationCode: String
 
-    var currentRoute: OnboardingView.Route?
-
     init() {
         phoneNumber = "+380931314850"
         verificationCode = ""
-        currentRoute = nil
     }
 }
 
 // MARK: - Action
 
-enum LoginAction: Equatable, BindableAction, RoutableAction {
+enum LoginAction: Equatable, BindableAction {
     case sendPhoneNumber
     case sendCode
     case verificationIDReceived(Result<String, NSError>)
@@ -34,7 +31,6 @@ enum LoginAction: Equatable, BindableAction, RoutableAction {
     case loginSuccess
 
     case binding(BindingAction<LoginState>)
-    case router(RoutingAction<LoginState.Route>)
 }
 
 // MARK: - Environment
@@ -66,20 +62,18 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
         return .merge(
 			.fireAndForget {
             	environment.userDefaultsClient.setVerificationID(verificationId)
-        	},
-			Effect(value: .navigate(to: .enterPhone(.enterCode)))
-            	.eraseToEffect()
+        	}
 		)
 
     case let .verificationIDReceived(.failure(error)):
-        return Effect(value: .navigate(to: nil))
+        return .none
 
     case let .authDataReceived(.success(authData)):
         print(authData.user.phoneNumber)
         return .none
 
     case let .authDataReceived(.failure(error)):
-        return Effect(value: .navigate(to: nil))
+        return .none
 
     case .binding(\.$phoneNumber):
         print("AAAAAAA")
@@ -103,10 +97,6 @@ let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, a
     case let .binding(some):
         print(some)
         return .none
-
-    case .router:
-        return .none
     }
 }
-.routing()
 .binding()

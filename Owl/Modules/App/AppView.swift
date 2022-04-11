@@ -13,11 +13,11 @@ import SwiftUINavigation
 
 struct AppState: Equatable {
     var appDelegate: AppDelegateState = AppDelegateState()
-    var login: LoginState?
+    var login: LoginCoordinator.State?
     var main: MainState?
 
     mutating func setOnly(
-        login: LoginState? = nil,
+        login: LoginCoordinator.State? = .initialState,
         main: MainState? = nil
     ) {
         self.login = login
@@ -30,7 +30,7 @@ struct AppState: Equatable {
 enum AppAction: Equatable {
     case appDelegate(AppDelegateAction)
     case main(MainAction)
-    case login(LoginAction)
+    case login(LoginCoordinator.Action)
 }
 
 // MARK: - Environment
@@ -76,12 +76,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             environment: { $0.appDelegate }
         ),
 
-    loginReducer
+    loginCoordinatorReducer
         .optional()
         .pullback(
             state: \AppState.login,
             action: /AppAction.login,
-            environment: { $0.login }
+            environment: { _ in .init() }
         ),
 
     mainReducer
@@ -98,15 +98,18 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
 let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, action, _ in
     switch action {
     case .appDelegate(.didFinishLaunching):
-        state.login = .init()
+        state.setOnly(login: .initialState)
         return .none
 
-    case .login(.loginSuccess):
-        state.setOnly(main: MainState())
-        return .none
+//    case .login:
+//        state.setOnly(main: MainState())
+//        return .none
 
     case .main(.logout):
-        state.setOnly(login: LoginState())
+        state.setOnly(login: .initialState)
+        return .none
+
+    case .login:
         return .none
 
     default:
@@ -114,50 +117,32 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
     }
 }
 
-// MARK: - View
-
 struct AppView: View {
 
     let store: Store<AppState, AppAction>
-    @ObservedObject var viewStore: ViewStore<ViewState, AppAction>
 
-    struct ViewState: Equatable {
 
-        init(state: AppState) { }
-    }
-
-    init(store: Store<AppState, AppAction>) {
-        self.store = store
-        self.viewStore = ViewStore(self.store.scope(state: ViewState.init))
-    }
+//    init(store: Store<AppState, AppAction>) {
+//        self.store = store
+//        self.viewStore = ViewStore(self.store.scope(state: ViewState.init))
+//    }
 
     var body: some View {
-        IfLetStore(
-            self.store.scope(
-                state: \.login,
-                action: AppAction.login
-            ),
-            then: { loginStore in
-                NavigationView {
-                    OnboardingView(store: loginStore)
+        WithViewStore(store) { viewStore in
+            IfLetStore(
+                store.scope(
+                    state: \.login,
+                    action: AppAction.login
+                ),
+                then: { loginCoordinatorStore in
+                    LoginCoordinatorView(store: loginCoordinatorStore)
                 }
-                .navigationViewStyle(StackNavigationViewStyle())
-            }
-        )
-        .transition(.opacity)
-
-        IfLetStore(
-            self.store.scope(
-                state: \.main,
-                action: AppAction.main
-            ),
-            then: { mainStore in
-                NavigationView {
-                    MainView(store: mainStore)
-                }
-                .navigationViewStyle(StackNavigationViewStyle())
-            }
-        )
-        .transition(.opacity)
+            )
+        }
     }
 }
+
+// MARK: - View
+
+import TCACoordinators
+
