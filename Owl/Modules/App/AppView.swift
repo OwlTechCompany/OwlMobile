@@ -13,11 +13,11 @@ import SwiftUINavigation
 
 struct AppState: Equatable {
     var appDelegate: AppDelegateState = AppDelegateState()
-    var login: LoginCoordinator.State?
+    var login: LoginFlowState?
     var main: MainState?
 
     mutating func setOnly(
-        login: LoginCoordinator.State? = .initialState,
+        login: LoginFlowState? = nil,
         main: MainState? = nil
     ) {
         self.login = login
@@ -30,7 +30,7 @@ struct AppState: Equatable {
 enum AppAction: Equatable {
     case appDelegate(AppDelegateAction)
     case main(MainAction)
-    case login(LoginCoordinator.Action)
+    case login(LoginFlowAction)
 }
 
 // MARK: - Environment
@@ -76,12 +76,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             environment: { $0.appDelegate }
         ),
 
-    loginCoordinatorReducer
+    loginFlowReducer
         .optional()
         .pullback(
             state: \AppState.login,
             action: /AppAction.login,
-            environment: { _ in .init() }
+            environment: { _ in LoginFlowEnvironment() }
         ),
 
     mainReducer
@@ -101,9 +101,9 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
         state.setOnly(login: .initialState)
         return .none
 
-//    case .login:
-//        state.setOnly(main: MainState())
-//        return .none
+    case .login(.loginSuccess):
+        state.setOnly(main: MainState())
+        return .none
 
     case .main(.logout):
         state.setOnly(login: .initialState)
@@ -121,7 +121,7 @@ struct AppView: View {
 
     let store: Store<AppState, AppAction>
 
-
+//
 //    init(store: Store<AppState, AppAction>) {
 //        self.store = store
 //        self.viewStore = ViewStore(self.store.scope(state: ViewState.init))
@@ -135,7 +135,16 @@ struct AppView: View {
                     action: AppAction.login
                 ),
                 then: { loginCoordinatorStore in
-                    LoginCoordinatorView(store: loginCoordinatorStore)
+                    LoginFlowView(store: loginCoordinatorStore)
+                }
+            )
+            IfLetStore(
+                store.scope(
+                    state: \.main,
+                    action: AppAction.main
+                ),
+                then: { mainStore in
+                    Text("Main")
                 }
             )
         }

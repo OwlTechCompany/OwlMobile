@@ -8,111 +8,141 @@
 import TCACoordinators
 import ComposableArchitecture
 import SwiftUI
+import FirebaseAuth
 
-enum ScreenState: Equatable {
-    case onboarding(OnboardingState)
-    case enterPhone(EnterPhoneState)
+// MARK: - Screen
+
+enum RoutePath: Identifiable {
+
+    case onboarding
+    case enterPhone
+
+    var id: Self { self }
+    
+    // swiftlint: disable force_cast
+    func path<T: Equatable>() -> CasePath<ScreenProviderState, T> {
+        switch self {
+        case .onboarding:
+            return /ScreenProviderState.onboarding as! CasePath<ScreenProviderState, T>
+        case .enterPhone:
+            return /ScreenProviderState.enterPhone as! CasePath<ScreenProviderState, T>
+        }
+    }
 }
 
-enum ScreenAction: Equatable {
+enum ScreenProviderState: Equatable, Identifiable {
+    case onboarding(OnboardingState)
+    case enterPhone(EnterPhoneState)
+
+    var id: RoutePath.ID {
+        switch self {
+        case .enterPhone:
+            return RoutePath.enterPhone
+        case .onboarding:
+            return RoutePath.onboarding
+        }
+    }
+}
+
+enum ScreenProviderAction: Equatable {
     case onboarding(OnboardingAction)
     case enterPhone(EnterPhoneAction)
 }
 
-struct ScreenEnvironment {}
-
-let screenReducer = Reducer<ScreenState, ScreenAction, ScreenEnvironment>.combine(
+let screenProviderReducer = Reducer<ScreenProviderState, ScreenProviderAction, LoginFlowEnvironment>.combine(
     onboardingReducer
         .pullback(
-            state: /ScreenState.onboarding,
-            action: /ScreenAction.onboarding,
+            state: /ScreenProviderState.onboarding,
+            action: /ScreenProviderAction.onboarding,
             environment: { _ in OnboardingEnvironment() }
         ),
     enterPhoneReducer
         .pullback(
-            state: /ScreenState.enterPhone,
-            action: /ScreenAction.enterPhone,
+            state: /ScreenProviderState.enterPhone,
+            action: /ScreenProviderAction.enterPhone,
             environment: { _ in EnterPhoneEnvironment() }
         )
 )
 
-struct LoginCoordinator {
+struct LoginFlowView: View {
 
-    struct State: Equatable, IndexedRouterState {
-
-        var routes: [Route<ScreenState>]
-
-        static let initialState = State(
-            routes: [.root(.onboarding(.init()), embedInNavigationView: true)]
-        )
-    }
-
-    enum Action: Equatable, IndexedRouterAction {
-        case routeAction(Int, action: ScreenAction)
-        case updateRoutes([Route<ScreenState>])
-    }
-
-    struct Environment { }
-}
-
-
-typealias LoginCoordinatorReducer = Reducer<
-    LoginCoordinator.State, LoginCoordinator.Action, LoginCoordinator.Environment
->
-
-let loginCoordinatorReducer: LoginCoordinatorReducer = screenReducer
-    .forEachIndexedRoute(environment: { _ in ScreenEnvironment() })
-    .withRouteReducer(
-        Reducer { state, action, environment in
-            switch action {
-            case .routeAction(_, .onboarding(.startMessaging)):
-                state.routes.push(.enterPhone(.init(phoneNumber: "+380")))
-
-//            case .routeAction(_, .numbersList(.numberSelected(let number))):
-//                state.routes.push(.numberDetail(.init(number: number)))
-//
-//            case .routeAction(_, .numberDetail(.showDouble(let number))):
-//                state.routes.presentSheet(.numberDetail(.init(number: number * 2)))
-//
-//            case .routeAction(_, .numberDetail(.goBackTapped)):
-//                state.routes.goBack()
-//
-//            case .routeAction(_, .numberDetail(.goBackToNumbersList)):
-//                return .routeWithDelaysIfUnsupported(state.routes) {
-//                    $0.goBackTo(/ScreenState.numbersList)
-//                }
-//
-//            case .routeAction(_, .numberDetail(.goBackToRootTapped)):
-//                return .routeWithDelaysIfUnsupported(state.routes) {
-//                    $0.goBackToRoot()
-//                }
-
-            default:
-                break
-            }
-            return .none
-        }
-    )
-
-
-struct LoginCoordinatorView: View {
-
-    let store: Store<LoginCoordinator.State, LoginCoordinator.Action>
+    let store: Store<LoginFlowState, LoginFlowAction>
 
     var body: some View {
         TCARouter(store) { screen in
             SwitchStore(screen) {
                 CaseLet(
-                    state: /ScreenState.onboarding,
-                    action: ScreenAction.onboarding,
+                    state: /ScreenProviderState.onboarding,
+                    action: ScreenProviderAction.onboarding,
                     then: OnboardingView.init
                 )
                 CaseLet(
-                    state: /ScreenState.enterPhone,
-                    action: ScreenAction.enterPhone,
+                    state: /ScreenProviderState.enterPhone,
+                    action: ScreenProviderAction.enterPhone,
                     then: EnterPhoneView.init
                 )
             }
         }
     }
 }
+
+// MARK: - LoginFlow
+
+struct LoginFlowState: Equatable, IdentifiedRouterState {
+
+    var routes: IdentifiedArrayOf<Route<ScreenProviderState>>
+
+    static let initialState = LoginFlowState(
+        routes: [
+            .root(.onboarding(OnboardingState()), embedInNavigationView: true)
+        ]
+    )
+
+    func routeState<T: Equatable>(routePath: RoutePath) -> T? {
+        if let screenProviderState = routes[id: routePath.id]?.screen {
+            let casePath: CasePath<ScreenProviderState, T> = routePath.path()
+            return casePath.extract(from: screenProviderState)
+        } else {
+            return nil
+        }
+    }
+}
+
+enum LoginFlowAction: Equatable, IdentifiedRouterAction {
+
+    case verificationIDReceived(Result<String, NSError>)
+    case authDataReceived(Result<AuthDataResult, NSError>)
+    case loginSuccess
+
+    case routeAction(ScreenProviderState.ID, action: ScreenProviderAction)
+    case updateRoutes(IdentifiedArrayOf<Route<ScreenProviderState>>)
+}
+
+struct LoginFlowEnvironment { }
+
+let loginFlowReducerCore = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnvironment> { state, action, environment in
+    switch action {
+    case .routeAction(_, action: .enterPhone(.binding(\.$phoneNumber))):
+        guard let enterPhoneState: EnterPhoneState = state.routeState(routePath: .enterPhone) else {
+            return .none
+        }
+        print("!!!!!!!!!! \(enterPhoneState.phoneNumber)")
+        return .none
+
+    case .routeAction(_, action: .onboarding(.startMessaging)):
+        print("Start messanging")
+        state.routes.push(.enterPhone(.init(phoneNumber: "+380")))
+        return .none
+
+    default:
+        return .none
+    }
+}
+
+let loginFlowReducer = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnvironment>.combine(
+    screenProviderReducer
+        .forEachIdentifiedRoute(environment: { _ in .init() })
+        .withRouteReducer(
+            loginFlowReducerCore
+        )
+)

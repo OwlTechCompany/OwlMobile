@@ -30,17 +30,17 @@ struct EnterPhoneEnvironment { }
 
 let enterPhoneReducer = Reducer<EnterPhoneState, EnterPhoneAction, EnterPhoneEnvironment> { state, action, environment in
     switch action {
-    case .sendPhoneNumber:
+    case .binding(\.$phoneNumber):
         return .none
 
-    case .binding(\.$phoneNumber):
-        print("Validating")
+    case .sendPhoneNumber:
         return .none
 
     case .binding:
         return .none
     }
 }
+.binding()
 
 // MARK: - View
 
