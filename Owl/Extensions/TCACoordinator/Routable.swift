@@ -10,7 +10,6 @@ import TCACoordinators
 
 protocol Routable {
 
-    // swiftlint: disable type_name
     associatedtype ID
     associatedtype ScreenProvider: Equatable & Identifiable
     associatedtype RouteState: Equatable
