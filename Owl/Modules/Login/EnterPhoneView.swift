@@ -8,51 +8,52 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - ViewState
+struct EnterPhone {
 
-struct EnterPhoneState: Equatable {
-    @BindableState var phoneNumber: String
-}
+    // MARK: - ViewState
 
-// MARK: - ViewAction
-
-enum EnterPhoneAction: Equatable, BindableAction {
-
-    case binding(BindingAction<EnterPhoneState>)
-    case delegate(DelegateAction)
-
-    enum DelegateAction {
-        case sendPhoneNumber
+    struct State: Equatable {
+        @BindableState var phoneNumber: String
     }
-}
 
-// MARK: - Environment
+    // MARK: - ViewAction
 
-struct EnterPhoneEnvironment { }
+    enum Action: Equatable, BindableAction {
 
-// MARK: - Reducer
+        case binding(BindingAction<State>)
+        case delegate(DelegateAction)
 
-let enterPhoneReducer = Reducer<EnterPhoneState, EnterPhoneAction, EnterPhoneEnvironment> { _, action, _ in
-    switch action {
-    case .binding(\.$phoneNumber):
-        return .none
-
-    case .delegate:
-        return .none
-
-    case .binding:
-        return .none
+        enum DelegateAction {
+            case sendPhoneNumber
+        }
     }
+
+    // MARK: - Environment
+
+    struct Environment { }
+
+    // MARK: - Reducer
+
+    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+        switch action {
+        case .binding(\.$phoneNumber):
+            return .none
+
+        case .delegate:
+            return .none
+
+        case .binding:
+            return .none
+        }
+    }
+    .binding()
 }
-.binding()
 
 // MARK: - View
 
 struct EnterPhoneView: View {
 
-    // MARK: - Properties
-
-    var store: Store<EnterPhoneState, EnterPhoneAction>
+    var store: Store<EnterPhone.State, EnterPhone.Action>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -75,9 +76,9 @@ struct EnterPhoneView: View {
 struct EnterPhoneNumber_Previews: PreviewProvider {
     static var previews: some View {
         EnterPhoneView(store: Store(
-            initialState: EnterPhoneState(phoneNumber: "+380992177560"),
-            reducer: enterPhoneReducer,
-            environment: EnterPhoneEnvironment()
+            initialState: EnterPhone.State(phoneNumber: "+380992177560"),
+            reducer: EnterPhone.reducer,
+            environment: EnterPhone.Environment()
         ))
     }
 }

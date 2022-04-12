@@ -29,7 +29,7 @@
 		5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */; };
 		5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A77E27FF33E100C2ECBA /* Assets.swift */; };
 		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
-		5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3C27FF4CBA00915572 /* AppView.swift */; };
+		5F9F4E3D27FF4CBA00915572 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3C27FF4CBA00915572 /* App.swift */; };
 		5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4327FF502F00915572 /* AppDelegate.swift */; };
 		5F9F4E4727FF52C100915572 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4627FF52C100915572 /* MainView.swift */; };
 		5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E482800434B00915572 /* OnboardingView.swift */; };
@@ -62,7 +62,7 @@
 		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftGen+Ext.swift"; sourceTree = "<group>"; };
-		5F9F4E3C27FF4CBA00915572 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		5F9F4E3C27FF4CBA00915572 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5F9F4E4327FF502F00915572 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F9F4E4627FF52C100915572 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 			children = (
 				5D35EC7B27FF7AE500624717 /* Clients */,
 				5DA8A75A27FF260700C2ECBA /* OwlApp.swift */,
-				5F9F4E3C27FF4CBA00915572 /* AppView.swift */,
+				5F9F4E3C27FF4CBA00915572 /* App.swift */,
 				5F9F4E4327FF502F00915572 /* AppDelegate.swift */,
 			);
 			path = App;
@@ -405,7 +405,7 @@
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
-				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
+				5F9F4E3D27FF4CBA00915572 /* App.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,

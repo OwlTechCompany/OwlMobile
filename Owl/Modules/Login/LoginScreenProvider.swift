@@ -8,72 +8,75 @@
 import ComposableArchitecture
 import TCACoordinators
 
-// MARK: - Routes
+extension Login {
 
-struct OnboardingRoute: Routable {
-    static var statePath = /LoginScreenProviderState.onboarding
+    struct ScreenProvider {}
 }
 
-struct EnterPhoneRoute: Routable {
-    static var statePath = /LoginScreenProviderState.enterPhone
-}
+extension Login.ScreenProvider {
 
-struct EnterCodeRoute: Routable {
-    static var statePath = /LoginScreenProviderState.enterCode
-}
+    // MARK: - Routes
 
-// MARK: - State handling
+    struct OnboardingRoute: Routable {
+        static var statePath = /State.onboarding
+    }
 
-enum LoginScreenProviderState: Equatable, Identifiable {
-    case onboarding(OnboardingState)
-    case enterPhone(EnterPhoneState)
-    case enterCode(EnterCodeState)
+    struct EnterPhoneRoute: Routable {
+        static var statePath = /State.enterPhone
+    }
 
-    var id: String {
-        switch self {
-        case .onboarding:
-            return OnboardingRoute.id
-        case .enterPhone:
-            return EnterPhoneRoute.id
-        case .enterCode:
-            return EnterCodeRoute.id
+    struct EnterCodeRoute: Routable {
+        static var statePath = /State.enterCode
+    }
+
+    // MARK: - State handling
+
+    enum State: Equatable, Identifiable {
+        case onboarding(Onboarding.State)
+        case enterPhone(EnterPhone.State)
+        case enterCode(EnterCode.State)
+
+        var id: String {
+            switch self {
+            case .onboarding:
+                return OnboardingRoute.id
+            case .enterPhone:
+                return EnterPhoneRoute.id
+            case .enterCode:
+                return EnterCodeRoute.id
+            }
         }
     }
+
+    // MARK: - Action handling
+
+    enum Action: Equatable {
+        case onboarding(Onboarding.Action)
+        case enterPhone(EnterPhone.Action)
+        case enterCode(EnterCode.Action)
+    }
+
+    // MARK: - Reducer handling
+
+    static let reducer = Reducer<State, Action, Login.Environment>.combine(
+        Onboarding.reducer
+            .pullback(
+                state: /State.onboarding,
+                action: /Action.onboarding,
+                environment: { _ in Onboarding.Environment() }
+            ),
+        EnterPhone.reducer
+            .pullback(
+                state: /State.enterPhone,
+                action: /Action.enterPhone,
+                environment: { _ in EnterPhone.Environment() }
+            ),
+        EnterCode.reducer
+            .pullback(
+                state: /State.enterCode,
+                action: /Action.enterCode,
+                environment: { _ in EnterCode.Environment() }
+            )
+    )
+
 }
-
-// MARK: - Action handling
-
-enum LoginScreenProviderAction: Equatable {
-    case onboarding(OnboardingAction)
-    case enterPhone(EnterPhoneAction)
-    case enterCode(EnterCodeAction)
-}
-
-// MARK: - Reducer handling
-
-typealias LoginScreenProviderReducer = Reducer<
-    LoginScreenProviderState,
-    LoginScreenProviderAction,
-    LoginFlowEnvironment
->
-
-let loginScreenProviderReducer = LoginScreenProviderReducer.combine(
-    onboardingReducer
-        .pullback(
-            state: /LoginScreenProviderState.onboarding,
-            action: /LoginScreenProviderAction.onboarding,
-            environment: { _ in OnboardingEnvironment() }
-        ),
-    enterPhoneReducer
-        .pullback(
-            state: /LoginScreenProviderState.enterPhone,
-            action: /LoginScreenProviderAction.enterPhone,
-            environment: { _ in EnterPhoneEnvironment() }
-        ),
-    enterCodeReducer
-        .pullback(
-            state: /LoginScreenProviderState.enterCode,
-            action: /LoginScreenProviderAction.enterCode,
-            environment: { _ in EnterCodeEnvironment() }
-        )
-)

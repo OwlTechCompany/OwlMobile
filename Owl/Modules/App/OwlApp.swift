@@ -9,11 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct OwlApp: App {
+struct OwlApp: SwiftUI.App {
 
-    static let store = Store<AppState, AppAction>(
-        initialState: AppState(),
-        reducer: appReducer,
+    static let store = Store<App.State, App.Action>(
+        initialState: App.State(),
+        reducer: App.reducer,
         environment: .live
     )
 

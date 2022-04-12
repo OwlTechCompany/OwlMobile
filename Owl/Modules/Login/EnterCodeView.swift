@@ -8,67 +8,67 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - State
+struct EnterCode {
 
-struct EnterCodeState: Equatable {
-    @BindableState var verificationCode: String
-    var phoneNumber: String
+    // MARK: - State
 
-    // For some very strange reasons TextField Binding<String> is setting its value two time
-    // To fix this (not to send code twice) i decided to use this variable
-    var isCodeSent: Bool = false
-}
+    struct State: Equatable {
+        @BindableState var verificationCode: String
+        var phoneNumber: String
 
-// MARK: - Action
-
-enum EnterCodeAction: Equatable, BindableAction {
-    case binding(BindingAction<EnterCodeState>)
-    case delegate(DelegateAction)
-
-    enum DelegateAction {
-        case sendCode
-        case resendCode
+        // For some very strange reasons TextField Binding<String> is setting its value two time
+        // To fix this (not to send code twice) i decided to use this variable
+        var isCodeSent: Bool = false
     }
-}
 
-// MARK: - Environment
+    // MARK: - Action
 
-struct EnterCodeEnvironment {
+    enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
+        case delegate(DelegateAction)
 
-}
+        enum DelegateAction {
+            case sendCode
+            case resendCode
+        }
+    }
 
-// MARK: - Reducer
+    // MARK: - Environment
 
-let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, EnterCodeEnvironment> { state, action, _ in
-    switch action {
-    case .binding(\.$verificationCode):
-        if state.verificationCode.count == 6 && !state.isCodeSent {
-            state.isCodeSent = true
-            return Effect(value: .delegate(.sendCode))
-        } else {
+    struct Environment { }
+
+    // MARK: - Reducer
+
+    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+        switch action {
+        case .binding(\.$verificationCode):
+            if state.verificationCode.count == 6 && !state.isCodeSent {
+                state.isCodeSent = true
+                return Effect(value: .delegate(.sendCode))
+            } else {
+                return .none
+            }
+
+        case .delegate(.resendCode):
+            state.isCodeSent = false
+            return .none
+
+        case .delegate:
+            return .none
+
+        case .binding:
             return .none
         }
-
-    case .delegate(.resendCode):
-        state.isCodeSent = false
-        return .none
-
-    case .delegate:
-        return .none
-
-    case .binding:
-        return .none
     }
+    .binding()
+
 }
-.binding()
 
 // MARK: - View
 
 struct EnterCodeView: View {
 
-    // MARK: - Properties
-
-    var store: Store<EnterCodeState, EnterCodeAction>
+    var store: Store<EnterCode.State, EnterCode.Action>
 
     @FocusState private var focusedField: Bool
 
@@ -150,9 +150,12 @@ struct EnterCodeView_Previews: PreviewProvider {
     static var previews: some View {
         EnterCodeView(
             store: Store(
-                initialState: EnterCodeState(verificationCode: "123", phoneNumber: "+380992177560"),
-                reducer: enterCodeReducer,
-                environment: EnterCodeEnvironment()
+                initialState: EnterCode.State(
+                    verificationCode: "123",
+                    phoneNumber: "+380992177560"
+                ),
+                reducer: EnterCode.reducer,
+                environment: EnterCode.Environment()
             )
         )
     }

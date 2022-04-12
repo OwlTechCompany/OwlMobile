@@ -8,26 +8,29 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - State
+struct Onboarding {
 
-struct OnboardingState: Equatable { }
+    // MARK: - State
 
-// MARK: - Action
+    struct State: Equatable { }
 
-enum OnboardingAction: Equatable {
-    case startMessaging
-}
+    // MARK: - Action
 
-// MARK: - Environment
+    enum Action: Equatable {
+        case startMessaging
+    }
 
-struct OnboardingEnvironment { }
+    // MARK: - Environment
 
-// MARK: - Reducer
+    struct Environment { }
 
-let onboardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnvironment> { _, action, _ in
-    switch action {
-    case .startMessaging:
-        return .none
+    // MARK: - Reducer
+
+    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+        switch action {
+        case .startMessaging:
+            return .none
+        }
     }
 }
 
@@ -35,7 +38,7 @@ let onboardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnv
 
 struct OnboardingView: View {
 
-    var store: Store<OnboardingState, OnboardingAction>
+    var store: Store<Onboarding.State, Onboarding.Action>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -76,9 +79,9 @@ struct OnboardingView: View {
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(store: Store(
-            initialState: OnboardingState(),
-            reducer: onboardingReducer,
-            environment: OnboardingEnvironment()
+            initialState: Onboarding.State(),
+            reducer: Onboarding.reducer,
+            environment: Onboarding.Environment()
         ))
     }
 }
