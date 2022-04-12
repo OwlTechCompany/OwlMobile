@@ -8,38 +8,41 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - State
+struct Main {
 
-struct MainState: Equatable {
+    // MARK: - State
 
-}
+    struct State: Equatable {
 
-// MARK: - Action
-
-enum MainAction: Equatable {
-    case logout
-}
-
-// MARK: - Environment
-
-struct MainEnvironment {
-
-}
-
-// MARK: - Reducer
-
-let mainReducer = Reducer<MainState, MainAction, MainEnvironment> { _, action, _ in
-    switch action {
-    case .logout:
-        return .none
+        static let initialState = State()
     }
+
+    // MARK: - Action
+
+    enum Action: Equatable {
+        case logout
+    }
+
+    // MARK: - Environment
+
+    struct Environment { }
+
+    // MARK: - Reducer
+
+    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+        switch action {
+        case .logout:
+            return .none
+        }
+    }
+
 }
 
 // MARK: - View
 
 struct MainView: View {
 
-    var store: Store<MainState, MainAction>
+    var store: Store<Main.State, Main.Action>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -53,9 +56,7 @@ struct MainView: View {
                         .padding()
 
                     Button(
-                        action: {
-                            viewStore.send(.logout)
-                        },
+                        action: { viewStore.send(.logout) },
                         label: {
                             Text("Logout")
                                 .foregroundColor(.white)
@@ -68,12 +69,14 @@ struct MainView: View {
     }
 }
 
+// MARK: - Preview
+
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView(store: Store(
-            initialState: .init(),
-            reducer: mainReducer,
-            environment: MainEnvironment()
+            initialState: Main.State(),
+            reducer: Main.reducer,
+            environment: Main.Environment()
         ))
     }
 }

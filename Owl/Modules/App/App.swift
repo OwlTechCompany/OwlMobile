@@ -16,11 +16,11 @@ struct App {
     struct State: Equatable {
         var appDelegate: AppDelegate.State = AppDelegate.State()
         var login: Login.State?
-        var main: MainState?
+        var main: Main.State?
 
         mutating func setOnly(
             login: Login.State? = nil,
-            main: MainState? = nil
+            main: Main.State? = nil
         ) {
             self.login = login
             self.main = main
@@ -31,8 +31,8 @@ struct App {
 
     enum Action: Equatable {
         case appDelegate(AppDelegate.Action)
-        case main(MainAction)
         case login(Login.Action)
+        case main(Main.Action)
     }
 
     // MARK: - Environment
@@ -67,12 +67,12 @@ struct App {
                 environment: { $0.login }
             ),
 
-        mainReducer
+        Main.reducer
             .optional()
             .pullback(
                 state: \State.main,
                 action: /Action.main,
-                environment: { _ in MainEnvironment() }
+                environment: { $0.main }
             ),
 
         reducerCore
@@ -85,7 +85,7 @@ struct App {
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            state.setOnly(main: MainState())
+            state.setOnly(main: .initialState)
             return .none
 
         case .main(.logout):
@@ -115,7 +115,7 @@ struct AppView: View {
             )
             IfLetStore(
                 store.scope(state: \App.State.main, action: App.Action.main),
-                then: { _ in Text("Main") }
+                then: MainView.init
             )
         }
     }
@@ -138,6 +138,10 @@ extension App.Environment {
             authClient: authClient,
             userDefaultsClient: userDefaultsClient
         )
+    }
+
+    var main: Main.Environment {
+        Main.Environment()
     }
 
 }
