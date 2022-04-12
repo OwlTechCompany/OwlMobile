@@ -53,21 +53,68 @@ struct EnterPhone {
 
 struct EnterPhoneView: View {
 
+    private enum Field: Int, CaseIterable {
+        case phoneNumber
+    }
+
     var store: Store<EnterPhone.State, EnterPhone.Action>
+    @FocusState private var focusedField: Field?
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 16) {
+            VStack(spacing: 50) {
+                Spacer()
+
+                VStack(spacing: 16.0) {
+                    Text("Enter Phone")
+                        .font(.system(size: 24, weight: .bold, design: .monospaced))
+
+                    Text("We will send you SMS to this number to confirm your identity.")
+                        .font(.system(size: 14, weight: .regular))
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .ignoresSafeArea(.keyboard)
+                }
+
                 TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
+                    .focused($focusedField, equals: .phoneNumber)
                     .textFieldStyle(PlainTextFieldStyle())
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .multilineTextAlignment(.center)
+                    .keyboardType(.phonePad)
+                    .textContentType(.telephoneNumber)
+                    .disableAutocorrection(true)
+                    .toolbar {
+                        ToolbarItem(placement: .keyboard) {
+                            HStack {
+                                Spacer()
+                                Button("Done") { focusedField = nil }
+                            }
+                        }
+                    }
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            focusedField = .phoneNumber
+                        }
+                    }
+
+                Spacer()
 
                 Button(
                     action: { viewStore.send(.delegate(.sendPhoneNumber)) },
-                    label: { Text("Next") }
+                    label: {
+                        Text("Send code")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                            .foregroundColor(.white)
+                            .background(Asset.Colors.accentColor.swiftUIColor)
+                            .cornerRadius(6)
+                    }
                 )
             }
-            .padding()
+            .padding(20)
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

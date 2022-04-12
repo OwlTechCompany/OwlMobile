@@ -85,7 +85,9 @@ struct App {
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            state.setOnly(main: .initialState)
+            withAnimation {
+                state.setOnly(main: .initialState)
+            }
             return .none
 
         case .main(.logout):
@@ -108,15 +110,20 @@ struct AppView: View {
     let store: Store<App.State, App.Action>
 
     var body: some View {
-        Group {
-            IfLetStore(
-                store.scope(state: \App.State.login, action: App.Action.login),
-                then: LoginView.init
-            )
+        Group {            
             IfLetStore(
                 store.scope(state: \App.State.main, action: App.Action.main),
                 then: MainView.init
             )
+            .transition(.opacity)
+            .zIndex(0)
+
+            IfLetStore(
+                store.scope(state: \App.State.login, action: App.Action.login),
+                then: LoginView.init
+            )
+            .transition(.opacity)
+            .zIndex(1)
         }
     }
 

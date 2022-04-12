@@ -124,17 +124,19 @@ struct EnterCodeView: View {
                     label: {
                         Text("Resend Code")
                             .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                            .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
                     }
                 )
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     withAnimation {
                         focusedField = true
                     }
                 }
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     enum Constants {
