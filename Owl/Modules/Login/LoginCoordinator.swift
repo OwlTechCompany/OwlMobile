@@ -16,6 +16,7 @@ enum RoutePath: Identifiable {
 
     case onboarding
     case enterPhone
+    case enterCode
 
     var id: Self { self }
     
@@ -26,6 +27,8 @@ enum RoutePath: Identifiable {
             return /ScreenProviderState.onboarding as! CasePath<ScreenProviderState, T>
         case .enterPhone:
             return /ScreenProviderState.enterPhone as! CasePath<ScreenProviderState, T>
+        case .enterCode:
+            return /ScreenProviderState.enterCode as! CasePath<ScreenProviderState, T>
         }
     }
 }
@@ -33,6 +36,7 @@ enum RoutePath: Identifiable {
 enum ScreenProviderState: Equatable, Identifiable {
     case onboarding(OnboardingState)
     case enterPhone(EnterPhoneState)
+    case enterCode(EnterCodeState)
 
     var id: RoutePath.ID {
         switch self {
@@ -40,6 +44,8 @@ enum ScreenProviderState: Equatable, Identifiable {
             return RoutePath.enterPhone
         case .onboarding:
             return RoutePath.onboarding
+        case .enterCode:
+            return RoutePath.enterCode
         }
     }
 }
@@ -47,6 +53,7 @@ enum ScreenProviderState: Equatable, Identifiable {
 enum ScreenProviderAction: Equatable {
     case onboarding(OnboardingAction)
     case enterPhone(EnterPhoneAction)
+    case enterCode(EnterCodeAction)
 }
 
 let screenProviderReducer = Reducer<ScreenProviderState, ScreenProviderAction, LoginFlowEnvironment>.combine(
@@ -61,6 +68,12 @@ let screenProviderReducer = Reducer<ScreenProviderState, ScreenProviderAction, L
             state: /ScreenProviderState.enterPhone,
             action: /ScreenProviderAction.enterPhone,
             environment: { _ in EnterPhoneEnvironment() }
+        ),
+    enterCodeReducer
+        .pullback(
+            state: /ScreenProviderState.enterCode,
+            action: /ScreenProviderAction.enterCode,
+            environment: { _ in EnterCodeEnvironment() }
         )
 )
 
@@ -80,6 +93,11 @@ struct LoginFlowView: View {
                     state: /ScreenProviderState.enterPhone,
                     action: ScreenProviderAction.enterPhone,
                     then: EnterPhoneView.init
+                )
+                CaseLet(
+                    state: /ScreenProviderState.enterCode,
+                    action: ScreenProviderAction.enterCode,
+                    then: EnterCodeView.init
                 )
             }
         }
@@ -132,6 +150,23 @@ let loginFlowReducerCore = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnv
     case .routeAction(_, action: .onboarding(.startMessaging)):
         print("Start messanging")
         state.routes.push(.enterPhone(.init(phoneNumber: "+380")))
+        return .none
+
+    case .routeAction(_, action: .enterPhone(.sendPhoneNumber)):
+        guard var enterPhoneState: EnterPhoneState = state.routeState(routePath: .enterPhone) else {
+            return .none
+        }
+        if let screenProviderState = state.routes[id: .enterPhone]?.screen {
+            let casePath: CasePath<ScreenProviderState, EnterPhoneState> = RoutePath.enterPhone.path()
+            let oldState = casePath.extract(from: screenProviderState)!
+            var newState = oldState
+            newState.phoneNumber = "++++"
+            enterPhoneState = newState
+            state.routes[id: .enterPhone]?.screen = casePath.embed(newState)
+        }
+//        state.
+//        enterPhoneState.phoneNumber
+        state.routes.push(.enterCode(EnterCodeState(verificationCode: "", phoneNumber: enterPhoneState.phoneNumber)))
         return .none
 
     default:

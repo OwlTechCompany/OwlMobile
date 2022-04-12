@@ -8,31 +8,53 @@
 import SwiftUI
 import ComposableArchitecture
 
+// MARK: - State
+
+struct EnterCodeState: Equatable {
+    @BindableState var verificationCode: String
+    var phoneNumber: String
+}
+
+// MARK: - Action
+
+enum EnterCodeAction: Equatable, BindableAction {
+    case sendCode
+    case binding(BindingAction<EnterCodeState>)
+}
+
+// MARK: - Environment
+
+struct EnterCodeEnvironment {
+
+}
+
+// MARK: - Reducer
+
+let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, Void> { state, action, environment in
+    switch action {
+    case .binding(\.$verificationCode):
+        return .none
+
+    case .sendCode:
+        return .none
+
+    case .binding:
+        return .none
+    }
+}
+.binding()
+
 struct EnterCodeView: View {
-
-    // MARK: - ViewState
-
-    struct ViewState: Equatable {
-        @BindableState var verificationCode: String
-        let phoneNumber: String
-    }
-
-    // MARK: - ViewAction
-
-    enum ViewAction: Equatable, BindableAction {
-        case sendCode
-        case binding(BindingAction<ViewState>)
-    }
 
     // MARK: - Properties
 
-    var store: Store<LoginState, LoginAction>
+    var store: Store<EnterCodeState, EnterCodeAction>
 
     @FocusState private var focusedField: Bool
 
     var body: some View {
 
-        WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack(spacing: 48.0) {
                 VStack(spacing: 16.0) {
                     Text("Enter Code")
@@ -104,45 +126,15 @@ struct EnterCodeView: View {
     }
 }
 
-// MARK: - LoginState + ViewState
-
-private extension LoginState {
-    var view: EnterCodeView.ViewState {
-        get {
-            EnterCodeView.ViewState(
-                verificationCode: verificationCode,
-                phoneNumber: phoneNumber
-            )
-        }
-        set {
-            verificationCode = newValue.verificationCode
-        }
-    }
-}
-
-// MARK: - LoginAction + ViewAction
-
-private extension LoginAction {
-    static func view(_ viewAction: EnterCodeView.ViewAction) -> Self {
-        switch viewAction {
-        case let .binding(action):
-            return .binding(action.pullback(\.view))
-
-        case .sendCode:
-            return .sendCode
-        }
-    }
-}
-
 // MARK: - Preview
 
 struct EnterCodeView_Previews: PreviewProvider {
     static var previews: some View {
         EnterCodeView(
             store: Store(
-                initialState: LoginState(),
-                reducer: loginReducer,
-                environment: AppEnvironment.live.login
+                initialState: EnterCodeState(verificationCode: "123", phoneNumber: "+380992177560"),
+                reducer: enterCodeReducer,
+                environment: ()
             )
         )
     }
