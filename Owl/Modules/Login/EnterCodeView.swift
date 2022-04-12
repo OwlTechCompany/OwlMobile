@@ -30,7 +30,7 @@ struct EnterCodeEnvironment {
 
 // MARK: - Reducer
 
-let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, Void> { state, action, environment in
+let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, EnterCodeEnvironment> { state, action, environment in
     switch action {
     case .binding(\.$verificationCode):
         return .none

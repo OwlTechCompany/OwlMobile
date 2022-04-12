@@ -36,8 +36,11 @@
 		5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4B280056E900915572 /* LoginStore.swift */; };
 		5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */; };
 		5FA7D862280435F500AA48B5 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA7D861280435F500AA48B5 /* TCACoordinators */; };
-		5FA7D864280435FF00AA48B5 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */; };
+		5FA7D864280435FF00AA48B5 /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginFlow.swift */; };
 		5FA7D86628043FE200AA48B5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86528043FE200AA48B5 /* AppCoordinator.swift */; };
+		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
+		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
+		5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,8 +71,11 @@
 		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5F9F4E4B280056E900915572 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
 		5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingExtensions.swift; sourceTree = "<group>"; };
-		5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		5FA7D863280435FF00AA48B5 /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		5FA7D86528043FE200AA48B5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
+		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
+		5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenProvider.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +180,7 @@
 		5F9F4E3827FF463800915572 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5FA7D86728057AC700AA48B5 /* TCACoordinator */,
 				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
 				5FA7D85D2803202A00AA48B5 /* RoutingExtensions.swift */,
 				5D35EC862803204D00624717 /* View+Ext.swift */,
@@ -208,7 +215,8 @@
 			isa = PBXGroup;
 			children = (
 				5F9F4E4B280056E900915572 /* LoginStore.swift */,
-				5FA7D863280435FF00AA48B5 /* LoginCoordinator.swift */,
+				5FA7D863280435FF00AA48B5 /* LoginFlow.swift */,
+				5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */,
 				5F9F4E482800434B00915572 /* OnboardingView.swift */,
 				5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */,
 				5D35EC842800473400624717 /* EnterCodeView.swift */,
@@ -222,6 +230,15 @@
 				5F9F4E4627FF52C100915572 /* MainView.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		5FA7D86728057AC700AA48B5 /* TCACoordinator */ = {
+			isa = PBXGroup;
+			children = (
+				5FA7D86828057ADB00AA48B5 /* Routable.swift */,
+				5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */,
+			);
+			path = TCACoordinator;
 			sourceTree = "<group>";
 		};
 		D3080E831299946BDE92AEDD /* Frameworks */ = {
@@ -387,12 +404,14 @@
 				5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
-				5FA7D864280435FF00AA48B5 /* LoginCoordinator.swift in Sources */,
+				5FA7D864280435FF00AA48B5 /* LoginFlow.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
 				5F9F4E4C280056E900915572 /* LoginStore.swift in Sources */,
+				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
@@ -403,6 +422,7 @@
 				5FA7D85E2803202A00AA48B5 /* RoutingExtensions.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
+				5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
