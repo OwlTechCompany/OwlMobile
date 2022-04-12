@@ -57,8 +57,8 @@ extension AppEnvironment {
         )
     }
 
-    var login: LoginEnvironment {
-        LoginEnvironment(
+    var login: LoginFlowEnvironment {
+        LoginFlowEnvironment(
             authClient: authClient,
             userDefaultsClient: userDefaultsClient
         )
@@ -81,7 +81,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         .pullback(
             state: \AppState.login,
             action: /AppAction.login,
-            environment: { _ in LoginFlowEnvironment() }
+            environment: { $0.login }
         ),
 
     mainReducer
@@ -101,7 +101,7 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
         state.setOnly(login: .initialState)
         return .none
 
-    case .login(.loginSuccess):
+    case .login(.delegate(.loginSuccess)):
         state.setOnly(main: MainState())
         return .none
 
@@ -121,37 +121,16 @@ struct AppView: View {
 
     let store: Store<AppState, AppAction>
 
-//
-//    init(store: Store<AppState, AppAction>) {
-//        self.store = store
-//        self.viewStore = ViewStore(self.store.scope(state: ViewState.init))
-//    }
-
     var body: some View {
-        WithViewStore(store) { viewStore in
+        Group {
             IfLetStore(
-                store.scope(
-                    state: \.login,
-                    action: AppAction.login
-                ),
-                then: { loginCoordinatorStore in
-                    LoginFlowView(store: loginCoordinatorStore)
-                }
+                store.scope(state: \AppState.login, action: AppAction.login),
+                then: LoginFlowView.init
             )
             IfLetStore(
-                store.scope(
-                    state: \.main,
-                    action: AppAction.main
-                ),
-                then: { mainStore in
-                    Text("Main")
-                }
+                store.scope(state: \AppState.main, action: AppAction.main),
+                then: { _ in Text("Main") }
             )
         }
     }
 }
-
-// MARK: - View
-
-import TCACoordinators
-

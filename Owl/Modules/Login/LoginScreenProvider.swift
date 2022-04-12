@@ -8,6 +8,8 @@
 import ComposableArchitecture
 import TCACoordinators
 
+// MARK: - Routes
+
 struct OnboardingRoute: Routable {
     static var statePath = /LoginScreenProviderState.onboarding
 }
@@ -19,6 +21,8 @@ struct EnterPhoneRoute: Routable {
 struct EnterCodeRoute: Routable {
     static var statePath = /LoginScreenProviderState.enterCode
 }
+
+// MARK: - State handling
 
 enum LoginScreenProviderState: Equatable, Identifiable {
     case onboarding(OnboardingState)
@@ -37,13 +41,23 @@ enum LoginScreenProviderState: Equatable, Identifiable {
     }
 }
 
+// MARK: - Action handling
+
 enum LoginScreenProviderAction: Equatable {
     case onboarding(OnboardingAction)
     case enterPhone(EnterPhoneAction)
     case enterCode(EnterCodeAction)
 }
 
-let loginScreenProviderReducer = Reducer<LoginScreenProviderState, LoginScreenProviderAction, LoginFlowEnvironment>.combine(
+// MARK: - Reducer handling
+
+typealias LoginScreenProviderReducer = Reducer<
+    LoginScreenProviderState,
+    LoginScreenProviderAction,
+    LoginFlowEnvironment
+>
+
+let loginScreenProviderReducer = LoginScreenProviderReducer.combine(
     onboardingReducer
         .pullback(
             state: /LoginScreenProviderState.onboarding,

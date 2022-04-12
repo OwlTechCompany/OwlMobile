@@ -13,13 +13,22 @@ import ComposableArchitecture
 struct EnterCodeState: Equatable {
     @BindableState var verificationCode: String
     var phoneNumber: String
+
+    // For some very strange reasons TextField Binding<String> is setting its value two time
+    // To fix this (not to send code twice) i decided to use this variable
+    var isCodeSent: Bool = false
 }
 
 // MARK: - Action
 
 enum EnterCodeAction: Equatable, BindableAction {
-    case sendCode
     case binding(BindingAction<EnterCodeState>)
+    case delegate(DelegateAction)
+
+    enum DelegateAction {
+        case sendCode
+        case resendCode
+    }
 }
 
 // MARK: - Environment
@@ -30,12 +39,21 @@ struct EnterCodeEnvironment {
 
 // MARK: - Reducer
 
-let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, EnterCodeEnvironment> { state, action, environment in
+let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, EnterCodeEnvironment> { state, action, _ in
     switch action {
     case .binding(\.$verificationCode):
+        if state.verificationCode.count == 6 && !state.isCodeSent {
+            state.isCodeSent = true
+            return Effect(value: .delegate(.sendCode))
+        } else {
+            return .none
+        }
+
+    case .delegate(.resendCode):
+        state.isCodeSent = false
         return .none
 
-    case .sendCode:
+    case .delegate:
         return .none
 
     case .binding:
@@ -43,6 +61,8 @@ let enterCodeReducer = Reducer<EnterCodeState, EnterCodeAction, EnterCodeEnviron
     }
 }
 .binding()
+
+// MARK: - View
 
 struct EnterCodeView: View {
 
@@ -53,7 +73,6 @@ struct EnterCodeView: View {
     @FocusState private var focusedField: Bool
 
     var body: some View {
-
         WithViewStore(store) { viewStore in
             VStack(spacing: 48.0) {
                 VStack(spacing: 16.0) {
@@ -69,7 +88,7 @@ struct EnterCodeView: View {
 
                 ZStack {
                     HStack(spacing: 24.0) {
-                        ForEach(Constants.codeSizeRange) { index in
+                        ForEach(Constants.codeSizeRange, id: \.self) { index in
                             ZStack {
                                 Circle()
                                     .frame(width: Constants.circleSize, height: Constants.circleSize)
@@ -81,7 +100,6 @@ struct EnterCodeView: View {
                                 if Array(viewStore.verificationCode)[safe: Int(index)] != nil {
                                      Text(String(Array(viewStore.verificationCode)[safe: Int(index)]!))
                                         .font(.system(size: Constants.circleSize, weight: .bold, design: .monospaced))
-
                                 }
                             }
                         }
@@ -102,7 +120,7 @@ struct EnterCodeView: View {
                 }
 
                 Button(
-                    action: { print("Resend Code") },
+                    action: { viewStore.send(.delegate(.resendCode)) },
                     label: {
                         Text("Resend Code")
                             .font(.system(size: 16, weight: .semibold, design: .monospaced))
@@ -134,7 +152,7 @@ struct EnterCodeView_Previews: PreviewProvider {
             store: Store(
                 initialState: EnterCodeState(verificationCode: "123", phoneNumber: "+380992177560"),
                 reducer: enterCodeReducer,
-                environment: ()
+                environment: EnterCodeEnvironment()
             )
         )
     }

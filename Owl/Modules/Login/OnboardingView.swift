@@ -10,8 +10,7 @@ import ComposableArchitecture
 
 // MARK: - State
 
-struct OnboardingState: Equatable {
-}
+struct OnboardingState: Equatable { }
 
 // MARK: - Action
 
@@ -21,13 +20,11 @@ enum OnboardingAction: Equatable {
 
 // MARK: - Environment
 
-struct OnboardingEnvironment {
-
-}
+struct OnboardingEnvironment { }
 
 // MARK: - Reducer
 
-let onboardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnvironment> { state, action, environment in
+let onboardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnvironment> { _, action, _ in
     switch action {
     case .startMessaging:
         return .none
@@ -57,16 +54,17 @@ struct OnboardingView: View {
 
                 Spacer()
 
-                Button {
-                    viewStore.send(.startMessaging)
-                } label: {
-                    Text("Start Messaging")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, minHeight: 50)
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(6)
-                }
+                Button(
+                    action: { viewStore.send(.startMessaging) },
+                    label: {
+                        Text("Start Messaging")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(6)
+                    }
+                )
             }
             .padding(20)
         }

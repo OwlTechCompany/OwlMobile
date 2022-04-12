@@ -29,57 +29,91 @@ enum LoginFlowAction: Equatable, IdentifiedRouterAction {
 
     case verificationIDReceived(Result<String, NSError>)
     case authDataReceived(Result<AuthDataResult, NSError>)
-    case loginSuccess
+    case delegate(DelegateAction)
 
     case routeAction(LoginScreenProviderState.ID, action: LoginScreenProviderAction)
     case updateRoutes(IdentifiedArrayOf<Route<LoginScreenProviderState>>)
+
+    enum DelegateAction: Equatable {
+        case loginSuccess
+    }
 }
 
 // MARK: - Environment
 
-struct LoginFlowEnvironment { }
+struct LoginFlowEnvironment {
+    let authClient: AuthClient
+    let userDefaultsClient: UserDefaultsClient
+}
 
 // MARK: - Reducer
 
-private let loginFlowReducerCore = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnvironment> { state, action, environment in
+typealias LoginFlowReducer = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnvironment>
+
+private let loginFlowReducerCore = LoginFlowReducer { state, action, environment in
     switch action {
-    case .routeAction(_, action: .enterPhone(.binding(\.$phoneNumber))):
-        guard let enterPhoneState = state.subState(routePath: EnterPhoneRoute.self) else {
-            return .none
-        }
-        print("!!!!!!!!!! \(enterPhoneState.phoneNumber)")
-        return .none
-
     case .routeAction(_, action: .onboarding(.startMessaging)):
-        print("Start messanging")
-        state.routes.push(.enterPhone(.init(phoneNumber: "+380")))
+        state.routes.push(.enterPhone(.init(phoneNumber: "+380931314850")))
         return .none
 
-    case .routeAction(_, action: .enterPhone(.sendPhoneNumber)):
+    case .routeAction(_, action: .enterPhone(.delegate(.sendPhoneNumber))):
         guard var enterPhoneState = state.subState(routePath: EnterPhoneRoute.self) else {
             return .none
         }
-        //        if let screenProviderState = state.routes[id: .enterPhone]?.screen {
-        //            let casePath: CasePath<ScreenProviderState, EnterPhoneState> = RoutePath.enterPhone.path()
-        //            let oldState = casePath.extract(from: screenProviderState)!
-        //            var newState = oldState
-        //            newState.phoneNumber = "++++"
-        //            enterPhoneState = newState
-        //            state.routes[id: .enterPhone]?.screen = casePath.embed(newState)
-        //        }
-        //        state.
-        //        enterPhoneState.phoneNumber
-        state.routes.push(.enterCode(EnterCodeState(verificationCode: "", phoneNumber: enterPhoneState.phoneNumber)))
+        return environment.authClient
+            .verifyPhoneNumber(enterPhoneState.phoneNumber)
+            .mapError { $0 as NSError }
+            .catchToEffect(LoginFlowAction.verificationIDReceived)
+            .eraseToEffect()
+
+    case .routeAction(_, action: .enterCode(.delegate(.sendCode))),
+         .routeAction(_, action: .enterCode(.delegate(.resendCode))):
+        guard var enterCodeState = state.subState(routePath: EnterCodeRoute.self) else {
+            return .none
+        }
+        let model = SignInModel(
+            verificationID: environment.userDefaultsClient.getVerificationID(),
+            verificationCode: enterCodeState.verificationCode
+        )
+        return environment.authClient.signIn(model)
+            .catchToEffect(LoginFlowAction.authDataReceived)
+            .eraseToEffect()
+
+    case let .verificationIDReceived(.success(verificationId)):
+        guard var enterPhoneState = state.subState(routePath: EnterPhoneRoute.self) else {
+            return .none
+        }
+        environment.userDefaultsClient.setVerificationID(verificationId)
+        state.routes.push(.enterCode(EnterCodeState(
+            verificationCode: "",
+            phoneNumber: enterPhoneState.phoneNumber
+        )))
         return .none
 
-    default:
+    case let .verificationIDReceived(.failure(error)):
+        state.routes.goBackToRoot()
+        return .none
+
+    case let .authDataReceived(.success(authDataResult)):
+        return Effect(value: .delegate(.loginSuccess))
+
+    case let .authDataReceived(.failure(error)):
+        return .none
+
+    case .routeAction:
+        return .none
+
+    case .updateRoutes:
+        return .none
+
+    case .delegate:
         return .none
     }
 }
 
-let loginFlowReducer = Reducer<LoginFlowState, LoginFlowAction, LoginFlowEnvironment>.combine(
+let loginFlowReducer = LoginFlowReducer.combine(
     loginScreenProviderReducer
-        .forEachIdentifiedRoute(environment: { _ in .init() })
+        .forEachIdentifiedRoute(environment: { $0 })
         .withRouteReducer(
             loginFlowReducerCore
         )
@@ -113,4 +147,3 @@ struct LoginFlowView: View {
         }
     }
 }
-

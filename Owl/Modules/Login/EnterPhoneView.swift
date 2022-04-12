@@ -17,9 +17,13 @@ struct EnterPhoneState: Equatable {
 // MARK: - ViewAction
 
 enum EnterPhoneAction: Equatable, BindableAction {
-    case sendPhoneNumber
 
     case binding(BindingAction<EnterPhoneState>)
+    case delegate(DelegateAction)
+
+    enum DelegateAction {
+        case sendPhoneNumber
+    }
 }
 
 // MARK: - Environment
@@ -28,12 +32,12 @@ struct EnterPhoneEnvironment { }
 
 // MARK: - Reducer
 
-let enterPhoneReducer = Reducer<EnterPhoneState, EnterPhoneAction, EnterPhoneEnvironment> { state, action, environment in
+let enterPhoneReducer = Reducer<EnterPhoneState, EnterPhoneAction, EnterPhoneEnvironment> { _, action, _ in
     switch action {
     case .binding(\.$phoneNumber):
         return .none
 
-    case .sendPhoneNumber:
+    case .delegate:
         return .none
 
     case .binding:
@@ -57,7 +61,7 @@ struct EnterPhoneView: View {
                     .textFieldStyle(PlainTextFieldStyle())
 
                 Button(
-                    action: { viewStore.send(.sendPhoneNumber) },
+                    action: { viewStore.send(.delegate(.sendPhoneNumber)) },
                     label: { Text("Next") }
                 )
             }
