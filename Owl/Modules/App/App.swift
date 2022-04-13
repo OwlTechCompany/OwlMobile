@@ -91,10 +91,13 @@ struct App {
             state.setOnly(login: .initialState)
             return .none
 
+        case .appDelegate:
+            return .none
+
         case .login:
             return .none
 
-        default:
+        case .main:
             return .none
         }
     }
