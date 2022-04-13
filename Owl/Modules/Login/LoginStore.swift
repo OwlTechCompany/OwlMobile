@@ -53,10 +53,11 @@ struct Login {
     static private let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .routeAction(_, action: .onboarding(.startMessaging)):
-            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850")))
+            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850", isLoading: false)))
             return .none
 
         case .routeAction(_, action: .enterPhone(.delegate(.sendPhoneNumber))):
+            return .none
             guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
                 return .none
             }

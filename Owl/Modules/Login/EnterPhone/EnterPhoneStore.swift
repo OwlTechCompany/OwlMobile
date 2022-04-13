@@ -13,6 +13,7 @@ struct EnterPhone {
 
     struct State: Equatable {
         @BindableState var phoneNumber: String
+        @BindableState var isLoading: Bool
     }
 
     // MARK: - ViewAction
@@ -33,9 +34,13 @@ struct EnterPhone {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .binding(\.$phoneNumber):
+            return .none
+
+        case .delegate(.sendPhoneNumber):
+            state.isLoading = true
             return .none
 
         case .delegate:

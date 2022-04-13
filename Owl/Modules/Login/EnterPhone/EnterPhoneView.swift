@@ -19,57 +19,67 @@ struct EnterPhoneView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 50) {
-                Spacer()
+//            ZStack {
+//                viewStore.isLoading ? Loader() : EmptyView()
 
-                VStack(spacing: 16.0) {
-                    Text("Enter Phone")
+                VStack(spacing: 50) {
+                    Spacer()
+
+                    VStack(spacing: 16.0) {
+                        Text("Enter Phone")
+                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+
+                        Text("We will send you SMS to this number to confirm your identity.")
+                            .font(.system(size: 14, weight: .regular))
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .ignoresSafeArea(.keyboard)
+                    }
+
+                    TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
+                        .focused($focusedField, equals: .phoneNumber)
+                        .textFieldStyle(PlainTextFieldStyle())
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
-
-                    Text("We will send you SMS to this number to confirm your identity.")
-                        .font(.system(size: 14, weight: .regular))
                         .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .ignoresSafeArea(.keyboard)
-                }
-
-                TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
-                    .focused($focusedField, equals: .phoneNumber)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
-                    .multilineTextAlignment(.center)
-                    .keyboardType(.phonePad)
-                    .textContentType(.telephoneNumber)
-                    .disableAutocorrection(true)
-                    .toolbar {
-                        ToolbarItem(placement: .keyboard) {
-                            HStack {
-                                Spacer()
-                                Button("Done") { focusedField = nil }
+                        .keyboardType(.phonePad)
+                        .textContentType(.telephoneNumber)
+                        .disableAutocorrection(true)
+                        .toolbar {
+                            ToolbarItem(placement: .keyboard) {
+                                HStack {
+                                    Spacer()
+                                    Button("Done") { focusedField = nil }
+                                }
                             }
                         }
-                    }
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                            focusedField = .phoneNumber
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                focusedField = .phoneNumber
+                            }
                         }
-                    }
 
-                Spacer()
+                    Spacer()
 
-                Button(
-                    action: { viewStore.send(.delegate(.sendPhoneNumber)) },
-                    label: {
-                        Text("Send code")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .foregroundColor(.white)
-                            .background(Asset.Colors.accentColor.swiftUIColor)
-                            .cornerRadius(6)
-                    }
+                    Button(
+                        action: { viewStore.send(.delegate(.sendPhoneNumber)) },
+                        label: {
+                            Text("Send code")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, minHeight: 50)
+                                .foregroundColor(.white)
+                                .background(Asset.Colors.accentColor.swiftUIColor)
+                                .cornerRadius(6)
+                        }
+                    )
+                }
+                .padding(20)
+                .disabled(viewStore.isLoading)
+                .overlay(
+                    viewStore.isLoading
+                        ? Loader()
+                        : nil
                 )
-            }
-            .padding(20)
+
         }
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -80,7 +90,7 @@ struct EnterPhoneView: View {
 struct EnterPhoneNumber_Previews: PreviewProvider {
     static var previews: some View {
         EnterPhoneView(store: Store(
-            initialState: EnterPhone.State(phoneNumber: "+380992177560"),
+            initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
             reducer: EnterPhone.reducer,
             environment: EnterPhone.Environment()
         ))
