@@ -1,13 +1,11 @@
 //
-//  App.swift
+//  AppStore.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 07.04.2022.
+//  Created by Denys Danyliuk on 13.04.2022.
 //
 
-import SwiftUI
 import ComposableArchitecture
-import SwiftUINavigation
 
 struct App {
 
@@ -94,39 +92,16 @@ struct App {
             state.setOnly(login: .initialState)
             return .none
 
+        case .appDelegate:
+            return .none
+
         case .login:
             return .none
 
-        default:
+        case .main:
             return .none
         }
     }
-}
-
-// MARK: - View
-
-struct AppView: View {
-
-    let store: Store<App.State, App.Action>
-
-    var body: some View {
-        Group {            
-            IfLetStore(
-                store.scope(state: \App.State.main, action: App.Action.main),
-                then: MainView.init
-            )
-            .transition(.opacity)
-            .zIndex(0)
-
-            IfLetStore(
-                store.scope(state: \App.State.login, action: App.Action.login),
-                then: LoginView.init
-            )
-            .transition(.opacity)
-            .zIndex(1)
-        }
-    }
-
 }
 
 // MARK: App.Environment + Extensions

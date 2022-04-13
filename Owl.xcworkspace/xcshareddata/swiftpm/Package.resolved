@@ -172,15 +172,6 @@
       }
     },
     {
-      "identity" : "swiftui-navigation",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swiftui-navigation",
-      "state" : {
-        "revision" : "2694c03284a368168b3e0b8d7ab52626802d2246",
-        "version" : "0.1.0"
-      }
-    },
-    {
       "identity" : "tcacoordinators",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/TCACoordinators",
