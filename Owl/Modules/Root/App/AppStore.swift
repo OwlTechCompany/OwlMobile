@@ -83,9 +83,7 @@ struct App {
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            withAnimation {
-                state.setOnly(main: .initialState)
-            }
+            state.setOnly(main: .initialState)
             return .none
 
         case .main(.logout):
