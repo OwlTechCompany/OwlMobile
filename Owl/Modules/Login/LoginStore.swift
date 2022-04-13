@@ -1,5 +1,5 @@
 //
-//  LoginFlow.swift
+//  LoginStore.swift
 //  Owl
 //
 //  Created by Denys Danyliuk on 11.04.2022.
@@ -10,9 +10,9 @@ import ComposableArchitecture
 import SwiftUI
 import FirebaseAuth
 
-// MARK: - State
-
 struct Login {
+
+    // MARK: - State
 
     struct State: Equatable, IdentifiedRouterState {
 
@@ -118,33 +118,4 @@ struct Login {
                 reducerCore
             )
     )
-}
-
-// MARK: - View
-
-struct LoginView: View {
-
-    let store: Store<Login.State, Login.Action>
-
-    var body: some View {
-        TCARouter(store) { screen in
-            SwitchStore(screen) {
-                CaseLet(
-                    state: /Login.ScreenProvider.State.onboarding,
-                    action: Login.ScreenProvider.Action.onboarding,
-                    then: OnboardingView.init
-                )
-                CaseLet(
-                    state: /Login.ScreenProvider.State.enterPhone,
-                    action: Login.ScreenProvider.Action.enterPhone,
-                    then: EnterPhoneView.init
-                )
-                CaseLet(
-                    state: /Login.ScreenProvider.State.enterCode,
-                    action: Login.ScreenProvider.Action.enterCode,
-                    then: EnterCodeView.init
-                )
-            }
-        }
-    }
 }
