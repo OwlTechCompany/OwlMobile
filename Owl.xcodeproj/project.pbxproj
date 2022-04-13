@@ -25,7 +25,6 @@
 		5DA8A77027FF2A8B00C2ECBA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A76F27FF2A8B00C2ECBA /* FirebaseMessaging */; };
 		5DA8A77227FF2A8B00C2ECBA /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */; };
 		5DA8A77527FF2B1100C2ECBA /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */; };
-		5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */; };
 		5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */; };
 		5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A77E27FF33E100C2ECBA /* Assets.swift */; };
 		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
@@ -83,7 +82,6 @@
 				5DA8A77527FF2B1100C2ECBA /* ComposableArchitecture in Frameworks */,
 				5DA8A77227FF2A8B00C2ECBA /* FirebaseStorageCombine-Community in Frameworks */,
 				5DA8A76A27FF2A8B00C2ECBA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				5DA8A77827FF2B9D00C2ECBA /* SwiftUINavigation in Frameworks */,
 				5DA8A76C27FF2A8B00C2ECBA /* FirebaseAuthCombine-Community in Frameworks */,
 				5FA7D862280435F500AA48B5 /* TCACoordinators in Frameworks */,
 				DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */,
@@ -266,7 +264,6 @@
 				5DA8A76F27FF2A8B00C2ECBA /* FirebaseMessaging */,
 				5DA8A77127FF2A8B00C2ECBA /* FirebaseStorageCombine-Community */,
 				5DA8A77427FF2B1100C2ECBA /* ComposableArchitecture */,
-				5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */,
 				5FA7D861280435F500AA48B5 /* TCACoordinators */,
 			);
 			productName = Owl;
@@ -300,7 +297,6 @@
 			packageReferences = (
 				5DA8A76827FF2A8B00C2ECBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 				5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
@@ -637,14 +633,6 @@
 				minimumVersion = 0.34.0;
 			};
 		};
-		5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
-			};
-		};
 		5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators";
@@ -685,11 +673,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		5DA8A77727FF2B9D00C2ECBA /* SwiftUINavigation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5DA8A77627FF2B9D00C2ECBA /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
-			productName = SwiftUINavigation;
 		};
 		5FA7D861280435F500AA48B5 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
