@@ -61,7 +61,7 @@ struct EnterPhoneView: View {
                     Spacer()
 
                     Button(
-                        action: { viewStore.send(.delegate(.sendPhoneNumber)) },
+                        action: { viewStore.send(.sendPhoneNumber) },
                         label: {
                             Text("Send code")
                                 .font(.headline)
@@ -92,7 +92,7 @@ struct EnterPhoneNumber_Previews: PreviewProvider {
         EnterPhoneView(store: Store(
             initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
             reducer: EnterPhone.reducer,
-            environment: EnterPhone.Environment()
+            environment: EnterPhone.Environment(authClient: .live)
         ))
     }
 }

@@ -29,7 +29,7 @@ struct Login {
 
     enum Action: Equatable, IdentifiedRouterAction {
 
-        case verificationIDReceived(Result<String, NSError>)
+//        case verificationIDReceived(Result<String, NSError>)
         case authDataReceived(Result<AuthDataResult, NSError>)
         case delegate(DelegateAction)
 
@@ -56,16 +56,16 @@ struct Login {
             state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850", isLoading: false)))
             return .none
 
-        case .routeAction(_, action: .enterPhone(.delegate(.sendPhoneNumber))):
-            return .none
+        case let .routeAction(_, action: .enterPhone(.delegate(.verificationIDReceived(.success(verificationId))))):
             guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
                 return .none
             }
-            return environment.authClient
-                .verifyPhoneNumber(enterPhoneState.phoneNumber)
-                .mapError { $0 as NSError }
-                .catchToEffect(Action.verificationIDReceived)
-                .eraseToEffect()
+            environment.userDefaultsClient.setVerificationID(verificationId)
+            state.routes.push(.enterCode(EnterCode.State(
+                verificationCode: "",
+                phoneNumber: enterPhoneState.phoneNumber
+            )))
+            return .none
 
         case .routeAction(_, action: .enterCode(.delegate(.sendCode))),
              .routeAction(_, action: .enterCode(.delegate(.resendCode))):
@@ -79,21 +79,6 @@ struct Login {
             return environment.authClient.signIn(model)
                 .catchToEffect(Action.authDataReceived)
                 .eraseToEffect()
-
-        case let .verificationIDReceived(.success(verificationId)):
-            guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
-                return .none
-            }
-            environment.userDefaultsClient.setVerificationID(verificationId)
-            state.routes.push(.enterCode(EnterCode.State(
-                verificationCode: "",
-                phoneNumber: enterPhoneState.phoneNumber
-            )))
-            return .none
-
-        case let .verificationIDReceived(.failure(error)):
-            state.routes.goBackToRoot()
-            return .none
 
         case let .authDataReceived(.success(authDataResult)):
             return Effect(value: .delegate(.loginSuccess))

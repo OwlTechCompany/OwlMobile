@@ -69,7 +69,7 @@ extension Login.ScreenProvider {
             .pullback(
                 state: /State.enterPhone,
                 action: /Action.enterPhone,
-                environment: { _ in EnterPhone.Environment() }
+                environment: { EnterPhone.Environment(authClient: $0.authClient) }
             ),
         EnterCode.reducer
             .pullback(
