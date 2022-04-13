@@ -42,7 +42,7 @@ struct EnterCode {
     static let reducer = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .binding(\.$verificationCode):
-            if state.verificationCode.count == 6 && !state.isCodeSent {
+            if state.verificationCode.count == EnterCodeView.Constants.codeSize && !state.isCodeSent {
                 state.isCodeSent = true
                 return Effect(value: .delegate(.sendCode))
             } else {
