@@ -2,111 +2,120 @@
 //  LoginStore.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 08.04.2022.
+//  Created by Denys Danyliuk on 11.04.2022.
 //
 
+import TCACoordinators
 import ComposableArchitecture
+import SwiftUI
 import FirebaseAuth
 
-// MARK: - State
+struct Login {
 
-struct LoginState: Equatable, Hashable, RoutableState {
+    // MARK: - State
 
-    @BindableState var phoneNumber: String
-    @BindableState var verificationCode: String
+    struct State: Equatable, IdentifiedRouterState {
 
-    var currentRoute: OnboardingView.Route?
+        var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
 
-    init() {
-        phoneNumber = "+380931314850"
-        verificationCode = ""
-        currentRoute = nil
+        static let initialState = State(
+            routes: [
+                .root(.onboarding(Onboarding.State()), embedInNavigationView: true)
+            ]
+        )
     }
-}
 
-// MARK: - Action
+    // MARK: - Action
 
-enum LoginAction: Equatable, BindableAction, RoutableAction {
-    case sendPhoneNumber
-    case sendCode
-    case verificationIDReceived(Result<String, NSError>)
-    case authDataReceived(Result<AuthDataResult, NSError>)
-    case loginSuccess
+    enum Action: Equatable, IdentifiedRouterAction {
 
-    case binding(BindingAction<LoginState>)
-    case router(RoutingAction<LoginState.Route>)
-}
+        case verificationIDReceived(Result<String, NSError>)
+        case authDataReceived(Result<AuthDataResult, NSError>)
+        case delegate(DelegateAction)
 
-// MARK: - Environment
+        case routeAction(ScreenProvider.State.ID, action: ScreenProvider.Action)
+        case updateRoutes(IdentifiedArrayOf<Route<ScreenProvider.State>>)
 
-struct LoginEnvironment {
-    let authClient: AuthClient
-    let userDefaultsClient: UserDefaultsClient
-}
+        enum DelegateAction: Equatable {
+            case loginSuccess
+        }
+    }
 
-// MARK: - Reducer
+    // MARK: - Environment
 
-let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> { state, action, environment in
-    switch action {
-    case .loginSuccess:
-        return .none
+    struct Environment {
+        let authClient: AuthClient
+        let userDefaultsClient: UserDefaultsClient
+    }
 
-    case .sendPhoneNumber:
-        return environment.authClient
-            .verifyPhoneNumber(state.phoneNumber)
-            .mapError { $0 as NSError }
-            .catchToEffect(LoginAction.verificationIDReceived)
-            .eraseToEffect()
+    // MARK: - Reducer
 
-    case .sendCode:
-        print(state.verificationCode)
-        return .none
+    static private let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
+        switch action {
+        case .routeAction(_, action: .onboarding(.startMessaging)):
+            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850")))
+            return .none
 
-    case let .verificationIDReceived(.success(verificationId)):
-        return .merge(
-			.fireAndForget {
-            	environment.userDefaultsClient.setVerificationID(verificationId)
-        	},
-			Effect(value: .navigate(to: .enterPhone(.enterCode)))
-            	.eraseToEffect()
-		)
-
-    case let .verificationIDReceived(.failure(error)):
-        return Effect(value: .navigate(to: nil))
-
-    case let .authDataReceived(.success(authData)):
-        print(authData.user.phoneNumber)
-        return .none
-
-    case let .authDataReceived(.failure(error)):
-        return Effect(value: .navigate(to: nil))
-
-    case .binding(\.$phoneNumber):
-        print("AAAAAAA")
-        return .none
-
-    case .binding:
-        print(state.verificationCode)
-        if state.verificationCode.count == 6 {
-            let model = SignInModel(
-                verificationID: environment.userDefaultsClient.getVerificationID(),
-                verificationCode: state.verificationCode
-            )
-            return environment.authClient.signIn(model)
-                .catchToEffect(LoginAction.authDataReceived)
+        case .routeAction(_, action: .enterPhone(.delegate(.sendPhoneNumber))):
+            guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+                return .none
+            }
+            return environment.authClient
+                .verifyPhoneNumber(enterPhoneState.phoneNumber)
+                .mapError { $0 as NSError }
+                .catchToEffect(Action.verificationIDReceived)
                 .eraseToEffect()
 
-        } else {
+        case .routeAction(_, action: .enterCode(.delegate(.sendCode))),
+             .routeAction(_, action: .enterCode(.delegate(.resendCode))):
+            guard var enterCodeState = state.subState(routePath: ScreenProvider.EnterCodeRoute.self) else {
+                return .none
+            }
+            let model = SignIn(
+                verificationID: environment.userDefaultsClient.getVerificationID(),
+                verificationCode: enterCodeState.verificationCode
+            )
+            return environment.authClient.signIn(model)
+                .catchToEffect(Action.authDataReceived)
+                .eraseToEffect()
+
+        case let .verificationIDReceived(.success(verificationId)):
+            guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+                return .none
+            }
+            environment.userDefaultsClient.setVerificationID(verificationId)
+            state.routes.push(.enterCode(EnterCode.State(
+                verificationCode: "",
+                phoneNumber: enterPhoneState.phoneNumber
+            )))
+            return .none
+
+        case let .verificationIDReceived(.failure(error)):
+            state.routes.goBackToRoot()
+            return .none
+
+        case let .authDataReceived(.success(authDataResult)):
+            return Effect(value: .delegate(.loginSuccess))
+
+        case let .authDataReceived(.failure(error)):
+            return .none
+
+        case .routeAction:
+            return .none
+
+        case .updateRoutes:
+            return .none
+
+        case .delegate:
             return .none
         }
-
-    case let .binding(some):
-        print(some)
-        return .none
-
-    case .router:
-        return .none
     }
+
+    static let reducer = Reducer<State, Action, Environment>.combine(
+        Login.ScreenProvider.reducer
+            .forEachIdentifiedRoute(environment: { $0 })
+            .withRouteReducer(
+                reducerCore
+            )
+    )
 }
-.routing()
-.binding()

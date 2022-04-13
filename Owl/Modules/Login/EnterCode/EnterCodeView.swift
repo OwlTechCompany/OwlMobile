@@ -10,29 +10,12 @@ import ComposableArchitecture
 
 struct EnterCodeView: View {
 
-    // MARK: - ViewState
-
-    struct ViewState: Equatable {
-        @BindableState var verificationCode: String
-        let phoneNumber: String
-    }
-
-    // MARK: - ViewAction
-
-    enum ViewAction: Equatable, BindableAction {
-        case sendCode
-        case binding(BindingAction<ViewState>)
-    }
-
-    // MARK: - Properties
-
-    var store: Store<LoginState, LoginAction>
+    var store: Store<EnterCode.State, EnterCode.Action>
 
     @FocusState private var focusedField: Bool
 
     var body: some View {
-
-        WithViewStore(store.scope(state: \LoginState.view, action: LoginAction.view)) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack(spacing: 48.0) {
                 VStack(spacing: 16.0) {
                     Text("Enter Code")
@@ -47,7 +30,7 @@ struct EnterCodeView: View {
 
                 ZStack {
                     HStack(spacing: 24.0) {
-                        ForEach(Constants.codeSizeRange) { index in
+                        ForEach(Constants.codeSizeRange, id: \.self) { index in
                             ZStack {
                                 Circle()
                                     .frame(width: Constants.circleSize, height: Constants.circleSize)
@@ -59,7 +42,6 @@ struct EnterCodeView: View {
                                 if Array(viewStore.verificationCode)[safe: Int(index)] != nil {
                                      Text(String(Array(viewStore.verificationCode)[safe: Int(index)]!))
                                         .font(.system(size: Constants.circleSize, weight: .bold, design: .monospaced))
-
                                 }
                             }
                         }
@@ -80,7 +62,7 @@ struct EnterCodeView: View {
                 }
 
                 Button(
-                    action: { print("Resend Code") },
+                    action: { viewStore.send(.delegate(.resendCode)) },
                     label: {
                         Text("Resend Code")
                             .font(.system(size: 16, weight: .semibold, design: .monospaced))
@@ -104,45 +86,18 @@ struct EnterCodeView: View {
     }
 }
 
-// MARK: - LoginState + ViewState
-
-private extension LoginState {
-    var view: EnterCodeView.ViewState {
-        get {
-            EnterCodeView.ViewState(
-                verificationCode: verificationCode,
-                phoneNumber: phoneNumber
-            )
-        }
-        set {
-            verificationCode = newValue.verificationCode
-        }
-    }
-}
-
-// MARK: - LoginAction + ViewAction
-
-private extension LoginAction {
-    static func view(_ viewAction: EnterCodeView.ViewAction) -> Self {
-        switch viewAction {
-        case let .binding(action):
-            return .binding(action.pullback(\.view))
-
-        case .sendCode:
-            return .sendCode
-        }
-    }
-}
-
 // MARK: - Preview
 
 struct EnterCodeView_Previews: PreviewProvider {
     static var previews: some View {
         EnterCodeView(
             store: Store(
-                initialState: LoginState(),
-                reducer: loginReducer,
-                environment: AppEnvironment.live.login
+                initialState: EnterCode.State(
+                    verificationCode: "123",
+                    phoneNumber: "+380992177560"
+                ),
+                reducer: EnterCode.reducer,
+                environment: EnterCode.Environment()
             )
         )
     }
