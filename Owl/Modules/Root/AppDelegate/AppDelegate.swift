@@ -7,8 +7,6 @@
 
 import UIKit
 import ComposableArchitecture
-import Firebase
-import FirebaseAuth
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
 

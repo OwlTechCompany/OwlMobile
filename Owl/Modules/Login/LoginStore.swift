@@ -71,7 +71,7 @@ struct Login {
             guard var enterCodeState = state.subState(routePath: ScreenProvider.EnterCodeRoute.self) else {
                 return .none
             }
-            let model = SignInModel(
+            let model = SignIn(
                 verificationID: environment.userDefaultsClient.getVerificationID(),
                 verificationCode: enterCodeState.verificationCode
             )

@@ -9,11 +9,6 @@ import UIKit
 import FirebaseAuth
 import ComposableArchitecture
 
-struct SignInModel {
-    let verificationID: String
-    let verificationCode: String
-}
-
 struct AuthClient {
 
     var verifyPhoneNumber: (String) -> Effect<String, Error>
@@ -22,7 +17,7 @@ struct AuthClient {
         [AnyHashable: Any],
         @escaping (UIBackgroundFetchResult) -> Void
     ) -> Effect<Void, Never>
-    var signIn: (SignInModel) -> Effect<AuthDataResult, NSError>
+    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
 
 }
 
