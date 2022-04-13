@@ -15,15 +15,20 @@ struct OnboardingView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                VStack(spacing: 42) {
-                    Rectangle()
-                        .foregroundColor(.blue.opacity(0.2))
+                VStack(spacing: 50) {
+                    Image(uiImage: Asset.Images.owlBlack.image)
                         .frame(height: 270)
                         .cornerRadius(5)
 
-                    Text("Connect easily with your family and friends over countries")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .multilineTextAlignment(.center)
+                    VStack(spacing: 16) {
+                        Text("Owl")
+                            .font(.system(size: 36, weight: .bold, design: .monospaced))
+                            .multilineTextAlignment(.center)
+
+                        Text("Connect easily with your family and friends over countries")
+                            .font(.system(size: 14, weight: .regular))
+                            .multilineTextAlignment(.center)
+                    }
                 }
                 .padding()
 
@@ -36,13 +41,14 @@ struct OnboardingView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity, minHeight: 50)
                             .foregroundColor(.white)
-                            .background(Color.blue)
+                            .background(Asset.Colors.accentColor.swiftUIColor)
                             .cornerRadius(6)
                     }
                 )
             }
             .padding(20)
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
