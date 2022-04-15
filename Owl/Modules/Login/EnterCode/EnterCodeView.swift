@@ -48,6 +48,7 @@ struct EnterCodeView: View {
                     }
 
                     TextField("", text: viewStore.binding(\.$verificationCode))
+                        .textFieldStyle(PlainTextFieldStyle())
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
                         .tint(.clear)
                         .textContentType(.oneTimeCode)
