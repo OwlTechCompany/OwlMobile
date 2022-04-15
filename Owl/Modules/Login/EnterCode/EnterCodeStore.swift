@@ -27,6 +27,8 @@ struct EnterCode {
 
         case verificationIDReceived(Result<String, NSError>)
         case authDataReceived(Result<AuthDataResult, NSError>)
+        case setMe
+        case setMeResult(Result<Bool, NSError>)
 
         case dismissAlert
 
@@ -38,6 +40,7 @@ struct EnterCode {
     struct Environment {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
+        let firestoreUsersClient: FirestoreUsersClient
     }
 
     // MARK: - Reducer
@@ -62,7 +65,15 @@ struct EnterCode {
                 .catchToEffect(Action.authDataReceived)
                 .eraseToEffect()
 
-        case let .authDataReceived(.success(result)):
+        case .authDataReceived(.success):
+            return Effect(value: .setMe)
+
+        case .setMe:
+            return environment.firestoreUsersClient.setMe()
+                .catchToEffect(Action.setMeResult)
+                .eraseToEffect()
+
+        case .setMeResult(.success):
             state.isLoading = false
             return .none
 
@@ -80,7 +91,8 @@ struct EnterCode {
                 .eraseToEffect()
 
         case let .authDataReceived(.failure(error)),
-             let .verificationIDReceived(.failure(error)):
+             let .verificationIDReceived(.failure(error)),
+             let .setMeResult(.failure(error)):
             state.isLoading = false
             state.alert = .init(
                 title: TextState("Error"),

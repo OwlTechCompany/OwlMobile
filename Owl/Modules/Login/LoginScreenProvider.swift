@@ -84,7 +84,8 @@ extension Login.ScreenProvider {
                 environment: {
                     EnterCode.Environment(
                         authClient: $0.authClient,
-                        userDefaultsClient: $0.userDefaultsClient
+                        userDefaultsClient: $0.userDefaultsClient,
+                        firestoreUsersClient: $0.firestoreUsersClient
                     )
                 }
             )

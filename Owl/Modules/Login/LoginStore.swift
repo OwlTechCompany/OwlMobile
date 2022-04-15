@@ -45,6 +45,7 @@ struct Login {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
         let validationClient: ValidationClient
+        let firestoreUsersClient: FirestoreUsersClient
     }
 
     // MARK: - Reducer
@@ -65,7 +66,7 @@ struct Login {
             )))
             return .none
 
-        case .routeAction(_, action: .enterCode(.authDataReceived(.success))):
+        case .routeAction(_, action: .enterCode(.setMeResult(.success))):
             return Effect(value: .delegate(.loginSuccess))
 
         case .routeAction:

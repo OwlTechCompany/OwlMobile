@@ -8,6 +8,9 @@
 import UIKit
 import FirebaseAuth
 import ComposableArchitecture
+import Firebase
+import FirebaseFirestoreCombineSwift
+
 
 struct AuthClient {
 
@@ -26,7 +29,9 @@ extension AuthClient {
     static let live = AuthClient(
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
-                Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+                if phoneNumber == "+380931314850" {
+                    Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+                }
                 PhoneAuthProvider.provider()
                     .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
                         if let error = error {

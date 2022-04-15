@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseAuth
 
 struct App {
 
@@ -36,16 +37,18 @@ struct App {
     // MARK: - Environment
 
     struct Environment {
-        var firebaseClient: FirebaseClient
-        var authClient: AuthClient
-        var userDefaultsClient: UserDefaultsClient
-        var validationClient: ValidationClient
+        let firebaseClient: FirebaseClient
+        let authClient: AuthClient
+        let userDefaultsClient: UserDefaultsClient
+        let validationClient: ValidationClient
+        let firestoreUsersClient: FirestoreUsersClient
 
         static let live = Environment(
             firebaseClient: .live,
             authClient: .live,
             userDefaultsClient: .live,
-            validationClient: .live
+            validationClient: .live,
+            firestoreUsersClient: .live
         )
     }
 
@@ -78,10 +81,16 @@ struct App {
         reducerCore
     ).debug()
 
-    static var reducerCore = Reducer<State, Action, Environment> { state, action, _ in
+    static var reducerCore = Reducer<State, Action, Environment> { state, action, env in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            state.setOnly(login: .initialState)
+            if let currentUser = Auth.auth().currentUser {
+                print(currentUser)
+//                FirebaseAuth.User
+                state.setOnly(main: .initialState)
+            } else {
+                state.setOnly(login: .initialState)
+            }
             return .none
 
         case .login(.delegate(.loginSuccess)):
@@ -89,6 +98,7 @@ struct App {
             return .none
 
         case .main(.logout):
+            try? Auth.auth().signOut()
             state.setOnly(login: .initialState)
             return .none
 
@@ -119,7 +129,8 @@ extension App.Environment {
         Login.Environment(
             authClient: authClient,
             userDefaultsClient: userDefaultsClient,
-            validationClient: validationClient
+            validationClient: validationClient,
+            firestoreUsersClient: firestoreUsersClient
         )
     }
 
