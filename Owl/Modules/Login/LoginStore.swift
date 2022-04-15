@@ -44,6 +44,7 @@ struct Login {
     struct Environment {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
+        let validationClient: ValidationClient
     }
 
     // MARK: - Reducer
@@ -51,7 +52,7 @@ struct Login {
     static private let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .routeAction(_, action: .onboarding(.startMessaging)):
-            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850", isLoading: false)))
+            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
             return .none
 
         case .routeAction(_, action: .enterPhone(.verificationIDReceived(.success))):

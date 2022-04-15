@@ -72,7 +72,8 @@ extension Login.ScreenProvider {
                 environment: {
                     EnterPhone.Environment(
                         authClient: $0.authClient,
-                        userDefaultsClient: $0.userDefaultsClient
+                        userDefaultsClient: $0.userDefaultsClient,
+                        phoneValidation: $0.validationClient.phoneValidation
                     )
                 }
             ),

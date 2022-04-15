@@ -46,6 +46,8 @@
 		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
 		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
 		5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */; };
+		5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE318062809E4B5007F7816 /* ValidationClient.swift */; };
+		5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +89,8 @@
 		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
 		5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenProvider.swift; sourceTree = "<group>"; };
+		5FE318062809E4B5007F7816 /* ValidationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClient.swift; sourceTree = "<group>"; };
+		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +129,7 @@
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
 				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
+				5FE318062809E4B5007F7816 /* ValidationClient.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -162,6 +167,7 @@
 				5D35EC7E27FF846200624717 /* Owl.entitlements */,
 				5F9F4E4027FF4F4400915572 /* Modules */,
 				5F727FBE2807659000FABF26 /* Models */,
+				5FE318092809ED72007F7816 /* Modifiers */,
 				5F9F4E3827FF463800915572 /* Extensions */,
 				5DA8A77D27FF33D300C2ECBA /* Generated */,
 				5DA8A77C27FF313800C2ECBA /* Resources */,
@@ -319,6 +325,22 @@
 				5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */,
 			);
 			path = TCACoordinator;
+			sourceTree = "<group>";
+		};
+		5FE318092809ED72007F7816 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				5FE3180A2809ED7C007F7816 /* Buttons */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		5FE3180A2809ED7C007F7816 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		D3080E831299946BDE92AEDD /* Frameworks */ = {
@@ -480,8 +502,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */,
+				5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,

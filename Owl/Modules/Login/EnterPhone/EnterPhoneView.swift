@@ -62,15 +62,10 @@ struct EnterPhoneView: View {
 
                     Button(
                         action: { viewStore.send(.sendPhoneNumber) },
-                        label: {
-                            Text("Send code")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, minHeight: 50)
-                                .foregroundColor(.white)
-                                .background(Asset.Colors.accentColor.swiftUIColor)
-                                .cornerRadius(6)
-                        }
+                        label: { Text("Send code") }
                     )
+                    .buttonStyle(BigButtonStyle())
+                    .disabled(!viewStore.isPhoneNumberValid)
                 }
                 .padding(20)
                 .disabled(viewStore.isLoading)
@@ -94,7 +89,8 @@ struct EnterPhoneNumber_Previews: PreviewProvider {
             reducer: EnterPhone.reducer,
             environment: EnterPhone.Environment(
                 authClient: .live,
-                userDefaultsClient: .live
+                userDefaultsClient: .live,
+                phoneValidation: ValidationClient.live.phoneValidation
             )
         ))
     }

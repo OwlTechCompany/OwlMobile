@@ -13,6 +13,7 @@ struct EnterPhone {
 
     struct State: Equatable {
         @BindableState var phoneNumber: String
+        @BindableState var isPhoneNumberValid: Bool = false
         var isLoading: Bool
     }
 
@@ -30,6 +31,7 @@ struct EnterPhone {
     struct Environment {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
+        let phoneValidation: (String) -> Bool
     }
 
     // MARK: - Reducer
@@ -37,6 +39,7 @@ struct EnterPhone {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .binding(\.$phoneNumber):
+            state.isPhoneNumberValid = environment.phoneValidation(state.phoneNumber)
             return .none
 
         case .sendPhoneNumber:

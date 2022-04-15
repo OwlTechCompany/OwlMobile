@@ -39,11 +39,13 @@ struct App {
         var firebaseClient: FirebaseClient
         var authClient: AuthClient
         var userDefaultsClient: UserDefaultsClient
+        var validationClient: ValidationClient
 
         static let live = Environment(
             firebaseClient: .live,
             authClient: .live,
-            userDefaultsClient: .live
+            userDefaultsClient: .live,
+            validationClient: .live
         )
     }
 
@@ -116,7 +118,8 @@ extension App.Environment {
     var login: Login.Environment {
         Login.Environment(
             authClient: authClient,
-            userDefaultsClient: userDefaultsClient
+            userDefaultsClient: userDefaultsClient,
+            validationClient: validationClient
         )
     }
 
