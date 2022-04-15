@@ -23,7 +23,6 @@ struct EnterPhone {
         case sendPhoneNumber
 
         case binding(BindingAction<State>)
-        case delegate(DelegateAction)
     }
 
     // MARK: - Environment
@@ -56,9 +55,6 @@ struct EnterPhone {
         case let .verificationIDReceived(.failure(error)):
             print(error.localizedDescription)
             state.isLoading = false
-            return .none
-
-        case .delegate:
             return .none
 
         case .binding:
