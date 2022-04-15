@@ -16,6 +16,12 @@
 		5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC88280323C100624717 /* Collection+Ext.swift */; };
 		5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */; };
 		5D35EC8E28076EDF00624717 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8D28076EDE00624717 /* Loader.swift */; };
+		5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */; };
+		5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */; };
+		5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */; };
+		5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */; };
+		5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F4280A1C1600A1B705 /* ChatView.swift */; };
+		5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -63,6 +69,12 @@
 		5D35EC88280323C100624717 /* Collection+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Ext.swift"; sourceTree = "<group>"; };
 		5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsClient.swift; sourceTree = "<group>"; };
 		5D35EC8D28076EDE00624717 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
+		5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListStore.swift; sourceTree = "<group>"; };
+		5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
+		5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenProvider.swift; sourceTree = "<group>"; };
+		5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellView.swift; sourceTree = "<group>"; };
+		5D4CF9F4280A1C1600A1B705 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
@@ -135,6 +147,25 @@
 				5D35EC8D28076EDE00624717 /* Loader.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		5D4CF9E92809ED4D00A1B705 /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */,
+				5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */,
+				5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */,
+			);
+			path = ChatList;
+			sourceTree = "<group>";
+		};
+		5D4CF9F3280A1C0000A1B705 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
+				5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */,
+			);
+			path = Chat;
 			sourceTree = "<group>";
 		};
 		5DA8A74E27FF260700C2ECBA = {
@@ -293,8 +324,8 @@
 		5F9F4E4127FF4F5600915572 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				5FA7D863280435FF00AA48B5 /* LoginStore.swift */,
 				5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */,
+				5FA7D863280435FF00AA48B5 /* LoginStore.swift */,
 				5F727FB2280762D800FABF26 /* LoginView.swift */,
 				5F727FA92807621300FABF26 /* Onboarding */,
 				5F727FAC2807626100FABF26 /* EnterPhone */,
@@ -306,8 +337,11 @@
 		5F9F4E4527FF52B800915572 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */,
 				5F727FBC2807647300FABF26 /* MainStore.swift */,
 				5F9F4E4627FF52C100915572 /* MainView.swift */,
+				5D4CF9F3280A1C0000A1B705 /* Chat */,
+				5D4CF9E92809ED4D00A1B705 /* ChatList */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -480,20 +514,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */,
+				5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
+				5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */,
+				5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
 				5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */,
+				5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
+				5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */,
 				5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */,
 				5F727FB52807632300FABF26 /* AppStore.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,

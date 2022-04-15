@@ -16,12 +16,21 @@ struct App {
         var login: Login.State?
         var main: Main.State?
 
-        mutating func setOnly(
-            login: Login.State? = nil,
-            main: Main.State? = nil
-        ) {
-            self.login = login
-            self.main = main
+        mutating func set(_ currentState: CurrentState) {
+            switch currentState {
+            case .login:
+                self.login = .initialState
+                self.main = .none
+
+            case .main:
+                self.main = .initialState
+                self.login = .none
+            }
+        }
+
+        enum CurrentState {
+            case login
+            case main
         }
     }
 
@@ -79,15 +88,15 @@ struct App {
     static var reducerCore = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            state.setOnly(login: .initialState)
+            state.set(.login)
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            state.setOnly(main: .initialState)
+            state.set(.main)
             return .none
 
-        case .main(.logout):
-            state.setOnly(login: .initialState)
+        case .main(.delegate(.logout)):
+            state.set(.login)
             return .none
 
         case .appDelegate:

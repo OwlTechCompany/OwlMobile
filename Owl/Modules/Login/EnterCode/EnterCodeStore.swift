@@ -13,7 +13,7 @@ struct EnterCode {
     // MARK: - State
 
     struct State: Equatable {
-        @BindableState var verificationCode: String
+        @BindableState var verificationCode: String = ""
         var phoneNumber: String
         var isLoading: Bool = false
     }

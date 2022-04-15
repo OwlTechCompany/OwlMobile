@@ -19,8 +19,6 @@ struct EnterPhoneView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-//            ZStack {
-//                viewStore.isLoading ? Loader() : EmptyView()
 
                 VStack(spacing: 50) {
                     Spacer()

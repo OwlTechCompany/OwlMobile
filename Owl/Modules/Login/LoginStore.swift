@@ -59,7 +59,6 @@ struct Login {
                 return .none
             }
             state.routes.push(.enterCode(EnterCode.State(
-                verificationCode: "",
                 phoneNumber: enterPhoneState.phoneNumber
             )))
             return .none
