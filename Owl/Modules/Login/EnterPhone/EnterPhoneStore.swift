@@ -13,7 +13,7 @@ struct EnterPhone {
 
     struct State: Equatable {
         @BindableState var phoneNumber: String
-        @BindableState var isLoading: Bool
+        var isLoading: Bool
     }
 
     // MARK: - ViewAction
