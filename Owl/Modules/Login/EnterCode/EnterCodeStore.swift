@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseAuth
 
 struct EnterCode {
 
@@ -14,45 +15,55 @@ struct EnterCode {
     struct State: Equatable {
         @BindableState var verificationCode: String
         var phoneNumber: String
-
-        // For some very strange reasons TextField Binding<String> is setting its value two time
-        // To fix this (not to send code twice) i decided to use this variable
-        var isCodeSent: Bool = false
+        var isLoading: Bool = false
     }
 
     // MARK: - Action
 
     enum Action: Equatable, BindableAction {
+        case sendCode
+        case resendCode
+        case authDataReceived(Result<AuthDataResult, NSError>)
         case binding(BindingAction<State>)
-        case delegate(DelegateAction)
-
-        enum DelegateAction {
-            case sendCode
-            case resendCode
-        }
     }
 
     // MARK: - Environment
 
-    struct Environment { }
+    struct Environment {
+        let authClient: AuthClient
+        let userDefaultsClient: UserDefaultsClient
+    }
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .binding(\.$verificationCode):
-            if state.verificationCode.count == EnterCodeView.Constants.codeSize && !state.isCodeSent {
-                state.isCodeSent = true
-                return Effect(value: .delegate(.sendCode))
+            if state.verificationCode.count == EnterCodeView.Constants.codeSize {
+                return Effect(value: .sendCode)
             } else {
                 return .none
             }
 
-        case .delegate(.resendCode):
-            state.isCodeSent = false
+        case .sendCode,
+             .resendCode:
+            state.isLoading = true
+            let verificationID = environment.userDefaultsClient.getVerificationID()
+            let model = SignIn(
+                verificationID: verificationID,
+                verificationCode: state.verificationCode
+            )
+            return environment.authClient.signIn(model)
+                .catchToEffect(Action.authDataReceived)
+                .eraseToEffect()
+
+        case let .authDataReceived(.success(result)):
+            state.isLoading = false
             return .none
 
-        case .delegate:
+        case let .authDataReceived(.failure(error)):
+            state.isLoading = false
+            print(error.localizedDescription)
             return .none
 
         case .binding:

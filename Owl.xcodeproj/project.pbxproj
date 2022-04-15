@@ -15,6 +15,7 @@
 		5D35EC872803204E00624717 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC862803204D00624717 /* View+Ext.swift */; };
 		5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC88280323C100624717 /* Collection+Ext.swift */; };
 		5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */; };
+		5D35EC8E28076EDF00624717 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8D28076EDE00624717 /* Loader.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -61,6 +62,7 @@
 		5D35EC862803204D00624717 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		5D35EC88280323C100624717 /* Collection+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Ext.swift"; sourceTree = "<group>"; };
 		5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsClient.swift; sourceTree = "<group>"; };
+		5D35EC8D28076EDE00624717 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
@@ -125,6 +127,14 @@
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
 			);
 			path = Clients;
+			sourceTree = "<group>";
+		};
+		5D35EC8C28076ED100624717 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5D35EC8D28076EDE00624717 /* Loader.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		5DA8A74E27FF260700C2ECBA = {
@@ -275,6 +285,7 @@
 				5F9F4E3B27FF4CA700915572 /* Root */,
 				5F9F4E4127FF4F5600915572 /* Login */,
 				5F9F4E4527FF52B800915572 /* Main */,
+				5D35EC8C28076ED100624717 /* Common */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -494,6 +505,7 @@
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
+				5D35EC8E28076EDF00624717 /* Loader.swift in Sources */,
 				5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

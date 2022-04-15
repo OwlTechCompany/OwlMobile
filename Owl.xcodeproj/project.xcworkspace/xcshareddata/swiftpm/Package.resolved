@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
       "state" : {
-        "revision" : "30132357d65b22281ea52e1456aa658390f34805",
-        "version" : "0.2.0"
+        "revision" : "a8cd8a8ad52edd6e3282277c70b7ba6f04b27067",
+        "version" : "0.1.7"
       }
     },
     {

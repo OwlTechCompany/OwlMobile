@@ -48,6 +48,7 @@ struct EnterCodeView: View {
                     }
 
                     TextField("", text: viewStore.binding(\.$verificationCode))
+                        .textFieldStyle(PlainTextFieldStyle())
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
                         .tint(.clear)
                         .textContentType(.oneTimeCode)
@@ -58,11 +59,17 @@ struct EnterCodeView: View {
                             width: CGFloat((Constants.codeSize * 2 - 1)) * Constants.circleSize
                         )
                         .focused($focusedField)
-
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                withAnimation {
+                                    focusedField = true
+                                }
+                            }
+                        }
                 }
 
                 Button(
-                    action: { viewStore.send(.delegate(.resendCode)) },
+                    action: { viewStore.send(.resendCode) },
                     label: {
                         Text("Resend Code")
                             .font(.system(size: 16, weight: .semibold, design: .monospaced))
@@ -70,13 +77,13 @@ struct EnterCodeView: View {
                     }
                 )
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    withAnimation {
-                        focusedField = true
-                    }
-                }
-            }
+            .disabled(viewStore.isLoading)
+            .overlay(
+                viewStore.isLoading
+                ? Loader()
+                : nil
+            )
+
         }
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -99,7 +106,10 @@ struct EnterCodeView_Previews: PreviewProvider {
                     phoneNumber: "+380992177560"
                 ),
                 reducer: EnterCode.reducer,
-                environment: EnterCode.Environment()
+                environment: EnterCode.Environment(
+                    authClient: .live,
+                    userDefaultsClient: .live
+                )
             )
         )
     }
