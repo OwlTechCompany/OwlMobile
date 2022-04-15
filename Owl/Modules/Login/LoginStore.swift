@@ -81,8 +81,6 @@ struct Login {
     static let reducer = Reducer<State, Action, Environment>.combine(
         Login.ScreenProvider.reducer
             .forEachIdentifiedRoute(environment: { $0 })
-            .withRouteReducer(
-                reducerCore
-            )
+            .withRouteReducer(reducerCore)
     )
 }
