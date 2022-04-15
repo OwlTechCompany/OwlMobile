@@ -29,8 +29,6 @@ struct Login {
 
     enum Action: Equatable, IdentifiedRouterAction {
 
-//        case verificationIDReceived(Result<String, NSError>)
-        case authDataReceived(Result<AuthDataResult, NSError>)
         case delegate(DelegateAction)
 
         case routeAction(ScreenProvider.State.ID, action: ScreenProvider.Action)
@@ -50,41 +48,24 @@ struct Login {
 
     // MARK: - Reducer
 
-    static private let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
+    static private let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .routeAction(_, action: .onboarding(.startMessaging)):
             state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380931314850", isLoading: false)))
             return .none
 
-        case let .routeAction(_, action: .enterPhone(.delegate(.verificationIDReceived(.success(verificationId))))):
+        case .routeAction(_, action: .enterPhone(.verificationIDReceived(.success))):
             guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
                 return .none
             }
-            environment.userDefaultsClient.setVerificationID(verificationId)
             state.routes.push(.enterCode(EnterCode.State(
                 verificationCode: "",
                 phoneNumber: enterPhoneState.phoneNumber
             )))
             return .none
 
-        case .routeAction(_, action: .enterCode(.delegate(.sendCode))),
-             .routeAction(_, action: .enterCode(.delegate(.resendCode))):
-            guard var enterCodeState = state.subState(routePath: ScreenProvider.EnterCodeRoute.self) else {
-                return .none
-            }
-            let model = SignIn(
-                verificationID: environment.userDefaultsClient.getVerificationID(),
-                verificationCode: enterCodeState.verificationCode
-            )
-            return environment.authClient.signIn(model)
-                .catchToEffect(Action.authDataReceived)
-                .eraseToEffect()
-
-        case let .authDataReceived(.success(authDataResult)):
+        case .routeAction(_, action: .enterCode(.authDataReceived(.success))):
             return Effect(value: .delegate(.loginSuccess))
-
-        case let .authDataReceived(.failure(error)):
-            return .none
 
         case .routeAction:
             return .none

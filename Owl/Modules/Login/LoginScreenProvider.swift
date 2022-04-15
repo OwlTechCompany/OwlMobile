@@ -69,13 +69,23 @@ extension Login.ScreenProvider {
             .pullback(
                 state: /State.enterPhone,
                 action: /Action.enterPhone,
-                environment: { EnterPhone.Environment(authClient: $0.authClient) }
+                environment: {
+                    EnterPhone.Environment(
+                        authClient: $0.authClient,
+                        userDefaultsClient: $0.userDefaultsClient
+                    )
+                }
             ),
         EnterCode.reducer
             .pullback(
                 state: /State.enterCode,
                 action: /Action.enterCode,
-                environment: { _ in EnterCode.Environment() }
+                environment: {
+                    EnterCode.Environment(
+                        authClient: $0.authClient,
+                        userDefaultsClient: $0.userDefaultsClient
+                    )
+                }
             )
     )
 

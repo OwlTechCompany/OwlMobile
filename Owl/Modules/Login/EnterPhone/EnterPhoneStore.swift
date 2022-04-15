@@ -19,13 +19,13 @@ struct EnterPhone {
     // MARK: - ViewAction
 
     enum Action: Equatable, BindableAction {
+        case verificationIDReceived(Result<String, NSError>)
+        case sendPhoneNumber
 
         case binding(BindingAction<State>)
         case delegate(DelegateAction)
-        case sendPhoneNumber
 
         enum DelegateAction: Equatable {
-            case verificationIDReceived(Result<String, NSError>)
         }
     }
 
@@ -33,6 +33,7 @@ struct EnterPhone {
 
     struct Environment {
         let authClient: AuthClient
+        let userDefaultsClient: UserDefaultsClient
     }
 
     // MARK: - Reducer
@@ -47,10 +48,16 @@ struct EnterPhone {
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
-                .catchToEffect { Action.delegate(.verificationIDReceived($0)) }
+                .catchToEffect(Action.verificationIDReceived)
                 .eraseToEffect()
 
-        case .delegate(.verificationIDReceived):
+        case let .verificationIDReceived(.success(verificationId)):
+            state.isLoading = false
+            environment.userDefaultsClient.setVerificationID(verificationId)
+            return .none
+
+        case let .verificationIDReceived(.failure(error)):
+            print(error.localizedDescription)
             state.isLoading = false
             return .none
 
