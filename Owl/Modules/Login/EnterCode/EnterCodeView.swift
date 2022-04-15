@@ -83,7 +83,10 @@ struct EnterCodeView: View {
                 ? Loader()
                 : nil
             )
-
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
     }

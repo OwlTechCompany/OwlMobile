@@ -14,6 +14,7 @@ struct EnterCode {
 
     struct State: Equatable {
         @BindableState var verificationCode: String
+        var alert: AlertState<Action>?
         var phoneNumber: String
         var isLoading: Bool = false
     }
@@ -23,7 +24,12 @@ struct EnterCode {
     enum Action: Equatable, BindableAction {
         case sendCode
         case resendCode
+
+        case verificationIDReceived(Result<String, NSError>)
         case authDataReceived(Result<AuthDataResult, NSError>)
+
+        case dismissAlert
+
         case binding(BindingAction<State>)
     }
 
@@ -45,8 +51,7 @@ struct EnterCode {
                 return .none
             }
 
-        case .sendCode,
-             .resendCode:
+        case .sendCode:
             state.isLoading = true
             let verificationID = environment.userDefaultsClient.getVerificationID()
             let model = SignIn(
@@ -61,9 +66,32 @@ struct EnterCode {
             state.isLoading = false
             return .none
 
-        case let .authDataReceived(.failure(error)):
+        case let .verificationIDReceived(.success(verificationId)):
             state.isLoading = false
-            print(error.localizedDescription)
+            environment.userDefaultsClient.setVerificationID(verificationId)
+            return .none
+
+        case .resendCode:
+            state.isLoading = true
+            return environment.authClient
+                .verifyPhoneNumber(state.phoneNumber)
+                .mapError { $0 as NSError }
+                .catchToEffect(Action.verificationIDReceived)
+                .eraseToEffect()
+
+        case let .authDataReceived(.failure(error)),
+             let .verificationIDReceived(.failure(error)):
+            state.isLoading = false
+            state.alert = .init(
+                title: TextState("Error"),
+                message: TextState("\(error.localizedDescription)"),
+                dismissButton: .default(TextState("Ok"))
+            )
+            return .none
+
+
+        case .dismissAlert:
+            state.alert = nil
             return .none
 
         case .binding:

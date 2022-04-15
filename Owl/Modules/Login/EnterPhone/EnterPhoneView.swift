@@ -19,62 +19,62 @@ struct EnterPhoneView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-//            ZStack {
-//                viewStore.isLoading ? Loader() : EmptyView()
+            VStack(spacing: 50) {
+                Spacer()
 
-                VStack(spacing: 50) {
-                    Spacer()
+                VStack(spacing: 16.0) {
+                    Text("Enter Phone")
+                        .font(.system(size: 24, weight: .bold, design: .monospaced))
 
-                    VStack(spacing: 16.0) {
-                        Text("Enter Phone")
-                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    Text("We will send you SMS to this number to confirm your identity.")
+                        .font(.system(size: 14, weight: .regular))
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .ignoresSafeArea(.keyboard)
+                }
 
-                        Text("We will send you SMS to this number to confirm your identity.")
-                            .font(.system(size: 14, weight: .regular))
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .ignoresSafeArea(.keyboard)
+                TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
+                    .focused($focusedField, equals: .phoneNumber)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .multilineTextAlignment(.center)
+                    .keyboardType(.phonePad)
+                    .textContentType(.telephoneNumber)
+                    .disableAutocorrection(true)
+                    .toolbar {
+                        ToolbarItem(placement: .keyboard) {
+                            HStack {
+                                Spacer()
+                                Button("Done") { focusedField = nil }
+                            }
+                        }
+                    }
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            focusedField = .phoneNumber
+                        }
                     }
 
-                    TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
-                        .focused($focusedField, equals: .phoneNumber)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .font(.system(size: 24, weight: .bold, design: .monospaced))
-                        .multilineTextAlignment(.center)
-                        .keyboardType(.phonePad)
-                        .textContentType(.telephoneNumber)
-                        .disableAutocorrection(true)
-                        .toolbar {
-                            ToolbarItem(placement: .keyboard) {
-                                HStack {
-                                    Spacer()
-                                    Button("Done") { focusedField = nil }
-                                }
-                            }
-                        }
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                focusedField = .phoneNumber
-                            }
-                        }
+                Spacer()
 
-                    Spacer()
-
-                    Button(
-                        action: { viewStore.send(.sendPhoneNumber) },
-                        label: { Text("Send code") }
-                    )
-                    .buttonStyle(BigButtonStyle())
-                    .disabled(!viewStore.isPhoneNumberValid)
-                }
-                .padding(20)
-                .disabled(viewStore.isLoading)
-                .overlay(
-                    viewStore.isLoading
-                        ? Loader()
-                        : nil
+                Button(
+                    action: { viewStore.send(.sendPhoneNumber) },
+                    label: { Text("Send code") }
                 )
-
+                .buttonStyle(BigButtonStyle())
+                .disabled(!viewStore.isPhoneNumberValid)
+            }
+            .padding(20)
+            .disabled(viewStore.isLoading)
+            .overlay(
+                viewStore.isLoading
+                ? Loader()
+                : nil
+            )
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
     }

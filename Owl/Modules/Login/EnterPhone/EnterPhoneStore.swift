@@ -14,6 +14,7 @@ struct EnterPhone {
     struct State: Equatable {
         @BindableState var phoneNumber: String
         @BindableState var isPhoneNumberValid: Bool = false
+        var alert: AlertState<Action>?
         var isLoading: Bool
     }
 
@@ -22,6 +23,8 @@ struct EnterPhone {
     enum Action: Equatable, BindableAction {
         case verificationIDReceived(Result<String, NSError>)
         case sendPhoneNumber
+
+        case dismissAlert
 
         case binding(BindingAction<State>)
     }
@@ -56,8 +59,16 @@ struct EnterPhone {
             return .none
 
         case let .verificationIDReceived(.failure(error)):
-            print(error.localizedDescription)
             state.isLoading = false
+            state.alert = .init(
+                title: TextState("Error"),
+                message: TextState("\(error.localizedDescription)"),
+                dismissButton: .default(TextState("Ok"))
+            )
+            return .none
+
+        case .dismissAlert:
+            state.alert = nil
             return .none
 
         case .binding:
