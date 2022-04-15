@@ -46,7 +46,7 @@ struct EnterCode {
             }
 
         case .sendCode,
-            .resendCode:
+             .resendCode:
             state.isLoading = true
             let verificationID = environment.userDefaultsClient.getVerificationID()
             let model = SignIn(

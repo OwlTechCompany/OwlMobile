@@ -24,9 +24,6 @@ struct EnterPhone {
 
         case binding(BindingAction<State>)
         case delegate(DelegateAction)
-
-        enum DelegateAction: Equatable {
-        }
     }
 
     // MARK: - Environment
