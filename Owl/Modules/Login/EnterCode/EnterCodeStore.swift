@@ -24,10 +24,10 @@ struct EnterCode {
     enum Action: Equatable, BindableAction {
         case sendCode
         case resendCode
-
-        case verificationIDReceived(Result<String, NSError>)
-        case authDataReceived(Result<AuthDataResult, NSError>)
         case setMe
+
+        case verificationIDResult(Result<String, NSError>)
+        case authDataResult(Result<AuthDataResult, NSError>)
         case setMeResult(Result<Bool, NSError>)
 
         case dismissAlert
@@ -62,14 +62,14 @@ struct EnterCode {
                 verificationCode: state.verificationCode
             )
             return environment.authClient.signIn(model)
-                .catchToEffect(Action.authDataReceived)
+                .catchToEffect(Action.authDataResult)
                 .eraseToEffect()
 
-        case .authDataReceived(.success):
+        case .authDataResult(.success):
             return Effect(value: .setMe)
 
         case .setMe:
-            return environment.firestoreUsersClient.setMe()
+            return environment.firestoreUsersClient.setMeIfNeeded()
                 .catchToEffect(Action.setMeResult)
                 .eraseToEffect()
 
@@ -77,7 +77,7 @@ struct EnterCode {
             state.isLoading = false
             return .none
 
-        case let .verificationIDReceived(.success(verificationId)):
+        case let .verificationIDResult(.success(verificationId)):
             state.isLoading = false
             environment.userDefaultsClient.setVerificationID(verificationId)
             return .none
@@ -87,11 +87,11 @@ struct EnterCode {
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
-                .catchToEffect(Action.verificationIDReceived)
+                .catchToEffect(Action.verificationIDResult)
                 .eraseToEffect()
 
-        case let .authDataReceived(.failure(error)),
-             let .verificationIDReceived(.failure(error)),
+        case let .authDataResult(.failure(error)),
+             let .verificationIDResult(.failure(error)),
              let .setMeResult(.failure(error)):
             state.isLoading = false
             state.alert = .init(
@@ -100,7 +100,6 @@ struct EnterCode {
                 dismissButton: .default(TextState("Ok"))
             )
             return .none
-
 
         case .dismissAlert:
             state.alert = nil

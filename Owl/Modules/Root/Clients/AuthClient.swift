@@ -6,13 +6,16 @@
 //
 
 import UIKit
-import FirebaseAuth
 import ComposableArchitecture
 import Firebase
 import FirebaseFirestoreCombineSwift
 
-
 struct AuthClient {
+
+    static let firebaseAuth = Auth.auth()
+    static let phoneAuthProvider = PhoneAuthProvider.provider()
+
+    var currentUser: Firebase.User?
 
     var verifyPhoneNumber: (String) -> Effect<String, Error>
     var setAPNSToken: (Data) -> Effect<Void, Never>
@@ -20,19 +23,21 @@ struct AuthClient {
         [AnyHashable: Any],
         @escaping (UIBackgroundFetchResult) -> Void
     ) -> Effect<Void, Never>
-    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
 
+    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
+    var signOut: () -> Void
 }
 
 extension AuthClient {
 
     static let live = AuthClient(
+        currentUser: firebaseAuth.currentUser,
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
                 if phoneNumber == "+380931314850" {
-                    Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+                    firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
                 }
-                PhoneAuthProvider.provider()
+                phoneAuthProvider
                     .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
                         if let error = error {
                             completion(.failure(error))
@@ -44,24 +49,23 @@ extension AuthClient {
         },
         setAPNSToken: { deviceToken in
             .fireAndForget {
-                let firebaseAuth = Auth.auth()
                 firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
             }
         },
         canHandleNotification: { userInfo, completionHandler in
             .fireAndForget {
-                if Auth.auth().canHandleNotification(userInfo) {
+                if firebaseAuth.canHandleNotification(userInfo) {
                     completionHandler(.noData)
                 }
             }
         },
         signIn: { signInModel in
             .future { completion in
-                let credential = PhoneAuthProvider.provider().credential(
+                let credential = phoneAuthProvider.credential(
                     withVerificationID: signInModel.verificationID,
                     verificationCode: signInModel.verificationCode
                 )
-                Auth.auth().signIn(with: credential) { authResult, error in
+                firebaseAuth.signIn(with: credential) { authResult, error in
                     if let error = error {
                         completion(.failure(error as NSError))
                     } else if let authResult = authResult {
@@ -71,6 +75,9 @@ extension AuthClient {
                     }
                 }
             }
+        },
+        signOut: {
+            try? firebaseAuth.signOut()
         }
     )
 

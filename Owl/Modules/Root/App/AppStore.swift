@@ -81,12 +81,10 @@ struct App {
         reducerCore
     ).debug()
 
-    static var reducerCore = Reducer<State, Action, Environment> { state, action, env in
+    static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            if let currentUser = Auth.auth().currentUser {
-                print(currentUser)
-//                FirebaseAuth.User
+            if environment.authClient.currentUser != nil {
                 state.setOnly(main: .initialState)
             } else {
                 state.setOnly(login: .initialState)
@@ -98,7 +96,7 @@ struct App {
             return .none
 
         case .main(.logout):
-            try? Auth.auth().signOut()
+            environment.authClient.signOut()
             state.setOnly(login: .initialState)
             return .none
 

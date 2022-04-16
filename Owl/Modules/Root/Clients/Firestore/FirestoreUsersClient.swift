@@ -6,17 +6,16 @@
 //
 
 import Combine
-import FirebaseFirestore
-import FirebaseFirestoreCombineSwift
-import FirebaseAuth
 import ComposableArchitecture
+import Firebase
+import FirebaseFirestoreCombineSwift
 
 struct FirestoreUsersClient {
 
     static let collection = Firestore.firestore().collection("users")
     static var cancellables = Set<AnyCancellable>()
 
-    var setMe: () -> Effect<Bool, NSError>
+    var setMeIfNeeded: () -> Effect<Bool, NSError>
 }
 
 // MARK: - Live
@@ -24,9 +23,12 @@ struct FirestoreUsersClient {
 extension FirestoreUsersClient {
 
     static let live = FirestoreUsersClient(
-        setMe: {
+        setMeIfNeeded: {
             .future { result in
-                let authUser = Auth.auth().currentUser!
+                guard let authUser = Auth.auth().currentUser else {
+                    result(.failure(NSError(domain: "No current user", code: 1)))
+                    return
+                }
                 collection.whereField("uid", isEqualTo: authUser.uid)
                     .getDocuments()
                     .catch { error -> AnyPublisher<QuerySnapshot, Never> in
@@ -51,9 +53,7 @@ extension FirestoreUsersClient {
                         return Empty(completeImmediately: true)
                             .eraseToAnyPublisher()
                     }
-                    .sink {
-                        result(.success(true))
-                    }
+                    .sink { result(.success(true)) }
                     .store(in: &cancellables)
             }
         }

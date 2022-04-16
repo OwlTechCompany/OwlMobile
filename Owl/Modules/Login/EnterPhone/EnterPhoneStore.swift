@@ -21,9 +21,8 @@ struct EnterPhone {
     // MARK: - ViewAction
 
     enum Action: Equatable, BindableAction {
-        case verificationIDReceived(Result<String, NSError>)
         case sendPhoneNumber
-
+        case verificationIDResult(Result<String, NSError>)
         case dismissAlert
 
         case binding(BindingAction<State>)
@@ -50,15 +49,15 @@ struct EnterPhone {
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
-                .catchToEffect(Action.verificationIDReceived)
+                .catchToEffect(Action.verificationIDResult)
                 .eraseToEffect()
 
-        case let .verificationIDReceived(.success(verificationId)):
+        case let .verificationIDResult(.success(verificationId)):
             state.isLoading = false
             environment.userDefaultsClient.setVerificationID(verificationId)
             return .none
 
-        case let .verificationIDReceived(.failure(error)):
+        case let .verificationIDResult(.failure(error)):
             state.isLoading = false
             state.alert = .init(
                 title: TextState("Error"),

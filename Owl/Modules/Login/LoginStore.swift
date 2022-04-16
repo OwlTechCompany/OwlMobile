@@ -56,7 +56,7 @@ struct Login {
             state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
             return .none
 
-        case .routeAction(_, action: .enterPhone(.verificationIDReceived(.success))):
+        case .routeAction(_, action: .enterPhone(.verificationIDResult(.success))):
             guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
                 return .none
             }
