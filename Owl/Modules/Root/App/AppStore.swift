@@ -84,7 +84,7 @@ struct App {
     static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            if environment.authClient.currentUser != nil {
+            if environment.authClient.currentUser() != nil {
                 state.setOnly(main: .initialState)
             } else {
                 state.setOnly(login: .initialState)

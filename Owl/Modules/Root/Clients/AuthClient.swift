@@ -12,10 +12,10 @@ import FirebaseFirestoreCombineSwift
 
 struct AuthClient {
 
-    static let firebaseAuth = Auth.auth()
-    static let phoneAuthProvider = PhoneAuthProvider.provider()
+    static var firebaseAuth: Auth { Auth.auth() }
+    static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
 
-    var currentUser: Firebase.User?
+    var currentUser: () -> Firebase.User?
 
     var verifyPhoneNumber: (String) -> Effect<String, Error>
     var setAPNSToken: (Data) -> Effect<Void, Never>
@@ -31,7 +31,7 @@ struct AuthClient {
 extension AuthClient {
 
     static let live = AuthClient(
-        currentUser: firebaseAuth.currentUser,
+        currentUser: { firebaseAuth.currentUser },
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
                 if phoneNumber == "+380931314850" {
