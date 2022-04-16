@@ -29,12 +29,17 @@ extension Login.ScreenProvider {
         static var statePath = /State.enterCode
     }
 
+    struct EnterUserDataRoute: Routable {
+        static var statePath = /State.enterCode
+    }
+
     // MARK: - State handling
 
     enum State: Equatable, Identifiable {
         case onboarding(Onboarding.State)
         case enterPhone(EnterPhone.State)
         case enterCode(EnterCode.State)
+        case enterUserData(EnterUserData.State)
 
         var id: String {
             switch self {
@@ -44,6 +49,8 @@ extension Login.ScreenProvider {
                 return EnterPhoneRoute.id
             case .enterCode:
                 return EnterCodeRoute.id
+            case .enterUserData:
+                return EnterUserDataRoute.id
             }
         }
     }
@@ -54,6 +61,7 @@ extension Login.ScreenProvider {
         case onboarding(Onboarding.Action)
         case enterPhone(EnterPhone.Action)
         case enterCode(EnterCode.Action)
+        case enterUserData(EnterUserData.Action)
     }
 
     // MARK: - Reducer handling
@@ -88,6 +96,12 @@ extension Login.ScreenProvider {
                         firestoreUsersClient: $0.firestoreUsersClient
                     )
                 }
+            ),
+        EnterUserData.reducer
+            .pullback(
+                state: /State.enterUserData,
+                action: /Action.enterUserData,
+                environment: { _ in EnterUserData.Environment() }
             )
     )
 

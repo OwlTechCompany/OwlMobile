@@ -16,66 +16,71 @@ struct EnterCodeView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 48.0) {
-                VStack(spacing: 16.0) {
-                    Text("Enter Code")
-                        .font(.system(size: 24, weight: .bold, design: .monospaced))
+            ZStack {
 
-                    VStack(spacing: 8.0) {
-                        Text("We have sent you an SMS with the code to")
-                        Text(viewStore.phoneNumber)
+                Color(UIColor.systemGroupedBackground).ignoresSafeArea(.all)
+
+                VStack(spacing: 48.0) {
+                    VStack(spacing: 16.0) {
+                        Text("Enter Code")
+                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+
+                        VStack(spacing: 8.0) {
+                            Text("We have sent you an SMS with the code to")
+                            Text(viewStore.phoneNumber)
+                        }
+                        .font(.system(size: 14, weight: .regular, design: .default))
                     }
-                    .font(.system(size: 14, weight: .regular, design: .default))
-                }
 
-                ZStack {
-                    HStack(spacing: 24.0) {
-                        ForEach(Constants.codeSizeRange, id: \.self) { index in
-                            ZStack {
-                                Circle()
-                                    .frame(width: Constants.circleSize, height: Constants.circleSize)
-                                    .foregroundColor(
-                                        Color.gray.opacity(
-                                            Array(viewStore.verificationCode)[safe: index] != nil ? 0 : 0.3
+                    ZStack {
+                        HStack(spacing: 24.0) {
+                            ForEach(Constants.codeSizeRange, id: \.self) { index in
+                                ZStack {
+                                    Circle()
+                                        .frame(width: Constants.circleSize, height: Constants.circleSize)
+                                        .foregroundColor(
+                                            Color.gray.opacity(
+                                                Array(viewStore.verificationCode)[safe: index] != nil ? 0 : 0.3
+                                            )
                                         )
-                                    )
-                                if Array(viewStore.verificationCode)[safe: Int(index)] != nil {
-                                     Text(String(Array(viewStore.verificationCode)[safe: Int(index)]!))
-                                        .font(.system(size: Constants.circleSize, weight: .bold, design: .monospaced))
+                                    if Array(viewStore.verificationCode)[safe: Int(index)] != nil {
+                                        Text(String(Array(viewStore.verificationCode)[safe: Int(index)]!))
+                                            .font(.system(size: Constants.circleSize, weight: .bold, design: .monospaced))
+                                    }
                                 }
                             }
                         }
+
+                        TextField("", text: viewStore.binding(\.$verificationCode))
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+                            .tint(.clear)
+                            .textContentType(.oneTimeCode)
+                            .accentColor(.clear)
+                            .foregroundColor(.clear)
+                            .keyboardType(.numberPad)
+                            .frame(
+                                width: CGFloat((Constants.codeSize * 2 - 1)) * Constants.circleSize
+                            )
+                            .focused($focusedField)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                    withAnimation {
+                                        focusedField = true
+                                    }
+                                }
+                            }
                     }
 
-                    TextField("", text: viewStore.binding(\.$verificationCode))
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .font(.system(size: 24, weight: .bold, design: .monospaced))
-                        .tint(.clear)
-                        .textContentType(.oneTimeCode)
-                        .accentColor(.clear)
-                        .foregroundColor(.clear)
-                        .keyboardType(.numberPad)
-                        .frame(
-                            width: CGFloat((Constants.codeSize * 2 - 1)) * Constants.circleSize
-                        )
-                        .focused($focusedField)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                withAnimation {
-                                    focusedField = true
-                                }
-                            }
+                    Button(
+                        action: { viewStore.send(.resendCode) },
+                        label: {
+                            Text("Resend Code")
+                                .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                                .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
                         }
+                    )
                 }
-
-                Button(
-                    action: { viewStore.send(.resendCode) },
-                    label: {
-                        Text("Resend Code")
-                            .font(.system(size: 16, weight: .semibold, design: .monospaced))
-                            .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
-                    }
-                )
             }
             .disabled(viewStore.isLoading)
             .overlay(

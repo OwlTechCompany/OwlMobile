@@ -67,6 +67,10 @@ struct Login {
             return .none
 
         case .routeAction(_, action: .enterCode(.setMeResult(.success))):
+            state.routes.push(.enterUserData(.init()))
+            return .none
+
+        case .routeAction(_, action: .enterUserData(.later)):
             return Effect(value: .delegate(.loginSuccess))
 
         case .routeAction:

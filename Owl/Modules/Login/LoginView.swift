@@ -31,6 +31,11 @@ struct LoginView: View {
                     action: Login.ScreenProvider.Action.enterCode,
                     then: EnterCodeView.init
                 )
+                CaseLet(
+                    state: /Login.ScreenProvider.State.enterUserData,
+                    action: Login.ScreenProvider.Action.enterUserData,
+                    then: EnterUserDataView.init
+                )
             }
         }
     }

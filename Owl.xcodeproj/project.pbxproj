@@ -54,6 +54,8 @@
 		5FE31839280AD05C007F7816 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE31838280AD05C007F7816 /* FirebaseMessaging */; };
 		5FE3183B280AD05C007F7816 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE3183A280AD05C007F7816 /* FirebaseStorageCombine-Community */; };
 		5FE3183D280AD05C007F7816 /* FirebaseStorageSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE3183C280AD05C007F7816 /* FirebaseStorageSwift-Beta */; };
+		5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */; };
+		5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31841280ADB02007F7816 /* EnterUserDataView.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +101,8 @@
 		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		5FE31826280A2151007F7816 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClient.swift; sourceTree = "<group>"; };
+		5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataStore.swift; sourceTree = "<group>"; };
+		5FE31841280ADB02007F7816 /* EnterUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataView.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -319,6 +323,7 @@
 				5F727FA92807621300FABF26 /* Onboarding */,
 				5F727FAC2807626100FABF26 /* EnterPhone */,
 				5F727FAD2807626600FABF26 /* EnterCode */,
+				5FE3183E280ADADC007F7816 /* EnterUserData */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -363,6 +368,15 @@
 				5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */,
 			);
 			path = Firestore;
+			sourceTree = "<group>";
+		};
+		5FE3183E280ADADC007F7816 /* EnterUserData */ = {
+			isa = PBXGroup;
+			children = (
+				5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */,
+				5FE31841280ADB02007F7816 /* EnterUserDataView.swift */,
+			);
+			path = EnterUserData;
 			sourceTree = "<group>";
 		};
 		D3080E831299946BDE92AEDD /* Frameworks */ = {
@@ -543,7 +557,9 @@
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
+				5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */,
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,
+				5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
 				5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */,
 				5F727FB52807632300FABF26 /* AppStore.swift in Sources */,
