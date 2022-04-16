@@ -56,12 +56,12 @@ struct EnterUserData {
                 return .none
             }
             state.isLoading = true
-            let updateUser = UpdateUser(
+            let userUpdate = UserUpdate(
                 uid: authUser.uid,
                 firstName: state.firstName,
                 lastName: state.lastName
             )
-            return environment.firestoreUsersClient.updateUser(updateUser)
+            return environment.firestoreUsersClient.updateUser(userUpdate)
                 .catchToEffect(Action.updateUserResult)
                 .eraseToEffect()
 

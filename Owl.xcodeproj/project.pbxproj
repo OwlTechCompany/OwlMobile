@@ -31,8 +31,8 @@
 		5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB62807638300FABF26 /* AppDelegateStore.swift */; };
 		5F727FBD2807647300FABF26 /* MainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FBC2807647300FABF26 /* MainStore.swift */; };
 		5F727FC1280765B000FABF26 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FC0280765B000FABF26 /* SignIn.swift */; };
-		5F9DFC89280B156600E73206 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC88280B156600E73206 /* UpdateUser.swift */; };
-		5F9DFC8B280B165500E73206 /* SetMeSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC8A280B165500E73206 /* SetMeSuccess.swift */; };
+		5F9DFC89280B156600E73206 /* UserUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC88280B156600E73206 /* UserUpdate.swift */; };
+		5F9DFC8B280B165500E73206 /* SignInUserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC8A280B165500E73206 /* SignInUserType.swift */; };
 		5F9DFC91280B1C4C00E73206 /* DocumentReference+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */; };
 		5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC93280B1C7800E73206 /* Publisher+Ext.swift */; };
 		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
@@ -92,8 +92,8 @@
 		5F727FB62807638300FABF26 /* AppDelegateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateStore.swift; sourceTree = "<group>"; };
 		5F727FBC2807647300FABF26 /* MainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainStore.swift; sourceTree = "<group>"; };
 		5F727FC0280765B000FABF26 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
-		5F9DFC88280B156600E73206 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
-		5F9DFC8A280B165500E73206 /* SetMeSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetMeSuccess.swift; sourceTree = "<group>"; };
+		5F9DFC88280B156600E73206 /* UserUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUpdate.swift; sourceTree = "<group>"; };
+		5F9DFC8A280B165500E73206 /* SignInUserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUserType.swift; sourceTree = "<group>"; };
 		5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DocumentReference+Ext.swift"; sourceTree = "<group>"; };
 		5F9DFC93280B1C7800E73206 /* Publisher+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Ext.swift"; sourceTree = "<group>"; };
 		5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftGen+Ext.swift"; sourceTree = "<group>"; };
@@ -285,8 +285,8 @@
 			children = (
 				5F727FC0280765B000FABF26 /* SignIn.swift */,
 				5FE31826280A2151007F7816 /* User.swift */,
-				5F9DFC88280B156600E73206 /* UpdateUser.swift */,
-				5F9DFC8A280B165500E73206 /* SetMeSuccess.swift */,
+				5F9DFC88280B156600E73206 /* UserUpdate.swift */,
+				5F9DFC8A280B165500E73206 /* SignInUserType.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -599,9 +599,9 @@
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,
 				5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
-				5F9DFC8B280B165500E73206 /* SetMeSuccess.swift in Sources */,
+				5F9DFC8B280B165500E73206 /* SignInUserType.swift in Sources */,
 				5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */,
-				5F9DFC89280B156600E73206 /* UpdateUser.swift in Sources */,
+				5F9DFC89280B156600E73206 /* UserUpdate.swift in Sources */,
 				5F727FB52807632300FABF26 /* AppStore.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,

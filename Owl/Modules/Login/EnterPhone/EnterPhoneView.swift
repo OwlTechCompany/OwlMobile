@@ -76,7 +76,10 @@ struct EnterPhoneView: View {
                 dismiss: .dismissAlert
             )
         }
-        .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+        .background(
+            Color(UIColor.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationBarTitleDisplayMode(.inline)
     }
 }

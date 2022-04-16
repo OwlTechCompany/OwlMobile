@@ -71,6 +71,7 @@ struct Login {
             case .newUser:
                 state.routes.push(.enterUserData(.init()))
                 return .none
+
             case .userExists:
                 return Effect(value: .delegate(.loginSuccess))
             }

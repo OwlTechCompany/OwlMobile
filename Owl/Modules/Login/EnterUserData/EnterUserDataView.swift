@@ -101,8 +101,8 @@ struct EnterUserDataView: View {
                     .disabled(viewStore.isLoading)
                     .overlay(
                         viewStore.isLoading
-                        ? Loader()
-                        : nil
+                            ? Loader()
+                            : nil
                     )
                     .alert(
                         self.store.scope(state: \.alert),
@@ -111,7 +111,10 @@ struct EnterUserDataView: View {
                 }
             }
         }
-        .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+        .background(
+            Color(UIColor.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationBarTitleDisplayMode(.inline)
     }
 }

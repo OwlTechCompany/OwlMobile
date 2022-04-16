@@ -15,8 +15,8 @@ struct FirestoreUsersClient {
     static let collection = Firestore.firestore().collection("users")
     static var cancellables = Set<AnyCancellable>()
 
-    var setMeIfNeeded: (Firebase.User) -> Effect<SetMeSuccess, NSError>
-    var updateUser: (UpdateUser) -> Effect<Bool, NSError>
+    var setMeIfNeeded: (Firebase.User) -> Effect<SignInUserType, NSError>
+    var updateUser: (UserUpdate) -> Effect<Bool, NSError>
 }
 
 // MARK: - Live
@@ -40,12 +40,13 @@ extension FirestoreUsersClient {
                             .eraseToAnyPublisher()
                     }
                     .flatMap { snapshot -> AnyPublisher<Void, Error> in
-                        if !snapshot.exists {
-                            return documentRef.setData(from: user)
-                                .eraseToAnyPublisher()
-                        } else {
+                        switch snapshot.exists {
+                        case true:
                             result(.success(.userExists))
                             return Empty(completeImmediately: true)
+                                .eraseToAnyPublisher()
+                        case false:
+                            return documentRef.setData(from: user)
                                 .eraseToAnyPublisher()
                         }
                     }
