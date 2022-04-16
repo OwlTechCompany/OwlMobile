@@ -30,6 +30,7 @@ internal enum Asset {
   }
   internal enum Images {
     internal static let owlBlack = ImageAsset(name: "OwlBlack")
+    internal static let owlWithPadding = ImageAsset(name: "OwlWithPadding")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
