@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseAuth
 
 struct App {
 
@@ -45,14 +46,18 @@ struct App {
     // MARK: - Environment
 
     struct Environment {
-        var firebaseClient: FirebaseClient
-        var authClient: AuthClient
-        var userDefaultsClient: UserDefaultsClient
+        let firebaseClient: FirebaseClient
+        let authClient: AuthClient
+        let userDefaultsClient: UserDefaultsClient
+        let validationClient: ValidationClient
+        let firestoreUsersClient: FirestoreUsersClient
 
         static let live = Environment(
             firebaseClient: .live,
             authClient: .live,
-            userDefaultsClient: .live
+            userDefaultsClient: .live,
+            validationClient: .live,
+            firestoreUsersClient: .live
         )
     }
 
@@ -85,17 +90,22 @@ struct App {
         reducerCore
     ).debug()
 
-    static var reducerCore = Reducer<State, Action, Environment> { state, action, _ in
+    static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            state.set(.login)
+            if environment.authClient.currentUser() != nil {
+                state.set(.main)
+            } else {
+                state.set(.login)
+            }
             return .none
 
         case .login(.delegate(.loginSuccess)):
             state.set(.main)
             return .none
 
-        case .main(.delegate(.logout)):
+        case .main(.logout):
+            environment.authClient.signOut()
             state.set(.login)
             return .none
 
@@ -125,7 +135,9 @@ extension App.Environment {
     var login: Login.Environment {
         Login.Environment(
             authClient: authClient,
-            userDefaultsClient: userDefaultsClient
+            userDefaultsClient: userDefaultsClient,
+            validationClient: validationClient,
+            firestoreUsersClient: firestoreUsersClient
         )
     }
 

@@ -14,6 +14,7 @@ struct EnterCode {
 
     struct State: Equatable {
         @BindableState var verificationCode: String = ""
+        var alert: AlertState<Action>?
         var phoneNumber: String
         var isLoading: Bool = false
     }
@@ -23,7 +24,14 @@ struct EnterCode {
     enum Action: Equatable, BindableAction {
         case sendCode
         case resendCode
-        case authDataReceived(Result<AuthDataResult, NSError>)
+        case setMe
+
+        case verificationIDResult(Result<String, NSError>)
+        case authDataResult(Result<AuthDataResult, NSError>)
+        case setMeResult(Result<Bool, NSError>)
+
+        case dismissAlert
+
         case binding(BindingAction<State>)
     }
 
@@ -32,6 +40,7 @@ struct EnterCode {
     struct Environment {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
+        let firestoreUsersClient: FirestoreUsersClient
     }
 
     // MARK: - Reducer
@@ -45,8 +54,7 @@ struct EnterCode {
                 return .none
             }
 
-        case .sendCode,
-             .resendCode:
+        case .sendCode:
             state.isLoading = true
             let verificationID = environment.userDefaultsClient.getVerificationID()
             let model = SignIn(
@@ -54,16 +62,47 @@ struct EnterCode {
                 verificationCode: state.verificationCode
             )
             return environment.authClient.signIn(model)
-                .catchToEffect(Action.authDataReceived)
+                .catchToEffect(Action.authDataResult)
                 .eraseToEffect()
 
-        case let .authDataReceived(.success(result)):
+        case .authDataResult(.success):
+            return Effect(value: .setMe)
+
+        case .setMe:
+            return environment.firestoreUsersClient.setMeIfNeeded()
+                .catchToEffect(Action.setMeResult)
+                .eraseToEffect()
+
+        case .setMeResult(.success):
             state.isLoading = false
             return .none
 
-        case let .authDataReceived(.failure(error)):
+        case let .verificationIDResult(.success(verificationId)):
             state.isLoading = false
-            print(error.localizedDescription)
+            environment.userDefaultsClient.setVerificationID(verificationId)
+            return .none
+
+        case .resendCode:
+            state.isLoading = true
+            return environment.authClient
+                .verifyPhoneNumber(state.phoneNumber)
+                .mapError { $0 as NSError }
+                .catchToEffect(Action.verificationIDResult)
+                .eraseToEffect()
+
+        case let .authDataResult(.failure(error)),
+             let .verificationIDResult(.failure(error)),
+             let .setMeResult(.failure(error)):
+            state.isLoading = false
+            state.alert = .init(
+                title: TextState("Error"),
+                message: TextState("\(error.localizedDescription)"),
+                dismissButton: .default(TextState("Ok"))
+            )
+            return .none
+
+        case .dismissAlert:
+            state.alert = nil
             return .none
 
         case .binding:

@@ -7,11 +7,10 @@
 
 import Foundation
 import Firebase
-import ComposableArchitecture
 
 struct FirebaseClient {
 
-    var setup: () -> Effect<Never, Never>
+    var setup: () -> Void
 
 }
 
@@ -19,9 +18,7 @@ extension FirebaseClient {
 
     static let live: FirebaseClient = FirebaseClient(
         setup: {
-            .fireAndForget {
-                FirebaseApp.configure()
-            }
+            FirebaseApp.configure()
         }
     )
 

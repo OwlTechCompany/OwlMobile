@@ -13,14 +13,17 @@ struct EnterPhone {
 
     struct State: Equatable {
         @BindableState var phoneNumber: String
+        var isPhoneNumberValid: Bool = false
+        var alert: AlertState<Action>?
         var isLoading: Bool
     }
 
     // MARK: - ViewAction
 
     enum Action: Equatable, BindableAction {
-        case verificationIDReceived(Result<String, NSError>)
         case sendPhoneNumber
+        case verificationIDResult(Result<String, NSError>)
+        case dismissAlert
 
         case binding(BindingAction<State>)
     }
@@ -30,6 +33,7 @@ struct EnterPhone {
     struct Environment {
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
+        let phoneValidation: (String) -> Bool
     }
 
     // MARK: - Reducer
@@ -37,6 +41,7 @@ struct EnterPhone {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .binding(\.$phoneNumber):
+            state.isPhoneNumberValid = environment.phoneValidation(state.phoneNumber)
             return .none
 
         case .sendPhoneNumber:
@@ -44,17 +49,25 @@ struct EnterPhone {
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
-                .catchToEffect(Action.verificationIDReceived)
+                .catchToEffect(Action.verificationIDResult)
                 .eraseToEffect()
 
-        case let .verificationIDReceived(.success(verificationId)):
+        case let .verificationIDResult(.success(verificationId)):
             state.isLoading = false
             environment.userDefaultsClient.setVerificationID(verificationId)
             return .none
 
-        case let .verificationIDReceived(.failure(error)):
-            print(error.localizedDescription)
+        case let .verificationIDResult(.failure(error)):
             state.isLoading = false
+            state.alert = .init(
+                title: TextState("Error"),
+                message: TextState("\(error.localizedDescription)"),
+                dismissButton: .default(TextState("Ok"))
+            )
+            return .none
+
+        case .dismissAlert:
+            state.alert = nil
             return .none
 
         case .binding:

@@ -85,7 +85,11 @@ struct ChatListCellView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                     }
-                    .background(Color.accentColor)
+                    .background(LinearGradient(
+                        colors: [Colors.loader3.swiftUIColor, Color.accentColor],
+                        startPoint: .topTrailing,
+                        endPoint: .bottomLeading
+                    ))
                     .clipShape(RoundedRectangle(cornerSize: CGSize(
                         width: viewStore.unreadMessagesWidth,
                         height: Constants.unreadMessagesSize
@@ -140,7 +144,7 @@ struct ChatListCellView_Previews: PreviewProvider {
                 chatName: "Name Name Name",
                 lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
                 lastMessageSendTime: Date(),
-                unreadMessagesNumber: 59
+                unreadMessagesNumber: 5679
             ),
             reducer: ChatListCell.reducer,
             environment: ChatListCell.Environment()

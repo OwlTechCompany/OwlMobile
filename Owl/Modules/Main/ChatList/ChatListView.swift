@@ -11,22 +11,11 @@ import ComposableArchitecture
 struct ChatListView: View {
 
     var store: Store<ChatList.State, ChatList.Action>
+    @State private var searchText = ""
 
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                HStack {
-                    Spacer()
-
-                    Button(
-                        action: { viewStore.send(.logout) },
-                        label: {
-                            Text("Logout")
-                        }
-                    )
-                    .padding()
-                }
-
                 List {
                     ForEachStore(
                         self.store.scope(
@@ -38,7 +27,21 @@ struct ChatListView: View {
                 }
                 .listStyle(.plain)
             }
+            .navigationTitle("Owl")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                HStack {
+                    Spacer()
+
+                    Button(
+                        action: { viewStore.send(.logout) },
+                        label: {
+                            Text("Logout")
+                        }
+                    )
+                    .padding()
+                }
+            }
         }
     }
 }
@@ -49,15 +52,16 @@ struct ChatListView_Previews: PreviewProvider {
     static var previews: some View {
         ChatListView(store: Store(
             initialState: ChatList.State(
-                chats: .init(arrayLiteral:
-                    ChatListCell.State(
-                        documentID: "123",
-                        chatImage: Asset.Images.owlBlack.image,
-                        chatName: "Test chat",
-                        lastMessage: "Hello world",
-                        lastMessageSendTime: Date(),
-                        unreadMessagesNumber: 4
-                    )
+                chats: .init(
+                    arrayLiteral:
+                        ChatListCell.State(
+                            documentID: "123",
+                            chatImage: Asset.Images.owlBlack.image,
+                            chatName: "Test chat",
+                            lastMessage: "Hello world",
+                            lastMessageSendTime: Date(),
+                            unreadMessagesNumber: 4
+                        )
                 )
             ),
             reducer: ChatList.reducer,

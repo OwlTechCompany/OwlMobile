@@ -36,15 +36,9 @@ struct OnboardingView: View {
 
                 Button(
                     action: { viewStore.send(.startMessaging) },
-                    label: {
-                        Text("Start Messaging")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .foregroundColor(.white)
-                            .background(Asset.Colors.accentColor.swiftUIColor)
-                            .cornerRadius(6)
-                    }
+                    label: { Text("Start Messaging") }
                 )
+                .buttonStyle(BigButtonStyle())
             }
             .padding(20)
         }

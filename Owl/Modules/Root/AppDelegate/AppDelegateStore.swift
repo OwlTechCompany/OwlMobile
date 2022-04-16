@@ -53,9 +53,8 @@ extension AppDelegate {
     static let reducer = Reducer<State, Action, Environment> { _, action, environment in
         switch action {
         case .didFinishLaunching:
-            return .merge(
-                environment.firebaseClient.setup().fireAndForget()
-            )
+            environment.firebaseClient.setup()
+            return .none
 
         case let .didRegisterForRemoteNotifications(.success(data)):
             return .merge(

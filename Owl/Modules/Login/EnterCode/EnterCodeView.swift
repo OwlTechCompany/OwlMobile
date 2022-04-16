@@ -83,7 +83,10 @@ struct EnterCodeView: View {
                 ? Loader()
                 : nil
             )
-
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -108,7 +111,8 @@ struct EnterCodeView_Previews: PreviewProvider {
                 reducer: EnterCode.reducer,
                 environment: EnterCode.Environment(
                     authClient: .live,
-                    userDefaultsClient: .live
+                    userDefaultsClient: .live,
+                    firestoreUsersClient: .live
                 )
             )
         )
