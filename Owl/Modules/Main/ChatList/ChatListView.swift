@@ -55,7 +55,8 @@ struct ChatListView_Previews: PreviewProvider {
                         chatImage: Asset.Images.owlBlack.image,
                         chatName: "Test chat",
                         lastMessage: "Hello world",
-                        lastMessageSendTime: Date()
+                        lastMessageSendTime: Date(),
+                        unreadMessagesNumber: 4
                     )
                 )
             ),

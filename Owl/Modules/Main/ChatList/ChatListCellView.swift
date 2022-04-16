@@ -16,6 +16,7 @@ struct ChatListCell {
         let chatName: String
         let lastMessage: String
         let lastMessageSendTime: Date
+        let unreadMessagesNumber: Int
 
         public var id: String {
             documentID
@@ -28,7 +29,7 @@ struct ChatListCell {
 
     struct Environment { }
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
         switch action {
         case .open:
             return .none
@@ -44,8 +45,12 @@ struct ChatListCellView: View {
         WithViewStore(self.store) { viewStore in
             HStack(alignment: .top, spacing: 16) {
                 Image(uiImage: viewStore.chatImage)
+                    .resizable()
                     .frame(width: 56, height: 56)
-                    .cornerRadius(19)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .scaledToFill()
+                    .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(viewStore.chatName)
@@ -59,19 +64,71 @@ struct ChatListCellView: View {
                         .lineLimit(2)
                 }
 
-                Text(
-                    viewStore.lastMessageSendTime,
-                    format: Date.FormatStyle().hour().minute()
-                )
-                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                Spacer(minLength: 0)
+
+                VStack(alignment: .trailing) {
+                    Text(
+                        viewStore.lastMessageSendTime,
+                        format: Date.FormatStyle().hour().minute()
+                    )
+                    .font(.system(size: 12, weight: .regular, design: .monospaced))
+
+                    ZStack {
+                        Text(String(viewStore.unreadMessagesNumber))
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(
+                                width: viewStore.unreadMessagesWidth,
+                                height: Constants.unreadMessagesSize
+                            )
+                            .fixedSize(horizontal: true, vertical: true)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                    }
+                    .background(Color.accentColor)
+                    .clipShape(RoundedRectangle(cornerSize: CGSize(
+                        width: viewStore.unreadMessagesWidth,
+                        height: Constants.unreadMessagesSize
+                    )))
+                    .shadow(color: Color.accentColor.opacity(0.3), radius: 5, x: 0, y: 5)
+                    .opacity(viewStore.unreadMessagesNumber == 0 ? 0 : 1)
+                }
             }
             .frame(height: 60)
-            .padding(.vertical)
+            .padding(.vertical, 8)
             .onTapGesture {
                 viewStore.send(.open)
             }
         }
     }
+}
+
+private extension ChatListCellView {
+
+    enum Constants {
+        static let unreadMessagesSize: CGFloat = 24
+    }
+}
+
+private extension ChatListCell.State {
+
+    var unreadMessagesWidth: CGFloat {
+        let numbersCount = String(unreadMessagesNumber).count
+        switch numbersCount {
+        case 0:
+            return 0
+
+        case 1, 2:
+            return ChatListCellView.Constants.unreadMessagesSize
+
+        case 3, 4:
+            return CGFloat(numbersCount) * 12
+
+        default:
+            return 48
+        }
+    }
+
 }
 
 struct ChatListCellView_Previews: PreviewProvider {
@@ -81,8 +138,9 @@ struct ChatListCellView_Previews: PreviewProvider {
                 documentID: "",
                 chatImage: Asset.Images.owlBlack.image,
                 chatName: "Name Name Name",
-                lastMessage: "Cool!😊 let's meet at 16:00 near the shopping mall fklfl",
-                lastMessageSendTime: Date()
+                lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
+                lastMessageSendTime: Date(),
+                unreadMessagesNumber: 59
             ),
             reducer: ChatListCell.reducer,
             environment: ChatListCell.Environment()

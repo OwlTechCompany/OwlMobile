@@ -23,7 +23,7 @@ struct Chat {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { _, _, _ in
         return .none
     }
 

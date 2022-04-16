@@ -22,6 +22,7 @@
 		5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */; };
 		5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F4280A1C1600A1B705 /* ChatView.swift */; };
 		5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */; };
+		5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -75,6 +76,7 @@
 		5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellView.swift; sourceTree = "<group>"; };
 		5D4CF9F4280A1C1600A1B705 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				5D35EC8D28076EDE00624717 /* Loader.swift */,
+				5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */,
 				5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
+				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
