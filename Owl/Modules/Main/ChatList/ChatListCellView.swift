@@ -87,8 +87,8 @@ struct ChatListCellView: View {
                     }
                     .background(LinearGradient(
                         colors: [Colors.loader3.swiftUIColor, Color.accentColor],
-                        startPoint: .topTrailing,
-                        endPoint: .bottomLeading
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     ))
                     .clipShape(RoundedRectangle(cornerSize: CGSize(
                         width: viewStore.unreadMessagesWidth,
