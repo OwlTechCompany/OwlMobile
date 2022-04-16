@@ -42,6 +42,10 @@ struct OnboardingView: View {
             }
             .padding(20)
         }
+        .background(
+            Color(UIColor.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationBarTitleDisplayMode(.inline)
     }
 }

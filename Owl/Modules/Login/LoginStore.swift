@@ -66,7 +66,18 @@ struct Login {
             )))
             return .none
 
-        case .routeAction(_, action: .enterCode(.setMeResult(.success))):
+        case let .routeAction(_, action: .enterCode(.setMeResult(.success(setMeSuccess)))):
+            switch setMeSuccess {
+            case .newUser:
+                state.routes.push(.enterUserData(.init()))
+                return .none
+
+            case .userExists:
+                return Effect(value: .delegate(.loginSuccess))
+            }
+
+        case .routeAction(_, action: .enterUserData(.later)),
+             .routeAction(_, action: .enterUserData(.updateUserResult(.success))):
             return Effect(value: .delegate(.loginSuccess))
 
         case .routeAction:

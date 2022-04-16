@@ -28,7 +28,7 @@ struct EnterCode {
 
         case verificationIDResult(Result<String, NSError>)
         case authDataResult(Result<AuthDataResult, NSError>)
-        case setMeResult(Result<Bool, NSError>)
+        case setMeResult(Result<SignInUserType, NSError>)
 
         case dismissAlert
 
@@ -69,7 +69,10 @@ struct EnterCode {
             return Effect(value: .setMe)
 
         case .setMe:
-            return environment.firestoreUsersClient.setMeIfNeeded()
+            guard let authUser = environment.authClient.currentUser() else {
+                return .none
+            }
+            return environment.firestoreUsersClient.setMeIfNeeded(authUser)
                 .catchToEffect(Action.setMeResult)
                 .eraseToEffect()
 

@@ -7,15 +7,16 @@
 
 import Combine
 import ComposableArchitecture
-import Firebase
 import FirebaseFirestoreCombineSwift
+import Firebase
 
 struct FirestoreUsersClient {
 
     static let collection = Firestore.firestore().collection("users")
     static var cancellables = Set<AnyCancellable>()
 
-    var setMeIfNeeded: () -> Effect<Bool, NSError>
+    var setMeIfNeeded: (Firebase.User) -> Effect<SignInUserType, NSError>
+    var updateUser: (UserUpdate) -> Effect<Bool, NSError>
 }
 
 // MARK: - Live
@@ -23,37 +24,48 @@ struct FirestoreUsersClient {
 extension FirestoreUsersClient {
 
     static let live = FirestoreUsersClient(
-        setMeIfNeeded: {
+        setMeIfNeeded: { authUser in
             .future { result in
-                guard let authUser = Auth.auth().currentUser else {
-                    result(.failure(NSError(domain: "No current user", code: 1)))
-                    return
-                }
-                collection.whereField("uid", isEqualTo: authUser.uid)
-                    .getDocuments()
-                    .catch { error -> AnyPublisher<QuerySnapshot, Never> in
+                let user = User(
+                    uid: authUser.uid,
+                    phoneNumber: authUser.phoneNumber,
+                    firstName: nil,
+                    lastName: nil
+                )
+                let documentRef = collection.document(authUser.uid)
+                documentRef.getDocument()
+                    .catch { error -> AnyPublisher<DocumentSnapshot, Never> in
                         result(.failure(error as NSError))
                         return Empty(completeImmediately: true)
                             .eraseToAnyPublisher()
                     }
                     .flatMap { snapshot -> AnyPublisher<Void, Error> in
-                        if snapshot.isEmpty {
-                            let user = User(uid: authUser.uid, phoneNumber: authUser.phoneNumber)
-                            return collection.document()
-                                .setData(from: user, encoder: Firestore.Encoder())
-                                .eraseToAnyPublisher()
-                        } else {
-                            result(.success(true))
+                        switch snapshot.exists {
+                        case true:
+                            result(.success(.userExists))
                             return Empty(completeImmediately: true)
+                                .eraseToAnyPublisher()
+                        case false:
+                            return documentRef.setData(from: user)
                                 .eraseToAnyPublisher()
                         }
                     }
-                    .catch { error -> AnyPublisher<Void, Never> in
-                        result(.failure(error as NSError))
-                        return Empty(completeImmediately: true)
-                            .eraseToAnyPublisher()
-                    }
-                    .sink { result(.success(true)) }
+                    .on(
+                        value: { _ in result(.success(.newUser)) },
+                        error: { error in result(.failure(error as NSError)) }
+                    )
+                    .sink()
+                    .store(in: &cancellables)
+            }
+        },
+        updateUser: { userUpdate in
+            .future { result in
+                collection.document(userUpdate.uid).updateData(from: userUpdate)
+                    .on(
+                        value: { result(.success(true)) },
+                        error: { error in result(.failure(error as NSError)) }
+                    )
+                    .sink()
                     .store(in: &cancellables)
             }
         }
