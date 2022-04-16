@@ -8,6 +8,7 @@
 import Foundation
 
 struct UpdateUser {
+    let uid: String
     let firstName: String?
     let lastName: String?
 }

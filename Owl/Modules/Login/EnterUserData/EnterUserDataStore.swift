@@ -35,6 +35,7 @@ struct EnterUserData {
     // MARK: - Environment
 
     struct Environment {
+        let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
     }
 
@@ -51,8 +52,12 @@ struct EnterUserData {
             return .none
 
         case .save:
+            guard let authUser = environment.authClient.currentUser() else {
+                return .none
+            }
             state.isLoading = true
             let updateUser = UpdateUser(
+                uid: authUser.uid,
                 firstName: state.firstName,
                 lastName: state.lastName
             )

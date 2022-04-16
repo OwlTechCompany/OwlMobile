@@ -69,7 +69,10 @@ struct EnterCode {
             return Effect(value: .setMe)
 
         case .setMe:
-            return environment.firestoreUsersClient.setMeIfNeeded()
+            guard let authUser = environment.authClient.currentUser() else {
+                return .none
+            }
+            return environment.firestoreUsersClient.setMeIfNeeded(authUser)
                 .catchToEffect(Action.setMeResult)
                 .eraseToEffect()
 

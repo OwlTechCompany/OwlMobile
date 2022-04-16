@@ -124,6 +124,7 @@ struct EnterUserDataView_Previews: PreviewProvider {
             initialState: EnterUserData.State(),
             reducer: EnterUserData.reducer,
             environment: EnterUserData.Environment(
+                authClient: .live,
                 firestoreUsersClient: .live
             )
         ))

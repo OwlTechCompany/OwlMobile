@@ -5,6 +5,7 @@
 //  Created by Denys Danyliuk on 16.04.2022.
 //
 
+import Combine
 import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreCombineSwift

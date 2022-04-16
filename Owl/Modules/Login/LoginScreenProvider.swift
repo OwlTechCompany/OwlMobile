@@ -103,6 +103,7 @@ extension Login.ScreenProvider {
                 action: /Action.enterUserData,
                 environment: {
                     EnterUserData.Environment(
+                        authClient: $0.authClient,
                         firestoreUsersClient: $0.firestoreUsersClient
                     )
                 }

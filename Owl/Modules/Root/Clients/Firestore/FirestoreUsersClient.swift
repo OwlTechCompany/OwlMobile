@@ -15,7 +15,7 @@ struct FirestoreUsersClient {
     static let collection = Firestore.firestore().collection("users")
     static var cancellables = Set<AnyCancellable>()
 
-    var setMeIfNeeded: () -> Effect<SetMeSuccess, NSError>
+    var setMeIfNeeded: (Firebase.User) -> Effect<SetMeSuccess, NSError>
     var updateUser: (UpdateUser) -> Effect<Bool, NSError>
 }
 
@@ -24,12 +24,8 @@ struct FirestoreUsersClient {
 extension FirestoreUsersClient {
 
     static let live = FirestoreUsersClient(
-        setMeIfNeeded: {
+        setMeIfNeeded: { authUser in
             .future { result in
-                guard let authUser = Auth.auth().currentUser else {
-                    result(.failure(NSError(domain: "No current user", code: 1)))
-                    return
-                }
                 let user = User(
                     uid: authUser.uid,
                     phoneNumber: authUser.phoneNumber,
@@ -63,11 +59,7 @@ extension FirestoreUsersClient {
         },
         updateUser: { userUpdate in
             .future { result in
-                guard let authUser = Auth.auth().currentUser else {
-                    result(.failure(NSError(domain: "No current user", code: 1)))
-                    return
-                }
-                collection.document(authUser.uid).updateData(from: userUpdate)
+                collection.document(userUpdate.uid).updateData(from: userUpdate)
                     .on(
                         value: { result(.success(true)) },
                         error: { error in result(.failure(error as NSError)) }
