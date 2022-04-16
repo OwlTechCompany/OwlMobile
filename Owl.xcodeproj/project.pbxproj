@@ -33,6 +33,8 @@
 		5F727FC1280765B000FABF26 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FC0280765B000FABF26 /* SignIn.swift */; };
 		5F9DFC89280B156600E73206 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC88280B156600E73206 /* UpdateUser.swift */; };
 		5F9DFC8B280B165500E73206 /* SetMeSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC8A280B165500E73206 /* SetMeSuccess.swift */; };
+		5F9DFC91280B1C4C00E73206 /* DocumentReference+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */; };
+		5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC93280B1C7800E73206 /* Publisher+Ext.swift */; };
 		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
 		5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3C27FF4CBA00915572 /* AppView.swift */; };
 		5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4327FF502F00915572 /* AppDelegate.swift */; };
@@ -92,6 +94,8 @@
 		5F727FC0280765B000FABF26 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		5F9DFC88280B156600E73206 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
 		5F9DFC8A280B165500E73206 /* SetMeSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetMeSuccess.swift; sourceTree = "<group>"; };
+		5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DocumentReference+Ext.swift"; sourceTree = "<group>"; };
+		5F9DFC93280B1C7800E73206 /* Publisher+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Ext.swift"; sourceTree = "<group>"; };
 		5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftGen+Ext.swift"; sourceTree = "<group>"; };
 		5F9F4E3C27FF4CBA00915572 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		5F9F4E4327FF502F00915572 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -287,9 +291,35 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		5F9DFC8E280B1C3700E73206 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				5F9DFC8F280B1C3D00E73206 /* Firestore */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		5F9DFC8F280B1C3D00E73206 /* Firestore */ = {
+			isa = PBXGroup;
+			children = (
+				5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */,
+			);
+			path = Firestore;
+			sourceTree = "<group>";
+		};
+		5F9DFC92280B1C6D00E73206 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				5F9DFC93280B1C7800E73206 /* Publisher+Ext.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
 		5F9F4E3827FF463800915572 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5F9DFC92280B1C6D00E73206 /* Combine */,
+				5F9DFC8E280B1C3700E73206 /* Firebase */,
 				5FA7D86728057AC700AA48B5 /* TCACoordinator */,
 				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
 				5D35EC862803204D00624717 /* View+Ext.swift */,
@@ -551,10 +581,12 @@
 				5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5F9DFC91280B1C4C00E73206 /* DocumentReference+Ext.swift in Sources */,
 				5FE31827280A2151007F7816 /* User.swift in Sources */,
 				5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
+				5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
