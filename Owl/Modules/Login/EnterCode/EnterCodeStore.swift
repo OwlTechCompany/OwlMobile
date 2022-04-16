@@ -28,7 +28,7 @@ struct EnterCode {
 
         case verificationIDResult(Result<String, NSError>)
         case authDataResult(Result<AuthDataResult, NSError>)
-        case setMeResult(Result<Bool, NSError>)
+        case setMeResult(Result<SetMeSuccess, NSError>)
 
         case dismissAlert
 

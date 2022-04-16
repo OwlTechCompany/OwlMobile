@@ -101,7 +101,11 @@ extension Login.ScreenProvider {
             .pullback(
                 state: /State.enterUserData,
                 action: /Action.enterUserData,
-                environment: { _ in EnterUserData.Environment() }
+                environment: {
+                    EnterUserData.Environment(
+                        firestoreUsersClient: $0.firestoreUsersClient
+                    )
+                }
             )
     )
 

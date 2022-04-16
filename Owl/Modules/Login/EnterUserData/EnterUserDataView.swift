@@ -88,11 +88,12 @@ struct EnterUserDataView: View {
                             .frame(minWidth: 0, maxWidth: .infinity)
 
                             Button(
-                                action: { viewStore.send(.letsChat) },
-                                label: { Text("Let's chat") }
+                                action: { viewStore.send(.save) },
+                                label: { Text("Save") }
                             )
                             .buttonStyle(BigButtonStyle())
                             .frame(minWidth: 0, maxWidth: .infinity)
+                            .disabled(!viewStore.saveButtonEnabled)
                         }
                     }
                     .padding(20)
@@ -122,7 +123,9 @@ struct EnterUserDataView_Previews: PreviewProvider {
         EnterUserDataView(store: Store(
             initialState: EnterUserData.State(),
             reducer: EnterUserData.reducer,
-            environment: EnterUserData.Environment()
+            environment: EnterUserData.Environment(
+                firestoreUsersClient: .live
+            )
         ))
     }
 }

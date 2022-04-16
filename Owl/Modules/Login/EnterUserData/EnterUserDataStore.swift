@@ -14,6 +14,7 @@ struct EnterUserData {
     struct State: Equatable {
         @BindableState var firstName: String = ""
         @BindableState var lastName: String = ""
+        var saveButtonEnabled: Bool = false
         var isLoading: Bool = false
 
         var alert: AlertState<Action>?
@@ -23,8 +24,9 @@ struct EnterUserData {
 
     enum Action: Equatable, BindableAction {
         case later
-        case letsChat
+        case save
 
+        case updateUserResult(Result<Bool, NSError>)
         case dismissAlert
 
         case binding(BindingAction<State>)
@@ -32,28 +34,44 @@ struct EnterUserData {
 
     // MARK: - Environment
 
-    struct Environment { }
+    struct Environment {
+        let firestoreUsersClient: FirestoreUsersClient
+    }
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
+
+        case .binding(\.$firstName):
+            state.saveButtonEnabled = !state.firstName.isEmpty
+            return .none
+
         case .later:
             return .none
 
-        case .letsChat:
+        case .save:
+            state.isLoading = true
+            let updateUser = UpdateUser(
+                firstName: state.firstName,
+                lastName: state.lastName
+            )
+            return environment.firestoreUsersClient.updateUser(updateUser)
+                .catchToEffect(Action.updateUserResult)
+                .eraseToEffect()
+
+        case .updateUserResult(.success):
+            state.isLoading = false
             return .none
 
-//        case let .authDataResult(.failure(error)),
-//             let .verificationIDResult(.failure(error)),
-//            let .setMeResult(.failure(error)):
-//            state.isLoading = false
-//            state.alert = .init(
-//                title: TextState("Error"),
-//                message: TextState("\(error.localizedDescription)"),
-//                dismissButton: .default(TextState("Ok"))
-//            )
-//            return .none
+        case let .updateUserResult(.failure(error)):
+            state.isLoading = false
+            state.alert = .init(
+                title: TextState("Error"),
+                message: TextState("\(error.localizedDescription)"),
+                dismissButton: .default(TextState("Ok"))
+            )
+            return .none
 
         case .dismissAlert:
             state.alert = nil
