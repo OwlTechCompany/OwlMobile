@@ -25,11 +25,16 @@ extension Main.ScreenProvider {
         static var statePath = /State.chat
     }
 
+    struct NewPrivateChatRoute: Routable {
+        static var statePath = /State.chat
+    }
+
     // MARK: - State handling
 
     enum State: Equatable, Identifiable {
         case chatList(ChatList.State)
         case chat(Chat.State)
+        case newPrivateChat(NewPrivateChat.State)
 
         var id: String {
             switch self {
@@ -38,6 +43,9 @@ extension Main.ScreenProvider {
 
             case .chat:
                 return ChatRoute.id
+
+            case .newPrivateChat:
+                return NewPrivateChatRoute.id
             }
         }
     }
@@ -47,6 +55,7 @@ extension Main.ScreenProvider {
     enum Action: Equatable {
         case chatList(ChatList.Action)
         case chat(Chat.Action)
+        case newPrivateChat(NewPrivateChat.Action)
     }
 
     // MARK: - Reducer handling
@@ -68,6 +77,12 @@ extension Main.ScreenProvider {
                 state: /State.chat,
                 action: /Action.chat,
                 environment: { _ in Chat.Environment() }
+            ),
+        NewPrivateChat.reducer
+            .pullback(
+                state: /State.newPrivateChat,
+                action: /Action.newPrivateChat,
+                environment: { _ in NewPrivateChat.Environment() }
             )
     )
 

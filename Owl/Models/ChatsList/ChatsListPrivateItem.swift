@@ -31,7 +31,7 @@ extension ChatsListPrivateItem {
     }
 
     var name: String {
-        return (companion.firstName ?? "Wild") + (companion.lastName ?? "Owl")
+        return companion.fullName
     }
     
 }

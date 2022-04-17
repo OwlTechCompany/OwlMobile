@@ -26,6 +26,11 @@ struct MainView: View {
                     action: Main.ScreenProvider.Action.chat,
                     then: ChatView.init
                 )
+                CaseLet(
+                    state: /Main.ScreenProvider.State.newPrivateChat,
+                    action: Main.ScreenProvider.Action.newPrivateChat,
+                    then: NewPrivateChatView.init
+                )
             }
         }
     }

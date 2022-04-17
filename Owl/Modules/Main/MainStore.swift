@@ -56,6 +56,10 @@ struct Main {
         case .routeAction(_, action: .chatList(.logout)):
             return Effect(value: .delegate(.logout))
 
+        case .routeAction(_, action: .chatList(.newPrivateChat)):
+            state.routes.push(.newPrivateChat(.initialState))
+            return .none
+
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
             state.routes.push(.chat(.init()))
             return .none
