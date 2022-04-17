@@ -5,7 +5,7 @@
 //  Created by Anastasia Holovash on 17.04.2022.
 //
 
-import Foundation
+import SwiftUI
 
 struct MockedDataClient {
 
@@ -36,5 +36,10 @@ struct MockedDataClient {
         )
     )
 
-}
+    static let chatNavigationState = ChatNavigation.State(
+        chatImage: Image(systemName: "pawprint"),
+        chatName: "Namehello World",
+        chatDescription: "+380931314850"
+    )
 
+}

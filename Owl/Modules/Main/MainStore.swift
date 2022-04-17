@@ -7,6 +7,7 @@
 
 import TCACoordinators
 import ComposableArchitecture
+import SwiftUI
 
 struct Main {
 
@@ -57,7 +58,7 @@ struct Main {
             return Effect(value: .delegate(.logout))
 
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
-            state.routes.push(.chat(.init()))
+            state.routes.push(.chat(.init(navigation: MockedDataClient.chatNavigationState)))
             return .none
 
         case .delegate:
