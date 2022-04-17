@@ -35,6 +35,7 @@
 		5DCD57A2280C424D00186FE2 /* ChatsListGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */; };
 		5DCD57A5280C42A200186FE2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A4280C42A200186FE2 /* Message.swift */; };
 		5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */; };
+		5DCD57AA280C63DE00186FE2 /* MockedDataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */; };
 		5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingStore.swift */; };
 		5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeStore.swift */; };
 		5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */; };
@@ -108,6 +109,7 @@
 		5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListGroupItem.swift; sourceTree = "<group>"; };
 		5DCD57A4280C42A200186FE2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellStore.swift; sourceTree = "<group>"; };
+		5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDataClient.swift; sourceTree = "<group>"; };
 		5F727FAA2807623200FABF26 /* OnboardingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStore.swift; sourceTree = "<group>"; };
 		5F727FAE2807627100FABF26 /* EnterCodeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeStore.swift; sourceTree = "<group>"; };
 		5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneStore.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
 				5FE318062809E4B5007F7816 /* ValidationClient.swift */,
+				5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */,
 				5FE31828280A218F007F7816 /* Firestore */,
 			);
 			path = Clients;
@@ -674,6 +677,7 @@
 				5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */,
 				5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */,
 				5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */,
+				5DCD57AA280C63DE00186FE2 /* MockedDataClient.swift in Sources */,
 				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,

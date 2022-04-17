@@ -108,32 +108,12 @@ private extension ChatListCell.State {
 
 }
 
-extension ChatListCell.State {
-
-    init(model: ChatsListPrivateItem) {
-        id = model.id
-        chatImage = Asset.Images.owlWithPadding.image
-        chatName = model.name
-        lastMessage = model.lastMessage.messageText
-        lastMessageSendTime = model.lastMessage.sentAt
-        unreadMessagesNumber = 0
-    }
-
-}
-
 // MARK: - Preview
 
 struct ChatListCellView_Previews: PreviewProvider {
     static var previews: some View {
         ChatListCellView(store: Store(
-            initialState: ChatListCell.State(
-                id: "",
-                chatImage: Asset.Images.owlBlack.image,
-                chatName: "Name Name Name",
-                lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-                lastMessageSendTime: Date(),
-                unreadMessagesNumber: 5679
-            ),
+            initialState: ChatListCell.State(model: MockedDataClient.chatsListPrivateItem),
             reducer: ChatListCell.reducer,
             environment: ChatListCell.Environment()
         ))

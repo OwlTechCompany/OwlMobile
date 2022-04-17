@@ -52,14 +52,7 @@ struct ChatListView_Previews: PreviewProvider {
             initialState: ChatList.State(
                 chats: .init(
                     arrayLiteral:
-                        ChatListCell.State(
-                            id: "123",
-                            chatImage: Asset.Images.owlBlack.image,
-                            chatName: "Test chat",
-                            lastMessage: "Hello world",
-                            lastMessageSendTime: Date(),
-                            unreadMessagesNumber: 4
-                        )
+                        ChatListCell.State(model: MockedDataClient.chatsListPrivateItem)
                 )
             ),
             reducer: ChatList.reducer,

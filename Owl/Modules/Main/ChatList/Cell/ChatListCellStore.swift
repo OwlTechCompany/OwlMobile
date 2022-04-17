@@ -40,3 +40,16 @@ struct ChatListCell {
         }
     }
 }
+
+extension ChatListCell.State {
+
+    init(model: ChatsListPrivateItem) {
+        id = model.id
+        chatImage = Asset.Images.owlWithPadding.image
+        chatName = model.name
+        lastMessage = model.lastMessage.messageText
+        lastMessageSendTime = model.lastMessage.sentAt
+        unreadMessagesNumber = 0
+    }
+
+}
