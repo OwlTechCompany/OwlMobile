@@ -20,59 +20,7 @@ struct Main {
             routes: [
                 .root(
                     .chatList(
-                        ChatList.State(
-                            chats: .init(
-                                arrayLiteral:
-                                    ChatListCell.State(
-                                        id: "123",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat",
-                                        lastMessage: "Hello world",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 4
-                                    ),
-                                    ChatListCell.State(
-                                        id: "1237",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat 3",
-                                        lastMessage: "Hello world",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 4
-                                    ),
-                                    ChatListCell.State(
-                                        id: "13",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat 3",
-                                        lastMessage: "Hello world Hello Hello Hello Hello HelloHello",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 209
-                                    ),
-                                    ChatListCell.State(
-                                        id: "1235",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat 4",
-                                        lastMessage: "Hello world",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 4
-                                    ),
-                                    ChatListCell.State(
-                                        id: "12376",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat 5",
-                                        lastMessage: "Hello world",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 4099
-                                    ),
-                                    ChatListCell.State(
-                                        id: "137",
-                                        chatImage: Asset.Images.owlBlack.image,
-                                        chatName: "Test chat 6",
-                                        lastMessage: "Hello world Hello Hello Hello Hello HelloHello",
-                                        lastMessageSendTime: Date(),
-                                        unreadMessagesNumber: 209
-                                    )
-                            )
-                        )
+                        ChatList.State.initialState
                     ),
                     embedInNavigationView: true
                 )

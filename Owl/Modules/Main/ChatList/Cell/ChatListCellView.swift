@@ -8,35 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-// MARK: - ViewStore
-
-struct ChatListCell {
-
-    struct State: Equatable, Identifiable {
-        let id: String
-        let chatImage: UIImage
-        let chatName: String
-        let lastMessage: String
-        let lastMessageSendTime: Date
-        let unreadMessagesNumber: Int
-    }
-
-    enum Action: Equatable {
-        case open
-    }
-
-    struct Environment { }
-
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
-        switch action {
-        case .open:
-            return .none
-        }
-    }
-}
-
-// MARK: - View
-
 struct ChatListCellView: View {
 
     let store: Store<ChatListCell.State, ChatListCell.Action>

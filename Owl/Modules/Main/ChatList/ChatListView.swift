@@ -11,7 +11,6 @@ import ComposableArchitecture
 struct ChatListView: View {
 
     var store: Store<ChatList.State, ChatList.Action>
-    @State private var searchText = ""
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -35,9 +34,7 @@ struct ChatListView: View {
 
                     Button(
                         action: { viewStore.send(.logout) },
-                        label: {
-                            Text("Logout")
-                        }
+                        label: { Text("Logout") }
                     )
                     .padding()
                 }

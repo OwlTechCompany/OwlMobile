@@ -34,6 +34,7 @@
 		5DCD57A0280C423300186FE2 /* ChatsListPrivateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */; };
 		5DCD57A2280C424D00186FE2 /* ChatsListGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */; };
 		5DCD57A5280C42A200186FE2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A4280C42A200186FE2 /* Message.swift */; };
+		5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */; };
 		5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingStore.swift */; };
 		5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeStore.swift */; };
 		5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */; };
@@ -106,6 +107,7 @@
 		5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListPrivateItem.swift; sourceTree = "<group>"; };
 		5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListGroupItem.swift; sourceTree = "<group>"; };
 		5DCD57A4280C42A200186FE2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellStore.swift; sourceTree = "<group>"; };
 		5F727FAA2807623200FABF26 /* OnboardingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStore.swift; sourceTree = "<group>"; };
 		5F727FAE2807627100FABF26 /* EnterCodeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeStore.swift; sourceTree = "<group>"; };
 		5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneStore.swift; sourceTree = "<group>"; };
@@ -171,12 +173,12 @@
 		5D35EC7B27FF7AE500624717 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
-				5FE31828280A218F007F7816 /* Firestore */,
 				5D35EC822800246900624717 /* AuthClient.swift */,
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
 				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
 				5FE318062809E4B5007F7816 /* ValidationClient.swift */,
+				5FE31828280A218F007F7816 /* Firestore */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -195,7 +197,7 @@
 			children = (
 				5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */,
 				5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */,
-				5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */,
+				5DCD57A6280C434D00186FE2 /* Cell */,
 			);
 			path = ChatList;
 			sourceTree = "<group>";
@@ -203,8 +205,8 @@
 		5D4CF9F3280A1C0000A1B705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
 				5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */,
+				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -272,8 +274,8 @@
 		5DCD579E280C422400186FE2 /* ChatsList */ = {
 			isa = PBXGroup;
 			children = (
-				5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */,
 				5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */,
+				5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */,
 			);
 			path = ChatsList;
 			sourceTree = "<group>";
@@ -284,6 +286,15 @@
 				5DCD57A4280C42A200186FE2 /* Message.swift */,
 			);
 			path = Chat;
+			sourceTree = "<group>";
+		};
+		5DCD57A6280C434D00186FE2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */,
+				5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		5F727FA92807621300FABF26 /* Onboarding */ = {
@@ -334,9 +345,9 @@
 		5F727FBE2807659000FABF26 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5F727FBF2807659D00FABF26 /* Auth */,
 				5DCD57A3280C428F00186FE2 /* Chat */,
 				5DCD579E280C422400186FE2 /* ChatsList */,
-				5F727FBF2807659D00FABF26 /* Auth */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -345,9 +356,9 @@
 			isa = PBXGroup;
 			children = (
 				5F727FC0280765B000FABF26 /* SignIn.swift */,
+				5F9DFC8A280B165500E73206 /* SignInUserType.swift */,
 				5FE31826280A2151007F7816 /* User.swift */,
 				5F9DFC88280B156600E73206 /* UserUpdate.swift */,
-				5F9DFC8A280B165500E73206 /* SignInUserType.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -465,8 +476,8 @@
 		5FE31828280A218F007F7816 /* Firestore */ = {
 			isa = PBXGroup;
 			children = (
-				5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */,
 				5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */,
+				5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */,
 			);
 			path = Firestore;
 			sourceTree = "<group>";
@@ -689,6 +700,7 @@
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
+				5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */,
 				5D35EC8E28076EDF00624717 /* Loader.swift in Sources */,
 				5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */,
 			);
