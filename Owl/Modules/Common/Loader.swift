@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-let darkBlue = Color(red: 96 / 255, green: 174 / 255, blue: 201 / 255)
-let darkPink = Color(red: 244 / 255, green: 132 / 255, blue: 177 / 255)
-let darkViolet = Color(red: 214 / 255, green: 189 / 255, blue: 251 / 255)
-
 struct Loader: View {
 
     let rotationTime: Double = 0.5
@@ -32,30 +28,26 @@ struct Loader: View {
                 .edgesIgnoringSafeArea(.all)
 
             ZStack {
-                // S3
                 LoaderCircle(
                     start: spinnerStart,
                     end: spinnerEndS2S3,
                     rotation: rotationDegreeS3,
-                    color: darkViolet
+                    color: Constants.secondaryColor2
                 )
 
-                // S2
                 LoaderCircle(
                     start: spinnerStart,
                     end: spinnerEndS2S3,
                     rotation: rotationDegreeS2,
-                    color: darkPink
+                    color: Constants.secondaryColor1
                 )
 
-                // S1
                 LoaderCircle(
                     start: spinnerStart,
                     end: spinnerEndS1,
                     rotation: rotationDegreeS1,
-                    color: darkBlue
+                    color: Constants.mainColor
                 )
-
             }
             .frame(width: Constants.size, height: Constants.size)
         }
@@ -124,7 +116,10 @@ struct LoaderCircle: View {
 
 private enum Constants {
     static let size: CGFloat = 80
-    static let lineWidth: CGFloat = 10
+    static let lineWidth: CGFloat = 6
+    static let mainColor = Colors.loader1.swiftUIColor
+    static let secondaryColor1 = Colors.loader2.swiftUIColor
+    static let secondaryColor2 = Colors.loader3.swiftUIColor
 }
 
 struct Loader_Previews: PreviewProvider {

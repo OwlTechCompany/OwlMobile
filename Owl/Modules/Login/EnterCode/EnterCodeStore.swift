@@ -13,7 +13,7 @@ struct EnterCode {
     // MARK: - State
 
     struct State: Equatable {
-        @BindableState var verificationCode: String
+        @BindableState var verificationCode: String = ""
         var alert: AlertState<Action>?
         var phoneNumber: String
         var isLoading: Bool = false
@@ -63,7 +63,6 @@ struct EnterCode {
             )
             return environment.authClient.signIn(model)
                 .catchToEffect(Action.authDataResult)
-                .eraseToEffect()
 
         case .authDataResult(.success):
             return Effect(value: .setMe)
@@ -74,7 +73,6 @@ struct EnterCode {
             }
             return environment.firestoreUsersClient.setMeIfNeeded(authUser)
                 .catchToEffect(Action.setMeResult)
-                .eraseToEffect()
 
         case .setMeResult(.success):
             state.isLoading = false
@@ -91,7 +89,6 @@ struct EnterCode {
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
                 .catchToEffect(Action.verificationIDResult)
-                .eraseToEffect()
 
         case let .authDataResult(.failure(error)),
              let .verificationIDResult(.failure(error)),

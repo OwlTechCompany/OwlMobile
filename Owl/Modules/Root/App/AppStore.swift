@@ -17,12 +17,21 @@ struct App {
         var login: Login.State?
         var main: Main.State?
 
-        mutating func setOnly(
-            login: Login.State? = nil,
-            main: Main.State? = nil
-        ) {
-            self.login = login
-            self.main = main
+        mutating func set(_ currentState: CurrentState) {
+            switch currentState {
+            case .login:
+                self.login = .initialState
+                self.main = .none
+
+            case .main:
+                self.main = .initialState
+                self.login = .none
+            }
+        }
+
+        enum CurrentState {
+            case login
+            case main
         }
     }
 
@@ -42,13 +51,15 @@ struct App {
         let userDefaultsClient: UserDefaultsClient
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
+        let chatsClient: FirestoreChatsClient
 
         static let live = Environment(
             firebaseClient: .live,
             authClient: .live,
             userDefaultsClient: .live,
             validationClient: .live,
-            firestoreUsersClient: .live
+            firestoreUsersClient: .live,
+            chatsClient: .live
         )
     }
 
@@ -85,19 +96,19 @@ struct App {
         switch action {
         case .appDelegate(.didFinishLaunching):
             if environment.authClient.currentUser() != nil {
-                state.setOnly(main: .initialState)
+                state.set(.main)
             } else {
-                state.setOnly(login: .initialState)
+                state.set(.login)
             }
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            state.setOnly(main: .initialState)
+            state.set(.main)
             return .none
 
-        case .main(.logout):
+        case .main(.delegate(.logout)):
             environment.authClient.signOut()
-            state.setOnly(login: .initialState)
+            state.set(.login)
             return .none
 
         case .appDelegate:
@@ -133,7 +144,10 @@ extension App.Environment {
     }
 
     var main: Main.Environment {
-        Main.Environment()
+        Main.Environment(
+            authClient: authClient,
+            chatsClient: chatsClient
+        )
     }
 
 }

@@ -7,44 +7,26 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TCACoordinators
 
 struct MainView: View {
 
     var store: Store<Main.State, Main.Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
-            ZStack {
-                Color.pink
-                    .ignoresSafeArea()
-
-                VStack {
-                    Text("Main")
-                        .foregroundColor(Colors.test.swiftUIColor)
-                        .padding()
-
-                    Button(
-                        action: { viewStore.send(.logout) },
-                        label: {
-                            Text("Logout")
-                                .foregroundColor(.white)
-                        }
-                    )
-                }
+        TCARouter(store) { screen in
+            SwitchStore(screen) {
+                CaseLet(
+                    state: /Main.ScreenProvider.State.chatList,
+                    action: Main.ScreenProvider.Action.chatList,
+                    then: ChatListView.init
+                )
+                CaseLet(
+                    state: /Main.ScreenProvider.State.chat,
+                    action: Main.ScreenProvider.Action.chat,
+                    then: ChatView.init
+                )
             }
-
         }
-    }
-}
-
-// MARK: - Preview
-
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView(store: Store(
-            initialState: Main.State(),
-            reducer: Main.reducer,
-            environment: Main.Environment()
-        ))
     }
 }

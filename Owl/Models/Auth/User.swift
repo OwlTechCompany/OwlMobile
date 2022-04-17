@@ -16,7 +16,7 @@ struct User {
 
 // MARK: - Encodable
 
-extension User: Encodable {
+extension User: Codable {
 
     enum CodingKeys: String, CodingKey {
         case uid
@@ -32,4 +32,10 @@ extension User: Encodable {
         try container.encode(firstName ?? "Wild", forKey: .firstName)
         try container.encode(lastName ?? "Owl", forKey: .lastName)
     }
+}
+
+// MARK: - Equatable
+
+extension User: Equatable {
+
 }

@@ -50,7 +50,6 @@ struct EnterPhone {
                 .verifyPhoneNumber(state.phoneNumber)
                 .mapError { $0 as NSError }
                 .catchToEffect(Action.verificationIDResult)
-                .eraseToEffect()
 
         case let .verificationIDResult(.success(verificationId)):
             state.isLoading = false

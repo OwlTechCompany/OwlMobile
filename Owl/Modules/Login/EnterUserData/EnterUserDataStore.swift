@@ -63,7 +63,6 @@ struct EnterUserData {
             )
             return environment.firestoreUsersClient.updateUser(userUpdate)
                 .catchToEffect(Action.updateUserResult)
-                .eraseToEffect()
 
         case .updateUserResult(.success):
             state.isLoading = false
