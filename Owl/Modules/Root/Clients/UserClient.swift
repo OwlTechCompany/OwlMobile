@@ -1,0 +1,62 @@
+//
+//  UserClient.swift
+//  Owl
+//
+//  Created by Denys Danyliuk on 18.04.2022.
+//
+
+import Foundation
+import ComposableArchitecture
+import Combine
+import Firebase
+import FirebaseFirestoreCombineSwift
+import FirebaseAuthCombineSwift
+
+struct UserClient {
+
+    static var cancellables = Set<AnyCancellable>()
+
+    var firebaseUser: CurrentValueSubject<Firebase.User?, Never>
+    var firestoreUser: CurrentValueSubject<User?, Never>
+
+    var setup: () -> Void
+}
+
+extension UserClient {
+
+    static var live: Self {
+        let firebaseUser = CurrentValueSubject<Firebase.User?, Never>(nil)
+        let firestoreUser = CurrentValueSubject<User?, Never>(nil)
+        var userCancellable: Cancellable?
+        return Self(
+            firebaseUser: firebaseUser,
+            firestoreUser: firestoreUser,
+            setup: {
+                // Set current user immediately
+                firebaseUser.send(Auth.auth().currentUser)
+
+                // Subscribe for updates
+                Auth.auth().authStateDidChangePublisher()
+                    .sink { user in
+                        firebaseUser.send(user)
+
+                        // If Firebase.User changes we need to update firestoreUser
+                        userCancellable?.cancel()
+                        if let user = user {
+                            userCancellable = Firestore.firestore().collection("users")
+                                .document(user.uid)
+                                .snapshotPublisher()
+                                .map { try? $0.data(as: User.self) }
+                                .on(value: {
+                                    firestoreUser.send($0)
+                                })
+                                .sink()
+                        } else {
+                            firestoreUser.send(nil)
+                        }
+                    }
+                    .store(in: &cancellables)
+            }
+        )
+    }
+}

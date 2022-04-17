@@ -17,101 +17,100 @@ struct FirestoreChatsClient {
     static var cancellables = Set<AnyCancellable>()
 
     var getChats: (Firebase.User) -> Effect<[ChatsListPrivateItem], NSError>
-    var chatWithUser: (String) -> Effect<ChatWithUserResponse, NSError>
-    var createPrivateChat: (PrivateChatRequest) -> Effect<ChatsListPrivateItem, NSError>
+    var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
+    var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
 }
 
 // MARK: - Live
 
-enum ChatWithUserResponse: Equatable {
-    case chatItem(ChatsListPrivateItem)
-    case needToCreate(withUserID: String)
-}
-
 extension FirestoreChatsClient {
 
-    static let live = FirestoreChatsClient(
-        getChats: { authUser in
-            .run { subscriber in
-                collection.whereField("members", arrayContains: authUser.uid)
-                    .snapshotPublisher()
-                    .on(
-                        value: { snapshot in
-                            print(snapshot)
-                            let items = snapshot.documents.compactMap { document -> ChatsListPrivateItem? in
-                                do {
-                                    return try document.data(as: ChatsListPrivateItem.self)
-                                } catch let error as NSError {
-                                    subscriber.send(completion: .failure(error))
-                                    return nil
-                                }
-                            }
-                            subscriber.send(items)
-                        },
-                        error: { error in
-                            print(error)
-                            subscriber.send(completion: .failure(error as NSError))
-                        }
-                    )
-                    .sink()
-            }
-        },
-        chatWithUser: { userId in
-            .future { result in
-                let users = [userId, Auth.auth().currentUser!.uid]
-                let reversed: [String] = users.reversed()
-                collection
-                    .whereField("members", in: [users, reversed])
-//                    .whereField("members", arrayContains: userId)
-//                    .whereField("members", in: [Auth.auth().currentUser!.uid])
-//                    .filter(using: NSPredicate)
-                    .getDocuments()
-                    .on(
-                        value: { snapshot in
-                            if let document = snapshot.documents.first {
-                                do {
-                                    let chatsListPrivateItem = try document.data(as: ChatsListPrivateItem.self)
-                                    result(.success(.chatItem(chatsListPrivateItem)))
-                                } catch let error as NSError {
-                                    result(.failure(error as NSError))
-                                }
-                            } else {
-                                result(.success(.needToCreate(withUserID: userId)))
-                            }
-                        },
-                        error: { result(.failure($0 as NSError)) }
-                    )
-                    .sink()
-                    .store(in: &cancellables)
-            }
-        },
-        createPrivateChat: { chatsListPrivateItem in
-            .future { result in
-                let newDocument = collection.document()
-                var chatsListPrivateItem = chatsListPrivateItem
-                chatsListPrivateItem.id = newDocument.documentID
-
-                newDocument.setData(from: chatsListPrivateItem)
-                    .catch { error -> AnyPublisher<Void, Never> in
-                        result(.failure(error as NSError))
-                        return Empty(completeImmediately: true)
-                            .eraseToAnyPublisher()
+    // swiftlint:disable function_body_length
+    static func live(userClient: UserClient) -> Self {
+        return Self(
+            getChats: { authUser in
+                Effect.run { subscriber in
+                    collection.whereField("members", arrayContains: authUser.uid)
+                        .snapshotPublisher()
+                        .on(
+                            value: { snapshot in
+                                subscriber.send(
+                                    snapshot.documents.compactMap { document in
+                                        do {
+                                            return try document.data(as: ChatsListPrivateItem.self)
+                                        } catch let error as NSError {
+                                            subscriber.send(completion: .failure(error))
+                                            return nil
+                                        }
+                                    }
+                                )
+                            },
+                            error: { subscriber.send(completion: .failure($0 as NSError)) }
+                        )
+                        .sink()
+                }
+            },
+            chatWithUser: { uid in
+                Effect.future { callback in
+                    guard let firebaseUser = userClient.firebaseUser.value?.uid else {
+                        return callback(.failure(.init(domain: "No user", code: 1)))
                     }
-                    .flatMap { _ in newDocument.getDocument().eraseToAnyPublisher() }
-                    .on(
-                        value: { response in
-                            do {
-                                let chatsListPrivateItem = try response.data(as: ChatsListPrivateItem.self)
-                                result(.success(chatsListPrivateItem))
-                            } catch let error as NSError {
-                                result(.failure(error as NSError))
-                            }
-                        },
-                        error: { result(.failure($0 as NSError)) }
-                    )
-                    .sink()
-                    .store(in: &cancellables)
+                    let users = [uid, firebaseUser]
+                    let usersReversed: [String] = users.reversed()
+                    collection
+                        .whereField("members", in: [users, usersReversed])
+                        .getDocuments()
+                        .on(
+                            value: { snapshot in
+                                if let document = snapshot.documents.first {
+                                    do {
+                                        // TODO: Add new model
+                                        let chatsListPrivateItem = try document.data(as: ChatsListPrivateItem.self)
+                                        callback(.success(.chatItem(chatsListPrivateItem)))
+                                    } catch let error as NSError {
+                                        callback(.failure(error as NSError))
+                                    }
+                                } else {
+                                    callback(.success(.needToCreate(withUserID: uid)))
+                                }
+                            },
+                            error: { callback(.failure($0 as NSError)) }
+                        )
+                        .sink()
+                        .store(in: &cancellables)
+                }
+            },
+            createPrivateChat: { privateChatRequest in
+                Effect.future { callback in
+                    let newDocument = collection.document()
+
+                    // Update id of PrivateChatRequest
+                    var privateChatRequest = privateChatRequest
+                    privateChatRequest.id = newDocument.documentID
+
+                    newDocument.setData(from: privateChatRequest)
+                        .catch { error -> AnyPublisher<Void, Never> in
+                            callback(.failure(error as NSError))
+                            return Empty(completeImmediately: true)
+                                .eraseToAnyPublisher()
+                        }
+                        .flatMap { _ in newDocument.getDocument().eraseToAnyPublisher() }
+                        .on(
+                            value: { response in
+                                do {
+                                    let chatsListPrivateItem = try response.data(as: ChatsListPrivateItem.self)
+                                    callback(.success(chatsListPrivateItem))
+                                } catch let error as NSError {
+                                    callback(.failure(error as NSError))
+                                }
+                            },
+                            error: { callback(.failure($0 as NSError)) }
+                        )
+                        .sink()
+                        .store(in: &cancellables)
+                }
             }
-        }
-    )
+        )
+    }
+
 }

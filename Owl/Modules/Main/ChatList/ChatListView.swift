@@ -73,7 +73,7 @@ struct ChatListView_Previews: PreviewProvider {
             reducer: ChatList.reducer,
             environment: ChatList.Environment(
                 authClient: .live,
-                chatsClient: .live
+                chatsClient: .live(userClient: .live)
             )
         ))
     }

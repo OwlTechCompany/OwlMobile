@@ -10,8 +10,6 @@ import ComposableArchitecture
 
 struct NewPrivateChatView: View {
 
-    @Environment(\.isSearching) private var isSearching
-
     var store: Store<NewPrivateChat.State, NewPrivateChat.Action>
 
     var body: some View {
@@ -29,14 +27,15 @@ struct NewPrivateChatView: View {
             .searchable(
                 text: viewStore.binding(\.$searchText),
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Enter phone number"
+                prompt: "Phone number"
             )
             .onSubmit(of: .search) {
                 viewStore.send(.search)
             }
             .overlay(
                 viewStore.users.isEmpty
-                    ? Text("Users empty").animation(.easeOut, value: viewStore.users.isEmpty)
+                    ? emptyView
+                        .animation(.easeOut, value: viewStore.users.isEmpty)
                     : nil
             )
             .disabled(viewStore.isLoading)
@@ -53,18 +52,36 @@ struct NewPrivateChatView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarTitle("New private chat")
     }
+
+    var emptyView: some View {
+        VStack {
+            Image(systemName: "person.3")
+                .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
+                .font(.system(size: 50, weight: .regular, design: .monospaced))
+
+            Text("Find new contacts.")
+                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                .lineSpacing(10)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+    }
 }
 
 // MARK: - Preview
 
 struct NewPrivateChatView_Previews: PreviewProvider {
+
+    static let usersClient = UserClient.live
+
     static var previews: some View {
         NavigationView {
             NewPrivateChatView(store: Store(
-                initialState: NewPrivateChat.State.initialState,
+                initialState: NewPrivateChat.State(),
                 reducer: NewPrivateChat.reducer,
                 environment: NewPrivateChat.Environment(
-                    chatsClient: .live,
+                    userClient: usersClient,
+                    chatsClient: .live(userClient: usersClient),
                     firestoreUsersClient: .live
                 )
             ))

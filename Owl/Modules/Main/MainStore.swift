@@ -45,6 +45,7 @@ struct Main {
     // MARK: - Environment
 
     struct Environment {
+        let userClient: UserClient
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
         let firestoreUsersClient: FirestoreUsersClient
@@ -58,7 +59,7 @@ struct Main {
             return Effect(value: .delegate(.logout))
 
         case .routeAction(_, action: .chatList(.newPrivateChat)):
-            state.routes.push(.newPrivateChat(.initialState))
+            state.routes.push(.newPrivateChat(NewPrivateChat.State()))
             return .none
 
         case let .routeAction(_, .chatList(.chats(id, action: .open))):

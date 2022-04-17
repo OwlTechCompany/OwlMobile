@@ -39,7 +39,7 @@ extension ChatsListPrivateItem {
 }
 
 
-struct PrivateChatRequest: Encodable {
+struct PrivateChatCreate: Encodable {
 
     var id: String?
     @ServerTimestamp var createdAt: Timestamp?

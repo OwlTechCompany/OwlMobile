@@ -78,7 +78,6 @@ extension FirestoreUsersClient {
             .future { result in
                 collection
                     .whereField("phoneNumber", isEqualTo: userQuery.phoneNumber)
-//                    .whereField("uid", isNotEqualTo: "\(Auth.auth().currentUser!.uid)")
                     .getDocuments()
                     .on(
                         value: { snapshot in

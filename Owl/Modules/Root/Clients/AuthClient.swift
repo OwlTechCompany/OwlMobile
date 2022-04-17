@@ -7,8 +7,10 @@
 
 import UIKit
 import ComposableArchitecture
+import Combine
 import Firebase
 import FirebaseFirestoreCombineSwift
+import FirebaseAuthCombineSwift
 
 struct AuthClient {
 

@@ -61,6 +61,8 @@
 		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
 		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
 		5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */; };
+		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
+		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
 		5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE318062809E4B5007F7816 /* ValidationClient.swift */; };
 		5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */; };
 		5FE31827280A2151007F7816 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31826280A2151007F7816 /* User.swift */; };
@@ -137,6 +139,8 @@
 		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
 		5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenProvider.swift; sourceTree = "<group>"; };
+		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
+		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		5FE318062809E4B5007F7816 /* ValidationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClient.swift; sourceTree = "<group>"; };
 		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		5FE31826280A2151007F7816 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				5D35EC822800246900624717 /* AuthClient.swift */,
+				5FD33DC2280CC315009E9FBB /* UserClient.swift */,
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
 				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
@@ -284,6 +289,7 @@
 			children = (
 				5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */,
 				5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */,
+				5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */,
 			);
 			path = ChatsList;
 			sourceTree = "<group>";
@@ -706,6 +712,7 @@
 				5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */,
 				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
+				5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5DCD57A0280C423300186FE2 /* ChatsListPrivateItem.swift in Sources */,
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
@@ -720,6 +727,7 @@
 				5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */,
 				5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */,
 				5F9DFC89280B156600E73206 /* UserUpdate.swift in Sources */,
+				5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */,
 				5F727FB52807632300FABF26 /* AppStore.swift in Sources */,
 				5D35EC832800246900624717 /* AuthClient.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,

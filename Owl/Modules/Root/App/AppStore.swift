@@ -47,20 +47,25 @@ struct App {
 
     struct Environment {
         let firebaseClient: FirebaseClient
+        let userClient: UserClient
         let authClient: AuthClient
         let userDefaultsClient: UserDefaultsClient
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
         let chatsClient: FirestoreChatsClient
 
-        static let live = Environment(
-            firebaseClient: .live,
-            authClient: .live,
-            userDefaultsClient: .live,
-            validationClient: .live,
-            firestoreUsersClient: .live,
-            chatsClient: .live
-        )
+        static var live: Self {
+            let userClient = UserClient.live
+            return Self(
+                firebaseClient: .live,
+                userClient: userClient,
+                authClient: .live,
+                userDefaultsClient: .live,
+                validationClient: .live,
+                firestoreUsersClient: .live,
+                chatsClient: .live(userClient: userClient)
+            )
+        }
     }
 
     // MARK: - Reducer
@@ -130,6 +135,7 @@ extension App.Environment {
     var appDelegate: AppDelegate.Environment {
         AppDelegate.Environment(
             firebaseClient: firebaseClient,
+            userClient: userClient,
             authClient: authClient
         )
     }
@@ -145,6 +151,7 @@ extension App.Environment {
 
     var main: Main.Environment {
         Main.Environment(
+            userClient: userClient,
             authClient: authClient,
             chatsClient: chatsClient,
             firestoreUsersClient: firestoreUsersClient

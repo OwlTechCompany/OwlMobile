@@ -84,6 +84,7 @@ extension Main.ScreenProvider {
                 action: /Action.newPrivateChat,
                 environment: {
                     NewPrivateChat.Environment(
+                        userClient: $0.userClient,
                         chatsClient: $0.chatsClient,
                         firestoreUsersClient: $0.firestoreUsersClient
                     )
