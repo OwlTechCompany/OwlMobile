@@ -17,6 +17,11 @@ struct FirestoreUsersClient {
 
     var setMeIfNeeded: (Firebase.User) -> Effect<SignInUserType, NSError>
     var updateUser: (UserUpdate) -> Effect<Bool, NSError>
+    var users: (UserQuery) -> Effect<[User], NSError>
+}
+
+struct UserQuery {
+    var phoneNumber: String
 }
 
 // MARK: - Live
@@ -64,6 +69,32 @@ extension FirestoreUsersClient {
                     .on(
                         value: { result(.success(true)) },
                         error: { error in result(.failure(error as NSError)) }
+                    )
+                    .sink()
+                    .store(in: &cancellables)
+            }
+        },
+        users: { userQuery in
+            .future { result in
+                collection
+                    .whereField("phoneNumber", isEqualTo: userQuery.phoneNumber)
+//                    .whereField("uid", isNotEqualTo: "\(Auth.auth().currentUser!.uid)")
+                    .getDocuments()
+                    .on(
+                        value: { snapshot in
+                            let items = snapshot.documents.compactMap { document -> User? in
+                                do {
+                                    return try document.data(as: User.self)
+                                } catch let error as NSError {
+                                    result(.failure(error))
+                                    return nil
+                                }
+                            }
+                            result(.success(items))
+                        },
+                        error: { error in
+                            result(.failure(error as NSError))
+                        }
                     )
                     .sink()
                     .store(in: &cancellables)

@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 struct NewPrivateChatView: View {
 
+    @Environment(\.isSearching) private var isSearching
+
     var store: Store<NewPrivateChat.State, NewPrivateChat.Action>
 
     var body: some View {
@@ -23,13 +25,20 @@ struct NewPrivateChatView: View {
                     content: NewPrivateChatCellView.init(store:)
                 )
             }
+            .animation(.default, value: viewStore.users)
             .searchable(
                 text: viewStore.binding(\.$searchText),
-                placement: .navigationBarDrawer(displayMode: .always)
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Enter phone number"
             )
             .onSubmit(of: .search) {
                 viewStore.send(.search)
             }
+            .overlay(
+                viewStore.users.isEmpty
+                    ? Text("Users empty").animation(.easeOut, value: viewStore.users.isEmpty)
+                    : nil
+            )
             .disabled(viewStore.isLoading)
             .overlay(
                 viewStore.isLoading
@@ -54,7 +63,10 @@ struct NewPrivateChatView_Previews: PreviewProvider {
             NewPrivateChatView(store: Store(
                 initialState: NewPrivateChat.State.initialState,
                 reducer: NewPrivateChat.reducer,
-                environment: NewPrivateChat.Environment()
+                environment: NewPrivateChat.Environment(
+                    chatsClient: .live,
+                    firestoreUsersClient: .live
+                )
             ))
         }
     }

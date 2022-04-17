@@ -146,7 +146,8 @@ extension App.Environment {
     var main: Main.Environment {
         Main.Environment(
             authClient: authClient,
-            chatsClient: chatsClient
+            chatsClient: chatsClient,
+            firestoreUsersClient: firestoreUsersClient
         )
     }
 

@@ -7,6 +7,8 @@
 
 import Foundation
 import Firebase
+import FirebaseFirestoreSwift
+import FirebaseFirestoreCombineSwift
 
 struct ChatsListPrivateItem: Codable, Equatable {
 
@@ -16,7 +18,7 @@ struct ChatsListPrivateItem: Codable, Equatable {
     let members: [String]
     let user1: User
     let user2: User
-    let lastMessage: Message
+    let lastMessage: Message?
 
 }
 
@@ -34,4 +36,16 @@ extension ChatsListPrivateItem {
         return companion.fullName
     }
     
+}
+
+
+struct PrivateChatRequest: Encodable {
+
+    var id: String?
+    @ServerTimestamp var createdAt: Timestamp?
+    let createdBy: String
+    let members: [String]
+    let user1: User
+    let user2: User
+    var chatType: String = "private"
 }

@@ -82,7 +82,12 @@ extension Main.ScreenProvider {
             .pullback(
                 state: /State.newPrivateChat,
                 action: /Action.newPrivateChat,
-                environment: { _ in NewPrivateChat.Environment() }
+                environment: {
+                    NewPrivateChat.Environment(
+                        chatsClient: $0.chatsClient,
+                        firestoreUsersClient: $0.firestoreUsersClient
+                    )
+                }
             )
     )
 
