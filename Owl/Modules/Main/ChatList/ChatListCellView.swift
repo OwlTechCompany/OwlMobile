@@ -8,19 +8,17 @@
 import SwiftUI
 import ComposableArchitecture
 
+// MARK: - ViewStore
+
 struct ChatListCell {
 
     struct State: Equatable, Identifiable {
-        let documentID: String
+        let id: String
         let chatImage: UIImage
         let chatName: String
         let lastMessage: String
         let lastMessageSendTime: Date
         let unreadMessagesNumber: Int
-
-        public var id: String {
-            documentID
-        }
     }
 
     enum Action: Equatable {
@@ -36,6 +34,8 @@ struct ChatListCell {
         }
     }
 }
+
+// MARK: - View
 
 struct ChatListCellView: View {
 
@@ -107,6 +107,8 @@ struct ChatListCellView: View {
     }
 }
 
+// MARK: - Extensions
+
 private extension ChatListCellView {
 
     enum Constants {
@@ -135,11 +137,26 @@ private extension ChatListCell.State {
 
 }
 
+extension ChatListCell.State {
+
+    init(model: ChatsListPrivateItem) {
+        id = model.id
+        chatImage = Asset.Images.owlWithPadding.image
+        chatName = model.name
+        lastMessage = model.lastMessage.messageText
+        lastMessageSendTime = model.lastMessage.sentAt
+        unreadMessagesNumber = 0
+    }
+
+}
+
+// MARK: - Preview
+
 struct ChatListCellView_Previews: PreviewProvider {
     static var previews: some View {
         ChatListCellView(store: Store(
             initialState: ChatListCell.State(
-                documentID: "",
+                id: "",
                 chatImage: Asset.Images.owlBlack.image,
                 chatName: "Name Name Name",
                 lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",

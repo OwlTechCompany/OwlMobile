@@ -42,6 +42,7 @@ struct ChatListView: View {
                     .padding()
                 }
             }
+            .onAppear { viewStore.send(.onAppear) }
         }
     }
 }
@@ -55,7 +56,7 @@ struct ChatListView_Previews: PreviewProvider {
                 chats: .init(
                     arrayLiteral:
                         ChatListCell.State(
-                            documentID: "123",
+                            id: "123",
                             chatImage: Asset.Images.owlBlack.image,
                             chatName: "Test chat",
                             lastMessage: "Hello world",
@@ -65,7 +66,10 @@ struct ChatListView_Previews: PreviewProvider {
                 )
             ),
             reducer: ChatList.reducer,
-            environment: ChatList.Environment()
+            environment: ChatList.Environment(
+                authClient: .live,
+                chatsClient: .live
+            )
         ))
     }
 }

@@ -51,13 +51,15 @@ struct App {
         let userDefaultsClient: UserDefaultsClient
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
+        let chatsClient: FirestoreChatsClient
 
         static let live = Environment(
             firebaseClient: .live,
             authClient: .live,
             userDefaultsClient: .live,
             validationClient: .live,
-            firestoreUsersClient: .live
+            firestoreUsersClient: .live,
+            chatsClient: .live
         )
     }
 
@@ -104,7 +106,7 @@ struct App {
             state.set(.main)
             return .none
 
-        case .main(.logout):
+        case .main(.delegate(.logout)):
             environment.authClient.signOut()
             state.set(.login)
             return .none
@@ -142,7 +144,10 @@ extension App.Environment {
     }
 
     var main: Main.Environment {
-        Main.Environment()
+        Main.Environment(
+            authClient: authClient,
+            chatsClient: chatsClient
+        )
     }
 
 }
