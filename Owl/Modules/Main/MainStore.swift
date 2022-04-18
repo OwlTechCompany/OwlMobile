@@ -59,7 +59,7 @@ struct Main {
             return Effect(value: .delegate(.logout))
 
         case .routeAction(_, action: .chatList(.newPrivateChat)):
-            state.routes.push(.newPrivateChat(NewPrivateChat.State()))
+            state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
 
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
@@ -67,8 +67,10 @@ struct Main {
             return .none
 
         case let .routeAction(_, .newPrivateChat(.openChat(item))):
-            state.routes.push(.chat(.init()))
-            return .none
+            return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
+                provider.dismiss()
+                provider.push(.chat(.init()))
+            }
 
         case .delegate:
             return .none
