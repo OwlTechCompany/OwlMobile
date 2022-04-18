@@ -19,13 +19,17 @@ struct ChatView: View {
 
             }
             .toolbar {
-                ChatNavigationView(
-                    store: store.scope(
-                        state: \.navigation,
-                        action: Chat.Action.navigation
+                ToolbarItem(placement: .principal) {
+                    ChatNavigationView(
+                        store: store.scope(
+                            state: \.navigation,
+                            action: Chat.Action.navigation
+                        )
                     )
-                )
+                }
             }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

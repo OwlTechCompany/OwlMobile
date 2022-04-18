@@ -61,6 +61,10 @@ struct Main {
             state.routes.push(.chat(.init(navigation: MockedDataClient.chatNavigationState)))
             return .none
 
+        case .routeAction(_, .chat(.navigation(.back))):
+            state.routes.pop()
+            return .none
+
         case .delegate:
             return .none
 

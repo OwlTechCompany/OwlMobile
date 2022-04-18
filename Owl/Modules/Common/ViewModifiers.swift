@@ -16,3 +16,13 @@ struct ShadowModifier: ViewModifier {
     }
 
 }
+
+struct TinyShadowModifier: ViewModifier {
+
+    func body(content: Content) -> some View {
+        content
+            .shadow(color: Colors.accentColor.swiftUIColor.opacity(0.1), radius: 1, x: 0, y: 1)
+            .shadow(color: Colors.accentColor.swiftUIColor.opacity(0.3), radius: 3, x: 0, y: 2)
+    }
+
+}

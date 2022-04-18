@@ -20,7 +20,7 @@ struct ChatNavigationView: View {
                     .foregroundColor(Colors.accentColor.swiftUIColor)
                     .background(Colors.loader3.swiftUIColor.opacity(0.5))
                     .clipShape(Circle())
-                    .modifier(ShadowModifier())
+                    .modifier(TinyShadowModifier())
                     .onTapGesture {
                         viewStore.send(.back)
                     }
@@ -44,13 +44,11 @@ struct ChatNavigationView: View {
                     .background(Color.white)
                     .clipShape(Circle())
                     .scaledToFill()
-                    .modifier(ShadowModifier())
+                    .modifier(TinyShadowModifier())
                     .onTapGesture {
                         viewStore.send(.chatDetails)
                     }
             }
-            .padding()
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
