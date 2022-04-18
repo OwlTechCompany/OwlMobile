@@ -16,8 +16,8 @@ struct NewPrivateChat {
         @BindableState var searchText: String = ""
         var alert: AlertState<Action>?
         var isLoading: Bool = false
-        var usersModels: [User] = []
-        var users: IdentifiedArrayOf<NewPrivateChatCell.State> = .init()
+        var users: [User] = []
+        var cells: IdentifiedArrayOf<NewPrivateChatCell.State> = .init()
     }
 
     // MARK: - Action
@@ -26,16 +26,14 @@ struct NewPrivateChat {
         case search
         case searchResult(Result<[User], NSError>)
 
-        case users(id: String, action: NewPrivateChatCell.Action)
+        case cells(id: String, action: NewPrivateChatCell.Action)
 
         case chatWithUserResult(Result<ChatWithUserResponse, NSError>)
-        case createPrivateChat(String)
+        case createPrivateChat(opponentId: String)
         case createPrivateChatResult(Result<ChatsListPrivateItem, NSError>)
 
         case openChat(ChatsListPrivateItem)
-
         case dismissAlert
-
         case binding(BindingAction<State>)
     }
 
@@ -59,11 +57,11 @@ struct NewPrivateChat {
 
         case let .searchResult(.success(users)):
             state.isLoading = false
-            state.usersModels = users
-            state.users = .init(uniqueElements: users.map(NewPrivateChatCell.State.init(model:)))
+            state.users = users
+            state.cells = .init(uniqueElements: users.map(NewPrivateChatCell.State.init(model:)))
             return .none
 
-        case let .users(userId, .open):
+        case let .cells(userId, .open):
             state.isLoading = true
             return environment.chatsClient.chatWithUser(userId)
                 .catchToEffect(Action.chatWithUserResult)
@@ -73,8 +71,8 @@ struct NewPrivateChat {
             case let .chatItem(item):
                 return Effect(value: .openChat(item))
 
-            case let .needToCreate(withUserID):
-                return Effect(value: .createPrivateChat(withUserID))
+            case let .needToCreate(userID):
+                return Effect(value: .createPrivateChat(opponentId: userID))
             }
 
         case let .createPrivateChat(userId):
@@ -82,7 +80,7 @@ struct NewPrivateChat {
                 return .none
             }
             state.isLoading = true
-            let opponent = state.usersModels.first(where: { $0.uid == userId })!
+            let opponent = state.users.first(where: { $0.uid == userId })!
             let privateChatCreate = PrivateChatCreate(
                 createdBy: firestoreUser.uid,
                 members: [
@@ -126,8 +124,8 @@ struct NewPrivateChat {
     static let reducer = Reducer<State, Action, Environment>.combine(
         NewPrivateChatCell.reducer
             .forEach(
-                state: \State.users,
-                action: /Action.users,
+                state: \State.cells,
+                action: /Action.cells,
                 environment: { _ in NewPrivateChatCell.Environment() }
             ),
         reducerCore

@@ -38,3 +38,16 @@ struct NewPrivateChatCell {
         }
     }
 }
+
+// MARK: - NewPrivateChatCell.State + User
+
+extension NewPrivateChatCell.State {
+
+    init(model: User) {
+        id = model.uid
+        image = Asset.Images.owlWithPadding.image
+        fullName = model.fullName
+        phoneNumber = model.phoneNumber ?? ""
+    }
+
+}

@@ -14,7 +14,9 @@ struct NewPrivateChatCellView: View {
 
     var body: some View {
         WithViewStore(self.store) { viewStore in
+
             HStack(alignment: .center, spacing: 16) {
+
                 Image(uiImage: viewStore.image)
                     .resizable()
                     .frame(width: 56, height: 56)
@@ -24,6 +26,7 @@ struct NewPrivateChatCellView: View {
                     .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {
+
                     Text(viewStore.fullName)
                         .font(.system(size: 16, weight: .bold))
                         .multilineTextAlignment(.leading)
@@ -44,17 +47,6 @@ struct NewPrivateChatCellView: View {
             }
         }
     }
-}
-
-extension NewPrivateChatCell.State {
-
-    init(model: User) {
-        id = model.uid
-        image = Asset.Images.owlWithPadding.image
-        fullName = model.fullName
-        phoneNumber = model.phoneNumber ?? ""
-    }
-
 }
 
 // MARK: - Preview

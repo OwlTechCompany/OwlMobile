@@ -17,13 +17,13 @@ struct NewPrivateChatView: View {
             List {
                 ForEachStore(
                     self.store.scope(
-                        state: \NewPrivateChat.State.users,
-                        action: NewPrivateChat.Action.users(id:action:)
+                        state: \NewPrivateChat.State.cells,
+                        action: NewPrivateChat.Action.cells(id:action:)
                     ),
                     content: NewPrivateChatCellView.init(store:)
                 )
             }
-            .animation(.default, value: viewStore.users)
+            .animation(.default, value: viewStore.cells)
             .searchable(
                 text: viewStore.binding(\.$searchText),
                 placement: .navigationBarDrawer(displayMode: .always),
@@ -33,9 +33,9 @@ struct NewPrivateChatView: View {
                 viewStore.send(.search)
             }
             .overlay(
-                viewStore.users.isEmpty
+                viewStore.cells.isEmpty
                     ? emptyView
-                        .animation(.easeOut, value: viewStore.users.isEmpty)
+                        .animation(.easeOut, value: viewStore.cells.isEmpty)
                     : nil
             )
             .disabled(viewStore.isLoading)

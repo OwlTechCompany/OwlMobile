@@ -30,7 +30,7 @@ extension FirestoreUsersClient {
 
     static let live = FirestoreUsersClient(
         setMeIfNeeded: { authUser in
-            .future { result in
+            Effect.future { callback in
                 let user = User(
                     uid: authUser.uid,
                     phoneNumber: authUser.phoneNumber,
@@ -40,14 +40,14 @@ extension FirestoreUsersClient {
                 let documentRef = collection.document(authUser.uid)
                 documentRef.getDocument()
                     .catch { error -> AnyPublisher<DocumentSnapshot, Never> in
-                        result(.failure(error as NSError))
+                        callback(.failure(error as NSError))
                         return Empty(completeImmediately: true)
                             .eraseToAnyPublisher()
                     }
                     .flatMap { snapshot -> AnyPublisher<Void, Error> in
                         switch snapshot.exists {
                         case true:
-                            result(.success(.userExists))
+                            callback(.success(.userExists))
                             return Empty(completeImmediately: true)
                                 .eraseToAnyPublisher()
                         case false:
@@ -56,26 +56,26 @@ extension FirestoreUsersClient {
                         }
                     }
                     .on(
-                        value: { _ in result(.success(.newUser)) },
-                        error: { error in result(.failure(error as NSError)) }
+                        value: { _ in callback(.success(.newUser)) },
+                        error: { callback(.failure($0 as NSError)) }
                     )
                     .sink()
                     .store(in: &cancellables)
             }
         },
         updateUser: { userUpdate in
-            .future { result in
+            Effect.future { callback in
                 collection.document(userUpdate.uid).updateData(from: userUpdate)
                     .on(
-                        value: { result(.success(true)) },
-                        error: { error in result(.failure(error as NSError)) }
+                        value: { callback(.success(true)) },
+                        error: { callback(.failure($0 as NSError)) }
                     )
                     .sink()
                     .store(in: &cancellables)
             }
         },
         users: { userQuery in
-            .future { result in
+            Effect.future { callback in
                 collection
                     .whereField("phoneNumber", isEqualTo: userQuery.phoneNumber)
                     .getDocuments()
@@ -85,15 +85,13 @@ extension FirestoreUsersClient {
                                 do {
                                     return try document.data(as: User.self)
                                 } catch let error as NSError {
-                                    result(.failure(error))
+                                    callback(.failure(error))
                                     return nil
                                 }
                             }
-                            result(.success(items))
+                            callback(.success(items))
                         },
-                        error: { error in
-                            result(.failure(error as NSError))
-                        }
+                        error: { callback(.failure($0 as NSError)) }
                     )
                     .sink()
                     .store(in: &cancellables)
