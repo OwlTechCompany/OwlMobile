@@ -59,7 +59,7 @@ struct NewPrivateChatView: View {
                 .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
                 .font(.system(size: 50, weight: .regular, design: .monospaced))
 
-            Text("Find new contacts.")
+            Text("Find contacts")
                 .font(.system(size: 20, weight: .bold, design: .monospaced))
                 .lineSpacing(10)
                 .multilineTextAlignment(.center)
