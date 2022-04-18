@@ -15,9 +15,16 @@ struct NewPrivateChat {
     struct State: Equatable {
         @BindableState var searchText: String = ""
         var alert: AlertState<Action>?
+        var emptyViewState: EmptyViewState = .onAppear
         var isLoading: Bool = false
         var users: [User] = []
         var cells: IdentifiedArrayOf<NewPrivateChatCell.State> = .init()
+
+        enum EmptyViewState {
+            case onAppear
+            case notFound
+            case hidden
+        }
     }
 
     // MARK: - Action
@@ -59,6 +66,11 @@ struct NewPrivateChat {
             state.isLoading = false
             state.users = users
             state.cells = .init(uniqueElements: users.map(NewPrivateChatCell.State.init(model:)))
+            if users.isEmpty {
+                state.emptyViewState = .notFound
+            } else {
+                state.emptyViewState = .hidden
+            }
             return .none
 
         case let .cells(userId, .open):

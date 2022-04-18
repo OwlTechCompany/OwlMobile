@@ -63,6 +63,7 @@
 		5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */; };
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
+		5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */; };
 		5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE318062809E4B5007F7816 /* ValidationClient.swift */; };
 		5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */; };
 		5FE31827280A2151007F7816 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31826280A2151007F7816 /* User.swift */; };
@@ -141,6 +142,7 @@
 		5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenProvider.swift; sourceTree = "<group>"; };
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
+		5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		5FE318062809E4B5007F7816 /* ValidationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClient.swift; sourceTree = "<group>"; };
 		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		5FE31826280A2151007F7816 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				5F9F4E4027FF4F4400915572 /* Modules */,
 				5F727FBE2807659000FABF26 /* Models */,
 				5FE318092809ED72007F7816 /* Modifiers */,
+				5FD33DC4280DBA7E009E9FBB /* SharedViews */,
 				5F9F4E3827FF463800915572 /* Extensions */,
 				5DA8A77D27FF33D300C2ECBA /* Generated */,
 				5DA8A77C27FF313800C2ECBA /* Resources */,
@@ -489,6 +492,14 @@
 				5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */,
 			);
 			path = TCACoordinator;
+			sourceTree = "<group>";
+		};
+		5FD33DC4280DBA7E009E9FBB /* SharedViews */ = {
+			isa = PBXGroup;
+			children = (
+				5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */,
+			);
+			path = SharedViews;
 			sourceTree = "<group>";
 		};
 		5FE318092809ED72007F7816 /* Modifiers */ = {
@@ -740,6 +751,7 @@
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
 				5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */,
+				5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */,
 				5D35EC8E28076EDF00624717 /* Loader.swift in Sources */,
 				5F71A669280C612A0024F44A /* NewPrivateChatCellView.swift in Sources */,
 				5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */,

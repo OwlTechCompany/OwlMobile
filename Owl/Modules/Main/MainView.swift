@@ -29,7 +29,7 @@ struct MainView: View {
                 CaseLet(
                     state: /Main.ScreenProvider.State.newPrivateChat,
                     action: Main.ScreenProvider.Action.newPrivateChat,
-                    then: NewPrivateChatView.init
+                    then: { NewPrivateChatView(store: $0) }
                 )
             }
         }

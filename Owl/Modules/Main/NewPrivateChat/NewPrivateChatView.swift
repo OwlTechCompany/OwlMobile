@@ -14,30 +14,33 @@ struct NewPrivateChatView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            List {
-                ForEachStore(
-                    self.store.scope(
-                        state: \NewPrivateChat.State.cells,
-                        action: NewPrivateChat.Action.cells(id:action:)
-                    ),
-                    content: NewPrivateChatCellView.init(store:)
+
+            VStack {
+                SearchBar(
+                    searchText: viewStore.binding(\.$searchText),
+                    placeholder: "Enter phone number",
+                    onSubmit: {
+                        viewStore.send(.search)
+                    }
                 )
-            }
-            .animation(.default, value: viewStore.cells)
-            .searchable(
-                text: viewStore.binding(\.$searchText),
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Phone number"
-            )
-            .onSubmit(of: .search) {
-                viewStore.send(.search)
-            }
-            .overlay(
-                viewStore.cells.isEmpty
+
+                List {
+                    ForEachStore(
+                        self.store.scope(
+                            state: \NewPrivateChat.State.cells,
+                            action: NewPrivateChat.Action.cells(id:action:)
+                        ),
+                        content: NewPrivateChatCellView.init(store:)
+                    )
+                }
+                .overlay(
+                    viewStore.cells.isEmpty
                     ? emptyView
                         .animation(.easeOut, value: viewStore.cells.isEmpty)
                     : nil
-            )
+                )
+                .animation(.default, value: viewStore.cells)
+            }
             .disabled(viewStore.isLoading)
             .overlay(
                 viewStore.isLoading
@@ -49,21 +52,49 @@ struct NewPrivateChatView: View {
                 dismiss: .dismissAlert
             )
         }
+        .background(
+            Color(UIColor.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarTitle("New private chat")
     }
 
     var emptyView: some View {
-        VStack {
-            Image(systemName: "person.3")
-                .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
-                .font(.system(size: 50, weight: .regular, design: .monospaced))
+        WithViewStore(store) { viewStore in
+            switch viewStore.emptyViewState {
+            case .onAppear:
+                VStack(spacing: 20) {
+                    Image(systemName: "person.3")
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(Asset.Colors.accentColor.swiftUIColor)
+                        .font(.system(size: 50, weight: .regular, design: .monospaced))
 
-            Text("Find contacts")
-                .font(.system(size: 20, weight: .bold, design: .monospaced))
-                .lineSpacing(10)
-                .multilineTextAlignment(.center)
-                .padding()
+                    Text("For start messaging enter phone number")
+                        .font(.system(size: 20, weight: .bold, design: .monospaced))
+                        .lineSpacing(10)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
+
+            case .notFound:
+                VStack(spacing: 20) {
+                    Image(systemName: "person.fill.xmark")
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle( Asset.Colors.accentColor.swiftUIColor)
+                        .opacity(0.8)
+                        .font(.system(size: 60, weight: .regular, design: .monospaced))
+
+                    Text("There is no users with this phone number")
+                        .font(.system(size: 20, weight: .bold, design: .monospaced))
+                        .lineSpacing(10)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
+
+            case .hidden:
+                EmptyView()
+            }
         }
     }
 }
