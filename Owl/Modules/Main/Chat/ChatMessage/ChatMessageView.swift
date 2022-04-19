@@ -8,126 +8,98 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct AdaptiveStack<Content: View>: View {
-//    @Environment(\.horizontalSizeClass) var sizeClass
-    @Binding var isHStack: Bool
-    let horizontalAlignment: HorizontalAlignment
-    let verticalAlignment: VerticalAlignment
-    let spacing: CGFloat?
-    let content: () -> Content
-
-    init(
-        isHStack: Binding<Bool>,
-        horizontalAlignment: HorizontalAlignment = .trailing,
-        verticalAlignment: VerticalAlignment = .bottom,
-        spacing: CGFloat? = nil,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self._isHStack = isHStack
-        self.horizontalAlignment = horizontalAlignment
-        self.verticalAlignment = verticalAlignment
-        self.spacing = spacing
-        self.content = content
-    }
-
-    var body: some View {
-        Group {
-            if isHStack {
-                HStack(
-                    alignment: verticalAlignment,
-                    spacing: spacing,
-                    content: content
-                )
-            } else {
-                VStack(
-                    alignment: horizontalAlignment,
-                    spacing: spacing,
-                    content: content
-                )
-            }
-        }
-    }
-}
-
 struct ChatMessageView: View {
 
     let store: Store<ChatMessage.State, ChatMessage.Action>
 
-    @State private var isHStack: Bool = false
+    @State private var isHStack: Bool = true
 
     var body: some View {
 
         WithViewStore(self.store) { viewStore in
             VStack {
-                AdaptiveStack(isHStack: $isHStack) {
+
+                AdaptiveStack(isHStack: $isHStack, spacing: 4) {
                     Text(viewStore.text)
                         .font(.system(size: 16))
                         .multilineTextAlignment(.leading)
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear.onAppear {
-                                    let lines = viewStore.text.lines(
-                                        font: .systemFont(ofSize: 16),
-                                        width: geometry.size.width
-                                    )
-                                    isHStack = lines == 1
-                                }
-                            }
-                        )
 
                     Text(
                         viewStore.sentAt,
                         format: Date.FormatStyle().hour().minute()
                     )
-                    .font(.system(size: 12, weight: .regular, design: .monospaced))
+                    .font(.system(size: 11, weight: .light, design: .monospaced))
                 }
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
-                .background(Colors.loader3.swiftUIColor.opacity(0.3))
+                .foregroundColor(.white)
+                .padding(.vertical, Constants.messagePaddingVertical)
+                .padding(.horizontal, Constants.messagePaddingHorizontal)
+                .background(viewStore.background)
                 .cornerRadius(30, antialiased: true)
-                .frame(
-                    maxWidth: screen.width * 3 / 4,
-                    alignment: viewStore.type == .sentByMe ? .trailing : .leading
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear.onAppear {
+                            isHStack = geometry.size.width < Constants.messageMaxWidth
+                        }
+                    }
                 )
+                .frame(maxWidth: Constants.bubbleMaxWidth, alignment: viewStore.alignment)
+
             }
             .padding()
-            .frame(
-                width: screen.width,
-                alignment: viewStore.type == .sentByMe ? .trailing : .leading
-            )
+            .frame(width: screen.width, alignment: viewStore.alignment)
+            .modifier(ShadowModifier())
         }
     }
+
 }
 
-extension String {
+private extension ChatMessageView {
 
-    func lines(font: UIFont, width: CGFloat) -> Int {
-        let text = self as NSString
-        let textHeight = text.boundingRect(
-            with: CGSize(
-                width: width,
-                height: .greatestFiniteMagnitude),
-            options: .usesLineFragmentOrigin,
-            attributes: [.font: font],
-            context: nil
-        ).height
-        let lineHeight = font.lineHeight
-        return Int(ceil(textHeight / lineHeight))
+    enum Constants {
+        static let bubbleMaxWidth = screen.width * 3 / 4
+        static let messagePaddingVertical: CGFloat = 12
+        static let messagePaddingHorizontal: CGFloat = 16
+        static let messageMaxWidth = bubbleMaxWidth - messagePaddingHorizontal * 2
     }
-//
-//    func lines(font: Font, width: CGFloat) -> Int {
-//        let text = self as NSString
-//        let textHeight = text.boundingRect(
-//            with: CGSize(
-//                width: width,
-//                height: .greatestFiniteMagnitude),
-//            options: .usesLineFragmentOrigin,
-//            attributes: [.font: font],
-//            context: nil
-//        ).height
-//        let lineHeight = font.
-//        return Int(ceil(textHeight / lineHeight))
-//    }
+
+}
+
+private extension ChatMessage.State {
+
+    var alignment: Alignment {
+        switch type {
+        case .sentByMe:
+            return .trailing
+
+        case .sentForMe:
+            return .leading
+        }
+    }
+
+    var textColor: Color {
+        switch type {
+        case .sentByMe:
+            return Color.white
+
+        case .sentForMe:
+            return Color.black
+        }
+    }
+
+    var background: some View {
+        switch type {
+        case .sentByMe:
+            return AnyView(LinearGradient(
+                colors: [Colors.loader3.swiftUIColor, Colors.violet.swiftUIColor],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ))
+
+        case .sentForMe:
+            return AnyView(Colors.loader3.swiftUIColor.opacity(0.9))
+        }
+    }
+
 }
 
 struct ChatMessageView_Previews: PreviewProvider {
@@ -136,7 +108,8 @@ struct ChatMessageView_Previews: PreviewProvider {
             ChatMessageView(
                 store: .init(
                     initialState: .init(
-                        text: "I love you                               a a a a aa a a a aa",
+                        id: "",
+                        text: "I love you - - - - - - -",
                         sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentByMe
@@ -149,7 +122,8 @@ struct ChatMessageView_Previews: PreviewProvider {
             ChatMessageView(
                 store: .init(
                     initialState: .init(
-                        text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+                        id: "",
+                        text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.\n\nEaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
                         sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentForMe
@@ -159,5 +133,6 @@ struct ChatMessageView_Previews: PreviewProvider {
                 )
             )
         }
+        .previewLayout(.sizeThatFits)
     }
 }

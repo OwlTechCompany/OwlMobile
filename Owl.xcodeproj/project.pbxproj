@@ -40,6 +40,7 @@
 		5DCD57AF280C6BA500186FE2 /* ChatNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57AE280C6BA500186FE2 /* ChatNavigationView.swift */; };
 		5DCD57B2280C9D8D00186FE2 /* ChatMessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */; };
 		5DCD57B4280C9D9800186FE2 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */; };
+		5DCD57BA280E185200186FE2 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */; };
 		5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingStore.swift */; };
 		5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeStore.swift */; };
 		5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */; };
@@ -118,6 +119,7 @@
 		5DCD57AE280C6BA500186FE2 /* ChatNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationView.swift; sourceTree = "<group>"; };
 		5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageStore.swift; sourceTree = "<group>"; };
 		5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		5F727FAA2807623200FABF26 /* OnboardingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStore.swift; sourceTree = "<group>"; };
 		5F727FAE2807627100FABF26 /* EnterCodeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeStore.swift; sourceTree = "<group>"; };
 		5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneStore.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				5D35EC8D28076EDE00624717 /* Loader.swift */,
 				5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */,
+				5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 				5FE3182A280A2197007F7816 /* FirestoreUsersClient.swift in Sources */,
 				5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
+				5DCD57BA280E185200186FE2 /* AdaptiveStack.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,
 				5D35EC852800473500624717 /* EnterCodeView.swift in Sources */,
 				5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */,

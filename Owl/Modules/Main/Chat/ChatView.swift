@@ -9,14 +9,23 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ChatView: View {
+
     let store: Store<Chat.State, Chat.Action>
 
     var body: some View {
 
         WithViewStore(self.store) { viewStore in
             VStack {
-                Text("Hello, World!")
-
+                List {
+                    ForEachStore(
+                        self.store.scope(
+                            state: \.messages,
+                            action: Chat.Action.messages(id:action:)
+                        ),
+                        content: { ChatMessageView(store: $0) }
+                    )
+                }
+                .listStyle(.plain)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -36,12 +45,22 @@ struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(store: Store(
-            initialState: .init(
-                navigation: MockedDataClient.chatNavigationState
-            ),
-            reducer: Chat.reducer,
-            environment: Chat.Environment()
-        ))
+        NavigationView {
+            ChatView(store: Store(
+                initialState: .init(
+                    navigation: .init(model: MockedDataClient.chatsListPrivateItem),
+                    messages: .init(
+                        uniqueElements: MockedDataClient.chatMessages.map {
+                            ChatMessage.State(
+                                message: $0,
+                                companion: MockedDataClient.chatsListPrivateItem.companion
+                            )
+                        }
+                    )
+                ),
+                reducer: Chat.reducer,
+                environment: Chat.Environment()
+            ))
+        }
     }
 }

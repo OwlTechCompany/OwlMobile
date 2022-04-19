@@ -42,3 +42,16 @@ struct ChatNavigation {
     }
 
 }
+
+extension ChatNavigation.State {
+
+    init(model: ChatsListPrivateItem) {
+        let nameFirstLater = model.companion.firstName?.first
+        self.chatImage = Image(
+            systemName: "\(String(describing: nameFirstLater).lowercased()).circle"
+        )
+        self.chatName = model.name
+        self.chatDescription = model.companion.phoneNumber ?? ""
+    }
+
+}

@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Message: Codable, Equatable {
+struct Message: Codable, Equatable, Identifiable {
 
+    let id: String
     let messageText: String
     let sentAt: Date
     let sentBy: String

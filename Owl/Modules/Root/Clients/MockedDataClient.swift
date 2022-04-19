@@ -30,16 +30,44 @@ struct MockedDataClient {
             lastName: "No"
         ),
         lastMessage: Message(
+            id: "1",
             messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
             sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         )
     )
 
-    static let chatNavigationState = ChatNavigation.State(
-        chatImage: Image(systemName: "pawprint"),
-        chatName: "Namehello World",
-        chatDescription: "+380931314850"
-    )
+    static let chatMessages = [
+        Message(
+            id: "1",
+            messageText: "But I must explain to you how all this mistaken idea?",
+            sentAt: Date(),
+            sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
+        ),
+        Message(
+            id: "2",
+            messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
+            sentAt: Date(),
+            sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
+        ),
+        Message(
+            id: "3",
+            messageText: "no resultant pleasure 👍",
+            sentAt: Date(),
+            sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
+        ),
+        Message(
+            id: "4",
+            messageText: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis",
+            sentAt: Date(),
+            sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
+        ),
+        Message(
+            id: "5",
+            messageText: "Ha every!",
+            sentAt: Date(),
+            sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
+        ),
+    ]
 
 }

@@ -56,7 +56,7 @@ struct ChatNavigationView: View {
 struct ChatNavigationView_Previews: PreviewProvider {
     static var previews: some View {
         ChatNavigationView(store: Store(
-            initialState: MockedDataClient.chatNavigationState,
+            initialState: .init(model: MockedDataClient.chatsListPrivateItem),
             reducer: ChatNavigation.reducer,
             environment: .init()
         ))

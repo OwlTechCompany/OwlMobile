@@ -12,10 +12,11 @@ struct ChatMessage {
 
     // MARK: - State
 
-    struct State: Equatable {
+    struct State: Equatable, Identifiable {
+        let id: String
         let text: String
         let sentAt: Date
-        let sentBy: String
+        let sentBy: String // Not used for now; Added for groups
         let type: MessageType
     }
 
@@ -40,4 +41,16 @@ struct ChatMessage {
         return .none
     }
 
+}
+
+extension ChatMessage.State {
+
+    init(message: Message, companion: User) {
+        self.id = message.id
+        self.text = message.messageText
+        self.sentAt = message.sentAt
+        self.sentBy = ""
+        self.type = message.sentBy == companion.uid ? .sentForMe : .sentByMe
+    }
+    
 }
