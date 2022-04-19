@@ -30,11 +30,18 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(
-                        action: { viewStore.send(.logout) },
-                        label: { Text("Logout") }
-                    )
-                    .padding()
+                    HStack {
+                        Button(
+                            action: { viewStore.send(.logout) },
+                            label: { Text("Logout") }
+                        )
+                        .padding()
+                        Button(
+                            action: { viewStore.send(.openProfile) },
+                            label: { Text("Profile") }
+                        )
+                        .padding()
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {

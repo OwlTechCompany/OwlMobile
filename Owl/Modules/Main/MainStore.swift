@@ -62,6 +62,10 @@ struct Main {
             state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
 
+        case .routeAction(_, action: .chatList(.openProfile)):
+            state.routes.push(.profile(.init(image: Asset.Images.owlBlack.image)))
+            return .none
+
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
             state.routes.push(.chat(.init()))
             return .none

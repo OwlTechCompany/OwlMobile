@@ -29,12 +29,17 @@ extension Main.ScreenProvider {
         static var statePath = /State.chat
     }
 
+    struct ProfileRoute: Routable {
+        static var statePath = /State.chat
+    }
+
     // MARK: - State handling
 
     enum State: Equatable, Identifiable {
         case chatList(ChatList.State)
         case chat(Chat.State)
         case newPrivateChat(NewPrivateChat.State)
+        case profile(Profile.State)
 
         var id: String {
             switch self {
@@ -46,6 +51,9 @@ extension Main.ScreenProvider {
 
             case .newPrivateChat:
                 return NewPrivateChatRoute.id
+
+            case .profile:
+                return ProfileRoute.id
             }
         }
     }
@@ -56,6 +64,7 @@ extension Main.ScreenProvider {
         case chatList(ChatList.Action)
         case chat(Chat.Action)
         case newPrivateChat(NewPrivateChat.Action)
+        case profile(Profile.Action)
     }
 
     // MARK: - Reducer handling
@@ -89,6 +98,12 @@ extension Main.ScreenProvider {
                         firestoreUsersClient: $0.firestoreUsersClient
                     )
                 }
+            ),
+        Profile.reducer
+            .pullback(
+                state: /State.profile,
+                action: /Action.profile,
+                environment: { _ in Profile.Environment() }
             )
     )
 

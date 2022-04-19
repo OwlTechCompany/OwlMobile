@@ -25,6 +25,7 @@ struct ChatList {
 
     enum Action: Equatable {
         case logout
+        case openProfile
         case newPrivateChat
         case onAppear
         case getChatsResult(Result<[ChatsListPrivateItem], NSError>)
@@ -47,6 +48,9 @@ struct ChatList {
             return .none
 
         case .newPrivateChat:
+            return .none
+
+        case .openProfile:
             return .none
 
         case .onAppear:

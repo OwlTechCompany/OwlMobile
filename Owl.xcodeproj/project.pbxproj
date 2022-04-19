@@ -64,6 +64,9 @@
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
 		5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */; };
+		5FD33DC9280DBE8E009E9FBB /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC8280DBE8E009E9FBB /* ProfileStore.swift */; };
+		5FD33DCB280DBE98009E9FBB /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DCA280DBE98009E9FBB /* ProfileView.swift */; };
+		5FD33DE8280F5172009E9FBB /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 5FD33DE7280F5172009E9FBB /* Introspect */; };
 		5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE318062809E4B5007F7816 /* ValidationClient.swift */; };
 		5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */; };
 		5FE31827280A2151007F7816 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31826280A2151007F7816 /* User.swift */; };
@@ -143,6 +146,8 @@
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		5FD33DC8280DBE8E009E9FBB /* ProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStore.swift; sourceTree = "<group>"; };
+		5FD33DCA280DBE98009E9FBB /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		5FE318062809E4B5007F7816 /* ValidationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClient.swift; sourceTree = "<group>"; };
 		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		5FE31826280A2151007F7816 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -158,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FE3183B280AD05C007F7816 /* FirebaseStorageCombine-Community in Frameworks */,
+				5FD33DE8280F5172009E9FBB /* Introspect in Frameworks */,
 				5DA8A77527FF2B1100C2ECBA /* ComposableArchitecture in Frameworks */,
 				5FE31837280AD05C007F7816 /* FirebaseFunctionsSwift-Beta in Frameworks */,
 				5FE31839280AD05C007F7816 /* FirebaseMessaging in Frameworks */,
@@ -481,6 +487,7 @@
 				5D4CF9F3280A1C0000A1B705 /* Chat */,
 				5D4CF9E92809ED4D00A1B705 /* ChatList */,
 				5F71A661280C60070024F44A /* NewPrivateChat */,
+				5FD33DC7280DBE6D009E9FBB /* Profile */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -500,6 +507,15 @@
 				5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */,
 			);
 			path = SharedViews;
+			sourceTree = "<group>";
+		};
+		5FD33DC7280DBE6D009E9FBB /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				5FD33DC8280DBE8E009E9FBB /* ProfileStore.swift */,
+				5FD33DCA280DBE98009E9FBB /* ProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		5FE318092809ED72007F7816 /* Modifiers */ = {
@@ -575,6 +591,7 @@
 				5FE31838280AD05C007F7816 /* FirebaseMessaging */,
 				5FE3183A280AD05C007F7816 /* FirebaseStorageCombine-Community */,
 				5FE3183C280AD05C007F7816 /* FirebaseStorageSwift-Beta */,
+				5FD33DE7280F5172009E9FBB /* Introspect */,
 			);
 			productName = Owl;
 			productReference = 5DA8A75727FF260700C2ECBA /* Owl.app */;
@@ -608,6 +625,7 @@
 				5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				5FE3182B280AD05C007F7816 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
 			projectDirPath = "";
@@ -714,6 +732,7 @@
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
 				5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */,
+				5FD33DCB280DBE98009E9FBB /* ProfileView.swift in Sources */,
 				5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
 				5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */,
@@ -729,6 +748,7 @@
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
 				5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */,
 				5DCD57A5280C42A200186FE2 /* Message.swift in Sources */,
+				5FD33DC9280DBE8E009E9FBB /* ProfileStore.swift in Sources */,
 				5F71A663280C60210024F44A /* NewPrivateChatStore.swift in Sources */,
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,
 				5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */,
@@ -981,6 +1001,14 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
 		5FE3182B280AD05C007F7816 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1001,6 +1029,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5FA7D860280435F500AA48B5 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
 			productName = TCACoordinators;
+		};
+		5FD33DE7280F5172009E9FBB /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 		5FE3182C280AD05C007F7816 /* FirebaseAnalyticsSwift-Beta */ = {
 			isa = XCSwiftPackageProductDependency;
