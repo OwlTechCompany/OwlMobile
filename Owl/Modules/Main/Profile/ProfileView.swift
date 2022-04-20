@@ -10,57 +10,10 @@ import ComposableArchitecture
 import Introspect
 import UIKit
 
-struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGPoint = .zero
+class Delegate: NSObject, UITableViewDelegate, ObservableObject {
 
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {}
-}
-
-struct CustomScrollView<Content: View>: View {
-
-    let axes: Axis.Set
-    let showsIndicators: Bool
-    let offsetChanged: (CGPoint) -> Void
-    let content: Content
-
-    init(
-        axes: Axis.Set = .vertical,
-        showsIndicators: Bool = true,
-        offsetChanged: @escaping (CGPoint) -> Void = { _ in },
-        @ViewBuilder content: () -> Content
-    ) {
-        self.axes = axes
-        self.showsIndicators = showsIndicators
-        self.offsetChanged = offsetChanged
-        self.content = content()
-    }
-
-    var body: some View {
-        SwiftUI.ScrollView(axes, showsIndicators: showsIndicators) {
-            GeometryReader { geometry in
-                Color.blue.preference(
-                    key: ScrollOffsetPreferenceKey.self,
-                    value: geometry.frame(in: .named("scrollView")).origin
-                )
-                .frame(width: 0, height: 0)
-            }
-            .frame(width: 0, height: 0)
-            content
-        }
-        .coordinateSpace(name: "scrollView")
-        .onPreferenceChange(ScrollOffsetPreferenceKey.self, perform: offsetChanged)
-    }
-}
-
-class Delegate: NSObject, UIScrollViewDelegate, ObservableObject {
-
-//    var scrollViewContentOffset: CGFloat = .zero
     @Published var scrollViewDidScroll: ScrollViewDidScroll?
     @Published var scrollViewDidEndDragging: ScrollViewDidScroll?
-//
-//    init(scrollViewDidScroll: @escaping (UIScrollView) -> Void) {
-//        self.scrollViewDidScroll = scrollViewDidScroll
-//    }
 
     struct ScrollViewDidScroll: Equatable {
         var scrollView: UIScrollView
@@ -72,23 +25,26 @@ class Delegate: NSObject, UIScrollViewDelegate, ObservableObject {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //            scrollViewDidScroll(scrollView)
-        //            print("scrollView.contentInset \(scrollView.contentInset)")
-//        print("scrollView.contentOffset.y \(scrollView.contentOffset.y)")
-        scrollViewDidScroll = .init(scrollView: scrollView)
+        print("-----scrollViewDidScroll\(scrollView.contentOffset.y)")
+        scrollViewDidScroll = ScrollViewDidScroll(scrollView: scrollView)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        print("Here")
+        print("!!!!!scrollViewDidEndDragging\(scrollView.contentOffset.y)")
+        scrollViewDidEndDragging = ScrollViewDidScroll(scrollView: scrollView)
+    }
 
-//        scrollViewDidEndDragging = nil
-//        scrollView.contentOffset = scrollView.contentOffset
-        scrollViewDidEndDragging = .init(scrollView: scrollView)
-//        print(scrollViewDidEndDragging)
-//        let offset = scrollView.contentOffset.y
-//        scrollViewContentOffset = offset
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        print("scrollViewWillBeginDecelerating")
+    }
 
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        print("+++++++scrollViewShouldScrollToTop")
+        return true
+    }
 
+    func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
+        print("~~~~~~~scrollViewDidChangeAdjustedContentInset")
     }
 }
 
@@ -112,32 +68,6 @@ private extension UIEdgeInsets {
     }
 }
 
-//enum ScrollState {
-//    case small
-//    case blur
-//    case photoHidden
-//
-//    var showBlur: Bool {
-//        return self == .photoHidden
-//    }
-//
-//    init(offsetY: CGFloat) {
-//        let max: CGFloat = 157 + 1
-//        switch offsetY {
-//        case (..<CGFloat(max / 2)):
-//            self = .small
-//        case (max / 2..<max):
-//            self = .blur
-//        case (max...):
-//            self = .photoHidden
-//            //            case (70...):
-//            //                self = .navigation
-//        default:
-//            print("Default: \(offsetY)")
-//            self = .small
-//        }
-//    }
-//}
 
 enum PhotoState {
     case big
@@ -189,10 +119,11 @@ struct AnimationState {
     // MARK: - Constants
 
     let textSize: CGFloat = 44
-    let subTextSize: CGFloat = 24
+    let subTextSize: CGFloat = 16
+    let textBottomPadding: CGFloat = 16
     let smallPhotoTopPadding: CGFloat = 10
     var textHeaderSize: CGFloat {
-        textSize + subTextSize
+        textSize + subTextSize + textBottomPadding
     }
 
     @Environment(\.safeAreaInsets) var safeAreaInsets
@@ -205,53 +136,186 @@ struct AnimationState {
     var smallPhotoMaxY: CGFloat {
         return PhotoState.small.height + safeAreaInsets.top + smallPhotoTopPadding
     }
-}
 
+
+    var stackViewHeight: CGFloat {
+        switch photoState {
+        case .big:
+            return screen.width
+        case .small:
+            return photoState.height + safeAreaInsets.top + textHeaderSize
+        }
+    }
+}
 
 struct ProfileView: View {
 
     var store: Store<Profile.State, Profile.Action>
 
-    @State var animationState: AnimationState = .init()
-
-//    @State var offset: CGFloat = .zero
     @ObservedObject var delegate = Delegate()
+    @State var animationState = AnimationState()
 
-//    @Environment(\.safeAreaInsets) private var safeAreaInsets
+    @Environment(\.presentationMode) var presentationMode
 
-//    @State var scrollState: ScrollState = .init(offsetY: 0)
-//    @State var photoState: PhotoState = .small
-
-//    @State var textColor: Color = .black
-
+//    var scrollView: UIScrollView
 
     var body: some View {
         WithViewStore(store) { _ in
             ScrollView {
                 VStack(spacing: 30) {
-                    ZStack {
-                        UserImageView(animationState: $animationState)
-                            .onTapGesture { animationState.photoState.toggle() }
+                    GeometryReader { proxy in
+                        ZStack {
+                            UserImageView(animationState: $animationState)
+                                .onTapGesture { animationState.photoState.toggle() }
 
-                        HeaderBlurView(animationState: $animationState)
+                            HeaderBlurView(animationState: $animationState)
 
-                        HeaderDescriptionView(animationState: $animationState)
+                            HeaderDescriptionView(animationState: $animationState)
+
+                            Text("\(proxy.frame(in: .global).minY)")
+                                .offset(x: 0, y: 100)
+                        }
+                        .frame(width: screen.width)
+                        .frame(height: animationState.stackViewHeight)
+                        .background(Color.red.opacity(0.2))
                     }
                     .frame(width: screen.width)
+                    .frame(height: animationState.stackViewHeight)
                     .zIndex(2)
 
-                    VStack {
-                        ForEach(0..<100, id: \.self) { index in
-                            HStack {
-                                Spacer()
-                                Text("\(index)")
-                                Spacer()
+                    VStack(spacing: 20) {
+
+                        sectionButton(
+                            image: "bookmark.square.fill",
+                            imageColor: .blue,
+                            text: "Saved messages",
+                            action: { }
+                        )
+
+                        sectionButton(
+                            image: "bell.square.fill",
+                            imageColor: .red,
+                            text: "Notifications",
+                            action: { }
+                        )
+
+                        sectionButton(
+                            image: "lock.square.fill",
+                            imageColor: .gray,
+                            text: "Privacy and security",
+                            action: { }
+                        )
+
+                        Spacer(minLength: 50)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
                             }
-                        }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+                        Button(
+                            action: {
+                                print("Perform an action here...")
+                            },
+                            label: {
+                                Text("Logout")
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        )
+                        .frame(height: 44)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+                        .padding(.horizontal)
+
+//                        Spacer(minLength: 500)
                     }
-                    .zIndex(1)
                 }
+                .zIndex(1)
             }
+//            .overlay {
+//                VStack {
+//                    HStack(alignment: .center) {
+//                        Image(systemName: "chevron.backward")
+//                            .scaleEffect(1.5)
+//                            .foregroundColor(animationState.backColor)
+//                            .padding(.leading, 20)
+//                            .onTapGesture {
+//                                presentationMode.wrappedValue.dismiss()
+//                            }
+//                        Spacer()
+//                    }
+//                    .frame(height: 44)
+//                    .padding(.top, animationState.safeAreaInsets.top)
+//
+//                    Spacer()
+//                }
+//                .frame(width: screen.width)
+//            }
             .onChange(of: animationState.photoState) { newValue in
                 switch newValue {
                 case .big:
@@ -265,7 +329,8 @@ struct ProfileView: View {
                 animationState.offset = offset
                 if offset < -10 {
                     animationState.photoState = .big
-                } else if offset > 10 {
+                } else if offset > 5 && animationState.photoState == .big {
+//                    scrollView.dece
                     animationState.photoState = .small
                 }
             }
@@ -274,6 +339,7 @@ struct ProfileView: View {
                 let offset = scrollView.contentOffset.y
                 let hidePhotoOffset = animationState.smallPhotoMaxY
                 let edgePosition = hidePhotoOffset / 2
+                print("hidePhotoOffset \(hidePhotoOffset)")
 
                 switch offset {
                 case (0..<edgePosition):
@@ -307,6 +373,35 @@ struct ProfileView: View {
         .navigationBarHidden(true)
     }
 
+    func sectionButton(
+        image: String,
+        imageColor: Color,
+        text: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(
+            action: action,
+            label: {
+                HStack(spacing: 10) {
+                    Image(systemName: image)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(imageColor)
+                        .padding(.leading, 7)
+
+                    Text(text)
+                        .foregroundColor(.black)
+                        .font(.system(size: 18, weight: .medium, design: .rounded))
+
+                    Spacer()
+                }
+            }
+        )
+        .frame(height: 44)
+        .background(RoundedRectangle(cornerRadius: 6).fill(Color.white))
+        .padding(.horizontal)
+    }
+
     func generateFeedback() {
         let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
         impactHeavy.impactOccurred()
@@ -321,14 +416,16 @@ struct UserImageView: View {
         Image(uiImage: Asset.Images.nastya.image)
             .resizable()
             .scaledToFill()
+            .opacity(0.1)
             .cornerRadius(animationState.photoState.cornerRadius)
-            .offset(x: 0, y: animationState.photoState.isScaled ? animationState.offset : 0)
-            .frame(
-                width: animationState.photoState.width,
-                height: animationState.imageViewHeight
-            )
-            .padding(.top, animationState.photoState.isScaled ? 0 : animationState.safeAreaInsets.top + animationState.smallPhotoTopPadding)
-            .padding(.bottom, animationState.photoState.isScaled ? 0 : animationState.textHeaderSize)
+            .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
+            .offset(x: 0, y: animationState.imageViewYOffset)
+            .padding(.top, animationState.imageViewTopPadding)
+            .padding(.bottom, animationState.imageViewBottomPadding)
+//            .animation(
+//                Animation.spring(response: 0.35, dampingFraction: 0.7, blendDuration: 0),
+//                value: animationState.photoState
+//            )
     }
 }
 
@@ -340,6 +437,33 @@ private extension AnimationState {
             return photoState.height - offset
         case .small:
             return photoState.height
+        }
+    }
+
+    var imageViewYOffset: CGFloat {
+        switch photoState {
+        case .big:
+            return offset / 2
+        case .small:
+            return 0
+        }
+    }
+
+    var imageViewTopPadding: CGFloat {
+        switch photoState {
+        case .big:
+            return 0
+        case .small:
+            return safeAreaInsets.top + smallPhotoTopPadding
+        }
+    }
+
+    var imageViewBottomPadding: CGFloat {
+        switch photoState {
+        case .big:
+            return 0
+        case .small:
+            return textHeaderSize
         }
     }
 }
@@ -362,9 +486,12 @@ struct HeaderBlurView: View {
 }
 
 private extension AnimationState {
+    var backColor: Color {
+        return photoState.isScaled ? .white.opacity(0.9) : .black
+    }
 
     var blurHeight: CGFloat {
-        safeAreaInsets.top + textSize
+        return safeAreaInsets.top + textSize
     }
 
     var blurOpacity: CGFloat {
@@ -395,44 +522,68 @@ struct HeaderDescriptionView: View {
                 .font(.system(.headline))
                 .frame(height: animationState.textSize)
                 .frame(width: screen.width)
-                .offset(x: 0, y: animationState.imageOffset)
-                .offset(x: 0, y: animationState.photoState.isScaled && animationState.offset < 0 ? animationState.offset : 0)
-                .foregroundColor(animationState.mainColor)
+                .scaleEffect(animationState.photoState.isScaled ? 1.5 : 1.1)
+                .offset(x: 0, y: animationState.keepInHeaderYOffset)
+                .offset(x: 0, y: animationState.stickyOffsetY)
+                .foregroundColor(animationState.nameColor)
+
 
             Text("+380931314850")
                 .foregroundColor(animationState.photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7))
-                .font(.system(.caption))
+                .font(.system(.subheadline))
                 .frame(width: screen.width)
                 .frame(height: animationState.subTextSize)
-                .offset(x: 0, y: animationState.photoState.isScaled && animationState.offset < 0 ? animationState.offset : 0)
+                .offset(x: 0, y: animationState.stickyOffsetY)
                 .opacity(animationState.phoneOpacity)
+                .padding(.bottom, animationState.textBottomPadding)
         }
+//        .animation(
+//            Animation.easeIn(duration: 0.35),
+//            value: animationState.photoState
+//        )
     }
 }
 
-extension AnimationState {
-    var mainColor: Color {
-        photoState.isScaled ? .white.opacity(0.9) : .black
+private extension AnimationState {
+
+    // MARK: - Name
+
+    var nameMinY: CGFloat {
+        return smallPhotoMaxY - textSize
+    }
+    var nameColor: Color {
+        return photoState.isScaled ? .white.opacity(0.9) : .black
+    }
+
+    var keepInHeaderYOffset: CGFloat {
+        return offset > nameMinY ? offset - nameMinY : 0
+    }
+
+    // MARK: - Phone
+
+    var phoneColor: Color {
+        return photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7)
     }
 
     var phoneOpacity: CGFloat {
-        let max: CGFloat = smallPhotoMaxY - textSize
-        return (max - offset) / max
+        return (nameMinY - offset) / nameMinY
     }
 
-    var imageOffset: CGFloat {
-        return offset > (smallPhotoMaxY - textSize) ? offset - (smallPhotoMaxY - textSize) : 0
+    // MARK: - Other
+
+    var stickyOffsetY: CGFloat {
+        return photoState.isScaled && offset <= 0 ? offset / 2 : 0
     }
 }
 
 // MARK: - Preview
 
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView(store: Store(
-//            initialState: Profile.State(image: Asset.Images.owlWithPadding.image),
-//            reducer: Profile.reducer,
-//            environment: Profile.Environment()
-//        ))
-//    }
-//}
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView(store: Store(
+            initialState: Profile.State(image: Asset.Images.owlWithPadding.image),
+            reducer: Profile.reducer,
+            environment: Profile.Environment()
+        ))
+    }
+}

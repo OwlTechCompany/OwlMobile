@@ -30,18 +30,14 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(
-                            action: { viewStore.send(.logout) },
-                            label: { Text("Logout") }
-                        )
-                        .padding()
-                        Button(
-                            action: { viewStore.send(.openProfile) },
-                            label: { Text("Profile") }
-                        )
-                        .padding()
-                    }
+                    Image(uiImage: Asset.Images.nastya.image)
+                        .resizable()
+                        .scaledToFill()
+                        .cornerRadius(20)
+                        .frame(width: 40, height: 40)
+                        .onTapGesture {
+                            viewStore.send(.openProfile)
+                        }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
