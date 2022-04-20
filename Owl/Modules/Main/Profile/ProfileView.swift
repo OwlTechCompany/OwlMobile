@@ -131,6 +131,10 @@ struct ProfileView: View {
         case big
         case small
 
+        var isScaled: Bool {
+            return self == .big
+        }
+
 //        var width: CGFloat {
 //            switch
 //        }
@@ -173,14 +177,31 @@ struct ProfileView: View {
         }
 
         func phoneOpacity(offset: CGFloat) -> CGFloat {
-            let max: CGFloat = 177 - 44
+            let max: CGFloat = 157 - 44
             let result = (max - offset) / max
-            print(result)
+//            print(result)
             return result
         }
 
+        func blurOpacity(offset: CGFloat) -> CGFloat {
+            let max: CGFloat = 157 + 1
+
+            switch offset {
+            case (...(max - 10)):
+                return 0
+            case ((max - 10)..<max + 10):
+                let result = (offset - max + 10) / (20)
+                print(result)
+                return result
+            default:
+                return 1
+            }
+//            let result = 1 - ((max - offset) / max)
+//            return result
+        }
+
         init(offsetY: CGFloat) {
-            let max: CGFloat = 177 + 1
+            let max: CGFloat = 157 + 1
             switch offsetY {
             case (..<CGFloat(max / 2)):
                 self = .small
@@ -197,8 +218,12 @@ struct ProfileView: View {
         }
     }
 
-    let textSize: CGFloat = 44 + 16
-    let smallImageTopPadding: CGFloat = 30
+    var textHeaderSize: CGFloat {
+        textSize + subTextSize
+    }
+    let textSize: CGFloat = 44
+    let subTextSize: CGFloat = 24
+    let smallImageTopPadding: CGFloat = 10
 
     var imageMaxY: CGFloat {
         return PhotoState.small.imageHeight(scrollOffset: 0) + safeAreaInsets.top + smallImageTopPadding
@@ -217,21 +242,21 @@ struct ProfileView: View {
                             Image(uiImage: Asset.Images.nastya.image)
                                 .resizable()
                                 .scaledToFill()
-                                .cornerRadius(photoState == .big ? 0 : 50)
-                                .offset(x: 0, y: photoState == .big ? offset : 0)
+                                .cornerRadius(photoState.isScaled ? 0 : 50)
+                                .offset(x: 0, y: photoState.isScaled ? offset : 0)
                                 .frame(
                                     width: photoState.imageWidth(),
                                     height: photoState.imageHeight(scrollOffset: offset)
                                 )
-                                .padding(.top, photoScaled ? 0 : safeAreaInsets.top + smallImageTopPadding)
-                                .padding(.bottom, photoScaled ? 0 : textSize)
+                                .padding(.top, photoState.isScaled ? 0 : safeAreaInsets.top + smallImageTopPadding)
+                                .padding(.bottom, photoState.isScaled ? 0 : textHeaderSize)
 //                                .ignoresSafeArea(.all, edges: .top)
 
                             VStack {
                                 Color.clear.background(.ultraThinMaterial)
-                                    .opacity(scrollState.showBlur ? 1 : 0)
+                                    .opacity(scrollState.blurOpacity(offset: offset))
                                     .frame(height: safeAreaInsets.top + textSize, alignment: .top)
-                                    .animation(.default, value: scrollState.showBlur)
+//                                    .animation(.default, value: scrollState.showBlur)
                                     .offset(x: 0, y: offset)
 
                                 Spacer()
@@ -243,22 +268,21 @@ struct ProfileView: View {
 
                                 Text("Anastasia Holovash")
                                     .font(.system(.headline))
-                                    .foregroundColor(.black)
-                                    .frame(height: textSize - 16)
+                                    .foregroundColor(photoState.isScaled ? .white.opacity(0.9) : .black)
+                                    .frame(height: textSize)
                                     .frame(width: screen.width)
-                                    .background(Color.red.opacity(0.2))
-                                    .offset(x: 0, y: offset > (imageMaxY - textSize + 16) ? offset - (imageMaxY - textSize + 16) : 0)
-                                    .offset(x: 0, y: photoScaled ? offset : 0)
+//                                    .background(Color.red.opacity(0.2))
+                                    .offset(x: 0, y: offset > (imageMaxY - textSize) ? offset - (imageMaxY - textSize) : 0)
+                                    .offset(x: 0, y: photoState.isScaled && offset < 0 ? offset : 0)
 
                                 Text("+380931314850")
-                                    .foregroundColor(Color(.secondaryLabel))
+                                    .foregroundColor(photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7))
                                     .font(.system(.caption))
                                     .frame(width: screen.width)
-                                    .frame(height: 16)
+                                    .frame(height: subTextSize)
 //                                    .background(Color.orange.opacity(0.2))
-                                    .offset(x: 0, y: photoScaled ? offset : 0)
+                                    .offset(x: 0, y: photoState.isScaled && offset < 0 ? offset : 0)
                                     .opacity(scrollState.phoneOpacity(offset: offset))
-
                             }
 //                            .background(Color.blue)
                         }
@@ -268,7 +292,7 @@ struct ProfileView: View {
                     .frame(
                         height: photoState.imageHeight(
                             scrollOffset: offset,
-                            smallInset: safeAreaInsets.top + smallImageTopPadding + textSize
+                            smallInset: safeAreaInsets.top + smallImageTopPadding + textHeaderSize
                         )
                     )
                     .onTapGesture {
@@ -289,6 +313,14 @@ struct ProfileView: View {
                     .zIndex(99)
                 }
             }
+            .onChange(of: photoState, perform: { newValue in
+                switch newValue {
+                case .big:
+                    simpleSuccess()
+                case .small:
+                    break
+                }
+            })
             .onChange(of: delegate.scrollViewDidScroll) { value in
                 let newOffset = value!.scrollView.contentOffset.y
                 offset = newOffset
@@ -296,10 +328,10 @@ struct ProfileView: View {
                 print("SCROLL STATE \(scrollState) \(newOffset)")
                 if newOffset < -10 {
                     photoState = .big
-                    photoScaled = true
+//                    photoScaled = true
                 } else if newOffset > 10 {
                     photoState = .small
-                    photoScaled = false
+//                    photoScaled = false
                 }
             }
             .onChange(of: delegate.scrollViewDidEndDragging) { value in
@@ -311,7 +343,7 @@ struct ProfileView: View {
                     scrollView.setContentOffset(.init(x: 0, y: imageMaxY), animated: true)
                 }
             }
-            .animation(.spring(response: 0.35, dampingFraction: 0.7, blendDuration: 0), value: photoScaled)
+            .animation(.spring(response: 0.35, dampingFraction: 0.7, blendDuration: 0), value: photoState)
             .introspectScrollView { scrollView in
                 if scrollView.delegate !== delegate {
                     print("************** setup DELEGATE")
@@ -319,38 +351,21 @@ struct ProfileView: View {
                 }
             }
             .ignoresSafeArea()
-            .overlay(
-                ZStack {
-                    Color.clear.background(.ultraThinMaterial)
-
-                    Text("Title")
-                        .font(.system(.headline))
-//                        .frame(width: .infinity)
-//                        .frame(width: .infinity, alignment: .leading)
-                }
-                .frame(height: 70)
-                .frame(maxHeight: .infinity, alignment: .top)
-//                .transition(.e)
-//                    .hi
-                .opacity(offset < -120 ? 1 : 0)
-                .animation(.default, value: offset)
-                .opacity(0)
-            )
         }
 
-//        .edgesIgnoringSafeArea(.all)
         .background(
             Color(UIColor.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
         )
         .navigationBarHidden(true)
-//        .navigationTitle("Profile")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .toolbar {
-//            ToolbarItem(placement: .principal) {
-//                Text("Tool")
-//            }
-//        }
+    }
+
+    func simpleSuccess() {
+//        let generator = UINotificationFeedbackGenerator()
+//        generator.notificationOccurred(.warning)
+        let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+        impactHeavy.impactOccurred()
+
     }
 }
 
