@@ -41,6 +41,7 @@
 		5DCD57B2280C9D8D00186FE2 /* ChatMessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */; };
 		5DCD57B4280C9D9800186FE2 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */; };
 		5DCD57BA280E185200186FE2 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */; };
+		5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */; };
 		5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingStore.swift */; };
 		5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeStore.swift */; };
 		5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */; };
@@ -120,6 +121,7 @@
 		5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageStore.swift; sourceTree = "<group>"; };
 		5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
+		5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessage.swift; sourceTree = "<group>"; };
 		5F727FAA2807623200FABF26 /* OnboardingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStore.swift; sourceTree = "<group>"; };
 		5F727FAE2807627100FABF26 /* EnterCodeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeStore.swift; sourceTree = "<group>"; };
 		5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneStore.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			isa = PBXGroup;
 			children = (
 				5DCD57A4280C42A200186FE2 /* Message.swift */,
+				5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -698,6 +701,7 @@
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
 				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
+				5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
 				5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,

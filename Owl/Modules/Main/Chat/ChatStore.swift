@@ -12,34 +12,79 @@ struct Chat {
     // MARK: - State
 
     struct State: Equatable {
+        var chatID: String
+        var companion: User
         var navigation: ChatNavigation.State
         var messages: IdentifiedArrayOf<ChatMessage.State>
+
+        var model: ChatsListPrivateItem
+        
+        @BindableState var newMessage: String = ""
     }
 
     // MARK: - Action
 
-    enum Action: Equatable {
+    enum Action: Equatable, BindableAction {
         case navigation(ChatNavigation.Action)
         case messages(id: String, action: ChatMessage.Action)
 
         case getMessagesResult(Result<[Message], NSError>)
+        case binding(BindingAction<State>)
+        case onAppear
+        case sendMessage
+        case sendMessageResult(Result<Bool, NSError>)
     }
 
     // MARK: - Environment
 
-    struct Environment { }
+    struct Environment {
+        let chatsClient: FirestoreChatsClient
+    }
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { _, action, _ in
+    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .navigation:
             return .none
-            
-        case .getMessagesResult(_):
+
+        case let .getMessagesResult(.success(messages)):
+            state.messages = .init(uniqueElements: messages.map {
+                ChatMessage.State(message: $0, companion: state.companion)
+            })
+            return .none
+
+        case let .getMessagesResult(.failure(error)):
+            return .none
+
+        case .binding(\.$newMessage):
+            return .none
+
+        case .binding:
+            return .none
+
+        case .onAppear:
+            return environment.chatsClient.getMessages(state.chatID)
+                .catchToEffect(Action.getMessagesResult)
+
+        case .sendMessage:
+            let newMessage = NewMessage(
+                chatId: state.model.id,
+                message: Message(
+                    id: "",
+                    messageText: state.newMessage,
+                    sentAt: Date(),
+                    sentBy: state.model.me.uid
+                )
+            )
+            return environment.chatsClient.sendMessage(newMessage)
+                .catchToEffect(Action.sendMessageResult)
+
+        case .sendMessageResult:
             return .none
         }
     }
+    .binding()
 
     static let reducer = Reducer<State, Action, Environment>.combine(
         ChatNavigation.reducer
@@ -50,5 +95,24 @@ struct Chat {
             ),
         reducerCore
     )
+
+}
+
+extension Chat.State {
+
+    init(model: ChatsListPrivateItem) {
+        self.chatID = model.id
+        self.companion = model.companion
+        self.messages = .init(
+            uniqueElements: [
+                ChatMessage.State(
+                    message: model.lastMessage,
+                    companion: model.companion
+                )
+            ]
+        )
+        self.navigation = .init(model: model)
+        self.model = model
+    }
 
 }

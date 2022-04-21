@@ -57,20 +57,8 @@ struct Main {
         case .routeAction(_, action: .chatList(.logout)):
             return Effect(value: .delegate(.logout))
 
-        case let .routeAction(_, .chatList(.chats(id, action: .open))):
-            state.routes.push(.chat(.init(
-                navigation: .init(
-                    model: MockedDataClient.chatsListPrivateItem
-                ),
-                messages: .init(
-                    uniqueElements: MockedDataClient.chatMessages.map {
-                        ChatMessage.State(
-                            message: $0,
-                            companion: MockedDataClient.chatsListPrivateItem.companion
-                        )
-                    }
-                )
-            )))
+        case let .routeAction(_, .chatList(.open(chat))):
+            state.routes.push(.chat(.init(model: chat)))
             return .none
 
         case .routeAction(_, .chat(.navigation(.back))):

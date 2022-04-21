@@ -67,7 +67,7 @@ struct MockedDataClient {
             messageText: "Ha every!",
             sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
-        ),
+        )
     ]
 
 }

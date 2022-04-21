@@ -67,7 +67,11 @@ extension Main.ScreenProvider {
             .pullback(
                 state: /State.chat,
                 action: /Action.chat,
-                environment: { _ in Chat.Environment() }
+                environment: {
+                    Chat.Environment(
+                        chatsClient: $0.chatsClient
+                    )
+                }
             )
     )
 

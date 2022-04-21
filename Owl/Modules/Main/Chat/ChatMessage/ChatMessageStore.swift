@@ -12,7 +12,7 @@ struct ChatMessage {
 
     // MARK: - State
 
-    struct State: Equatable, Identifiable {
+    struct State: Equatable, Identifiable, Hashable {
         let id: String
         let text: String
         let sentAt: Date

@@ -12,21 +12,66 @@ struct ChatView: View {
 
     let store: Store<Chat.State, Chat.Action>
 
+    init(store: Store<Chat.State, Chat.Action>) {
+        self.store = store
+
+        UITextView.appearance().backgroundColor = .clear
+    }
+
     var body: some View {
 
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack {
-                List {
-                    ForEachStore(
-                        self.store.scope(
-                            state: \.messages,
-                            action: Chat.Action.messages(id:action:)
-                        ),
-                        content: { ChatMessageView(store: $0) }
-                    )
+                ScrollView {
+
+                    ScrollViewReader { proxy in
+                        LazyVStack{
+                            ForEachStore(
+                                self.store.scope(
+                                    state: \.messages,
+                                    action: Chat.Action.messages(id:action:)
+                                ),
+                                content: {
+                                    ChatMessageView(store: $0)
+                                        .listRowSeparator(.hidden)
+                                        .listRowInsets(.init())
+                                        .onAppear {
+                                            DispatchQueue.main.async {
+                                                proxy.scrollTo(viewStore.messages.last!.id, anchor: .bottom)
+                                            }
+                                        }
+                                }
+                            )
+                        }
+                    }
+
                 }
-                .listStyle(.plain)
+                HStack(spacing: 16) {
+                    ZStack {
+                        TextEditor(text: viewStore.binding(\.$newMessage))
+                            .font(.system(size: 16, weight: .regular))
+
+                        Text(viewStore.state.newMessage)
+                            .font(.system(size: 16, weight: .regular))
+                            .opacity(0)
+                    }
+                    .frame(height: 40)
+                    .padding(.horizontal, 4)
+                    .background(Colors.textFieldBackground.swiftUIColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                    Image(systemName: "paperplane")
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.white)
+                        .background(Colors.accentColor.swiftUIColor)
+                        .clipShape(Circle())
+                        .onTapGesture { viewStore.send(.sendMessage) }
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+
             }
+            .frame(width: screen.width)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     ChatNavigationView(
@@ -39,6 +84,7 @@ struct ChatView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear { viewStore.send(.onAppear) }
         }
     }
 }
@@ -47,19 +93,9 @@ struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             ChatView(store: Store(
-                initialState: .init(
-                    navigation: .init(model: MockedDataClient.chatsListPrivateItem),
-                    messages: .init(
-                        uniqueElements: MockedDataClient.chatMessages.map {
-                            ChatMessage.State(
-                                message: $0,
-                                companion: MockedDataClient.chatsListPrivateItem.companion
-                            )
-                        }
-                    )
-                ),
+                initialState: .init(model: MockedDataClient.chatsListPrivateItem),
                 reducer: Chat.reducer,
-                environment: Chat.Environment()
+                environment: Chat.Environment(chatsClient: .live)
             ))
         }
     }

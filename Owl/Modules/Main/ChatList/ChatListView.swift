@@ -53,7 +53,8 @@ struct ChatListView_Previews: PreviewProvider {
                 chats: .init(
                     arrayLiteral:
                         ChatListCell.State(model: MockedDataClient.chatsListPrivateItem)
-                )
+                ),
+                chatsData: []
             ),
             reducer: ChatList.reducer,
             environment: ChatList.Environment(

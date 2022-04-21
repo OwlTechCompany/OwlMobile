@@ -15,9 +15,11 @@ struct ChatList {
 
     struct State: Equatable {
         var chats: IdentifiedArrayOf<ChatListCell.State>
+        var chatsData: [ChatsListPrivateItem]
 
         static let initialState = State(
-            chats: .init()
+            chats: .init(),
+            chatsData: []
         )
     }
 
@@ -29,6 +31,7 @@ struct ChatList {
         case getChatsResult(Result<[ChatsListPrivateItem], NSError>)
 
         case chats(id: String, action: ChatListCell.Action)
+        case open(ChatsListPrivateItem)
     }
 
     // MARK: - Environment
@@ -53,13 +56,20 @@ struct ChatList {
                 .catchToEffect(Action.getChatsResult)
 
         case let .chats(id, .open):
-            return .none
+            guard let chat = state.chatsData.first(where: { $0.id == id }) else {
+                return .none
+            }
+            return Effect(value: .open(chat))
 
         case let .getChatsResult(.success(items)):
             state.chats = .init(uniqueElements: items.map(ChatListCell.State.init(model:)))
+            state.chatsData = items
             return .none
 
         case let .getChatsResult(.failure(error)):
+            return .none
+
+        case .open:
             return .none
         }
     }

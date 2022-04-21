@@ -45,7 +45,8 @@ struct ChatMessageView: View {
                 .frame(maxWidth: Constants.bubbleMaxWidth, alignment: viewStore.alignment)
 
             }
-            .padding()
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
             .frame(width: screen.width, alignment: viewStore.alignment)
             .modifier(ShadowModifier())
         }
@@ -133,6 +134,6 @@ struct ChatMessageView_Previews: PreviewProvider {
                 )
             )
         }
-        .previewLayout(.sizeThatFits)
+//        .previewLayout(.sizeThatFits)
     }
 }

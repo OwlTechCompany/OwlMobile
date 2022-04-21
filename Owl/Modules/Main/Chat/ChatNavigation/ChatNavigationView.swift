@@ -44,7 +44,6 @@ struct ChatNavigationView: View {
                     .background(Color.white)
                     .clipShape(Circle())
                     .scaledToFill()
-                    .modifier(TinyShadowModifier())
                     .onTapGesture {
                         viewStore.send(.chatDetails)
                     }
