@@ -104,6 +104,7 @@ struct ChatView: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear { viewStore.send(.onAppear) }
+            
         }
     }
 }

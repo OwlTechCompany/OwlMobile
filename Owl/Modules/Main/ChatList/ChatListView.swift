@@ -29,13 +29,24 @@ struct ChatListView: View {
             .navigationTitle("Owl")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                HStack {
-                    Spacer()
-
-                    Button(
-                        action: { viewStore.send(.logout) },
-                        label: { Text("Logout") }
-                    )
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(uiImage: Asset.Images.nastya.image)
+                        .resizable()
+                        .scaledToFill()
+                        .cornerRadius(20)
+                        .frame(width: 40, height: 40)
+                        .onTapGesture {
+                            viewStore.send(.openProfile)
+                        }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button("Private chat", action: { viewStore.send(.newPrivateChat) })
+                        Button("Group", action: {})
+                            .disabled(true)
+                    } label: {
+                        Label("", systemImage: "square.and.pencil")
+                    }
                     .padding()
                 }
             }
@@ -59,7 +70,7 @@ struct ChatListView_Previews: PreviewProvider {
             reducer: ChatList.reducer,
             environment: ChatList.Environment(
                 authClient: .live,
-                chatsClient: .live
+                chatsClient: .live(userClient: .live)
             )
         ))
     }

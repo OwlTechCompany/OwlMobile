@@ -26,7 +26,8 @@ struct ChatList {
     // MARK: - Action
 
     enum Action: Equatable {
-        case logout
+        case openProfile
+        case newPrivateChat
         case onAppear
         case getChatsResult(Result<[ChatsListPrivateItem], NSError>)
 
@@ -45,7 +46,10 @@ struct ChatList {
 
     static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .logout:
+        case .newPrivateChat:
+            return .none
+
+        case .openProfile:
             return .none
 
         case .onAppear:

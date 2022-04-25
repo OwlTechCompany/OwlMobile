@@ -46,16 +46,23 @@ struct Main {
     // MARK: - Environment
 
     struct Environment {
+        let userClient: UserClient
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
+        let firestoreUsersClient: FirestoreUsersClient
     }
 
     // MARK: - Reducer
 
     static let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
-        case .routeAction(_, action: .chatList(.logout)):
-            return Effect(value: .delegate(.logout))
+        case .routeAction(_, action: .chatList(.newPrivateChat)):
+            state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
+            return .none
+
+        case .routeAction(_, action: .chatList(.openProfile)):
+            state.routes.push(.profile(.init(image: Asset.Images.owlBlack.image)))
+            return .none
 
         case let .routeAction(_, .chatList(.open(chat))):
             state.routes.push(.chat(.init(model: chat)))
@@ -64,6 +71,19 @@ struct Main {
         case .routeAction(_, .chat(.navigation(.back))):
             state.routes.pop()
             return .none
+
+        case let .routeAction(_, .newPrivateChat(.openChat(item))):
+            return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
+                provider.dismiss()
+                provider.push(.chat(.init()))
+            }
+
+        case .routeAction(_, .profile(.close)):
+            state.routes.pop()
+            return .none
+
+        case .routeAction(_, .profile(.logout)):
+            return Effect(value: .delegate(.logout))
 
         case .delegate:
             return .none

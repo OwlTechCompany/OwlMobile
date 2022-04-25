@@ -8,6 +8,10 @@
 import Foundation
 
 struct User {
+
+    static let defaultFirstName = "Wild"
+    static let defaultLastName = "Owl"
+
     let uid: String
     let phoneNumber: String?
     let firstName: String?
@@ -29,8 +33,8 @@ extension User: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uid, forKey: .uid)
         try container.encode(phoneNumber, forKey: .phoneNumber)
-        try container.encode(firstName ?? "Wild", forKey: .firstName)
-        try container.encode(lastName ?? "Owl", forKey: .lastName)
+        try container.encode(firstName ?? User.defaultFirstName, forKey: .firstName)
+        try container.encode(lastName ?? User.defaultLastName, forKey: .lastName)
     }
 }
 
@@ -38,4 +42,13 @@ extension User: Codable {
 
 extension User: Equatable {
 
+}
+
+// MARK: - Computable
+
+extension User {
+
+    var fullName: String {
+        return "\(firstName ?? "") \(lastName ?? "")"
+    }
 }

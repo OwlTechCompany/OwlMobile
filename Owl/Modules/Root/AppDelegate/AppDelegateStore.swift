@@ -45,6 +45,7 @@ extension AppDelegate {
 
     struct Environment {
         let firebaseClient: FirebaseClient
+        let userClient: UserClient
         let authClient: AuthClient
     }
 
@@ -54,6 +55,7 @@ extension AppDelegate {
         switch action {
         case .didFinishLaunching:
             environment.firebaseClient.setup()
+            environment.userClient.setup()
             return .none
 
         case let .didRegisterForRemoteNotifications(.success(data)):
