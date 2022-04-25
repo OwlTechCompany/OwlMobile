@@ -45,8 +45,10 @@ struct Main {
     // MARK: - Environment
 
     struct Environment {
+        let userClient: UserClient
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
+        let firestoreUsersClient: FirestoreUsersClient
     }
 
     // MARK: - Reducer
@@ -56,9 +58,19 @@ struct Main {
         case .routeAction(_, action: .chatList(.logout)):
             return Effect(value: .delegate(.logout))
 
+        case .routeAction(_, action: .chatList(.newPrivateChat)):
+            state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
+            return .none
+
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
             state.routes.push(.chat(.init()))
             return .none
+
+        case let .routeAction(_, .newPrivateChat(.openChat(item))):
+            return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
+                provider.dismiss()
+                provider.push(.chat(.init()))
+            }
 
         case .delegate:
             return .none

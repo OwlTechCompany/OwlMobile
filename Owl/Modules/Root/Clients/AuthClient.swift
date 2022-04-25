@@ -7,8 +7,10 @@
 
 import UIKit
 import ComposableArchitecture
+import Combine
 import Firebase
 import FirebaseFirestoreCombineSwift
+import FirebaseAuthCombineSwift
 
 struct AuthClient {
 
@@ -34,7 +36,7 @@ extension AuthClient {
         currentUser: { firebaseAuth.currentUser },
         verifyPhoneNumber: { phoneNumber in
             .future { completion in
-                if phoneNumber == "+380931314850" {
+                if AuthClient.testPhones.contains(phoneNumber) {
                     firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
                 }
                 phoneAuthProvider
@@ -80,5 +82,20 @@ extension AuthClient {
             try? firebaseAuth.signOut()
         }
     )
+
+}
+
+// MARK: - Test Phones
+
+extension AuthClient {
+
+    static let testPhones: [String] = [
+        "+380931314850",
+        "+380991111111",
+        "+380992222222",
+        "+380993333333",
+        "+380994444444",
+        "+380995555555"
+    ]
 
 }
