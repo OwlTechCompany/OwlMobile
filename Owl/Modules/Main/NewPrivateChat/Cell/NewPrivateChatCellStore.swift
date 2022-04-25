@@ -39,7 +39,7 @@ struct NewPrivateChatCell {
     }
 }
 
-// MARK: - NewPrivateChatCell.State + User
+// MARK: - State Extension
 
 extension NewPrivateChatCell.State {
 
