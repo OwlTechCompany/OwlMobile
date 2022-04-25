@@ -11,12 +11,15 @@ struct HeaderDescriptionView: View {
 
     @Binding var animationState: ProfileAnimationState
 
+    var title: String
+    var subtitle: String
+
     var body: some View {
         VStack(spacing: 0) {
 
             Spacer()
 
-            Text("Anastasia Holovash")
+            Text(title)
                 .font(.system(.headline))
                 .frame(height: animationState.textSize)
                 .frame(width: screen.width)
@@ -25,7 +28,7 @@ struct HeaderDescriptionView: View {
                 .offset(x: 0, y: animationState.stickyOffsetY)
                 .foregroundColor(animationState.nameColor)
 
-            Text("+380931314850")
+            Text(subtitle)
                 .foregroundColor(animationState.photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7))
                 .font(.system(.subheadline))
                 .frame(width: screen.width)

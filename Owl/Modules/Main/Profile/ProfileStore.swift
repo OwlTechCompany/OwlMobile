@@ -13,14 +13,19 @@ struct Profile {
     // MARK: - State
 
     struct State: Equatable {
+        var alert: AlertState<Action>?
         var image: UIImage
-//        var 
     }
 
     // MARK: - Action
 
     enum Action: Equatable {
-        case startMessaging
+        case close
+
+        case logoutTapped
+        case logout
+
+        case dismissAlert
     }
 
     // MARK: - Environment
@@ -29,9 +34,27 @@ struct Profile {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
-        case .startMessaging:
+        case .close:
+            return .none
+
+        case .logoutTapped:
+            state.alert = .init(
+                title: TextState("Are you sure?"),
+                primaryButton: .cancel(TextState("Cancel")),
+                secondaryButton: .destructive(
+                    TextState("Logout"),
+                    action: .send(.logout)
+                )
+            )
+            return .none
+
+        case .logout:
+            return .none
+
+        case .dismissAlert:
+            state.alert = nil
             return .none
         }
     }

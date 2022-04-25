@@ -11,11 +11,12 @@ struct UserImageView: View {
 
     @Binding var animationState: ProfileAnimationState
 
+    var image: UIImage
+
     var body: some View {
-        Image(uiImage: Asset.Images.nastya.image)
+        Image(uiImage: image)
             .resizable()
             .scaledToFill()
-            .opacity(0.1)
             .cornerRadius(animationState.photoState.cornerRadius)
             .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
             .offset(x: 0, y: animationState.imageViewYOffset)

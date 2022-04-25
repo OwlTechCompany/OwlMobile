@@ -55,9 +55,6 @@ struct Main {
 
     static let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
-        case .routeAction(_, action: .chatList(.logout)):
-            return Effect(value: .delegate(.logout))
-
         case .routeAction(_, action: .chatList(.newPrivateChat)):
             state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
@@ -75,6 +72,13 @@ struct Main {
                 provider.dismiss()
                 provider.push(.chat(.init()))
             }
+
+        case .routeAction(_, .profile(.close)):
+            state.routes.pop()
+            return .none
+
+        case .routeAction(_, .profile(.logout)):
+            return Effect(value: .delegate(.logout))
 
         case .delegate:
             return .none

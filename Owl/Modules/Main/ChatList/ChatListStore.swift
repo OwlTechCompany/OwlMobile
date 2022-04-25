@@ -24,7 +24,6 @@ struct ChatList {
     // MARK: - Action
 
     enum Action: Equatable {
-        case logout
         case openProfile
         case newPrivateChat
         case onAppear
@@ -44,9 +43,6 @@ struct ChatList {
 
     static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .logout:
-            return .none
-
         case .newPrivateChat:
             return .none
 

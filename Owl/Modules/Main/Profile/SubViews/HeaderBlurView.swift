@@ -11,21 +11,49 @@ struct HeaderBlurView: View {
 
     @Binding var animationState: ProfileAnimationState
 
+    var backAction: () -> Void
+
     var body: some View {
-        VStack {
-            Color.clear.background(.ultraThinMaterial)
-                .opacity(animationState.blurOpacity)
-                .frame(height: animationState.blurHeight, alignment: .top)
-                .offset(x: 0, y: animationState.offset)
+        VStack(spacing: 0) {
+            ZStack {
+                Color.clear.background(.ultraThinMaterial)
+                    .opacity(animationState.blurOpacity)
+
+                HStack {
+                    Image(systemName: "chevron.backward")
+                        .resizable()
+                        .frame(width: 19 / 1.5, height: 34 / 1.5)
+                        .foregroundColor(animationState.backColor)
+                        .offset(x: 16, y: 0)
+                        .onTapGesture { backAction() }
+
+                    Spacer()
+                }
+                .frame(height: 44)
+                .padding(.top, animationState.safeAreaInsets.top)
+            }
+            .frame(height: animationState.blurHeight)
+            .offset(x: 0, y: animationState.headerBlurYOffset)
 
             Spacer()
         }
+        .ignoresSafeArea()
     }
 }
 
 // MARK: - ProfileAnimationState
 
 private extension ProfileAnimationState {
+
+    var headerBlurYOffset: CGFloat {
+        switch photoState {
+        case .big:
+            return offset >= 0 ? offset : offset / 2
+
+        case .small:
+            return offset
+        }
+    }
 
     var backColor: Color {
         return photoState.isScaled ? .white.opacity(0.9) : .black

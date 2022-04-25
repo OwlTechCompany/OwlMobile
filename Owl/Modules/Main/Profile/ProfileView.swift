@@ -19,16 +19,26 @@ struct ProfileView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        WithViewStore(store) { _ in
+        WithViewStore(store) { viewStore in
             ScrollView {
                 VStack(spacing: 30) {
                     ZStack {
-                        UserImageView(animationState: $animationState)
-                            .onTapGesture { animationState.photoState.toggle() }
+                        UserImageView(
+                            animationState: $animationState,
+                            image: Asset.Images.nastya.image
+                        )
+                        .onTapGesture { animationState.photoState.toggle() }
 
-                        HeaderBlurView(animationState: $animationState)
+                        HeaderBlurView(
+                            animationState: $animationState,
+                            backAction: { viewStore.send(.close) }
+                        )
 
-                        HeaderDescriptionView(animationState: $animationState)
+                        HeaderDescriptionView(
+                            animationState: $animationState,
+                            title: "Anastasia Holovash",
+                            subtitle: "+380931314850"
+                        )
                     }
                     .frame(width: screen.width)
                     .frame(height: animationState.stackViewHeight)
@@ -60,9 +70,7 @@ struct ProfileView: View {
                         Spacer(minLength: 50)
 
                         Button(
-                            action: {
-                                print("Perform an action here...")
-                            },
+                            action: { viewStore.send(.logoutTapped) },
                             label: {
                                 Text("Logout")
                                     .foregroundColor(.red)
@@ -90,7 +98,10 @@ struct ProfileView: View {
                 }
             }
             .onChange(of: delegate.scrollViewDidScroll) { value in
-                let offset = value!.scrollView.contentOffset.y
+                guard let scrollView = value?.scrollView else {
+                    return
+                }
+                let offset = scrollView.contentOffset.y
                 animationState.offset = offset
                 if offset <= -32 {
                     animationState.photoState = .big
@@ -99,7 +110,9 @@ struct ProfileView: View {
                 }
             }
             .onChange(of: delegate.scrollViewDidEndDragging) { value in
-                let scrollView = value!.scrollView
+                guard let scrollView = value?.scrollView else {
+                    return
+                }
                 let offset = scrollView.contentOffset.y
                 let hidePhotoOffset = animationState.smallPhotoMaxY
                 let edgePosition = hidePhotoOffset / 2
@@ -123,6 +136,10 @@ struct ProfileView: View {
                 value: animationState.photoState
             )
             .ignoresSafeArea()
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
         }
         .background(
             Color(.systemGroupedBackground)
