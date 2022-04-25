@@ -56,7 +56,7 @@ extension FirestoreChatsClient {
         },
         getMessages: { chatID in
             Effect.run { subcriber in
-                Collection.chatsMessages.document(chatID).collection("messages")
+                Collection.chatsMessages.document(chatID).collection("messages").order(by: "sentAt", descending: false)
                     .snapshotPublisher()
                     .on { snapshot in
                         print(snapshot)

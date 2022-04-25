@@ -10,6 +10,13 @@ import ComposableArchitecture
 
 struct ChatView: View {
 
+    @State var isNeedScrollToBottom: Bool = true
+    @FocusState private var focusedField: Field?
+
+    private enum Field: Int, CaseIterable {
+        case enterMessage
+    }
+
     let store: Store<Chat.State, Chat.Action>
 
     init(store: Store<Chat.State, Chat.Action>) {
@@ -25,7 +32,7 @@ struct ChatView: View {
                 ScrollView {
 
                     ScrollViewReader { proxy in
-                        LazyVStack{
+                        LazyVStack {
                             ForEachStore(
                                 self.store.scope(
                                     state: \.messages,
@@ -35,21 +42,30 @@ struct ChatView: View {
                                     ChatMessageView(store: $0)
                                         .listRowSeparator(.hidden)
                                         .listRowInsets(.init())
-                                        .onAppear {
-                                            DispatchQueue.main.async {
-                                                proxy.scrollTo(viewStore.messages.last!.id, anchor: .bottom)
-                                            }
-                                        }
                                 }
                             )
+                        }
+                        .padding(.bottom, 12)
+                        .onChange(of: viewStore.messages) { newValue in
+                            if isNeedScrollToBottom {
+                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                isNeedScrollToBottom = false
+                            }
+                        }
+                        .onChange(of: focusedField) { value in
+                            if value != nil {
+                                proxy.scrollTo(viewStore.messages.last!.id, anchor: .bottom)
+                            }
                         }
                     }
 
                 }
+
                 HStack(spacing: 16) {
                     ZStack {
                         TextEditor(text: viewStore.binding(\.$newMessage))
                             .font(.system(size: 16, weight: .regular))
+                            .focused($focusedField, equals: .enterMessage)
 
                         Text(viewStore.state.newMessage)
                             .font(.system(size: 16, weight: .regular))
@@ -65,7 +81,10 @@ struct ChatView: View {
                         .foregroundColor(.white)
                         .background(Colors.accentColor.swiftUIColor)
                         .clipShape(Circle())
-                        .onTapGesture { viewStore.send(.sendMessage) }
+                        .onTapGesture {
+                            viewStore.send(.sendMessage)
+                            isNeedScrollToBottom = true
+                        }
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)

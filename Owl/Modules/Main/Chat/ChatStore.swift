@@ -77,6 +77,7 @@ struct Chat {
                     sentBy: state.model.me.uid
                 )
             )
+            state.newMessage = ""
             return environment.chatsClient.sendMessage(newMessage)
                 .catchToEffect(Action.sendMessageResult)
 
