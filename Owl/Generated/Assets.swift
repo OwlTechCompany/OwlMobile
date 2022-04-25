@@ -23,12 +23,42 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 internal enum Asset {
   internal enum Colors {
     internal static let accentColor = ColorAsset(name: "AccentColor")
+    internal enum Blue {
+      internal static let _1 = ColorAsset(name: "Blue/1")
+      internal static let _2 = ColorAsset(name: "Blue/2")
+      internal static let _3 = ColorAsset(name: "Blue/3")
+      internal static let _4 = ColorAsset(name: "Blue/4")
+      internal static let _5 = ColorAsset(name: "Blue/5")
+      internal static let _6 = ColorAsset(name: "Blue/6")
+    }
     internal static let darkGray = ColorAsset(name: "DarkGray")
     internal static let light = ColorAsset(name: "Light")
     internal enum Loader {
       internal static let first = ColorAsset(name: "Loader/first")
       internal static let second = ColorAsset(name: "Loader/second")
       internal static let third = ColorAsset(name: "Loader/third")
+    }
+    internal enum Pink {
+      internal static let _1 = ColorAsset(name: "Pink/1")
+      internal static let _10 = ColorAsset(name: "Pink/10")
+      internal static let _11 = ColorAsset(name: "Pink/11")
+      internal static let _2 = ColorAsset(name: "Pink/2")
+      internal static let _3 = ColorAsset(name: "Pink/3")
+      internal static let _4 = ColorAsset(name: "Pink/4")
+      internal static let _5 = ColorAsset(name: "Pink/5")
+      internal static let _6 = ColorAsset(name: "Pink/6")
+      internal static let _7 = ColorAsset(name: "Pink/7")
+      internal static let _8 = ColorAsset(name: "Pink/8")
+      internal static let _9 = ColorAsset(name: "Pink/9")
+    }
+    internal enum Purple {
+      internal static let _1 = ColorAsset(name: "Purple/1")
+      internal static let _2 = ColorAsset(name: "Purple/2")
+      internal static let _3 = ColorAsset(name: "Purple/3")
+      internal static let _4 = ColorAsset(name: "Purple/4")
+      internal static let _5 = ColorAsset(name: "Purple/5")
+      internal static let _6 = ColorAsset(name: "Purple/6")
+      internal static let _7 = ColorAsset(name: "Purple/7")
     }
     internal static let textFieldBackground = ColorAsset(name: "TextFieldBackground")
     internal static let violet = ColorAsset(name: "Violet")
