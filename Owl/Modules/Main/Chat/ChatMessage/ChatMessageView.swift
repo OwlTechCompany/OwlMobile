@@ -91,13 +91,13 @@ private extension ChatMessage.State {
         switch type {
         case .sentByMe:
             return AnyView(LinearGradient(
-                colors: [Colors.loader3.swiftUIColor, Colors.violet.swiftUIColor],
+                colors: [Colors.Loader.third.swiftUIColor, Colors.violet.swiftUIColor],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             ))
 
         case .sentForMe:
-            return AnyView(Colors.loader3.swiftUIColor.opacity(0.9))
+            return AnyView(Colors.Loader.third.swiftUIColor.opacity(0.9))
         }
     }
 

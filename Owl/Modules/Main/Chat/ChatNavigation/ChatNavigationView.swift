@@ -18,7 +18,7 @@ struct ChatNavigationView: View {
                 Image(systemName: "chevron.backward")
                     .frame(width: 34, height: 34)
                     .foregroundColor(Colors.accentColor.swiftUIColor)
-                    .background(Colors.loader3.swiftUIColor.opacity(0.5))
+                    .background(Colors.Loader.third.swiftUIColor.opacity(0.5))
                     .clipShape(Circle())
                     .modifier(TinyShadowModifier())
                     .onTapGesture {

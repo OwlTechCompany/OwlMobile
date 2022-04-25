@@ -25,9 +25,11 @@ internal enum Asset {
     internal static let accentColor = ColorAsset(name: "AccentColor")
     internal static let darkGray = ColorAsset(name: "DarkGray")
     internal static let light = ColorAsset(name: "Light")
-    internal static let loader1 = ColorAsset(name: "Loader1")
-    internal static let loader2 = ColorAsset(name: "Loader2")
-    internal static let loader3 = ColorAsset(name: "Loader3")
+    internal enum Loader {
+      internal static let first = ColorAsset(name: "Loader/first")
+      internal static let second = ColorAsset(name: "Loader/second")
+      internal static let third = ColorAsset(name: "Loader/third")
+    }
     internal static let textFieldBackground = ColorAsset(name: "TextFieldBackground")
     internal static let violet = ColorAsset(name: "Violet")
   }

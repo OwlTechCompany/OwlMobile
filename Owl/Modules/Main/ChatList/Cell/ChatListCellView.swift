@@ -57,7 +57,7 @@ struct ChatListCellView: View {
                             .minimumScaleFactor(0.5)
                     }
                     .background(LinearGradient(
-                        colors: [Colors.loader3.swiftUIColor, Color.accentColor],
+                        colors: [Colors.Loader.third.swiftUIColor, Color.accentColor],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))

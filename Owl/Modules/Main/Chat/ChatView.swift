@@ -7,10 +7,15 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Introspect
+import UIKit
+import Combine
 
 struct ChatView: View {
 
-    @State var isNeedScrollToBottom: Bool = true
+//    @State var isNeedScrollToBottom: Bool = true
+    @State var scrollView = UIScrollView()
+
     @FocusState private var focusedField: Field?
 
     private enum Field: Int, CaseIterable {
@@ -47,30 +52,38 @@ struct ChatView: View {
                         }
                         .padding(.bottom, 12)
                         .onChange(of: viewStore.messages) { newValue in
-                            if isNeedScrollToBottom {
+//                            if isNeedScrollToBottom {
                                 proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-                                isNeedScrollToBottom = false
-                            }
+//                                isNeedScrollToBottom = false
+//                            }
                         }
                         .onChange(of: focusedField) { value in
-                            guard
-                                let lastMessage = viewStore.messages.last,
-                                value != nil
-                            else {
-                                return
-                            }
-                            
-                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
+//                            guard
+//                                let lastMessage = viewStore.messages.last,
+//                                value != nil
+//                            else {
+//                                return
+//                            }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(350)) {
+//                                withAnimation {
+//                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
+//                                }
+//                            }
                         }
                     }
 
                 }
+                .introspectScrollView { scrollView in
+                    self.scrollView = scrollView
+                }
+                .onTapGesture { focusedField = nil }
 
                 HStack(spacing: 16) {
                     ZStack {
                         TextEditor(text: viewStore.binding(\.$newMessage))
                             .font(.system(size: 16, weight: .regular))
                             .focused($focusedField, equals: .enterMessage)
+                            .disableAutocorrection(true)
 
                         Text(viewStore.state.newMessage)
                             .font(.system(size: 16, weight: .regular))
@@ -88,7 +101,7 @@ struct ChatView: View {
                         .clipShape(Circle())
                         .onTapGesture {
                             viewStore.send(.sendMessage)
-                            isNeedScrollToBottom = true
+//                            isNeedScrollToBottom = true
                         }
                 }
                 .padding(.horizontal, 8)
@@ -110,6 +123,16 @@ struct ChatView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear { viewStore.send(.onAppear) }
 
+            .onReceive(Publishers.keyboardHeightPublisher) { value in
+                let contentOffset = scrollView.contentOffset
+                scrollView.setContentOffset(
+                    .init(
+                        x: 0,
+                        y: contentOffset.y + value
+                    ),
+                    animated: true
+                )
+            }
         }
     }
 }
@@ -124,4 +147,31 @@ struct ChatView_Previews: PreviewProvider {
             ))
         }
     }
+}
+
+extension Publishers {
+
+//    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
+//         let willShow = NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)
+//            .map { $0.keyboardHeight }
+//
+//        let willHide = NotificationCenter.default.publisher(for: UIApplication.keyboardWillHideNotification)
+//            .map { _ in CGFloat(0) }
+//
+//         return Merge(willShow, willHide)
+//            .eraseToAnyPublisher()
+//    }
+
+    static var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
+        Publishers.Merge(
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillShowNotification)
+                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
+                .map { $0.cgRectValue.height },
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillHideNotification)
+                .map { _ in CGFloat(0) }
+       ).eraseToAnyPublisher()
+    }
+
 }
