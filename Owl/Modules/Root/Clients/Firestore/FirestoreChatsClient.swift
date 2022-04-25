@@ -21,12 +21,11 @@ struct FirestoreChatsClient {
     }
 
     var getChats: (Firebase.User) -> Effect<[ChatsListPrivateItem], NSError>
-    var getMessages: (String) -> Effect<[Message], NSError>
-    var sendMessage: (NewMessage) -> Effect<Bool, NSError>
-
-    var getChats: (Firebase.User) -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
+
+    var getMessages: (String) -> Effect<[Message], NSError>
+    var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
 
 // MARK: - Live

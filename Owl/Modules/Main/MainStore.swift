@@ -75,7 +75,7 @@ struct Main {
         case let .routeAction(_, .newPrivateChat(.openChat(item))):
             return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
                 provider.dismiss()
-                provider.push(.chat(.init()))
+                provider.push(.chat(.init(model: item)))
             }
 
         case .routeAction(_, .profile(.close)):

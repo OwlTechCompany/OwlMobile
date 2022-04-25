@@ -53,9 +53,14 @@ struct ChatView: View {
                             }
                         }
                         .onChange(of: focusedField) { value in
-                            if value != nil {
-                                proxy.scrollTo(viewStore.messages.last!.id, anchor: .bottom)
+                            guard
+                                let lastMessage = viewStore.messages.last,
+                                value != nil
+                            else {
+                                return
                             }
+                            
+                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
                         }
                     }
 
@@ -104,7 +109,7 @@ struct ChatView: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear { viewStore.send(.onAppear) }
-            
+
         }
     }
 }
@@ -115,7 +120,7 @@ struct ChatView_Previews: PreviewProvider {
             ChatView(store: Store(
                 initialState: .init(model: MockedDataClient.chatsListPrivateItem),
                 reducer: Chat.reducer,
-                environment: Chat.Environment(chatsClient: .live)
+                environment: Chat.Environment(chatsClient: .live(userClient: .live))
             ))
         }
     }

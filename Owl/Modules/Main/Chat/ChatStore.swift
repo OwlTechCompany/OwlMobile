@@ -104,16 +104,20 @@ extension Chat.State {
     init(model: ChatsListPrivateItem) {
         self.chatID = model.id
         self.companion = model.companion
-        self.messages = .init(
-            uniqueElements: [
-                ChatMessage.State(
-                    message: model.lastMessage,
-                    companion: model.companion
-                )
-            ]
-        )
         self.navigation = .init(model: model)
         self.model = model
+        if let lastMessage = model.lastMessage {
+            self.messages = .init(
+                uniqueElements: [
+                    ChatMessage.State(
+                        message: lastMessage,
+                        companion: model.companion
+                    )
+                ]
+            )
+        } else {
+            self.messages = .init()
+        }
     }
 
 }
