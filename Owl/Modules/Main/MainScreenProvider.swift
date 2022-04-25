@@ -103,7 +103,11 @@ extension Main.ScreenProvider {
             .pullback(
                 state: /State.profile,
                 action: /Action.profile,
-                environment: { _ in Profile.Environment() }
+                environment: {
+                    Profile.Environment(
+                        userClient: $0.userClient
+                    )
+                }
             )
     )
 

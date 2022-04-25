@@ -30,14 +30,12 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image(uiImage: Asset.Images.nastya.image)
+                    Image(uiImage: Asset.Images.gradientOwl.image)
                         .resizable()
                         .scaledToFill()
                         .cornerRadius(20)
                         .frame(width: 40, height: 40)
-                        .onTapGesture {
-                            viewStore.send(.openProfile)
-                        }
+                        .onTapGesture { viewStore.send(.openProfile) }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {

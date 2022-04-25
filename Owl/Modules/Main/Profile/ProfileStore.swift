@@ -13,14 +13,17 @@ struct Profile {
     // MARK: - State
 
     struct State: Equatable {
+        var user: User
         var alert: AlertState<Action>?
-        var image: UIImage
     }
 
     // MARK: - Action
 
     enum Action: Equatable {
+        case onAppear
         case close
+
+        case updateUser(User)
 
         case logoutTapped
         case logout
@@ -30,12 +33,28 @@ struct Profile {
 
     // MARK: - Environment
 
-    struct Environment { }
+    struct Environment {
+        let userClient: UserClient
+    }
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
+        case .onAppear:
+            return Effect.run { subscriber in
+                environment.userClient.firestoreUser
+                    .dropFirst()
+                    .compactMap { $0 }
+                    .sink { user in
+                        subscriber.send(.updateUser(user))
+                    }
+            }
+
+        case let .updateUser(user):
+            state.user = user
+            return .none
+
         case .close:
             return .none
 

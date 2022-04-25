@@ -25,7 +25,7 @@ struct ProfileView: View {
                     ZStack {
                         UserImageView(
                             animationState: $animationState,
-                            image: Asset.Images.nastya.image
+                            image: Asset.Images.gradientOwl.image
                         )
                         .onTapGesture { animationState.photoState.toggle() }
 
@@ -36,8 +36,8 @@ struct ProfileView: View {
 
                         HeaderDescriptionView(
                             animationState: $animationState,
-                            title: "Anastasia Holovash",
-                            subtitle: "+380931314850"
+                            title: viewStore.user.fullName,
+                            subtitle: viewStore.user.phoneNumber ?? "hidden"
                         )
                     }
                     .frame(width: screen.width)
@@ -140,7 +140,11 @@ struct ProfileView: View {
                 self.store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
+
         .background(
             Color(.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
@@ -185,12 +189,12 @@ struct ProfileView: View {
 
 // MARK: - Preview
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView(store: Store(
-            initialState: Profile.State(image: Asset.Images.owlWithPadding.image),
-            reducer: Profile.reducer,
-            environment: Profile.Environment()
-        ))
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfileView(store: Store(
+//            initialState: Profile.State(user: user),
+//            reducer: Profile.reducer,
+//            environment: Profile.Environment()
+//        ))
+//    }
+//}

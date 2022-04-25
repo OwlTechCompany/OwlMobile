@@ -53,14 +53,18 @@ struct Main {
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .routeAction(_, action: .chatList(.newPrivateChat)):
             state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
 
         case .routeAction(_, action: .chatList(.openProfile)):
-            state.routes.push(.profile(.init(image: Asset.Images.owlBlack.image)))
+            guard let firestoreUser = environment.userClient.firestoreUser.value else {
+                return .none
+            }
+            let profileState = Profile.State(user: firestoreUser)
+            state.routes.push(.profile(profileState))
             return .none
 
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
