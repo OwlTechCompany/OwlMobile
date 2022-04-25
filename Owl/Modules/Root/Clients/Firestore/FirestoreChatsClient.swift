@@ -79,19 +79,32 @@ extension FirestoreChatsClient {
         },
         sendMessage: { newMessage in
             Effect.future { callback in
+                let batch = Firestore.firestore().batch()
+
                 let newDocument = Collection.chatsMessages.document(newMessage.chatId).collection("messages").document()
                 var message = newMessage.message
                 message.id = newDocument.documentID
 
-                newDocument.setData(from: message)
-                    .on { _ in
-                        callback(.success(true))
-                    }
-                    error: { error in
-                        callback(.failure(error as NSError))
-                    }
-                    .sink()
-                    .store(in: &cancellables)
+                let chat = Collection.chats.document(newMessage.chatId)
+
+                do {
+                    try batch.setData(from: message, forDocument: newDocument)
+                    let encodedMessage = try Firestore.Encoder().encode(message)
+                    batch.updateData(["lastMessage": encodedMessage], forDocument: chat)
+
+                    batch.commit()
+                        .on { _ in
+                            callback(.success(true))
+                        }
+                        error: { error in
+                            callback(.failure(error as NSError))
+                        }
+                        .sink()
+                        .store(in: &cancellables)
+
+                } catch {
+                    callback(.failure(error as NSError))
+                }
             }
         }
     )
