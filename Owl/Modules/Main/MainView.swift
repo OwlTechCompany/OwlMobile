@@ -31,6 +31,11 @@ struct MainView: View {
                     action: Main.ScreenProvider.Action.newPrivateChat,
                     then: { NewPrivateChatView(store: $0) }
                 )
+                CaseLet(
+                    state: /Main.ScreenProvider.State.profile,
+                    action: Main.ScreenProvider.Action.profile,
+                    then: { ProfileView(store: $0) }
+                )
             }
         }
     }
