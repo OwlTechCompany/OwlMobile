@@ -25,7 +25,7 @@ struct ProfileView: View {
                     ZStack {
                         UserImageView(
                             animationState: $animationState,
-                            image: Asset.Images.gradientOwl.image
+                            user: viewStore.user
                         )
                         .onTapGesture { animationState.photoState.toggle() }
 
@@ -92,9 +92,9 @@ struct ProfileView: View {
             .onChange(of: animationState.photoState) { newValue in
                 switch newValue {
                 case .big:
-                    generateFeedback()
+                    generateFeedback(style: .heavy)
                 case .small:
-                    break
+                    generateFeedback(style: .soft)
                 }
             }
             .onChange(of: delegate.scrollViewDidScroll) { value in
@@ -179,8 +179,8 @@ struct ProfileView: View {
         .padding(.horizontal)
     }
 
-    func generateFeedback() {
-        let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+    func generateFeedback(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let impactHeavy = UIImpactFeedbackGenerator(style: style)
         impactHeavy.impactOccurred()
     }
 }

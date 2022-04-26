@@ -22,6 +22,15 @@ struct User {
         case url(URL)
         case placeholder
 
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            if let url = try? container.decode(URL.self) {
+                self = .url(url)
+            } else {
+                self = .placeholder
+            }
+        }
+
         func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
             switch self {
@@ -29,6 +38,63 @@ struct User {
                 return try container.encode(url)
             case .placeholder:
                 return try container.encodeNil()
+            }
+        }
+    }
+}
+
+import SwiftUI
+
+extension CachedAsyncImage where Content == Image {
+
+    init(
+        user: User?,
+        urlCache: URLCache = .imageCache,
+        transaction: Transaction = Transaction()
+    ) {
+        switch user?.photo {
+        case let .url(url):
+            self.init(
+                url: url,
+                urlCache: urlCache,
+                scale: 1,
+                transaction: transaction
+            ) { phase in
+                var result: Image = Image("")
+                switch phase {
+                case .empty:
+                    result = Image(uiImage: Asset.Images.gradientOwl.image)
+                case .success(let image):
+                    result = image
+                case .failure:
+                    result = Image(uiImage: Asset.Images.gradientOwl.image)
+                @unknown default:
+                    result = Image(uiImage: Asset.Images.gradientOwl.image)
+                }
+                return result
+                    .resizable()
+            }
+
+        case .placeholder:
+            self.init(
+                urlRequest: nil,
+                urlCache: urlCache,
+                scale: 1,
+                transaction: transaction
+            ) { _ in
+                Image(uiImage: Asset.Images.gradientOwl.image)
+                    .resizable()
+            }
+            
+        case .none:
+            self.init(
+                urlRequest: nil,
+                urlCache: urlCache,
+                scale: 1,
+                transaction: transaction
+            ) { _ in
+                Image(uiImage: Asset.Images.gradientOwl.image)
+                    .resizable()
             }
         }
     }

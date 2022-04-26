@@ -19,9 +19,7 @@ struct Main {
         static let initialState = State(
             routes: [
                 .root(
-                    .chatList(
-                        ChatList.State.initialState
-                    ),
+                    .chatList(ChatList.State.initialState),
                     embedInNavigationView: true
                 )
             ]

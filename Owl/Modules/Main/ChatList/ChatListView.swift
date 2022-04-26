@@ -30,12 +30,15 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image(uiImage: Asset.Images.gradientOwl.image)
-                        .resizable()
-                        .scaledToFill()
-                        .cornerRadius(20)
-                        .frame(width: 40, height: 40)
-                        .onTapGesture { viewStore.send(.openProfile) }
+                    CachedAsyncImage(
+                        user: viewStore.user,
+                        urlCache: .imageCache,
+                        transaction: Transaction(animation: .easeInOut)
+                    )
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(20)
+                    .onTapGesture { viewStore.send(.openProfile) }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
@@ -74,7 +77,8 @@ struct ChatListView_Previews: PreviewProvider {
             reducer: ChatList.reducer,
             environment: ChatList.Environment(
                 authClient: .live,
-                chatsClient: .live(userClient: .live)
+                chatsClient: .live(userClient: .live),
+                userClient: .live
             )
         ))
     }

@@ -77,7 +77,8 @@ extension Main.ScreenProvider {
                 environment: {
                     ChatList.Environment(
                         authClient: $0.authClient,
-                        chatsClient: $0.chatsClient
+                        chatsClient: $0.chatsClient,
+                        userClient: $0.userClient
                     )
                 }
             ),

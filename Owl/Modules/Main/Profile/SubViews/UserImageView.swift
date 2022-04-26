@@ -11,17 +11,20 @@ struct UserImageView: View {
 
     @Binding var animationState: ProfileAnimationState
 
-    var image: UIImage
+    var user: User
 
     var body: some View {
-        Image(uiImage: image)
-            .resizable()
-            .scaledToFill()
-            .cornerRadius(animationState.photoState.cornerRadius)
-            .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
-            .offset(x: 0, y: animationState.imageViewYOffset)
-            .padding(.top, animationState.imageViewTopPadding)
-            .padding(.bottom, animationState.imageViewBottomPadding)
+        CachedAsyncImage(
+            user: user,
+            urlCache: .imageCache,
+            transaction: Transaction(animation: .easeInOut)
+        )
+        .scaledToFill()
+        .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
+        .cornerRadius(animationState.photoState.cornerRadius)
+        .offset(x: 0, y: animationState.imageViewYOffset)
+        .padding(.top, animationState.imageViewTopPadding)
+        .padding(.bottom, animationState.imageViewBottomPadding)
     }
 }
 
