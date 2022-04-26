@@ -35,7 +35,7 @@ struct ProfileAnimationState {
         case .big:
             return screen.width
         case .small:
-            return photoState.height + safeAreaInsets.top + textHeaderSize
+            return smallPhotoMaxY + textHeaderSize
         }
     }
 }

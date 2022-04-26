@@ -140,9 +140,7 @@ struct ProfileView: View {
                 self.store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
+            .onAppear { viewStore.send(.onAppear) }
         }
 
         .background(
