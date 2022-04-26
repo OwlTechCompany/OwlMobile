@@ -17,6 +17,7 @@ struct StorageClient {
         private static let db = Storage.storage()
         static let users = db.reference().child("users")
     }
+    
     static var cancellables = Set<AnyCancellable>()
 
     var setMyPhoto: (Data) -> Effect<URL, NSError>
@@ -26,7 +27,6 @@ struct StorageClient {
 
 extension StorageClient {
 
-    // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
         Self(
             setMyPhoto: { data in

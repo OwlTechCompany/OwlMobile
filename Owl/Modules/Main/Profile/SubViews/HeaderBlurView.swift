@@ -20,17 +20,21 @@ struct HeaderBlurView: View {
                     .opacity(animationState.blurOpacity)
 
                 HStack(alignment: .center, spacing: 0) {
-                    Image(systemName: "chevron.backward")
-                        .resizable()
-                        .frame(width: 19 / 1.5, height: 34 / 1.5)
-                        .foregroundColor(animationState.backColor)
-                        .onTapGesture { backAction() }
-
+                    ZStack(alignment: .center) {
+                        Image(systemName: "chevron.backward")
+                            .resizable()
+                            .frame(width: 19 / 1.5, height: 34 / 1.5)
+                            .foregroundColor(animationState.backColor)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .onTapGesture { backAction() }
+                    
                     Spacer()
                 }
                 .frame(height: 44)
                 .padding(.top, animationState.safeAreaInsets.top)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 8)
             }
             .frame(height: animationState.blurHeight)
 

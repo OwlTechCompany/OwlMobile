@@ -24,10 +24,10 @@ struct UserClient {
 
 extension UserClient {
 
-    static var live: Self {
+    static func live(userDefaults: UserDefaultsClient) -> Self {
         liveCancellable?.cancel()
         let firebaseUser = CurrentValueSubject<Firebase.User?, Never>(nil)
-        let firestoreUser = CurrentValueSubject<User?, Never>(nil)
+        let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
         var userCancellable: Cancellable?
         return Self(
             firebaseUser: firebaseUser,
@@ -49,10 +49,12 @@ extension UserClient {
                                 .snapshotPublisher()
                                 .map { try? $0.data(as: User.self) }
                                 .on(value: {
+                                    userDefaults.setUser($0)
                                     firestoreUser.send($0)
                                 })
                                 .sink()
                         } else {
+                            userDefaults.setUser(nil)
                             firestoreUser.send(nil)
                         }
                     }

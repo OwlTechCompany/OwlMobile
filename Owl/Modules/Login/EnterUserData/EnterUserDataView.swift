@@ -129,6 +129,9 @@ struct EnterUserDataView: View {
 // MARK: - Preview
 
 struct EnterUserDataView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live)
+
     static var previews: some View {
         EnterUserDataView(store: Store(
             initialState: EnterUserData.State(),
@@ -136,7 +139,7 @@ struct EnterUserDataView_Previews: PreviewProvider {
             environment: EnterUserData.Environment(
                 authClient: .live,
                 firestoreUsersClient: .live,
-                storageClient: .live(userClient: .live)
+                storageClient: .live(userClient: userClient)
             )
         ))
     }

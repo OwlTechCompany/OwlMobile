@@ -15,12 +15,11 @@ struct ChatListCellView: View {
     var body: some View {
         WithViewStore(self.store) { viewStore in
             HStack(alignment: .top, spacing: 16) {
-                Image(uiImage: viewStore.chatImage)
-                    .resizable()
+                PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName)
                     .frame(width: 56, height: 56)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .scaledToFill()
+//                    .background(Color.white)
+//                    .scaledToFill()
+
                     .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -112,7 +111,7 @@ extension ChatListCell.State {
 
     init(model: ChatsListPrivateItem) {
         id = model.id
-        chatImage = Asset.Images.owlWithPadding.image
+        photo = model.companion.photo
         chatName = model.name
         lastMessage = model.lastMessage?.messageText ?? ""
         lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
@@ -128,7 +127,7 @@ struct ChatListCellView_Previews: PreviewProvider {
         ChatListCellView(store: Store(
             initialState: ChatListCell.State(
                 id: "",
-                chatImage: Asset.Images.owlBlack.image,
+                photo: .placeholder,
                 chatName: "Name Name Name",
                 lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
                 lastMessageSendTime: Date(),

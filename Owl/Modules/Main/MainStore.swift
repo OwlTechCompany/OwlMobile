@@ -14,16 +14,20 @@ struct Main {
 
     struct State: Equatable, IdentifiedRouterState {
 
+        var user: User
         var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
 
-        static let initialState = State(
-            routes: [
-                .root(
-                    .chatList(ChatList.State.initialState),
-                    embedInNavigationView: true
-                )
-            ]
-        )
+        static func initialState(user: User) -> State {
+            State(
+                user: user,
+                routes: [
+                    .root(
+                        .chatList(ChatList.State(user: user, chats: [])),
+                        embedInNavigationView: true
+                    )
+                ]
+            )
+        }
     }
 
     // MARK: - Action

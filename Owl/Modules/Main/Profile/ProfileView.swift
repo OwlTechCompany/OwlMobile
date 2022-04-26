@@ -27,7 +27,12 @@ struct ProfileView: View {
                             animationState: $animationState,
                             user: viewStore.user
                         )
-                        .onTapGesture { animationState.photoState.toggle() }
+                        .onTapGesture {
+                            guard !animationState.isPlaceholder else {
+                                return
+                            }
+                            animationState.photoState.toggle()
+                        }
 
                         HeaderBlurView(
                             animationState: $animationState,
@@ -97,12 +102,19 @@ struct ProfileView: View {
                     generateFeedback(style: .soft)
                 }
             }
+            .onChange(of: viewStore.user) { newValue in
+                animationState.isPlaceholder = newValue.photo == .placeholder
+            }
             .onChange(of: delegate.scrollViewDidScroll) { value in
                 guard let scrollView = value?.scrollView else {
                     return
                 }
                 let offset = scrollView.contentOffset.y
                 animationState.offset = offset
+
+                guard !animationState.isPlaceholder else {
+                    return
+                }
                 if offset <= -32 {
                     animationState.photoState = .big
                 } else if offset >= 1 {
@@ -140,9 +152,11 @@ struct ProfileView: View {
                 self.store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
-            .onAppear { viewStore.send(.onAppear) }
+            .onAppear {
+                viewStore.send(.onAppear)
+                animationState.isPlaceholder = viewStore.user.photo == .placeholder
+            }
         }
-
         .background(
             Color(.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
@@ -187,12 +201,23 @@ struct ProfileView: View {
 
 // MARK: - Preview
 
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView(store: Store(
-//            initialState: Profile.State(user: user),
-//            reducer: Profile.reducer,
-//            environment: Profile.Environment()
-//        ))
-//    }
-//}
+struct ProfileView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live)
+
+    static var previews: some View {
+        ProfileView(store: Store(
+            initialState: Profile.State(
+                user: User(
+                    uid: "",
+                    phoneNumber: "",
+                    firstName: "",
+                    lastName: "",
+                    photo: .placeholder
+                )
+            ),
+            reducer: Profile.reducer,
+            environment: Profile.Environment(userClient: userClient)
+        ))
+    }
+}

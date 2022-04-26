@@ -14,13 +14,8 @@ struct ChatList {
     // MARK: - State
 
     struct State: Equatable {
-        var user: User?
+        var user: User
         var chats: IdentifiedArrayOf<ChatListCell.State>
-
-        static let initialState = State(
-            user: nil,
-            chats: []
-        )
     }
 
     // MARK: - Action

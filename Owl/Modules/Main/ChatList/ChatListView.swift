@@ -30,15 +30,12 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    CachedAsyncImage(
-                        user: viewStore.user,
-                        urlCache: .imageCache,
-                        transaction: Transaction(animation: .easeInOut)
-                    )
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(20)
-                    .onTapGesture { viewStore.send(.openProfile) }
+                    PhotoWebImage(user: viewStore.user)
+//                        .transition(.fade(duration: 0.5))
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(20)
+                        .modifier(ShadowModifier())
+                        .onTapGesture { viewStore.send(.openProfile) }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
@@ -59,14 +56,24 @@ struct ChatListView: View {
 // MARK: - Preview
 
 struct ChatListView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live)
+
     static var previews: some View {
         ChatListView(store: Store(
             initialState: ChatList.State(
+                user: User(
+                    uid: "",
+                    phoneNumber: "",
+                    firstName: "",
+                    lastName: "",
+                    photo: .placeholder
+                ),
                 chats: .init(
                     arrayLiteral:
                         ChatListCell.State(
                             id: "123",
-                            chatImage: Asset.Images.owlBlack.image,
+                            photo: .placeholder,
                             chatName: "Test chat",
                             lastMessage: "Hello world",
                             lastMessageSendTime: Date(),
@@ -77,8 +84,8 @@ struct ChatListView_Previews: PreviewProvider {
             reducer: ChatList.reducer,
             environment: ChatList.Environment(
                 authClient: .live,
-                chatsClient: .live(userClient: .live),
-                userClient: .live
+                chatsClient: .live(userClient: userClient),
+                userClient: userClient
             )
         ))
     }

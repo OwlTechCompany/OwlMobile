@@ -14,7 +14,7 @@ struct ChatListCell {
 
     struct State: Equatable, Identifiable {
         let id: String
-        let chatImage: UIImage
+        let photo: Photo
         let chatName: String
         let lastMessage: String
         let lastMessageSendTime: Date
