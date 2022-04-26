@@ -68,6 +68,8 @@
 		5FB6DA9C2817227B0037C38B /* HeaderBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA9B2817227B0037C38B /* HeaderBlurView.swift */; };
 		5FB6DA9E281722B20037C38B /* HeaderDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA9D281722B20037C38B /* HeaderDescriptionView.swift */; };
 		5FB6DAA0281723000037C38B /* ProfilePhotoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA9F281723000037C38B /* ProfilePhotoState.swift */; };
+		5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DAA128182FB70037C38B /* ImagePicker.swift */; };
+		5FB6DAA528183AB30037C38B /* StorageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DAA428183AB30037C38B /* StorageClient.swift */; };
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
 		5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */; };
@@ -157,6 +159,8 @@
 		5FB6DA9B2817227B0037C38B /* HeaderBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBlurView.swift; sourceTree = "<group>"; };
 		5FB6DA9D281722B20037C38B /* HeaderDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderDescriptionView.swift; sourceTree = "<group>"; };
 		5FB6DA9F281723000037C38B /* ProfilePhotoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoState.swift; sourceTree = "<group>"; };
+		5FB6DAA128182FB70037C38B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		5FB6DAA428183AB30037C38B /* StorageClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClient.swift; sourceTree = "<group>"; };
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
 				5FE318062809E4B5007F7816 /* ValidationClient.swift */,
 				5FE31828280A218F007F7816 /* Firestore */,
+				5FB6DAA328183AA60037C38B /* Storage */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 				5D35EC8D28076EDE00624717 /* Loader.swift */,
 				5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */,
 				5FB6DA94281721690037C38B /* ScrollViewDelegate.swift */,
+				5FB6DAA128182FB70037C38B /* ImagePicker.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -527,6 +533,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		5FB6DAA328183AA60037C38B /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5FB6DAA428183AB30037C38B /* StorageClient.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		5FD33DC4280DBA7E009E9FBB /* SharedViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -755,9 +769,11 @@
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
 				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
+				5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
 				5FB6DA9E281722B20037C38B /* HeaderDescriptionView.swift in Sources */,
+				5FB6DAA528183AB30037C38B /* StorageClient.swift in Sources */,
 				5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */,
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,

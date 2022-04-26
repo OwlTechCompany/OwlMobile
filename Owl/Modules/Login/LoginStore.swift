@@ -46,6 +46,7 @@ struct Login {
         let userDefaultsClient: UserDefaultsClient
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
+        let storageClient: StorageClient
     }
 
     // MARK: - Reducer

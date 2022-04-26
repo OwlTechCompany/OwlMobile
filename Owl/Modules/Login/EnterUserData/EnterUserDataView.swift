@@ -37,12 +37,13 @@ struct EnterUserDataView: View {
                         }
 
                         ZStack(alignment: .bottomTrailing) {
-                            Image(uiImage: Asset.Images.owlWithPadding.image)
+                            Image(uiImage: viewStore.selectedImage ?? Asset.Images.owlWithPadding.image)
                                 .resizable()
-                                .scaledToFit()
+                                .scaledToFill()
                                 .frame(width: 100, height: 100)
                                 .background(Color.white)
                                 .clipShape(Circle())
+                                .onTapGesture { viewStore.send(.showImagePicker) }
 
                             Image(systemName: "pencil.circle.fill")
                                 .offset(x: 5, y: 5)
@@ -108,6 +109,12 @@ struct EnterUserDataView: View {
                         self.store.scope(state: \.alert),
                         dismiss: .dismissAlert
                     )
+                    .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
+                        ImagePicker(
+                            sourceType: .photoLibrary,
+                            selectedImage: viewStore.binding(\.$selectedImage)
+                        )
+                    }
                 }
             }
         }
@@ -128,7 +135,8 @@ struct EnterUserDataView_Previews: PreviewProvider {
             reducer: EnterUserData.reducer,
             environment: EnterUserData.Environment(
                 authClient: .live,
-                firestoreUsersClient: .live
+                firestoreUsersClient: .live,
+                storageClient: .live(userClient: .live)
             )
         ))
     }

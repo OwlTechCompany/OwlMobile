@@ -49,6 +49,7 @@ struct Main {
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
         let firestoreUsersClient: FirestoreUsersClient
+        let storageClient: StorageClient
     }
 
     // MARK: - Reducer
@@ -61,7 +62,7 @@ struct Main {
 
         case .routeAction(_, action: .chatList(.openProfile)):
             guard let firestoreUser = environment.userClient.firestoreUser.value else {
-                return .none
+                return Effect(value: .delegate(.logout))
             }
             let profileState = Profile.State(user: firestoreUser)
             state.routes.push(.profile(profileState))

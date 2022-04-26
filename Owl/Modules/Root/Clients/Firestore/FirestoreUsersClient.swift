@@ -35,7 +35,8 @@ extension FirestoreUsersClient {
                     uid: authUser.uid,
                     phoneNumber: authUser.phoneNumber,
                     firstName: nil,
-                    lastName: nil
+                    lastName: nil,
+                    photo: .placeholder
                 )
                 let documentRef = collection.document(authUser.uid)
                 documentRef.getDocument()
