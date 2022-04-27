@@ -71,6 +71,7 @@ struct ChatListCellView: View {
             }
             .frame(height: 60)
             .padding(.vertical, 8)
+            .background(Color.white)
             .onTapGesture {
                 viewStore.send(.open)
             }

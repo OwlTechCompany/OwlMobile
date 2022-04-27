@@ -13,8 +13,9 @@ import Combine
 
 struct ChatView: View {
 
-//    @State var isNeedScrollToBottom: Bool = true
+    @State var isFirstUpdate: Bool = true
     @State var scrollView = UIScrollView()
+    @State var keyboardHeight: CGFloat = 0
 
     @FocusState private var focusedField: Field?
 
@@ -35,9 +36,9 @@ struct ChatView: View {
         WithViewStore(store) { viewStore in
             VStack {
                 ScrollView {
-
                     ScrollViewReader { proxy in
                         LazyVStack {
+
                             ForEachStore(
                                 self.store.scope(
                                     state: \.messages,
@@ -50,28 +51,20 @@ struct ChatView: View {
                                 }
                             )
                         }
-                        .padding(.bottom, 12)
                         .onChange(of: viewStore.messages) { newValue in
-//                            if isNeedScrollToBottom {
+                            if isFirstUpdate {
                                 proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-//                                isNeedScrollToBottom = false
-//                            }
+                                isFirstUpdate.toggle()
+                            } else {
+                                withAnimation {
+                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                }
+                            }
                         }
                         .onChange(of: focusedField) { value in
-//                            guard
-//                                let lastMessage = viewStore.messages.last,
-//                                value != nil
-//                            else {
-//                                return
-//                            }
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(350)) {
-//                                withAnimation {
-//                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
-//                                }
-//                            }
+
                         }
                     }
-
                 }
                 .introspectScrollView { scrollView in
                     self.scrollView = scrollView
@@ -84,6 +77,7 @@ struct ChatView: View {
                             .font(.system(size: 16, weight: .regular))
                             .focused($focusedField, equals: .enterMessage)
                             .disableAutocorrection(true)
+//                            .ignoresSafeArea(.keyboard, edges: .bottom)
 
                         Text(viewStore.state.newMessage)
                             .font(.system(size: 16, weight: .regular))
@@ -101,11 +95,15 @@ struct ChatView: View {
                         .clipShape(Circle())
                         .onTapGesture {
                             viewStore.send(.sendMessage)
-//                            isNeedScrollToBottom = true
                         }
                 }
+//                .ignoresSafeArea(.keyboard, edges: .bottom)
                 .padding(.horizontal, 8)
-                .padding(.vertical, 4)
+                .padding(.top, 4)
+                .padding(.bottom, keyboardHeight + 4)
+                .background(Colors.Blue._6.swiftUIColor)
+//                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .animation(Animation.easeInOut(duration: 0.2), value: keyboardHeight)
 
             }
             .frame(width: screen.width)
@@ -121,18 +119,17 @@ struct ChatView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
             .onAppear { viewStore.send(.onAppear) }
-
             .onReceive(Publishers.keyboardHeightPublisher) { value in
                 let contentOffset = scrollView.contentOffset
                 scrollView.setContentOffset(
-                    .init(
-                        x: 0,
-                        y: contentOffset.y + value
-                    ),
+                    .init(x: 0, y: contentOffset.y + value),
                     animated: true
                 )
+                keyboardHeight = value
             }
+
         }
     }
 }
@@ -150,17 +147,6 @@ struct ChatView_Previews: PreviewProvider {
 }
 
 extension Publishers {
-
-//    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
-//         let willShow = NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)
-//            .map { $0.keyboardHeight }
-//
-//        let willHide = NotificationCenter.default.publisher(for: UIApplication.keyboardWillHideNotification)
-//            .map { _ in CGFloat(0) }
-//
-//         return Merge(willShow, willHide)
-//            .eraseToAnyPublisher()
-//    }
 
     static var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
         Publishers.Merge(
