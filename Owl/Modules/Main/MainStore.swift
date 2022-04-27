@@ -14,19 +14,16 @@ struct Main {
 
     struct State: Equatable, IdentifiedRouterState {
 
-        var user: User
+        // This User used to be pushed to chatList as soon as possible
         var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
 
         static func initialState(user: User) -> State {
-            State(
-                user: user,
-                routes: [
-                    .root(
-                        .chatList(ChatList.State(user: user, chats: [])),
-                        embedInNavigationView: true
-                    )
-                ]
-            )
+            State(routes: [
+                .root(
+                    .chatList(ChatList.State(user: user, chats: [])),
+                    embedInNavigationView: true
+                )
+            ])
         }
     }
 
@@ -58,11 +55,11 @@ struct Main {
 
     static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .routeAction(_, action: .chatList(.newPrivateChat)):
+        case .routeAction(_, .chatList(.newPrivateChat)):
             state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
 
-        case .routeAction(_, action: .chatList(.openProfile)):
+        case .routeAction(_, .chatList(.openProfile)):
             guard let firestoreUser = environment.userClient.firestoreUser.value else {
                 return Effect(value: .delegate(.logout))
             }

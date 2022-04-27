@@ -64,7 +64,7 @@ struct App {
                 authClient: .live,
                 userDefaultsClient: userDefaultsClient,
                 validationClient: .live,
-                firestoreUsersClient: .live,
+                firestoreUsersClient: .live(userClient: userClient),
                 chatsClient: .live(userClient: userClient),
                 storageClient: .live(userClient: userClient)
             )
@@ -103,7 +103,7 @@ struct App {
     static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            if environment.userClient.firebaseUser.value != nil,
+            if environment.userClient.authUser.value != nil,
                let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
             } else {

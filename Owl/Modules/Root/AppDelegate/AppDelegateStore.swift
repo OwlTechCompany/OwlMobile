@@ -8,6 +8,15 @@
 import ComposableArchitecture
 import SwiftUI
 
+struct DidReceiveRemoteNotificationModel: Equatable {
+    var userInfo: [AnyHashable: Any]
+    var completionHandler: (UIBackgroundFetchResult) -> Void
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.userInfo.keys == lhs.userInfo.keys
+    }
+}
+
 extension AppDelegate {
 
     // MARK: - State
@@ -19,26 +28,7 @@ extension AppDelegate {
     enum Action: Equatable {
         case didFinishLaunching
         case didRegisterForRemoteNotifications(Result<Data, NSError>)
-        case didReceiveRemoteNotification(
-            _ userInfo: [AnyHashable: Any],
-            _ completionHandler: (UIBackgroundFetchResult) -> Void
-        )
-
-        static func == (lhs: Action, rhs: Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.didFinishLaunching, .didFinishLaunching):
-                return true
-
-            case let (.didRegisterForRemoteNotifications(lhs), .didRegisterForRemoteNotifications(rhs)):
-                return lhs == rhs
-
-            case let (.didReceiveRemoteNotification(lhs, _), .didReceiveRemoteNotification(rhs, _)):
-                return lhs.keys == rhs.keys
-
-            default:
-                return false
-            }
-        }
+        case didReceiveRemoteNotification(DidReceiveRemoteNotificationModel)
     }
 
     // MARK: - Environment
@@ -68,12 +58,10 @@ extension AppDelegate {
         case let .didRegisterForRemoteNotifications(.failure(error)):
             return .none
 
-        case let .didReceiveRemoteNotification(userInfo, completionHandler):
-            return .merge(
-                environment.authClient
-                    .canHandleNotification(userInfo, completionHandler)
-                    .fireAndForget()
-            )
+        case let .didReceiveRemoteNotification(model):
+            return environment.authClient
+                .canHandleNotification(model)
+                .fireAndForget()
         }
     }
 

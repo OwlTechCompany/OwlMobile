@@ -27,31 +27,36 @@ struct StorageClient {
 
 extension StorageClient {
 
-    static func live(userClient: UserClient) -> Self {
-        Self(
-            setMyPhoto: { data in
-                Effect.future { callback in
-                    guard let firebaseUser = userClient.firebaseUser.value else {
-                        return callback(.failure(.init(domain: "No user", code: 1)))
-                    }
-                    let storageReference = Collection.users.child("\(firebaseUser.uid)")
-
-                    storageReference
-                        .putData(data)
-                        .catch { error -> AnyPublisher<StorageMetadata, Never> in
-                            callback(.failure(error as NSError))
-                            return Empty(completeImmediately: true)
-                                .eraseToAnyPublisher()
-                        }
-                        .flatMap { _ in storageReference.downloadURL() }
-                        .on(
-                            value: { callback(.success($0)) },
-                            error: { callback(.failure($0 as NSError)) }
-                        )
-                        .sink()
-                        .store(in: &cancellables)
-                }
-            }
+    static func live(userClient: UserClient) -> StorageClient {
+        StorageClient(
+            setMyPhoto: { setMyPhotoLive(userClient: userClient, data: $0) }
         )
+    }
+
+    static private func setMyPhotoLive(
+        userClient: UserClient,
+        data: Data
+    ) -> Effect<URL, NSError> {
+        Effect.future { callback in
+            guard let authUser = userClient.authUser.value else {
+                return callback(.failure(.init(domain: "No user", code: 1)))
+            }
+            let storageReference = Collection.users.child("\(authUser.uid)")
+
+            storageReference
+                .putData(data)
+                .catch { error -> AnyPublisher<StorageMetadata, Never> in
+                    callback(.failure(error as NSError))
+                    return Empty(completeImmediately: true)
+                        .eraseToAnyPublisher()
+                }
+                .flatMap { _ in storageReference.downloadURL() }
+                .on(
+                    value: { callback(.success($0)) },
+                    error: { callback(.failure($0 as NSError)) }
+                )
+                .sink()
+                .store(in: &cancellables)
+        }
     }
 }

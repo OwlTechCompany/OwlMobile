@@ -120,13 +120,15 @@ struct EditProfileView: View {
 }
 
 // MARK: - Preview
-//
-//struct EditProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditProfileView(store: Store(
-//            initialState: EditProfile.State(),
-//            reducer: EditProfile.reducer,
-//            environment: EditProfile.Environment()
-//        ))
-//    }
-//}
+
+/*
+struct EditProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        EditProfileView(store: Store(
+            initialState: EditProfile.State(),
+            reducer: EditProfile.reducer,
+            environment: EditProfile.Environment()
+        ))
+    }
+}
+*/

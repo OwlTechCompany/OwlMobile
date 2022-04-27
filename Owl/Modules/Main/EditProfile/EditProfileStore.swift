@@ -56,7 +56,6 @@ struct EditProfile {
         let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
-        
     }
 
     // MARK: - Reducer
@@ -95,17 +94,13 @@ struct EditProfile {
             return Effect(value: .updateUser(url))
 
         case let .updateUser(photoURL):
-            guard let authUser = environment.authClient.currentUser() else {
-                return .none
-            }
             state.isLoading = true
             let userUpdate = UserUpdate(
-                uid: authUser.uid,
                 firstName: state.firstName,
                 lastName: state.lastName,
                 photo: photoURL
             )
-            return environment.firestoreUsersClient.updateUser(userUpdate)
+            return environment.firestoreUsersClient.updateMe(userUpdate)
                 .catchToEffect(Action.updateUserResult)
 
         case .updateUserResult(.success):

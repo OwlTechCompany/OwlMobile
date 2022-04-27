@@ -49,11 +49,8 @@ struct ChatList {
             return .none
 
         case .onAppear:
-            guard let authUser = environment.authClient.currentUser() else {
-                return .none
-            }
             return .merge(
-                environment.chatsClient.getChats(authUser)
+                environment.chatsClient.getChats()
                     .catchToEffect(Action.getChatsResult),
 
                 Effect.run { subscriber in

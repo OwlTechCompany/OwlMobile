@@ -113,7 +113,7 @@ struct NewPrivateChatView_Previews: PreviewProvider {
                 environment: NewPrivateChat.Environment(
                     userClient: userClient,
                     chatsClient: .live(userClient: userClient),
-                    firestoreUsersClient: .live
+                    firestoreUsersClient: .live(userClient: userClient)
                 )
             ))
         }
