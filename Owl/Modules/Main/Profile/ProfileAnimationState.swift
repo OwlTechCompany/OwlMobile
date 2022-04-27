@@ -24,7 +24,7 @@ struct ProfileAnimationState {
     // MARK: - Variables
 
     var offset: CGFloat = .zero
-    var photoState: ProfilePhotoState = .small
+    var photoState: ProfilePhotoState = .big
 
     var isPlaceholder: Bool = true
 

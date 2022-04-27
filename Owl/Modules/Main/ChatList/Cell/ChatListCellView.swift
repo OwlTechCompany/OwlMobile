@@ -15,8 +15,9 @@ struct ChatListCellView: View {
     var body: some View {
         WithViewStore(self.store) { viewStore in
             HStack(alignment: .top, spacing: 16) {
-                PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName)
+                PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName, isThumbnail: true)
                     .frame(width: 56, height: 56)
+                    .clipShape(Circle())
                     .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {

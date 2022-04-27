@@ -15,8 +15,7 @@ struct UserImageView: View {
     var user: User
 
     var body: some View {
-        PhotoWebImage(user: user)
-            .transition(.fade(duration: 0.5))
+        PhotoWebImage(user: user, useResize: false)
             .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
             .cornerRadius(animationState.photoState.cornerRadius)
             .overlay(

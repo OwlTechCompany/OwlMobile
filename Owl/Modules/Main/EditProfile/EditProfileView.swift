@@ -38,8 +38,10 @@ struct EditProfileView: View {
                                 } else {
                                     PhotoWebImage(
                                         photo: viewStore.photo,
-                                        placeholderName: viewStore.firstName
+                                        placeholderName: viewStore.firstName,
+                                        isThumbnail: false
                                     )
+                                    .clipShape(Circle())
                                 }
                             }
                             .frame(width: 100, height: 100)

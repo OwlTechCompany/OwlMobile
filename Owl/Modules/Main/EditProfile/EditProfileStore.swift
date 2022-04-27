@@ -65,6 +65,13 @@ struct EditProfile {
         switch action {
         case .showImagePicker:
             state.showImagePicker = true
+            state.isLoading = true
+            return .none
+
+        case .binding(\.$showImagePicker):
+            if !state.showImagePicker {
+                state.isLoading = false
+            }
             return .none
 
         case .binding(\.$firstName):
@@ -80,7 +87,7 @@ struct EditProfile {
 
         case let .uploadPhoto(image):
             state.isLoading = true
-            guard let data = image.jpegData(compressionQuality: 0.7) else {
+            guard let data = image.jpegData(compressionQuality: 0.4) else {
                 let error = NSError(domain: "Unable to compress", code: 1)
                 return Effect(value: .updateUserResult(.failure(error)))
             }

@@ -30,10 +30,9 @@ struct ChatListView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    PhotoWebImage(user: viewStore.user)
-//                        .transition(.fade(duration: 0.5))
+                    PhotoWebImage(user: viewStore.user, useResize: true)
                         .frame(width: 40, height: 40)
-                        .cornerRadius(20)
+                        .clipShape(Circle())
                         .modifier(ShadowModifier())
                         .onTapGesture { viewStore.send(.openProfile) }
                 }

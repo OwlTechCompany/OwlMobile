@@ -10,18 +10,38 @@ import SDWebImageSwiftUI
 
 struct PhotoWebImage: View {
 
+    static let thumbnailSize = CGSize(width: 100 * scale, height: 100 * scale)
+    static let thumbnailContext: [SDWebImageContextOption: Any] = [
+        .imageThumbnailPixelSize: PhotoWebImage.thumbnailSize
+    ]
+
     var photo: Photo?
     var placeholderName: String?
+    var isThumbnail: Bool
 
     var body: some View {
         Group {
             switch photo {
             case let .url(url):
-                WebImage(url: url)
-                    .resizable()
-                    .placeholder { placeholder }
-                    .scaledToFill()
-                    .clipShape(Circle())
+                WebImage(
+                    url: url,
+                    context: isThumbnail ? PhotoWebImage.thumbnailContext : nil
+                )
+                .resizable()
+                .placeholder(content: {
+                    switch isThumbnail {
+                    case true:
+                        placeholder
+
+                    case false:
+                        PhotoWebImage(
+                            photo: photo,
+                            placeholderName: placeholderName,
+                            isThumbnail: true
+                        )
+                    }
+                })
+                .scaledToFill()
 
             case .placeholder:
                 placeholder
@@ -30,7 +50,6 @@ struct PhotoWebImage: View {
                 Image(uiImage: Asset.Images.gradientOwl.image)
             }
         }
-        .transition(.fade(duration: 0.5))
     }
 
     var placeholder: some View {
@@ -67,8 +86,9 @@ struct PhotoWebImage: View {
 
 extension PhotoWebImage {
 
-    init(user: User) {
+    init(user: User, useResize: Bool) {
         self.photo = user.photo
         self.placeholderName = user.firstName
+        self.isThumbnail = useResize
     }
 }
