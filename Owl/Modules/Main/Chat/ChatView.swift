@@ -18,6 +18,8 @@ struct ChatView: View {
     @State var keyboardHeight: CGFloat = 0
 
     @FocusState private var focusedField: Field?
+    @Environment(\.safeAreaInsets) var safeAreaInsets
+
 
     private enum Field: Int, CaseIterable {
         case enterMessage
@@ -35,53 +37,49 @@ struct ChatView: View {
 
         WithViewStore(store) { viewStore in
             VStack {
-                ScrollView {
-                    ScrollViewReader { proxy in
-                        LazyVStack {
-
-                            ForEachStore(
-                                self.store.scope(
-                                    state: \.messages,
-                                    action: Chat.Action.messages(id:action:)
-                                ),
-                                content: {
-                                    ChatMessageView(store: $0)
-                                        .listRowSeparator(.hidden)
-                                        .listRowInsets(.init())
-                                }
-                            )
-                        }
-                        .onChange(of: viewStore.messages) { newValue in
-                            if isFirstUpdate {
-                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-                                isFirstUpdate.toggle()
-                            } else {
-                                withAnimation {
-                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-                                }
-                            }
-                        }
-                        .onChange(of: focusedField) { value in
-
-                        }
-                    }
-                }
-                .introspectScrollView { scrollView in
-                    self.scrollView = scrollView
-                }
-                .onTapGesture { focusedField = nil }
+                Rectangle().fill(.blue.opacity(0.2))
+                    .onTapGesture { focusedField = nil }
+//                ScrollView {
+//                    ScrollViewReader { proxy in
+//                        LazyVStack {
+//
+////                            ForEachStore(
+////                                self.store.scope(
+////                                    state: \.messages,
+////                                    action: Chat.Action.messages(id:action:)
+////                                ),
+////                                content: {
+////                                    ChatMessageView(store: $0)
+////                                        .listRowSeparator(.hidden)
+////                                        .listRowInsets(.init())
+////                                }
+////                            )
+//                        }
+//                        .onChange(of: viewStore.messages) { newValue in
+//                            if isFirstUpdate {
+//                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+//                                isFirstUpdate.toggle()
+//                            } else {
+//                                withAnimation {
+//                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+//                                }
+//                            }
+//                        }
+//                        .onChange(of: focusedField) { _ in }
+//                    }
+//                }
+//                .introspectScrollView { scrollView in
+//                    self.scrollView = scrollView
+//                }
+//                .onTapGesture { focusedField = nil }
 
                 HStack(spacing: 16) {
                     ZStack {
-                        TextEditor(text: viewStore.binding(\.$newMessage))
+                        TextField("Message...", text: viewStore.binding(\.$newMessage))
                             .font(.system(size: 16, weight: .regular))
                             .focused($focusedField, equals: .enterMessage)
                             .disableAutocorrection(true)
-//                            .ignoresSafeArea(.keyboard, edges: .bottom)
-
-                        Text(viewStore.state.newMessage)
-                            .font(.system(size: 16, weight: .regular))
-                            .opacity(0)
+                            .keyboardType(UIKit.UIKeyboardType.alphabet)
                     }
                     .frame(height: 40)
                     .padding(.horizontal, 4)
@@ -97,13 +95,17 @@ struct ChatView: View {
                             viewStore.send(.sendMessage)
                         }
                 }
-//                .ignoresSafeArea(.keyboard, edges: .bottom)
                 .padding(.horizontal, 8)
                 .padding(.top, 4)
-                .padding(.bottom, keyboardHeight + 4)
+                .padding(.bottom, safeAreaInsets.bottom)
+                .ignoresSafeArea(.all, edges: .bottom)
                 .background(Colors.Blue._6.swiftUIColor)
-//                .ignoresSafeArea(.keyboard, edges: .bottom)
-                .animation(Animation.easeInOut(duration: 0.2), value: keyboardHeight)
+//                .animation(Animation.easeInOut(duration: 0.16), value: keyboardHeight)
+//                .offset(y: keyboardHeight > 0 ? -keyboardHeight + 27 : 0)
+                .offset(y: keyboardHeight > 0 ? -keyboardHeight + safeAreaInsets.bottom - 4 : 0)
+
+//                .animation(.spring(response: 0.5, dampingFraction: 1, blendDuration: 0.25), value: keyboardHeight)
+//                .animation(.spring(), value: keyboardHeight)
 
             }
             .frame(width: screen.width)
@@ -119,15 +121,25 @@ struct ChatView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+//            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .ignoresSafeArea(.all, edges: .bottom)
             .onAppear { viewStore.send(.onAppear) }
             .onReceive(Publishers.keyboardHeightPublisher) { value in
-                let contentOffset = scrollView.contentOffset
-                scrollView.setContentOffset(
-                    .init(x: 0, y: contentOffset.y + value),
-                    animated: true
-                )
-                keyboardHeight = value
+                print("Publishers.keyboardHeightPublisher")
+//                let contentOffset = scrollView.contentOffset
+//                scrollView.setContentOffset(
+//                    .init(x: 0, y: contentOffset.y + value.height),
+//                    animated: true
+//                )
+//                Animation.mas)
+                let animation = Animation.interpolatingSpring(mass: 1, stiffness: 1000, damping: 500, initialVelocity: 1)
+//                animation.speed(0.5 / value.duration)
+//                Animation.interpolatingSpring(
+//                    .spring(response: value.duration, dampingFraction: 1)
+                withAnimation(animation.speed(0.5 / value.duration)) {
+                    keyboardHeight = value.height
+                }
+
             }
 
         }
@@ -148,18 +160,37 @@ struct ChatView_Previews: PreviewProvider {
 
 extension Publishers {
 
-    static var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
+    struct Keyboard {
+        var height: CGFloat
+        var duration: CGFloat
+    }
+
+    static var keyboardHeightPublisher: AnyPublisher<Keyboard, Never> {
         Publishers.Merge(
             NotificationCenter.default
                 .publisher(for: UIResponder.keyboardWillShowNotification)
-                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
-                .map { $0.cgRectValue.height },
+                .compactMap { value -> (NSValue, NSNumber)? in
+                    guard
+                        let frame = value.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+                        let duration = value.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber
+                    else {
+                        return nil
+                    }
+                    print(frame.cgRectValue)
+                    print(screen.height - frame.cgRectValue.minY)
+                    print(frame.cgRectValue.height)
+                    return (frame, duration)
+                }
+                .map { Keyboard(height: $0.cgRectValue.height, duration: $1.doubleValue) },
+
             NotificationCenter.default
                 .publisher(for: UIResponder.keyboardWillHideNotification)
-                .map { _ in CGFloat(0) }
-       ).eraseToAnyPublisher()
+                .compactMap {
+                    $0.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber
+                }
+                .map { Keyboard(height: 0, duration: $0.doubleValue) }
+        )
+        .eraseToAnyPublisher()
     }
 
 }
-
-// TRY reset the file
