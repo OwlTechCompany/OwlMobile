@@ -17,7 +17,7 @@ struct EditProfile {
         @BindableState var firstName: String = ""
         @BindableState var lastName: String = ""
 
-        var saveButtonEnabled: Bool = false
+        var saveButtonEnabled: Bool = true
         var isLoading: Bool = false
         var photo: Photo
 
@@ -72,10 +72,6 @@ struct EditProfile {
             if !state.showImagePicker {
                 state.isLoading = false
             }
-            return .none
-
-        case .binding(\.$firstName):
-            state.saveButtonEnabled = !state.firstName.isEmpty
             return .none
 
         case .save:

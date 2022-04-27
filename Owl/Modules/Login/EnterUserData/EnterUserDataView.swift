@@ -99,23 +99,23 @@ struct EnterUserDataView: View {
                     }
                     .padding(20)
                     .frame(minHeight: proxy.size.height)
-                    .disabled(viewStore.isLoading)
-                    .overlay(
-                        viewStore.isLoading
-                            ? Loader()
-                            : nil
-                    )
-                    .alert(
-                        self.store.scope(state: \.alert),
-                        dismiss: .dismissAlert
-                    )
-                    .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
-                        ImagePicker(
-                            sourceType: .photoLibrary,
-                            selectedImage: viewStore.binding(\.$selectedImage)
-                        )
-                    }
                 }
+            }
+            .disabled(viewStore.isLoading)
+            .overlay(
+                viewStore.isLoading
+                    ? Loader()
+                    : nil
+            )
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
+            .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
+                ImagePicker(
+                    sourceType: .photoLibrary,
+                    selectedImage: viewStore.binding(\.$selectedImage)
+                )
             }
         }
         .background(
