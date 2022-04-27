@@ -84,6 +84,18 @@ struct Main {
             state.routes.pop()
             return .none
 
+        case .routeAction(_, .profile(.edit)):
+            guard let firestoreUser = environment.userClient.firestoreUser.value else {
+                return Effect(value: .delegate(.logout))
+            }
+            let editProfileState = EditProfile.State(user: firestoreUser)
+            state.routes.push(.editProfile(editProfileState))
+            return .none
+
+        case .routeAction(_, .editProfile(.updateUserResult(.success))):
+            state.routes.pop()
+            return .none
+
         case .routeAction(_, .profile(.logout)):
             return Effect(value: .delegate(.logout))
 

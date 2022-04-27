@@ -74,6 +74,8 @@
 		5FB6DAAC281890E50037C38B /* PhotoWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DAAB281890E50037C38B /* PhotoWebImage.swift */; };
 		5FB6DAAF2818A8300037C38B /* UINavigationController+BackGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DAAE2818A8300037C38B /* UINavigationController+BackGesture.swift */; };
 		5FB6DAB22818AAD90037C38B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DAB12818AAD90037C38B /* Photo.swift */; };
+		5FBCF9D928193F0600734BA0 /* EditProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9D828193F0600734BA0 /* EditProfileStore.swift */; };
+		5FBCF9DB28193F0C00734BA0 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9DA28193F0C00734BA0 /* EditProfileView.swift */; };
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
 		5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */; };
@@ -168,6 +170,8 @@
 		5FB6DAAB281890E50037C38B /* PhotoWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoWebImage.swift; sourceTree = "<group>"; };
 		5FB6DAAE2818A8300037C38B /* UINavigationController+BackGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+BackGesture.swift"; sourceTree = "<group>"; };
 		5FB6DAB12818AAD90037C38B /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		5FBCF9D828193F0600734BA0 /* EditProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileStore.swift; sourceTree = "<group>"; };
+		5FBCF9DA28193F0C00734BA0 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -521,6 +525,7 @@
 				5D4CF9E92809ED4D00A1B705 /* ChatList */,
 				5F71A661280C60070024F44A /* NewPrivateChat */,
 				5FD33DC7280DBE6D009E9FBB /* Profile */,
+				5FBCF9D728193EF300734BA0 /* EditProfile */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -566,6 +571,15 @@
 				5FB6DAB12818AAD90037C38B /* Photo.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		5FBCF9D728193EF300734BA0 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				5FBCF9D828193F0600734BA0 /* EditProfileStore.swift */,
+				5FBCF9DA28193F0C00734BA0 /* EditProfileView.swift */,
+			);
+			path = EditProfile;
 			sourceTree = "<group>";
 		};
 		5FD33DC4280DBA7E009E9FBB /* SharedViews */ = {
@@ -791,6 +805,7 @@
 				5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */,
 				5FE318072809E4B5007F7816 /* ValidationClient.swift in Sources */,
 				5F71A66B280C61330024F44A /* NewPrivateChatCellStore.swift in Sources */,
+				5FBCF9DB28193F0C00734BA0 /* EditProfileView.swift in Sources */,
 				5F9DFC91280B1C4C00E73206 /* DocumentReference+Ext.swift in Sources */,
 				5FE31827280A2151007F7816 /* User.swift in Sources */,
 				5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */,
@@ -849,6 +864,7 @@
 				5F727FBD2807647300FABF26 /* MainStore.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5FE3182A280A2197007F7816 /* FirestoreUsersClient.swift in Sources */,
+				5FBCF9D928193F0600734BA0 /* EditProfileStore.swift in Sources */,
 				5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
 				5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */,

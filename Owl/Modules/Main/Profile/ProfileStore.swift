@@ -22,6 +22,7 @@ struct Profile {
     enum Action: Equatable {
         case onAppear
         case close
+        case edit
 
         case updateUser(User)
 
@@ -56,6 +57,9 @@ struct Profile {
             return .none
 
         case .close:
+            return .none
+
+        case .edit:
             return .none
 
         case .logoutTapped:

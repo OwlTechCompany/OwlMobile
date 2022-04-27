@@ -36,6 +36,11 @@ struct MainView: View {
                     action: Main.ScreenProvider.Action.profile,
                     then: { ProfileView(store: $0) }
                 )
+                CaseLet(
+                    state: /Main.ScreenProvider.State.editProfile,
+                    action: Main.ScreenProvider.Action.editProfile,
+                    then: { EditProfileView(store: $0) }
+                )
             }
         }
     }

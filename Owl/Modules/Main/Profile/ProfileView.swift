@@ -36,7 +36,8 @@ struct ProfileView: View {
 
                         HeaderBlurView(
                             animationState: $animationState,
-                            backAction: { viewStore.send(.close) }
+                            backAction: { viewStore.send(.close) },
+                            editAction: { viewStore.send(.edit) }
                         )
 
                         HeaderDescriptionView(

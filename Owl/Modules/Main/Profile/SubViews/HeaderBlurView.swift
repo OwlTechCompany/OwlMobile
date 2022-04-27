@@ -12,6 +12,7 @@ struct HeaderBlurView: View {
     @Binding var animationState: ProfileAnimationState
 
     var backAction: () -> Void
+    var editAction: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,13 +25,23 @@ struct HeaderBlurView: View {
                         Image(systemName: "chevron.backward")
                             .resizable()
                             .frame(width: 19 / 1.5, height: 34 / 1.5)
-                            .foregroundColor(animationState.backColor)
+                            .foregroundColor(animationState.buttonsColor)
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
                     .onTapGesture { backAction() }
                     
                     Spacer()
+
+                    ZStack(alignment: .center) {
+                        Image(systemName: "pencil")
+                            .resizable()
+                            .frame(width: 31 / 1.5, height: 32 / 1.5)
+                            .foregroundColor(animationState.buttonsColor)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .onTapGesture { editAction() }
                 }
                 .frame(height: 44)
                 .padding(.top, animationState.safeAreaInsets.top)
@@ -59,7 +70,7 @@ private extension ProfileAnimationState {
         }
     }
 
-    var backColor: Color {
+    var buttonsColor: Color {
         return photoState.isScaled ? .white.opacity(0.9) : .black
     }
 
