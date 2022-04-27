@@ -21,6 +21,7 @@ struct PhotoWebImage: View {
                     .resizable()
                     .placeholder { placeholder }
                     .scaledToFill()
+                    .clipShape(Circle())
 
             case .placeholder:
                 placeholder

@@ -17,9 +17,6 @@ struct ChatListCellView: View {
             HStack(alignment: .top, spacing: 16) {
                 PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName)
                     .frame(width: 56, height: 56)
-//                    .background(Color.white)
-//                    .scaledToFill()
-
                     .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {
