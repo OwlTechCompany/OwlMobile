@@ -54,10 +54,12 @@ struct App {
         let firestoreUsersClient: FirestoreUsersClient
         let chatsClient: FirestoreChatsClient
         let storageClient: StorageClient
+        let pushNotificationClient: PushNotificationClient
 
         static var live: Self {
             let userDefaultsClient = UserDefaultsClient.live()
             let userClient = UserClient.live(userDefaults: userDefaultsClient)
+            let firestoreUserClient = FirestoreUsersClient.live(userClient: userClient)
             return Self(
                 firebaseClient: .live,
                 userClient: userClient,
@@ -66,7 +68,8 @@ struct App {
                 validationClient: .live(),
                 firestoreUsersClient: .live(userClient: userClient),
                 chatsClient: .live(userClient: userClient),
-                storageClient: .live(userClient: userClient)
+                storageClient: .live(userClient: userClient),
+                pushNotificationClient: .live(firestoreUserClient: firestoreUserClient)
             )
         }
     }
@@ -142,7 +145,8 @@ extension App.Environment {
         AppDelegate.Environment(
             firebaseClient: firebaseClient,
             userClient: userClient,
-            authClient: authClient
+            authClient: authClient,
+            pushNotificationClient: pushNotificationClient
         )
     }
 
@@ -152,7 +156,8 @@ extension App.Environment {
             userDefaultsClient: userDefaultsClient,
             validationClient: validationClient,
             firestoreUsersClient: firestoreUsersClient,
-            storageClient: storageClient
+            storageClient: storageClient,
+            pushNotificationClient: pushNotificationClient
         )
     }
 

@@ -28,6 +28,7 @@ extension AppDelegate {
         let firebaseClient: FirebaseClient
         let userClient: UserClient
         let authClient: AuthClient
+        let pushNotificationClient: PushNotificationClient
     }
 
     // MARK: - Reducer
@@ -37,11 +38,22 @@ extension AppDelegate {
         case .didFinishLaunching:
             environment.firebaseClient.setup()
             environment.userClient.setup()
-            return .none
+
+//            return .none
+            return environment.pushNotificationClient.registerForRemoteNotifications()
+                .receive(on: DispatchQueue.main)
+                .map { value in
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+                .fireAndForget()
+            
 
         case let .didRegisterForRemoteNotifications(.success(data)):
             return .merge(
                 environment.authClient
+                    .setAPNSToken(data)
+                    .fireAndForget(),
+                environment.pushNotificationClient
                     .setAPNSToken(data)
                     .fireAndForget()
             )

@@ -8,9 +8,10 @@
 import Foundation
 
 struct UserUpdate {
-    let firstName: String?
-    let lastName: String?
-    let photo: URL?
+    var firstName: String?
+    var lastName: String?
+    var photo: URL?
+    var fcmToken: String?
 }
 
 // MARK: - Encodable

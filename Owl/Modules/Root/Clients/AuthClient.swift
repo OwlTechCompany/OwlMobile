@@ -58,6 +58,8 @@ extension AuthClient {
         Effect.fireAndForget {
             if firebaseAuth.canHandleNotification(model.userInfo) {
                 model.completionHandler(.noData)
+            } else {
+                model.completionHandler(.newData)
             }
         }
     }

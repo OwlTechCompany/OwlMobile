@@ -7,6 +7,7 @@
 
 import UIKit
 import ComposableArchitecture
+import FirebaseMessaging
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -27,6 +28,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        Messaging.messaging().delegate = self
         viewStore.send(.didFinishLaunching)
         return true
     }
@@ -35,6 +37,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        Messaging.messaging().apnsToken = deviceToken
         viewStore.send(.didRegisterForRemoteNotifications(.success(deviceToken)))
     }
 
@@ -57,5 +60,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             completionHandler: completionHandler
         )
         viewStore.send(.didReceiveRemoteNotification(model))
+        completionHandler(.newData)
     }
+}
+
+extension AppDelegate: MessagingDelegate {
+
 }

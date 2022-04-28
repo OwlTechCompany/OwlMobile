@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import FirebaseAuth
+import UIKit
 
 struct EnterCode {
 
@@ -73,6 +74,7 @@ struct EnterCode {
 
         case .setMeResult(.success):
             state.isLoading = false
+            UIApplication.shared.registerForRemoteNotifications()
             return .none
 
         case let .verificationIDResult(.success(verificationId)):

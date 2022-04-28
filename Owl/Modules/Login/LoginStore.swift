@@ -47,6 +47,7 @@ struct Login {
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
+        let pushNotificationClient: PushNotificationClient
     }
 
     // MARK: - Reducer

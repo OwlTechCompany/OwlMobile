@@ -71,7 +71,11 @@ extension Login.ScreenProvider {
             .pullback(
                 state: /State.onboarding,
                 action: /Action.onboarding,
-                environment: { _ in Onboarding.Environment() }
+                environment: {
+                    Onboarding.Environment(
+                        pushNotificationClient: $0.pushNotificationClient
+                    )
+                }
             ),
         EnterPhone.reducer
             .pullback(
