@@ -13,7 +13,6 @@ import Firebase
 struct FirestoreUsersClient {
 
     static let collection = Firestore.firestore().collection("users")
-    static var cancellables = Set<AnyCancellable>()
 
     var setMeIfNeeded: () -> Effect<SignInUserType, NSError>
     var updateMe: (UserUpdate) -> Effect<Bool, NSError>
