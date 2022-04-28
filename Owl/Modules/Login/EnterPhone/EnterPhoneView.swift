@@ -93,8 +93,8 @@ struct EnterPhoneNumber_Previews: PreviewProvider {
             reducer: EnterPhone.reducer,
             environment: EnterPhone.Environment(
                 authClient: .live,
-                userDefaultsClient: .live,
-                phoneValidation: ValidationClient.live.phoneValidation
+                userDefaultsClient: .live(),
+                phoneValidation: ValidationClient.live().phoneValidation
             )
         ))
     }

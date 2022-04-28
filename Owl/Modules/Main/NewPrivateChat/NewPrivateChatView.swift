@@ -103,7 +103,7 @@ struct NewPrivateChatView: View {
 
 struct NewPrivateChatView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live)
+    static let userClient = UserClient.live(userDefaults: .live())
 
     static var previews: some View {
         NavigationView {

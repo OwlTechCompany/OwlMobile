@@ -14,7 +14,6 @@ struct Main {
 
     struct State: Equatable, IdentifiedRouterState {
 
-        // This User used to be pushed to chatList as soon as possible
         var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
 
         static func initialState(user: User) -> State {

@@ -20,7 +20,7 @@ extension FirebaseClient {
         setup: setupLive
     )
 
-    static func setupLive() -> Void {
+    static func setupLive() {
         FirebaseApp.configure()
     }
 

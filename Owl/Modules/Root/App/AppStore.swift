@@ -56,14 +56,14 @@ struct App {
         let storageClient: StorageClient
 
         static var live: Self {
-            let userDefaultsClient = UserDefaultsClient.live
+            let userDefaultsClient = UserDefaultsClient.live()
             let userClient = UserClient.live(userDefaults: userDefaultsClient)
             return Self(
                 firebaseClient: .live,
                 userClient: userClient,
                 authClient: .live,
                 userDefaultsClient: userDefaultsClient,
-                validationClient: .live,
+                validationClient: .live(),
                 firestoreUsersClient: .live(userClient: userClient),
                 chatsClient: .live(userClient: userClient),
                 storageClient: .live(userClient: userClient)
