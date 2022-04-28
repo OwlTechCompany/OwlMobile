@@ -20,7 +20,7 @@ struct Main {
         static func initialState(user: User) -> State {
             State(routes: [
                 .root(
-                    .chatList(ChatList.State(user: user, chats: [])),
+                    .chatList(ChatList.State(user: user, chats: [], chatsData: [])),
                     embedInNavigationView: true
                 )
             ])

@@ -124,6 +124,7 @@ struct ChatMessageView_Previews: PreviewProvider {
                 )
             )
 
+            // swiftlint:disable line_length
             ChatMessageView(
                 store: .init(
                     initialState: .init(

@@ -106,19 +106,6 @@ private extension ChatListCell.State {
 
 }
 
-extension ChatListCell.State {
-
-    init(model: ChatsListPrivateItem) {
-        id = model.id
-        photo = model.companion.photo
-        chatName = model.name
-        lastMessage = model.lastMessage?.messageText ?? ""
-        lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
-        unreadMessagesNumber = 0
-    }
-
-}
-
 // MARK: - Preview
 
 struct ChatListCellView_Previews: PreviewProvider {

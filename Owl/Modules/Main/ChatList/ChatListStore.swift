@@ -17,11 +17,6 @@ struct ChatList {
         var user: User
         var chats: IdentifiedArrayOf<ChatListCell.State>
         var chatsData: [ChatsListPrivateItem]
-
-        static let initialState = State(
-            chats: .init(),
-            chatsData: []
-        )
     }
 
     // MARK: - Action

@@ -21,13 +21,15 @@ struct MockedDataClient {
             uid: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3",
             phoneNumber: "+380931314850",
             firstName: "Anastasia",
-            lastName: "No"
+            lastName: "No",
+            photo: .placeholder
         ),
         user2: User(
             uid: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1",
             phoneNumber: "+380991111111",
             firstName: "Denys",
-            lastName: "No"
+            lastName: "No",
+            photo: .placeholder
         ),
         lastMessage: Message(
             id: "1",

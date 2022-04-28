@@ -45,10 +45,9 @@ extension ChatListCell.State {
 
     init(model: ChatsListPrivateItem) {
         id = model.id
-        chatImage = Asset.Images.owlWithPadding.image
+        photo = model.companion.photo
         chatName = model.name
         lastMessage = model.lastMessage?.messageText ?? ""
-        // TODO: Make optional
         lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
         unreadMessagesNumber = 0
     }
