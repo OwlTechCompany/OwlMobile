@@ -71,7 +71,6 @@ struct Chat {
             let newMessage = NewMessage(
                 chatId: state.model.id,
                 message: Message(
-                    id: "",
                     messageText: state.newMessage,
                     sentAt: Date(),
                     sentBy: state.model.me.uid
@@ -116,7 +115,7 @@ extension Chat.State {
                 ]
             )
         } else {
-            self.messages = .init()
+            self.messages = []
         }
     }
 

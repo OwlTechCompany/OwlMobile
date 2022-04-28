@@ -44,9 +44,7 @@ struct ChatNavigationView: View {
                     .background(Color.white)
                     .clipShape(Circle())
                     .scaledToFill()
-                    .onTapGesture {
-                        viewStore.send(.chatDetails)
-                    }
+                    .onTapGesture { viewStore.send(.chatDetails) }
             }
         }
     }

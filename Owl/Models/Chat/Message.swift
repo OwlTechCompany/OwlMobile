@@ -9,7 +9,7 @@ import Foundation
 
 struct Message: Codable, Equatable, Identifiable {
 
-    var id: String
+    var id: String?
     let messageText: String
     let sentAt: Date
     let sentBy: String

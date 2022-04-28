@@ -49,12 +49,15 @@ struct ChatView: View {
                             )
                         }
                         .onChange(of: viewStore.messages) { newValue in
+                            guard let lastMessage = newValue.last else {
+                                return
+                            }
                             if isFirstUpdate {
-                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
                                 isFirstUpdate.toggle()
                             } else {
                                 withAnimation {
-                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
                                 }
                             }
                         }
@@ -138,7 +141,7 @@ private extension ChatView {
         keyboard.height > 0
     }
 
-    var textFieldBackgroundHeigh: CGFloat {
+    var textFieldBackgroundHeight: CGFloat {
         keyboardIsUp
         ? Constants.textFieldBackgroundHeigh + keyboard.height + Constants.editionTextFieldBottomPadding
         : Constants.textFieldBackgroundHeigh + safeAreaInsets.bottom
@@ -146,6 +149,10 @@ private extension ChatView {
 
     var scrollViewContentOffsetY: CGFloat {
         keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
+    }
+
+    var needsScrollToNewMessage: Bool {
+        return true
     }
 
 }
