@@ -16,6 +16,7 @@ struct ChatView: View {
     @State var isFirstUpdate: Bool = true
     @State var scrollView = UIScrollView()
     @State var keyboard = Keyboard.initialValue
+//    @State var scrollPreviousOffset = CGPoint(x: 0, y: 0)
 
     @FocusState private var focusedField: Field?
     @Environment(\.safeAreaInsets) var safeAreaInsets
@@ -63,12 +64,14 @@ struct ChatView: View {
                                 }
                             }
                         }
+                        .animation(.none, value: keyboard)
                         .onChange(of: focusedField) { _ in }
                     }
                 }
                 .introspectScrollView { scrollView in
                     self.scrollView = scrollView
                 }
+                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
                 .onTapGesture { focusedField = nil }
 
                 ZStack(alignment: .top) {
@@ -124,7 +127,12 @@ struct ChatView: View {
                 keyboard = value
                 let contentOffset = scrollView.contentOffset
                 scrollView.setContentOffset(
-                    .init(x: 0, y: contentOffset.y + value.height),
+                    .init(
+                        x: 0,
+                        y: value.height > 0
+                            ? contentOffset.y + value.height - safeAreaInsets.bottom + 8
+                            : contentOffset.y
+                    ),
                     animated: true
                 )
             }
@@ -168,9 +176,9 @@ extension Publishers {
                     else {
                         return nil
                     }
-                    print(frame.cgRectValue)
-                    print(screen.height - frame.cgRectValue.minY)
-                    print(frame.cgRectValue.height)
+//                    print(frame.cgRectValue)
+//                    print(screen.height - frame.cgRectValue.minY)
+//                    print(frame.cgRectValue.height)
                     return (frame, duration)
                 }
                 .map { Keyboard(height: $0.cgRectValue.height, duration: $1.doubleValue) },
