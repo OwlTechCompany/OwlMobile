@@ -32,7 +32,8 @@ struct Onboarding {
     static let reducer = Reducer<State, Action, Environment> { _, action, environment in
         switch action {
         case .startTapped:
-            return environment.pushNotificationClient.registerForRemoteNotifications()
+            return environment.pushNotificationClient
+                .registerForRemoteNotifications([.alert, .sound, .badge])
                 .receive(on: DispatchQueue.main)
                 .catchToEffect(Action.registerForRemoteNotificationsResult)
 

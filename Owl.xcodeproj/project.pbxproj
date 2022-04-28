@@ -83,8 +83,9 @@
 		5FBCF9E6281AD89200734BA0 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5FBCF9E5281AD89200734BA0 /* FirebaseFirestoreCombine-Community */; };
 		5FBCF9E8281AD89200734BA0 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5FBCF9E7281AD89200734BA0 /* FirebaseMessaging */; };
 		5FBCF9EA281AD89200734BA0 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5FBCF9E9281AD89200734BA0 /* FirebaseStorageCombine-Community */; };
-		5FBCF9ED281AEDE100734BA0 /* PushNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9EC281AEDE100734BA0 /* PushNotificationDelegate.swift */; };
+		5FBCF9ED281AEDE100734BA0 /* UserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9EC281AEDE100734BA0 /* UserNotificationCenterDelegate.swift */; };
 		5FBCF9EF281AF14000734BA0 /* FirebaseMessagingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9EE281AF14000734BA0 /* FirebaseMessagingDelegate.swift */; };
+		5FBCF9F1281AF58F00734BA0 /* PushNotificationClient+Live.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9F0281AF58F00734BA0 /* PushNotificationClient+Live.swift */; };
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
 		5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */; };
@@ -174,8 +175,9 @@
 		5FBCF9DA28193F0C00734BA0 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		5FBCF9DC2819D76E00734BA0 /* UserQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuery.swift; sourceTree = "<group>"; };
 		5FBCF9DE281A94B800734BA0 /* DidReceiveRemoteNotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidReceiveRemoteNotificationModel.swift; sourceTree = "<group>"; };
-		5FBCF9EC281AEDE100734BA0 /* PushNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationDelegate.swift; sourceTree = "<group>"; };
+		5FBCF9EC281AEDE100734BA0 /* UserNotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		5FBCF9EE281AF14000734BA0 /* FirebaseMessagingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessagingDelegate.swift; sourceTree = "<group>"; };
+		5FBCF9F0281AF58F00734BA0 /* PushNotificationClient+Live.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PushNotificationClient+Live.swift"; sourceTree = "<group>"; };
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -588,7 +590,8 @@
 			isa = PBXGroup;
 			children = (
 				5D35EC8028001E1100624717 /* PushNotificationClient.swift */,
-				5FBCF9EC281AEDE100734BA0 /* PushNotificationDelegate.swift */,
+				5FBCF9F0281AF58F00734BA0 /* PushNotificationClient+Live.swift */,
+				5FBCF9EC281AEDE100734BA0 /* UserNotificationCenterDelegate.swift */,
 				5FBCF9EE281AF14000734BA0 /* FirebaseMessagingDelegate.swift */,
 			);
 			path = PushNotification;
@@ -847,6 +850,7 @@
 				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
 				5FB6DAB22818AAD90037C38B /* Photo.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
+				5FBCF9F1281AF58F00734BA0 /* PushNotificationClient+Live.swift in Sources */,
 				5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5FBCF9EF281AF14000734BA0 /* FirebaseMessagingDelegate.swift in Sources */,
@@ -858,7 +862,7 @@
 				5F71A663280C60210024F44A /* NewPrivateChatStore.swift in Sources */,
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,
 				5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */,
-				5FBCF9ED281AEDE100734BA0 /* PushNotificationDelegate.swift in Sources */,
+				5FBCF9ED281AEDE100734BA0 /* UserNotificationCenterDelegate.swift in Sources */,
 				5FB6DAAC281890E50037C38B /* PhotoWebImage.swift in Sources */,
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
 				5DCD57A2280C424D00186FE2 /* ChatsListGroupItem.swift in Sources */,

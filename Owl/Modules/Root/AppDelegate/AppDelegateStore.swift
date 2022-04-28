@@ -21,7 +21,7 @@ extension AppDelegate {
         case didFinishLaunching
         case didRegisterForRemoteNotifications(Result<Data, NSError>)
         case didReceiveRemoteNotification(DidReceiveRemoteNotificationModel)
-        case pushNotificationDelegate(PushNotificationDelegate.Event)
+        case userNotificationCenterDelegate(UserNotificationCenterDelegate.Event)
         case firebaseMessagingDelegate(FirebaseMessagingDelegate.Event)
     }
 
@@ -43,31 +43,47 @@ extension AppDelegate {
             environment.firebaseClient.setup()
             environment.userClient.setup()
 
-            return
-                .merge(
-                    environment
-                        .pushNotificationClient
-                        .pushNotificationDelegate
-                        .map(Action.pushNotificationDelegate),
+            let userNotificationCenterDelegateEffect = environment
+                .pushNotificationClient
+                .userNotificationCenterDelegate
+                .map(Action.userNotificationCenterDelegate)
 
-                    environment
-                        .pushNotificationClient
-                        .firebaseMessagingDelegate
-                        .map(Action.firebaseMessagingDelegate)
-                )
-//            return environment.pushNotificationClient.registerForRemoteNotifications()
-//                .receive(on: DispatchQueue.main)
-//                .map { value in
-//                    UIApplication.shared.registerForRemoteNotifications()
-//                }
-//                .fireAndForget()
+            let firebaseMessagingDelegateEffect = environment
+                .pushNotificationClient
+                .firebaseMessagingDelegate
+                .map(Action.firebaseMessagingDelegate)
 
-        case let .pushNotificationDelegate(.willPresentNotification(notification, completionHandler)):
+            let setupPushNotificationEffect: Effect<AppDelegate.Action, Never> = environment
+                .pushNotificationClient
+                .getNotificationSettings
+                .receive(on: DispatchQueue.main)
+                .flatMap { settings in
+                    settings.authorizationStatus == .authorized
+                    ? environment.pushNotificationClient.registerForRemoteNotifications([.alert, .sound])
+                    : .none
+                }
+                .receive(on: DispatchQueue.main)
+                .flatMap { isSucceed in
+                    isSucceed
+                    ? environment.pushNotificationClient.register()
+                    : .none
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToEffect()
+                .fireAndForget()
+
+            return .merge(
+                userNotificationCenterDelegateEffect,
+                firebaseMessagingDelegateEffect,
+                setupPushNotificationEffect
+            )
+
+        case let .userNotificationCenterDelegate(.willPresentNotification(notification, completionHandler)):
             return .fireAndForget {
                 completionHandler([.banner, .sound])
             }
 
-        case .pushNotificationDelegate:
+        case .userNotificationCenterDelegate:
             return .none
 
         case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):

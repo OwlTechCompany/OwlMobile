@@ -12,67 +12,69 @@ import ComposableArchitecture
 
 struct PushNotificationClient {
 
-    var registerForRemoteNotifications: () -> Effect<Bool, NSError>
-    var pushNotificationDelegate: Effect<PushNotificationDelegate.Event, Never>
-    var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>
-    
+    var getNotificationSettings: Effect<Settings, Never>
+    var registerForRemoteNotifications: (UNAuthorizationOptions) -> Effect<Bool, NSError>
     var setAPNSToken: (Data) -> Void
-}
+    var register: () -> Effect<Never, Never>
 
-// MARK: - Live
+    var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
+    var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>
+}
 
 extension PushNotificationClient {
 
-    static func live() -> PushNotificationClient {
-        PushNotificationClient(
-            registerForRemoteNotifications: registerForRemoteNotificationsLive,
-            pushNotificationDelegate: pushNotificationDelegateLive,
-            firebaseMessagingDelegate: firebaseMessagingDelegateLive,
-            setAPNSToken: setAPNSToken
-        )
-    }
+    struct Notification: Equatable {
+        var date: Date
+        var request: UNNotificationRequest
 
-    static private var pushNotificationDelegateLive: Effect<PushNotificationDelegate.Event, Never> {
-        Effect
-            .run { subscriber in
-                var delegate: Optional = PushNotificationDelegate(subscriber: subscriber)
-                UNUserNotificationCenter.current().delegate = delegate
-                return AnyCancellable {
-                    delegate = nil
-                }
+        init(
+            date: Date,
+            request: UNNotificationRequest
+        ) {
+            self.date = date
+            self.request = request
+        }
+
+        struct Response: Equatable {
+            var notification: Notification
+
+            init(notification: Notification) {
+                self.notification = notification
             }
-            .share()
-            .eraseToEffect()
-    }
-
-    static private var firebaseMessagingDelegateLive: Effect<FirebaseMessagingDelegate.Event, Never> {
-        Effect
-            .run { subscriber in
-                var delegate: Optional = FirebaseMessagingDelegate(subscriber: subscriber)
-                Messaging.messaging().delegate = delegate
-                return AnyCancellable {
-                    delegate = nil
-                }
-            }
-            .share()
-            .eraseToEffect()
-    }
-
-    static private func registerForRemoteNotificationsLive() -> Effect<Bool, NSError> {
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        return Effect.future { callback in
-            UNUserNotificationCenter.current()
-                .requestAuthorization(options: authOptions) { granted, error in
-                    if let error = error {
-                        callback(.failure(error as NSError))
-                    } else {
-                        callback(.success(granted))
-                    }
-                }
         }
     }
 
-    static private func setAPNSToken(data: Data) {
-        Messaging.messaging().apnsToken = data
+    struct Settings: Equatable {
+        var authorizationStatus: UNAuthorizationStatus
+
+        init(authorizationStatus: UNAuthorizationStatus) {
+            self.authorizationStatus = authorizationStatus
+        }
     }
+
+}
+
+extension PushNotificationClient.Notification {
+
+    init(rawValue: UNNotification) {
+        self.date = rawValue.date
+        self.request = rawValue.request
+    }
+
+}
+
+extension PushNotificationClient.Notification.Response {
+
+    init(rawValue: UNNotificationResponse) {
+        self.notification = .init(rawValue: rawValue.notification)
+    }
+
+}
+
+extension PushNotificationClient.Settings {
+
+    init(rawValue: UNNotificationSettings) {
+        self.authorizationStatus = rawValue.authorizationStatus
+    }
+
 }
