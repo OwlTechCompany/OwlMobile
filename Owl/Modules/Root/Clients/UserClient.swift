@@ -14,8 +14,6 @@ import FirebaseAuthCombineSwift
 
 struct UserClient {
 
-    static var liveCancellable: Cancellable?
-
     var authUser: CurrentValueSubject<Firebase.User?, Never>
     var firestoreUser: CurrentValueSubject<User?, Never>
 
@@ -25,7 +23,7 @@ struct UserClient {
 extension UserClient {
 
     static func live(userDefaults: UserDefaultsClient) -> Self {
-        liveCancellable?.cancel()
+        var liveCancellables: Set<AnyCancellable> = []
         let authUser = CurrentValueSubject<Firebase.User?, Never>(nil)
         let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
         var userCancellable: Cancellable?
@@ -37,7 +35,7 @@ extension UserClient {
                 authUser.send(Auth.auth().currentUser)
 
                 // Subscribe for updates
-                liveCancellable = Auth.auth().authStateDidChangePublisher()
+                Auth.auth().authStateDidChangePublisher()
                     .sink { user in
                         authUser.send(user)
 
@@ -58,6 +56,7 @@ extension UserClient {
                             firestoreUser.send(nil)
                         }
                     }
+                    .store(in: &liveCancellables)
             }
         )
     }

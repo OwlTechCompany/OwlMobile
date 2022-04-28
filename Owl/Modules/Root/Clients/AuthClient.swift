@@ -24,6 +24,8 @@ struct AuthClient {
     var signOut: () -> Void
 }
 
+// MARK: - Live
+
 extension AuthClient {
 
     static let live = AuthClient(

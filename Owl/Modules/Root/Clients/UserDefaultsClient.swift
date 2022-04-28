@@ -9,10 +9,6 @@ import Foundation
 
 struct UserDefaultsClient {
 
-    static let defaults = UserDefaults.standard
-    static let encoder = JSONEncoder()
-    static let decoder = JSONDecoder()
-
     var setVerificationID: (String) -> Void
     var getVerificationID: () -> (String)
 
@@ -20,38 +16,70 @@ struct UserDefaultsClient {
     var getUser: () -> User?
 }
 
+// MARK: - Live
+
 extension UserDefaultsClient {
 
-    static let live = UserDefaultsClient(
-        setVerificationID: { verificationID in
-            defaults.set(verificationID, forKey: Key.authVerificationID.rawValue)
-        },
-        getVerificationID: {
-            defaults.string(forKey: Key.authVerificationID.rawValue) ?? ""
-        },
-        setUser: { user in
-            if let user = user {
-                guard let encoded = try? encoder.encode(user) else {
-                    return
-                }
-                defaults.set(encoded, forKey: Key.user.rawValue)
+    static func live() -> UserDefaultsClient {
+        let defaults = UserDefaults.standard
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        return UserDefaultsClient(
+            setVerificationID: { setVerificationIDLive(verificationID: $0, defaults: defaults) },
+            getVerificationID: { getVerificationIDLive(defaults: defaults) },
+            setUser: { setUserLive(user: $0, defaults: defaults, encoder: encoder) },
+            getUser: { getUserLive(defaults: defaults, decoder: decoder) }
+        )
+    }
 
-            } else {
-                defaults.removeObject(forKey: Key.user.rawValue)
+    // MARK: - VerificationID
+
+    static private func setVerificationIDLive(
+        verificationID: String,
+        defaults: UserDefaults
+    ) {
+        defaults.set(verificationID, forKey: Key.authVerificationID.rawValue)
+    }
+
+    static private func getVerificationIDLive(
+        defaults: UserDefaults
+    ) -> String {
+        defaults.string(forKey: Key.authVerificationID.rawValue) ?? ""
+    }
+
+    // MARK: - User
+
+    static private func setUserLive(
+        user: User?,
+        defaults: UserDefaults,
+        encoder: JSONEncoder
+    ) {
+        if let user = user {
+            guard let encoded = try? encoder.encode(user) else {
+                return
             }
-        },
-        getUser: {
-            guard
-                let userData = defaults.object(forKey: Key.user.rawValue) as? Data,
-                let user = try? decoder.decode(User.self, from: userData)
-            else {
-                return nil
-            }
-            return user
+            defaults.set(encoded, forKey: Key.user.rawValue)
+
+        } else {
+            defaults.removeObject(forKey: Key.user.rawValue)
         }
-    )
+    }
 
+    static private func getUserLive(
+        defaults: UserDefaults,
+        decoder: JSONDecoder
+    ) -> User? {
+        guard
+            let userData = defaults.object(forKey: Key.user.rawValue) as? Data,
+            let user = try? decoder.decode(User.self, from: userData)
+        else {
+            return nil
+        }
+        return user
+    }
 }
+
+// MARK: - Key
 
 extension UserDefaultsClient {
 

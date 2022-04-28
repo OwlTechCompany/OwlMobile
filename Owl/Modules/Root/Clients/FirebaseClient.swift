@@ -17,9 +17,11 @@ struct FirebaseClient {
 extension FirebaseClient {
 
     static let live: FirebaseClient = FirebaseClient(
-        setup: {
-            FirebaseApp.configure()
-        }
+        setup: setupLive
     )
+
+    static func setupLive() -> Void {
+        FirebaseApp.configure()
+    }
 
 }
