@@ -55,7 +55,7 @@ struct ChatView: View {
                             if isFirstUpdate {
                                 proxy.scrollTo(lastMessage.id, anchor: .bottom)
                                 isFirstUpdate.toggle()
-                            } else {
+                            } else if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
                                 withAnimation {
                                     proxy.scrollTo(lastMessage.id, anchor: .bottom)
                                 }
@@ -151,8 +151,8 @@ private extension ChatView {
         keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
     }
 
-    var needsScrollToNewMessage: Bool {
-        return true
+    var isLastMessageAppearing: Bool {
+        scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 20 + Constants.textFieldBackgroundHeigh
     }
 
 }
