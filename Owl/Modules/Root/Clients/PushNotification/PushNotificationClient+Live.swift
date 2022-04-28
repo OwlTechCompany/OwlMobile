@@ -19,6 +19,7 @@ extension PushNotificationClient {
             requestAuthorization: requestAuthorization,
             setAPNSToken: setAPNSToken,
             register: register,
+            currentFCMToken: { currentFCMToken() },
             userNotificationCenterDelegate: userNotificationCenterDelegate,
             firebaseMessagingDelegate: firebaseMessagingDelegate
         )
@@ -57,6 +58,18 @@ fileprivate extension PushNotificationClient {
     static func register() -> Effect<Never, Never> {
         Effect.fireAndForget {
             UIApplication.shared.registerForRemoteNotifications()
+        }
+    }
+
+    static func currentFCMToken() -> Effect<String, Never> {
+        Effect.future { completion in
+            Messaging.messaging().token { token, error in
+                if let error = error {
+//                    completion(.failure(.))
+                } else if let token = token {
+                    completion(.success(token))
+                }
+            }
         }
     }
 

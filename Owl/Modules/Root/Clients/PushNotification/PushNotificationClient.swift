@@ -16,6 +16,7 @@ struct PushNotificationClient {
     var requestAuthorization: (UNAuthorizationOptions) -> Effect<Bool, NSError>
     var setAPNSToken: (Data) -> Void
     var register: () -> Effect<Never, Never>
+    var currentFCMToken: () -> Effect<String, Never>
 
     var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
     var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>

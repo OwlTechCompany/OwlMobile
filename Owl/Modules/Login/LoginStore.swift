@@ -113,9 +113,17 @@ struct Login {
             return .none
 
         case .delegate(.loginSuccess):
-            return environment.pushNotificationClient
-                .register()
-                .fireAndForget()
+            return .concatenate(
+                environment.pushNotificationClient
+                    .register()
+                    .fireAndForget(),
+
+                environment.pushNotificationClient
+                    .currentFCMToken()
+                    .map { UserUpdate(fcmToken: $0) }
+                    .flatMap { environment.firestoreUsersClient.updateMe($0) }
+                    .fireAndForget()
+            )
 
         case .delegate:
             return .none
