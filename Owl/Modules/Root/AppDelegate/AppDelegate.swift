@@ -52,6 +52,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        viewStore.send(.didReceiveRemoteNotification(userInfo, completionHandler))
+        let model = DidReceiveRemoteNotificationModel(
+            userInfo: userInfo,
+            completionHandler: completionHandler
+        )
+        viewStore.send(.didReceiveRemoteNotification(model))
     }
 }

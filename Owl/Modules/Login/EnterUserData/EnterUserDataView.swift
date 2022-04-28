@@ -37,12 +37,13 @@ struct EnterUserDataView: View {
                         }
 
                         ZStack(alignment: .bottomTrailing) {
-                            Image(uiImage: Asset.Images.owlWithPadding.image)
+                            Image(uiImage: viewStore.selectedImage ?? Asset.Images.gradientOwl.image)
                                 .resizable()
-                                .scaledToFit()
+                                .scaledToFill()
                                 .frame(width: 100, height: 100)
                                 .background(Color.white)
                                 .clipShape(Circle())
+                                .onTapGesture { viewStore.send(.showImagePicker) }
 
                             Image(systemName: "pencil.circle.fill")
                                 .offset(x: 5, y: 5)
@@ -98,17 +99,19 @@ struct EnterUserDataView: View {
                     }
                     .padding(20)
                     .frame(minHeight: proxy.size.height)
-                    .disabled(viewStore.isLoading)
-                    .overlay(
-                        viewStore.isLoading
-                            ? Loader()
-                            : nil
-                    )
-                    .alert(
-                        self.store.scope(state: \.alert),
-                        dismiss: .dismissAlert
-                    )
                 }
+            }
+            .disabled(viewStore.isLoading)
+            .overlay(viewStore.isLoading ? Loader() : nil)
+            .alert(
+                self.store.scope(state: \.alert),
+                dismiss: .dismissAlert
+            )
+            .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
+                ImagePicker(
+                    sourceType: .photoLibrary,
+                    selectedImage: viewStore.binding(\.$selectedImage)
+                )
             }
         }
         .background(
@@ -122,13 +125,17 @@ struct EnterUserDataView: View {
 // MARK: - Preview
 
 struct EnterUserDataView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live())
+
     static var previews: some View {
         EnterUserDataView(store: Store(
             initialState: EnterUserData.State(),
             reducer: EnterUserData.reducer,
             environment: EnterUserData.Environment(
                 authClient: .live,
-                firestoreUsersClient: .live
+                firestoreUsersClient: .live(userClient: userClient),
+                storageClient: .live(userClient: userClient)
             )
         ))
     }

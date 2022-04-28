@@ -9,3 +9,5 @@ import Foundation
 import SwiftUI
 
 let screen = UIScreen.main.bounds
+
+let scale = UIScreen.main.scale

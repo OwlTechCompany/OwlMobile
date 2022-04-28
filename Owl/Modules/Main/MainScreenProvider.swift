@@ -26,11 +26,15 @@ extension Main.ScreenProvider {
     }
 
     struct NewPrivateChatRoute: Routable {
-        static var statePath = /State.chat
+        static var statePath = /State.newPrivateChat
     }
 
     struct ProfileRoute: Routable {
-        static var statePath = /State.chat
+        static var statePath = /State.profile
+    }
+
+    struct EditProfileRoute: Routable {
+        static var statePath = /State.editProfile
     }
 
     // MARK: - State handling
@@ -40,6 +44,7 @@ extension Main.ScreenProvider {
         case chat(Chat.State)
         case newPrivateChat(NewPrivateChat.State)
         case profile(Profile.State)
+        case editProfile(EditProfile.State)
 
         var id: String {
             switch self {
@@ -54,6 +59,9 @@ extension Main.ScreenProvider {
 
             case .profile:
                 return ProfileRoute.id
+
+            case .editProfile:
+                return EditProfileRoute.id
             }
         }
     }
@@ -65,6 +73,7 @@ extension Main.ScreenProvider {
         case chat(Chat.Action)
         case newPrivateChat(NewPrivateChat.Action)
         case profile(Profile.Action)
+        case editProfile(EditProfile.Action)
     }
 
     // MARK: - Reducer handling
@@ -77,7 +86,8 @@ extension Main.ScreenProvider {
                 environment: {
                     ChatList.Environment(
                         authClient: $0.authClient,
-                        chatsClient: $0.chatsClient
+                        chatsClient: $0.chatsClient,
+                        userClient: $0.userClient
                     )
                 }
             ),
@@ -103,7 +113,22 @@ extension Main.ScreenProvider {
             .pullback(
                 state: /State.profile,
                 action: /Action.profile,
-                environment: { _ in Profile.Environment() }
+                environment: {
+                    Profile.Environment(
+                        userClient: $0.userClient
+                    )
+                }
+            ),
+        EditProfile.reducer
+            .pullback(
+                state: /State.editProfile,
+                action: /Action.editProfile,
+                environment: {
+                    EditProfile.Environment(
+                        firestoreUsersClient: $0.firestoreUsersClient,
+                        storageClient: $0.storageClient
+                    )
+                }
             )
     )
 

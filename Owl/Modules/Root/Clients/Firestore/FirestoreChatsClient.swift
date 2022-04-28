@@ -16,7 +16,7 @@ struct FirestoreChatsClient {
     static let collection = Firestore.firestore().collection("chats")
     static var cancellables = Set<AnyCancellable>()
 
-    var getChats: (Firebase.User) -> Effect<[ChatsListPrivateItem], NSError>
+    var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
 }
@@ -28,9 +28,14 @@ extension FirestoreChatsClient {
     // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
         return Self(
-            getChats: { authUser in
+            getChats: {
                 Effect.run { subscriber in
-                    collection.whereField("members", arrayContains: authUser.uid)
+                    guard let authUser = userClient.authUser.value else {
+                        subscriber.send(completion: .failure(.init(domain: "No user", code: 1)))
+                        return Empty<Any, NSError>(completeImmediately: true)
+                            .sink()
+                    }
+                    return collection.whereField("members", arrayContains: authUser.uid)
                         .snapshotPublisher()
                         .on(
                             value: { snapshot in
@@ -52,10 +57,10 @@ extension FirestoreChatsClient {
             },
             chatWithUser: { uid in
                 Effect.future { callback in
-                    guard let firebaseUser = userClient.firebaseUser.value?.uid else {
+                    guard let authUser = userClient.authUser.value else {
                         return callback(.failure(.init(domain: "No user", code: 1)))
                     }
-                    let users = [uid, firebaseUser]
+                    let users = [uid, authUser.uid]
                     let usersReversed: [String] = users.reversed()
                     collection
                         .whereField("members", in: [users, usersReversed])

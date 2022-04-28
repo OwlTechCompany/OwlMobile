@@ -68,10 +68,7 @@ struct EnterCode {
             return Effect(value: .setMe)
 
         case .setMe:
-            guard let authUser = environment.authClient.currentUser() else {
-                return .none
-            }
-            return environment.firestoreUsersClient.setMeIfNeeded(authUser)
+            return environment.firestoreUsersClient.setMeIfNeeded()
                 .catchToEffect(Action.setMeResult)
 
         case .setMeResult(.success):
@@ -87,7 +84,6 @@ struct EnterCode {
             state.isLoading = true
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
-                .mapError { $0 as NSError }
                 .catchToEffect(Action.verificationIDResult)
 
         case let .authDataResult(.failure(error)),

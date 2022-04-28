@@ -23,15 +23,15 @@ struct App {
                 self.login = .initialState
                 self.main = .none
 
-            case .main:
-                self.main = .initialState
+            case let .main(user):
+                self.main = .initialState(user: user)
                 self.login = .none
             }
         }
 
         enum CurrentState {
             case login
-            case main
+            case main(User)
         }
     }
 
@@ -53,17 +53,20 @@ struct App {
         let validationClient: ValidationClient
         let firestoreUsersClient: FirestoreUsersClient
         let chatsClient: FirestoreChatsClient
+        let storageClient: StorageClient
 
         static var live: Self {
-            let userClient = UserClient.live
+            let userDefaultsClient = UserDefaultsClient.live()
+            let userClient = UserClient.live(userDefaults: userDefaultsClient)
             return Self(
                 firebaseClient: .live,
                 userClient: userClient,
                 authClient: .live,
-                userDefaultsClient: .live,
-                validationClient: .live,
-                firestoreUsersClient: .live,
-                chatsClient: .live(userClient: userClient)
+                userDefaultsClient: userDefaultsClient,
+                validationClient: .live(),
+                firestoreUsersClient: .live(userClient: userClient),
+                chatsClient: .live(userClient: userClient),
+                storageClient: .live(userClient: userClient)
             )
         }
     }
@@ -100,15 +103,18 @@ struct App {
     static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .appDelegate(.didFinishLaunching):
-            if environment.authClient.currentUser() != nil {
-                state.set(.main)
+            if environment.userClient.authUser.value != nil,
+               let user = environment.userClient.firestoreUser.value {
+                state.set(.main(user))
             } else {
                 state.set(.login)
             }
             return .none
 
         case .login(.delegate(.loginSuccess)):
-            state.set(.main)
+            if let user = environment.userClient.firestoreUser.value {
+                state.set(.main(user))
+            }
             return .none
 
         case .main(.delegate(.logout)):
@@ -145,7 +151,8 @@ extension App.Environment {
             authClient: authClient,
             userDefaultsClient: userDefaultsClient,
             validationClient: validationClient,
-            firestoreUsersClient: firestoreUsersClient
+            firestoreUsersClient: firestoreUsersClient,
+            storageClient: storageClient
         )
     }
 
@@ -154,7 +161,8 @@ extension App.Environment {
             userClient: userClient,
             authClient: authClient,
             chatsClient: chatsClient,
-            firestoreUsersClient: firestoreUsersClient
+            firestoreUsersClient: firestoreUsersClient,
+            storageClient: storageClient
         )
     }
 

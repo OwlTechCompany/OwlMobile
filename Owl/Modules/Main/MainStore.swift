@@ -16,16 +16,14 @@ struct Main {
 
         var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
 
-        static let initialState = State(
-            routes: [
+        static func initialState(user: User) -> State {
+            State(routes: [
                 .root(
-                    .chatList(
-                        ChatList.State.initialState
-                    ),
+                    .chatList(ChatList.State(user: user, chats: [])),
                     embedInNavigationView: true
                 )
-            ]
-        )
+            ])
+        }
     }
 
     // MARK: - Action
@@ -49,18 +47,23 @@ struct Main {
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
         let firestoreUsersClient: FirestoreUsersClient
+        let storageClient: StorageClient
     }
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .routeAction(_, action: .chatList(.newPrivateChat)):
+        case .routeAction(_, .chatList(.newPrivateChat)):
             state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
             return .none
 
-        case .routeAction(_, action: .chatList(.openProfile)):
-            state.routes.push(.profile(.init(image: Asset.Images.owlBlack.image)))
+        case .routeAction(_, .chatList(.openProfile)):
+            guard let firestoreUser = environment.userClient.firestoreUser.value else {
+                return Effect(value: .delegate(.logout))
+            }
+            let profileState = Profile.State(user: firestoreUser)
+            state.routes.push(.profile(profileState))
             return .none
 
         case let .routeAction(_, .chatList(.chats(id, action: .open))):
@@ -74,6 +77,18 @@ struct Main {
             }
 
         case .routeAction(_, .profile(.close)):
+            state.routes.pop()
+            return .none
+
+        case .routeAction(_, .profile(.edit)):
+            guard let firestoreUser = environment.userClient.firestoreUser.value else {
+                return Effect(value: .delegate(.logout))
+            }
+            let editProfileState = EditProfile.State(user: firestoreUser)
+            state.routes.push(.editProfile(editProfileState))
+            return .none
+
+        case .routeAction(_, .editProfile(.updateUserResult(.success))):
             state.routes.pop()
             return .none
 

@@ -1,28 +1,33 @@
 //
-//  EnterUserDataStore.swift
+//  EditProfileStore.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 16.04.2022.
+//  Created by Denys Danyliuk on 27.04.2022.
 //
 
 import ComposableArchitecture
 import UIKit
 
-struct EnterUserData {
+struct EditProfile {
 
     // MARK: - State
 
     struct State: Equatable {
-
         @BindableState var selectedImage: UIImage?
         @BindableState var firstName: String = ""
         @BindableState var lastName: String = ""
 
-        var saveButtonEnabled: Bool = false
         var isLoading: Bool = false
+        var photo: Photo
 
         var alert: AlertState<Action>?
         @BindableState var showImagePicker: Bool = false
+
+        init(user: User) {
+            firstName = user.firstName ?? ""
+            lastName = user.lastName ?? ""
+            photo = user.photo
+        }
     }
 
     // MARK: - Action
@@ -30,7 +35,6 @@ struct EnterUserData {
     enum Action: Equatable, BindableAction {
         case showImagePicker
 
-        case later
         case save
 
         case uploadPhoto(UIImage)
@@ -47,7 +51,6 @@ struct EnterUserData {
     // MARK: - Environment
 
     struct Environment {
-        let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
     }
@@ -63,13 +66,6 @@ struct EnterUserData {
 
         case .binding(\.$showImagePicker):
             state.isLoading = state.showImagePicker
-            return .none
-
-        case .binding(\.$firstName):
-            state.saveButtonEnabled = !state.firstName.isEmpty
-            return .none
-
-        case .later:
             return .none
 
         case .save:
