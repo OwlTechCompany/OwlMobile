@@ -64,38 +64,11 @@ struct ChatView: View {
                 .introspectScrollView { scrollView in
                     self.scrollView = scrollView
                 }
-                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
                 .onTapGesture { focusedField = nil }
 
-                ZStack(alignment: .top) {
-                    Rectangle().fill(Colors.Blue._7.swiftUIColor)
-                        .frame(height: textFieldBackgroundHeigh)
-
-                    HStack(spacing: 16) {
-                        TextField("Message...", text: viewStore.binding(\.$newMessage))
-                            .font(.system(size: 16, weight: .regular))
-                            .focused($focusedField, equals: .enterMessage)
-                            .disableAutocorrection(true)
-                            .keyboardType(UIKit.UIKeyboardType.alphabet)
-                            .frame(height: Constants.textFieldHeight)
-                            .padding(.horizontal, 4)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-                        Image(systemName: "paperplane")
-                            .frame(width: 32, height: 32)
-                            .foregroundColor(.white)
-                            .background(Colors.accentColor.swiftUIColor)
-                            .clipShape(Circle())
-                            .onTapGesture { viewStore.send(.sendMessage) }
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.top, Constants.textFieldVerticalPadding)
-                    .padding(.bottom, safeAreaInsets.bottom)
-                }
-                .ignoresSafeArea(.all, edges: .bottom)
-                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
+                textField
             }
+            .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
             .frame(width: screen.width)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -123,6 +96,38 @@ struct ChatView: View {
         }
         .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
     }
+
+    var textField: some View {
+        WithViewStore(store) { viewStore in
+            ZStack(alignment: .top) {
+                Rectangle().fill(Colors.Blue._7.swiftUIColor)
+                    .frame(height: textFieldBackgroundHeigh)
+
+                HStack(spacing: 16) {
+                    TextField("Message...", text: viewStore.binding(\.$newMessage))
+                        .font(.system(size: 16, weight: .regular))
+                        .focused($focusedField, equals: .enterMessage)
+                        .disableAutocorrection(true)
+                        .keyboardType(UIKit.UIKeyboardType.alphabet)
+                        .frame(height: Constants.textFieldHeight)
+                        .padding(.horizontal, 4)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                    Image(systemName: "paperplane")
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.white)
+                        .background(Colors.accentColor.swiftUIColor)
+                        .clipShape(Circle())
+                        .onTapGesture { viewStore.send(.sendMessage) }
+                }
+                .padding(.horizontal, 8)
+                .padding(.top, Constants.textFieldVerticalPadding)
+                .padding(.bottom, safeAreaInsets.bottom)
+            }
+        }
+    }
+
 }
 
 // MARK: - Extension
