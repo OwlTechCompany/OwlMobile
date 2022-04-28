@@ -18,8 +18,8 @@ struct AuthClient {
     static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
 
     var verifyPhoneNumber: (String) -> Effect<String, NSError>
-    var setAPNSToken: (Data) -> Effect<Void, Never>
-    var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Effect<Void, Never>
+    var setAPNSToken: (Data) -> Void // Effect<Void, Never>
+    var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Void // -> Effect<Void, Never>
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
     var signOut: () -> Void
 }
@@ -46,22 +46,23 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
-        Effect.fireAndForget {
-            firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
-        }
+    static private func setAPNSTokenLive(deviceToken: Data) { // -> Effect<Void, Never> {
+//        Effect.fireAndForget {
+        firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
+        print("~~~~~ set setAPNSToken AuthClient")
+//        }
     }
 
     static private func canHandleNotificationLive(
         model: DidReceiveRemoteNotificationModel
-    ) -> Effect<Void, Never> {
-        Effect.fireAndForget {
+    ) { // -> Effect<Void, Never> {
+//        Effect.fireAndForget {
             if firebaseAuth.canHandleNotification(model.userInfo) {
                 model.completionHandler(.noData)
             } else {
-                model.completionHandler(.newData)
+//                model.completionHandler(.newData)
             }
-        }
+//        }
     }
 
     static private func signInLive(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {

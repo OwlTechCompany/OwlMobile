@@ -59,7 +59,6 @@ struct App {
         static var live: Self {
             let userDefaultsClient = UserDefaultsClient.live()
             let userClient = UserClient.live(userDefaults: userDefaultsClient)
-            let firestoreUserClient = FirestoreUsersClient.live(userClient: userClient)
             return Self(
                 firebaseClient: .live,
                 userClient: userClient,
@@ -69,7 +68,7 @@ struct App {
                 firestoreUsersClient: .live(userClient: userClient),
                 chatsClient: .live(userClient: userClient),
                 storageClient: .live(userClient: userClient),
-                pushNotificationClient: .live(firestoreUserClient: firestoreUserClient)
+                pushNotificationClient: .live()
             )
         }
     }
@@ -146,6 +145,7 @@ extension App.Environment {
             firebaseClient: firebaseClient,
             userClient: userClient,
             authClient: authClient,
+            firestoreUserClient: firestoreUsersClient,
             pushNotificationClient: pushNotificationClient
         )
     }

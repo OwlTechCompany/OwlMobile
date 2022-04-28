@@ -7,11 +7,18 @@
 
 import UIKit
 
-struct DidReceiveRemoteNotificationModel: Equatable {
+class DidReceiveRemoteNotificationModel: Equatable {
+
+
     var userInfo: [AnyHashable: Any]
     var completionHandler: (UIBackgroundFetchResult) -> Void
 
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    init(userInfo: [AnyHashable : Any], completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        self.userInfo = userInfo
+        self.completionHandler = completionHandler
+    }
+
+    static func == (lhs: DidReceiveRemoteNotificationModel, rhs: DidReceiveRemoteNotificationModel) -> Bool {
         return lhs.userInfo.keys == lhs.userInfo.keys
     }
 }
