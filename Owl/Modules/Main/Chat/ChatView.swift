@@ -16,15 +16,9 @@ struct ChatView: View {
     @State var isFirstUpdate: Bool = true
     @State var scrollView = UIScrollView()
     @State var keyboard = Keyboard.initialValue
-//    @State var scrollPreviousOffset = CGPoint(x: 0, y: 0)
 
     @FocusState private var focusedField: Field?
     @Environment(\.safeAreaInsets) var safeAreaInsets
-
-
-    private enum Field: Int, CaseIterable {
-        case enterMessage
-    }
 
     let store: Store<Chat.State, Chat.Action>
 
@@ -65,7 +59,6 @@ struct ChatView: View {
                             }
                         }
                         .animation(.none, value: keyboard)
-                        .onChange(of: focusedField) { _ in }
                     }
                 }
                 .introspectScrollView { scrollView in
@@ -76,10 +69,7 @@ struct ChatView: View {
 
                 ZStack(alignment: .top) {
                     Rectangle().fill(Colors.Blue._7.swiftUIColor)
-                        .frame(height: keyboard.height > 0
-                               ? 48 + keyboard.height + 4
-                               : 48 + safeAreaInsets.bottom
-                        )
+                        .frame(height: textFieldBackgroundHeigh)
 
                     HStack(spacing: 16) {
                         TextField("Message...", text: viewStore.binding(\.$newMessage))
@@ -87,7 +77,7 @@ struct ChatView: View {
                             .focused($focusedField, equals: .enterMessage)
                             .disableAutocorrection(true)
                             .keyboardType(UIKit.UIKeyboardType.alphabet)
-                            .frame(height: 40)
+                            .frame(height: Constants.textFieldHeight)
                             .padding(.horizontal, 4)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -97,12 +87,10 @@ struct ChatView: View {
                             .foregroundColor(.white)
                             .background(Colors.accentColor.swiftUIColor)
                             .clipShape(Circle())
-                            .onTapGesture {
-                                viewStore.send(.sendMessage)
-                            }
+                            .onTapGesture { viewStore.send(.sendMessage) }
                     }
                     .padding(.horizontal, 8)
-                    .padding(.top, 4)
+                    .padding(.top, Constants.textFieldVerticalPadding)
                     .padding(.bottom, safeAreaInsets.bottom)
                 }
                 .ignoresSafeArea(.all, edges: .bottom)
@@ -123,28 +111,61 @@ struct ChatView: View {
             .navigationBarTitleDisplayMode(.inline)
             .ignoresSafeArea(.all, edges: .bottom)
             .onAppear { viewStore.send(.onAppear) }
-            .onReceive(Publishers.keyboardHeightPublisher) { value in
-                keyboard = value
-                let contentOffset = scrollView.contentOffset
-                scrollView.setContentOffset(
-                    .init(
-                        x: 0,
-                        y: value.height > 0
-                            ? contentOffset.y + value.height - safeAreaInsets.bottom + 8
-                            : contentOffset.y
-                    ),
-                    animated: true
-                )
+            .onReceive(Publishers.keyboardHeightPublisher) { newValue in
+                if keyboard.height != newValue.height {
+                    keyboard = newValue
+                    scrollView.setContentOffset(
+                        .init(x: 0, y: scrollView.contentOffset.y + scrollViewContentOffsetY),
+                        animated: true
+                    )
+                }
             }
         }
-        .background(
-            Color(.systemGroupedBackground)
-                .edgesIgnoringSafeArea(.all)
-        )
+        .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
     }
 }
 
+// MARK: - Extension
+
+private extension ChatView {
+
+    var keyboardIsUp: Bool {
+        keyboard.height > 0
+    }
+
+    var textFieldBackgroundHeigh: CGFloat {
+        keyboardIsUp
+        ? Constants.textFieldBackgroundHeigh + keyboard.height + Constants.editionTextFieldBottomPadding
+        : Constants.textFieldBackgroundHeigh + safeAreaInsets.bottom
+    }
+
+    var scrollViewContentOffsetY: CGFloat {
+        keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
+    }
+
+}
+
+// MARK: - Declarations
+
+private extension ChatView {
+
+    enum Field: Int, CaseIterable {
+        case enterMessage
+    }
+
+}
+
+private enum Constants {
+    static let textFieldHeight: CGFloat = 40
+    static let textFieldVerticalPadding: CGFloat = 4
+    static let textFieldBackgroundHeigh: CGFloat = textFieldHeight + textFieldVerticalPadding * 2
+    static let editionTextFieldBottomPadding: CGFloat = 4
+}
+
+// MARK: - Preview
+
 struct ChatView_Previews: PreviewProvider {
+
     static var previews: some View {
         NavigationView {
             ChatView(store: Store(
@@ -153,44 +174,6 @@ struct ChatView_Previews: PreviewProvider {
                 environment: Chat.Environment(chatsClient: .live(userClient: .live))
             ))
         }
-    }
-}
-
-struct Keyboard: Equatable {
-    var height: CGFloat
-    var duration: CGFloat
-
-    static let initialValue = Keyboard(height: 0, duration: 0)
-}
-
-extension Publishers {
-
-    static var keyboardHeightPublisher: AnyPublisher<Keyboard, Never> {
-        Publishers.Merge(
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillShowNotification)
-                .compactMap { value -> (NSValue, NSNumber)? in
-                    guard
-                        let frame = value.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
-                        let duration = value.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber
-                    else {
-                        return nil
-                    }
-//                    print(frame.cgRectValue)
-//                    print(screen.height - frame.cgRectValue.minY)
-//                    print(frame.cgRectValue.height)
-                    return (frame, duration)
-                }
-                .map { Keyboard(height: $0.cgRectValue.height, duration: $1.doubleValue) },
-
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillHideNotification)
-                .compactMap {
-                    $0.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber
-                }
-                .map { Keyboard(height: 0, duration: $0.doubleValue) }
-        )
-        .eraseToAnyPublisher()
     }
 
 }
