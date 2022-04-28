@@ -7,6 +7,7 @@
 
 import TCACoordinators
 import ComposableArchitecture
+import SwiftUI
 
 struct Main {
 
@@ -19,7 +20,7 @@ struct Main {
         static func initialState(user: User) -> State {
             State(routes: [
                 .root(
-                    .chatList(ChatList.State(user: user, chats: [])),
+                    .chatList(ChatList.State(user: user, chats: [], chatsData: [])),
                     embedInNavigationView: true
                 )
             ])
@@ -66,14 +67,18 @@ struct Main {
             state.routes.push(.profile(profileState))
             return .none
 
-        case let .routeAction(_, .chatList(.chats(id, action: .open))):
-            state.routes.push(.chat(.init()))
+        case let .routeAction(_, .chatList(.open(chat))):
+            state.routes.push(.chat(.init(model: chat)))
+            return .none
+
+        case .routeAction(_, .chat(.navigation(.back))):
+            state.routes.pop()
             return .none
 
         case let .routeAction(_, .newPrivateChat(.openChat(item))):
             return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
                 provider.dismiss()
-                provider.push(.chat(.init()))
+                provider.push(.chat(.init(model: item)))
             }
 
         case .routeAction(_, .profile(.close)):

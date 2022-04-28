@@ -117,9 +117,9 @@ struct LoaderCircle: View {
 private enum Constants {
     static let size: CGFloat = 80
     static let lineWidth: CGFloat = 6
-    static let mainColor = Colors.loader1.swiftUIColor
-    static let secondaryColor1 = Colors.loader2.swiftUIColor
-    static let secondaryColor2 = Colors.loader3.swiftUIColor
+    static let mainColor = Colors.Loader.first.swiftUIColor
+    static let secondaryColor1 = Colors.Loader.second.swiftUIColor
+    static let secondaryColor2 = Colors.Loader.third.swiftUIColor
 }
 
 struct Loader_Previews: PreviewProvider {

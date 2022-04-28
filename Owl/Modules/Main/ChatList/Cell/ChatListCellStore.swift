@@ -40,3 +40,16 @@ struct ChatListCell {
         }
     }
 }
+
+extension ChatListCell.State {
+
+    init(model: ChatsListPrivateItem) {
+        id = model.id
+        photo = model.companion.photo
+        chatName = model.name
+        lastMessage = model.lastMessage?.messageText ?? ""
+        lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
+        unreadMessagesNumber = 0
+    }
+
+}

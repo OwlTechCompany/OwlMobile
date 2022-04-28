@@ -43,7 +43,7 @@ struct OnboardingView: View {
             .padding(20)
         }
         .background(
-            Color(UIColor.systemGroupedBackground)
+            Color(.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
         )
         .navigationBarTitleDisplayMode(.inline)

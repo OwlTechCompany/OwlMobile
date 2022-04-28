@@ -54,7 +54,7 @@ struct ChatListCellView: View {
                             .minimumScaleFactor(0.5)
                     }
                     .background(LinearGradient(
-                        colors: [Colors.loader3.swiftUIColor, Color.accentColor],
+                        colors: [Colors.Loader.third.swiftUIColor, Color.accentColor],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))
@@ -68,6 +68,7 @@ struct ChatListCellView: View {
             }
             .frame(height: 60)
             .padding(.vertical, 8)
+            .background(Color.white)
             .onTapGesture {
                 viewStore.send(.open)
             }
@@ -105,32 +106,12 @@ private extension ChatListCell.State {
 
 }
 
-extension ChatListCell.State {
-
-    init(model: ChatsListPrivateItem) {
-        id = model.id
-        photo = model.companion.photo
-        chatName = model.name
-        lastMessage = model.lastMessage?.messageText ?? ""
-        lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
-        unreadMessagesNumber = 0
-    }
-
-}
-
 // MARK: - Preview
 
 struct ChatListCellView_Previews: PreviewProvider {
     static var previews: some View {
         ChatListCellView(store: Store(
-            initialState: ChatListCell.State(
-                id: "",
-                photo: .placeholder,
-                chatName: "Name Name Name",
-                lastMessage: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-                lastMessageSendTime: Date(),
-                unreadMessagesNumber: 5679
-            ),
+            initialState: ChatListCell.State(model: MockedDataClient.chatsListPrivateItem),
             reducer: ChatListCell.reducer,
             environment: ChatListCell.Environment()
         ))

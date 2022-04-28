@@ -13,12 +13,19 @@ import FirebaseAuth
 
 struct FirestoreChatsClient {
 
-    static let collection = Firestore.firestore().collection("chats")
     static var cancellables = Set<AnyCancellable>()
+
+    struct Collection {
+        static let chats = Firestore.firestore().collection("chats")
+        static let chatsMessages = Firestore.firestore().collection("chatsMessages")
+    }
 
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
+
+    var getMessages: (String) -> Effect<[Message], NSError>
+    var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
 
 // MARK: - Live
@@ -35,7 +42,7 @@ extension FirestoreChatsClient {
                         return Empty<Any, NSError>(completeImmediately: true)
                             .sink()
                     }
-                    return collection.whereField("members", arrayContains: authUser.uid)
+                    return Collection.chats.whereField("members", arrayContains: authUser.uid)
                         .snapshotPublisher()
                         .on(
                             value: { snapshot in
@@ -62,7 +69,7 @@ extension FirestoreChatsClient {
                     }
                     let users = [uid, authUser.uid]
                     let usersReversed: [String] = users.reversed()
-                    collection
+                    Collection.chats
                         .whereField("members", in: [users, usersReversed])
                         .getDocuments()
                         .on(
@@ -87,7 +94,7 @@ extension FirestoreChatsClient {
             },
             createPrivateChat: { privateChatRequest in
                 Effect.future { callback in
-                    let newDocument = collection.document()
+                    let newDocument = Collection.chats.document()
 
                     // Update id of PrivateChatRequest
                     var privateChatRequest = privateChatRequest
@@ -114,8 +121,60 @@ extension FirestoreChatsClient {
                         .sink()
                         .store(in: &cancellables)
                 }
+            },
+            getMessages: { chatID in
+                Effect.run { subcriber in
+                    Collection.chatsMessages.document(chatID).collection("messages").order(by: "sentAt", descending: false)
+                        .snapshotPublisher()
+                        .on { snapshot in
+                            print(snapshot)
+                            let items = snapshot.documents.compactMap { document -> Message? in
+                                do {
+                                    return try document.data(as: Message.self)
+                                } catch let error as NSError {
+                                    subcriber.send(completion: .failure(error))
+                                    return nil
+                                }
+                            }
+                            subcriber.send(items)
+
+                        }
+                        error: { error in
+                            subcriber.send(completion: .failure(error as NSError))
+                        }
+                        .sink()
+                }
+            },
+            sendMessage: { newMessage in
+                Effect.future { callback in
+                    let batch = Firestore.firestore().batch()
+
+                    let newDocument = Collection.chatsMessages.document(newMessage.chatId).collection("messages").document()
+                    var message = newMessage.message
+                    message.id = newDocument.documentID
+
+                    let chat = Collection.chats.document(newMessage.chatId)
+
+                    do {
+                        try batch.setData(from: message, forDocument: newDocument)
+                        let encodedMessage = try Firestore.Encoder().encode(message)
+                        batch.updateData(["lastMessage": encodedMessage], forDocument: chat)
+
+                        batch.commit()
+                            .on { _ in
+                                callback(.success(true))
+                            }
+                            error: { error in
+                                callback(.failure(error as NSError))
+                            }
+                            .sink()
+                            .store(in: &cancellables)
+
+                    } catch {
+                        callback(.failure(error as NSError))
+                    }
+                }
             }
         )
     }
-
 }
