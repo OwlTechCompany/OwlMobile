@@ -15,7 +15,7 @@ struct ChatView: View {
 
     @State var isFirstUpdate: Bool = true
     @State var scrollView = UIScrollView()
-    @State var keyboardHeight: CGFloat = 0
+    @State var keyboard = Keyboard.initialValue
 
     @FocusState private var focusedField: Field?
     @Environment(\.safeAreaInsets) var safeAreaInsets
@@ -36,77 +36,74 @@ struct ChatView: View {
     var body: some View {
 
         WithViewStore(store) { viewStore in
-            VStack {
-                Rectangle().fill(.blue.opacity(0.2))
-                    .onTapGesture { focusedField = nil }
-//                ScrollView {
-//                    ScrollViewReader { proxy in
-//                        LazyVStack {
-//
-////                            ForEachStore(
-////                                self.store.scope(
-////                                    state: \.messages,
-////                                    action: Chat.Action.messages(id:action:)
-////                                ),
-////                                content: {
-////                                    ChatMessageView(store: $0)
-////                                        .listRowSeparator(.hidden)
-////                                        .listRowInsets(.init())
-////                                }
-////                            )
-//                        }
-//                        .onChange(of: viewStore.messages) { newValue in
-//                            if isFirstUpdate {
-//                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-//                                isFirstUpdate.toggle()
-//                            } else {
-//                                withAnimation {
-//                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
-//                                }
-//                            }
-//                        }
-//                        .onChange(of: focusedField) { _ in }
-//                    }
-//                }
-//                .introspectScrollView { scrollView in
-//                    self.scrollView = scrollView
-//                }
-//                .onTapGesture { focusedField = nil }
+            VStack(spacing: 0) {
+                ScrollView {
+                    ScrollViewReader { proxy in
+                        LazyVStack {
 
-                HStack(spacing: 16) {
-                    ZStack {
+                            ForEachStore(
+                                self.store.scope(
+                                    state: \.messages,
+                                    action: Chat.Action.messages(id:action:)
+                                ),
+                                content: {
+                                    ChatMessageView(store: $0)
+                                        .listRowSeparator(.hidden)
+                                        .listRowInsets(.init())
+                                }
+                            )
+                        }
+                        .onChange(of: viewStore.messages) { newValue in
+                            if isFirstUpdate {
+                                proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                isFirstUpdate.toggle()
+                            } else {
+                                withAnimation {
+                                    proxy.scrollTo(newValue.last!.id, anchor: .bottom)
+                                }
+                            }
+                        }
+                        .onChange(of: focusedField) { _ in }
+                    }
+                }
+                .introspectScrollView { scrollView in
+                    self.scrollView = scrollView
+                }
+                .onTapGesture { focusedField = nil }
+
+                ZStack(alignment: .top) {
+                    Rectangle().fill(Colors.Blue._7.swiftUIColor)
+                        .frame(height: keyboard.height > 0
+                               ? 48 + keyboard.height + 4
+                               : 48 + safeAreaInsets.bottom
+                        )
+
+                    HStack(spacing: 16) {
                         TextField("Message...", text: viewStore.binding(\.$newMessage))
                             .font(.system(size: 16, weight: .regular))
                             .focused($focusedField, equals: .enterMessage)
                             .disableAutocorrection(true)
                             .keyboardType(UIKit.UIKeyboardType.alphabet)
+                            .frame(height: 40)
+                            .padding(.horizontal, 4)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                        Image(systemName: "paperplane")
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.white)
+                            .background(Colors.accentColor.swiftUIColor)
+                            .clipShape(Circle())
+                            .onTapGesture {
+                                viewStore.send(.sendMessage)
+                            }
                     }
-                    .frame(height: 40)
-                    .padding(.horizontal, 4)
-                    .background(Colors.textFieldBackground.swiftUIColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-                    Image(systemName: "paperplane")
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(.white)
-                        .background(Colors.accentColor.swiftUIColor)
-                        .clipShape(Circle())
-                        .onTapGesture {
-                            viewStore.send(.sendMessage)
-                        }
+                    .padding(.horizontal, 8)
+                    .padding(.top, 4)
+                    .padding(.bottom, safeAreaInsets.bottom)
                 }
-                .padding(.horizontal, 8)
-                .padding(.top, 4)
-                .padding(.bottom, safeAreaInsets.bottom)
                 .ignoresSafeArea(.all, edges: .bottom)
-                .background(Colors.Blue._6.swiftUIColor)
-//                .animation(Animation.easeInOut(duration: 0.16), value: keyboardHeight)
-//                .offset(y: keyboardHeight > 0 ? -keyboardHeight + 27 : 0)
-                .offset(y: keyboardHeight > 0 ? -keyboardHeight + safeAreaInsets.bottom - 4 : 0)
-
-//                .animation(.spring(response: 0.5, dampingFraction: 1, blendDuration: 0.25), value: keyboardHeight)
-//                .animation(.spring(), value: keyboardHeight)
-
+                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
             }
             .frame(width: screen.width)
             .toolbar {
@@ -121,28 +118,21 @@ struct ChatView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-//            .ignoresSafeArea(.keyboard, edges: .bottom)
             .ignoresSafeArea(.all, edges: .bottom)
             .onAppear { viewStore.send(.onAppear) }
             .onReceive(Publishers.keyboardHeightPublisher) { value in
-                print("Publishers.keyboardHeightPublisher")
-//                let contentOffset = scrollView.contentOffset
-//                scrollView.setContentOffset(
-//                    .init(x: 0, y: contentOffset.y + value.height),
-//                    animated: true
-//                )
-//                Animation.mas)
-                let animation = Animation.interpolatingSpring(mass: 1, stiffness: 1000, damping: 500, initialVelocity: 1)
-//                animation.speed(0.5 / value.duration)
-//                Animation.interpolatingSpring(
-//                    .spring(response: value.duration, dampingFraction: 1)
-                withAnimation(animation.speed(0.5 / value.duration)) {
-                    keyboardHeight = value.height
-                }
-
+                keyboard = value
+                let contentOffset = scrollView.contentOffset
+                scrollView.setContentOffset(
+                    .init(x: 0, y: contentOffset.y + value.height),
+                    animated: true
+                )
             }
-
         }
+        .background(
+            Color(.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
     }
 }
 
@@ -158,12 +148,14 @@ struct ChatView_Previews: PreviewProvider {
     }
 }
 
-extension Publishers {
+struct Keyboard: Equatable {
+    var height: CGFloat
+    var duration: CGFloat
 
-    struct Keyboard {
-        var height: CGFloat
-        var duration: CGFloat
-    }
+    static let initialValue = Keyboard(height: 0, duration: 0)
+}
+
+extension Publishers {
 
     static var keyboardHeightPublisher: AnyPublisher<Keyboard, Never> {
         Publishers.Merge(

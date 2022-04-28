@@ -50,6 +50,10 @@ struct ChatMessageView: View {
             .frame(width: screen.width, alignment: viewStore.alignment)
 //            .modifier(ShadowModifier())
         }
+        .background(
+            Color(.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.all)
+        )
     }
 
 }
