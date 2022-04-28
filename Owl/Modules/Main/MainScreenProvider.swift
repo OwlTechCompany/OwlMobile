@@ -125,8 +125,6 @@ extension Main.ScreenProvider {
                 action: /Action.editProfile,
                 environment: {
                     EditProfile.Environment(
-                        userClient: $0.userClient,
-                        authClient: $0.authClient,
                         firestoreUsersClient: $0.firestoreUsersClient,
                         storageClient: $0.storageClient
                     )

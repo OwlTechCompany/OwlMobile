@@ -80,15 +80,12 @@ struct EditProfileView: View {
 
                         Spacer()
 
-                        HStack(spacing: 20.0) {
-                            Button(
-                                action: { viewStore.send(.save) },
-                                label: { Text("Save") }
-                            )
-                            .buttonStyle(BigButtonStyle())
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .disabled(!viewStore.saveButtonEnabled)
-                        }
+                        Button(
+                            action: { viewStore.send(.save) },
+                            label: { Text("Save") }
+                        )
+                        .buttonStyle(BigButtonStyle())
+                        .frame(minWidth: 0, maxWidth: .infinity)
                     }
                     .padding(20)
                     .frame(minHeight: proxy.size.height)
@@ -121,14 +118,26 @@ struct EditProfileView: View {
 
 // MARK: - Preview
 
-/*
 struct EditProfileView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live())
+
     static var previews: some View {
         EditProfileView(store: Store(
-            initialState: EditProfile.State(),
+            initialState: EditProfile.State(
+                user: User(
+                    uid: "",
+                    phoneNumber: "",
+                    firstName: "",
+                    lastName: "",
+                    photo: .placeholder
+                )
+            ),
             reducer: EditProfile.reducer,
-            environment: EditProfile.Environment()
+            environment: EditProfile.Environment(
+                firestoreUsersClient: .live(userClient: userClient),
+                storageClient: .live(userClient: userClient)
+            )
         ))
     }
 }
-*/

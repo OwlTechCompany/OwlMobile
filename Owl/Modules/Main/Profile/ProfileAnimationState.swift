@@ -26,7 +26,7 @@ struct ProfileAnimationState {
     var offset: CGFloat = .zero
     var photoState: ProfilePhotoState = .small
 
-    var isPlaceholder: Bool = true
+    var isPlaceholderPhoto: Bool = true
 
     var smallPhotoMaxY: CGFloat {
         return ProfilePhotoState.small.height + safeAreaInsets.top + smallPhotoTopPadding
@@ -36,6 +36,7 @@ struct ProfileAnimationState {
         switch photoState {
         case .big:
             return screen.width
+            
         case .small:
             return smallPhotoMaxY + textHeaderSize
         }

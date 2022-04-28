@@ -85,8 +85,10 @@ private extension ProfileAnimationState {
         switch offset {
         case (...minimumOpacityOffset):
             return 0
+
         case (minimumOpacityOffset..<maximumOpacityOffset):
             return (offset - minimumOpacityOffset) / (maximumOpacityOffset - minimumOpacityOffset)
+            
         default:
             return 1
         }

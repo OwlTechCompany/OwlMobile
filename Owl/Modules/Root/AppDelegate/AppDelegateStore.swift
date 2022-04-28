@@ -8,15 +8,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct DidReceiveRemoteNotificationModel: Equatable {
-    var userInfo: [AnyHashable: Any]
-    var completionHandler: (UIBackgroundFetchResult) -> Void
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.userInfo.keys == lhs.userInfo.keys
-    }
-}
-
 extension AppDelegate {
 
     // MARK: - State

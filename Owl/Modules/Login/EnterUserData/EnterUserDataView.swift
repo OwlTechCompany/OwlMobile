@@ -37,7 +37,7 @@ struct EnterUserDataView: View {
                         }
 
                         ZStack(alignment: .bottomTrailing) {
-                            Image(uiImage: viewStore.selectedImage ?? Asset.Images.owlWithPadding.image)
+                            Image(uiImage: viewStore.selectedImage ?? Asset.Images.gradientOwl.image)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)

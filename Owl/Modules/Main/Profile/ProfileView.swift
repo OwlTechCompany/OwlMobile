@@ -28,7 +28,7 @@ struct ProfileView: View {
                             user: viewStore.user
                         )
                         .onTapGesture {
-                            guard !animationState.isPlaceholder else {
+                            guard !animationState.isPlaceholderPhoto else {
                                 return
                             }
                             animationState.photoState.toggle()
@@ -104,7 +104,7 @@ struct ProfileView: View {
                 }
             }
             .onChange(of: viewStore.user) { newValue in
-                animationState.isPlaceholder = newValue.photo == .placeholder
+                animationState.isPlaceholderPhoto = newValue.photo == .placeholder
             }
             .onChange(of: delegate.scrollViewDidScroll) { value in
                 guard let scrollView = value?.scrollView else {
@@ -113,7 +113,7 @@ struct ProfileView: View {
                 let offset = scrollView.contentOffset.y
                 animationState.offset = offset
 
-                guard !animationState.isPlaceholder else {
+                guard !animationState.isPlaceholderPhoto else {
                     return
                 }
                 if offset <= -32 {
@@ -155,7 +155,7 @@ struct ProfileView: View {
             )
             .onAppear {
                 viewStore.send(.onAppear)
-                animationState.isPlaceholder = viewStore.user.photo == .placeholder
+                animationState.isPlaceholderPhoto = viewStore.user.photo == .placeholder
             }
         }
         .background(

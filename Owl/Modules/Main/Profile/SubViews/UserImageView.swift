@@ -18,40 +18,41 @@ struct UserImageView: View {
         PhotoWebImage(user: user, useResize: false)
             .frame(width: animationState.photoState.width, height: animationState.imageViewHeight)
             .cornerRadius(animationState.photoState.cornerRadius)
-            .overlay(
-                VStack {
-                    Spacer()
-                    LinearGradient(
-                        colors: [
-                            .black.opacity(0),
-                            .black.opacity(0.2)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: animationState.textHeaderSize + 20)
-                }
-                .opacity(animationState.photoState == .big ? 1 : 0)
-            )
-            .overlay(
-                VStack {
-                    LinearGradient(
-                        colors: [
-                            .black.opacity(0.2),
-                            .black.opacity(0)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: animationState.safeAreaInsets.top + animationState.textSize + 10)
-
-                    Spacer()
-                }
-                .opacity(animationState.photoState == .big ? 1 : 0)
-            )
+            .overlay(topGradientOverlay)
+            .overlay(bottomGradientOverlay)
             .offset(x: 0, y: animationState.imageViewYOffset)
             .padding(.top, animationState.imageViewTopPadding)
             .padding(.bottom, animationState.imageViewBottomPadding)
+    }
+
+    var topGradientOverlay: some View {
+        VStack {
+            Spacer()
+            LinearGradient(
+                colors: [.black.opacity(0), .black.opacity(0.2)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: animationState.textHeaderSize + 20)
+        }
+        .opacity(animationState.gradientOverlayOpacity)
+    }
+
+    var bottomGradientOverlay: some View {
+        VStack {
+            LinearGradient(
+                colors: [
+                    .black.opacity(0.2),
+                    .black.opacity(0)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: animationState.safeAreaInsets.top + animationState.textSize + 10)
+
+            Spacer()
+        }
+        .opacity(animationState.gradientOverlayOpacity)
     }
 }
 
@@ -63,6 +64,7 @@ private extension ProfileAnimationState {
         switch photoState {
         case .big:
             return photoState.height - offset
+
         case .small:
             return photoState.height
         }
@@ -72,6 +74,7 @@ private extension ProfileAnimationState {
         switch photoState {
         case .big:
             return offset / 2
+
         case .small:
             return 0
         }
@@ -81,6 +84,7 @@ private extension ProfileAnimationState {
         switch photoState {
         case .big:
             return 0
+
         case .small:
             return safeAreaInsets.top + smallPhotoTopPadding
         }
@@ -90,8 +94,19 @@ private extension ProfileAnimationState {
         switch photoState {
         case .big:
             return 0
+
         case .small:
             return textHeaderSize
+        }
+    }
+
+    var gradientOverlayOpacity: CGFloat {
+        switch photoState {
+        case .big:
+            return 1
+
+        case .small:
+            return 0
         }
     }
     

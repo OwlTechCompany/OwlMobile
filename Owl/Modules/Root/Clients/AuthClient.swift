@@ -37,19 +37,12 @@ extension AuthClient {
     )
 
     static private func verifyPhoneNumberLive(phoneNumber: String) -> Effect<String, Error> {
-        Effect.future { completion in
-            if AuthClient.testPhones.contains(phoneNumber) {
-                firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
-            }
-            phoneAuthProvider
-                .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-                    if let error = error {
-                        completion(.failure(error))
-                        return
-                    }
-                    completion(.success(verificationID!))
-                }
+        if AuthClient.testPhones.contains(phoneNumber) {
+            firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
         }
+        return phoneAuthProvider
+            .verifyPhoneNumber(phoneNumber)
+            .eraseToEffect()
     }
 
     static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
@@ -69,21 +62,14 @@ extension AuthClient {
     }
 
     static private func signInLive(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
-        Effect.future { completion in
-            let credential = phoneAuthProvider.credential(
-                withVerificationID: signInModel.verificationID,
-                verificationCode: signInModel.verificationCode
-            )
-            firebaseAuth.signIn(with: credential) { authResult, error in
-                if let error = error {
-                    completion(.failure(error as NSError))
-                } else if let authResult = authResult {
-                    completion(.success(authResult))
-                } else {
-                    completion(.failure(.init(domain: "", code: 1)))
-                }
-            }
-        }
+        let credential = phoneAuthProvider.credential(
+            withVerificationID: signInModel.verificationID,
+            verificationCode: signInModel.verificationCode
+        )
+        return firebaseAuth
+            .signIn(with: credential)
+            .mapError { $0 as NSError }
+            .eraseToEffect()
     }
 
     static private func signOutLive() {

@@ -45,11 +45,8 @@ struct Profile {
         case .onAppear:
             return Effect.run { subscriber in
                 environment.userClient.firestoreUser
-                    .dropFirst()
                     .compactMap { $0 }
-                    .sink { user in
-                        subscriber.send(.updateUser(user))
-                    }
+                    .sink { subscriber.send(.updateUser($0)) }
             }
 
         case let .updateUser(user):

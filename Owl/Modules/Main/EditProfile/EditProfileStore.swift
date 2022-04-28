@@ -17,7 +17,6 @@ struct EditProfile {
         @BindableState var firstName: String = ""
         @BindableState var lastName: String = ""
 
-        var saveButtonEnabled: Bool = true
         var isLoading: Bool = false
         var photo: Photo
 
@@ -52,8 +51,6 @@ struct EditProfile {
     // MARK: - Environment
 
     struct Environment {
-        let userClient: UserClient
-        let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
     }
@@ -68,9 +65,7 @@ struct EditProfile {
             return .none
 
         case .binding(\.$showImagePicker):
-            if !state.showImagePicker {
-                state.isLoading = false
-            }
+            state.isLoading = state.showImagePicker
             return .none
 
         case .save:
@@ -82,7 +77,8 @@ struct EditProfile {
 
         case let .uploadPhoto(image):
             state.isLoading = true
-            guard let data = image.jpegData(compressionQuality: 0.4) else {
+            let compressionQuality = environment.storageClient.compressionQuality
+            guard let data = image.jpegData(compressionQuality: compressionQuality) else {
                 let error = NSError(domain: "Unable to compress", code: 1)
                 return Effect(value: .updateUserResult(.failure(error)))
             }

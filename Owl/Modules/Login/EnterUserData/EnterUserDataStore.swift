@@ -62,9 +62,7 @@ struct EnterUserData {
             return .none
 
         case .binding(\.$showImagePicker):
-            if !state.showImagePicker {
-                state.isLoading = false
-            }
+            state.isLoading = state.showImagePicker
             return .none
 
         case .binding(\.$firstName):
@@ -83,7 +81,8 @@ struct EnterUserData {
 
         case let .uploadPhoto(image):
             state.isLoading = true
-            guard let data = image.jpegData(compressionQuality: 0.4) else {
+            let compressionQuality = environment.storageClient.compressionQuality
+            guard let data = image.jpegData(compressionQuality: compressionQuality) else {
                 let error = NSError(domain: "Unable to compress", code: 1)
                 return Effect(value: .updateUserResult(.failure(error)))
             }
