@@ -25,19 +25,25 @@ struct ProfileView: View {
                     ZStack {
                         UserImageView(
                             animationState: $animationState,
-                            image: Asset.Images.nastya.image
+                            user: viewStore.user
                         )
-                        .onTapGesture { animationState.photoState.toggle() }
+                        .onTapGesture {
+                            guard !animationState.isPlaceholderPhoto else {
+                                return
+                            }
+                            animationState.photoState.toggle()
+                        }
 
                         HeaderBlurView(
                             animationState: $animationState,
-                            backAction: { viewStore.send(.close) }
+                            backAction: { viewStore.send(.close) },
+                            editAction: { viewStore.send(.edit) }
                         )
 
                         HeaderDescriptionView(
                             animationState: $animationState,
-                            title: "Anastasia Holovash",
-                            subtitle: "+380931314850"
+                            title: viewStore.user.fullName,
+                            subtitle: viewStore.user.phoneNumber ?? "hidden"
                         )
                     }
                     .frame(width: screen.width)
@@ -92,10 +98,13 @@ struct ProfileView: View {
             .onChange(of: animationState.photoState) { newValue in
                 switch newValue {
                 case .big:
-                    generateFeedback()
+                    generateFeedback(style: .heavy)
                 case .small:
-                    break
+                    generateFeedback(style: .soft)
                 }
+            }
+            .onChange(of: viewStore.user) { newValue in
+                animationState.isPlaceholderPhoto = newValue.photo == .placeholder
             }
             .onChange(of: delegate.scrollViewDidScroll) { value in
                 guard let scrollView = value?.scrollView else {
@@ -103,6 +112,10 @@ struct ProfileView: View {
                 }
                 let offset = scrollView.contentOffset.y
                 animationState.offset = offset
+
+                guard !animationState.isPlaceholderPhoto else {
+                    return
+                }
                 if offset <= -32 {
                     animationState.photoState = .big
                 } else if offset >= 1 {
@@ -140,6 +153,10 @@ struct ProfileView: View {
                 self.store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
+            .onAppear {
+                viewStore.send(.onAppear)
+                animationState.isPlaceholderPhoto = viewStore.user.photo == .placeholder
+            }
         }
         .background(
             Color(.systemGroupedBackground)
@@ -177,8 +194,8 @@ struct ProfileView: View {
         .padding(.horizontal)
     }
 
-    func generateFeedback() {
-        let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+    func generateFeedback(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let impactHeavy = UIImpactFeedbackGenerator(style: style)
         impactHeavy.impactOccurred()
     }
 }
@@ -186,11 +203,22 @@ struct ProfileView: View {
 // MARK: - Preview
 
 struct ProfileView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live())
+
     static var previews: some View {
         ProfileView(store: Store(
-            initialState: Profile.State(image: Asset.Images.owlWithPadding.image),
+            initialState: Profile.State(
+                user: User(
+                    uid: "",
+                    phoneNumber: "",
+                    firstName: "",
+                    lastName: "",
+                    photo: .placeholder
+                )
+            ),
             reducer: Profile.reducer,
-            environment: Profile.Environment()
+            environment: Profile.Environment(userClient: userClient)
         ))
     }
 }

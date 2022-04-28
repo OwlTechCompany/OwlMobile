@@ -22,8 +22,7 @@ struct HeaderDescriptionView: View {
             Text(title)
                 .font(.system(.headline))
                 .frame(height: animationState.textSize)
-                .frame(width: screen.width)
-                .scaleEffect(animationState.photoState.isScaled ? 1.5 : 1.1)
+                .scaleEffect(animationState.photoState.isScaled ? 1.5 : 1)
                 .offset(x: 0, y: animationState.keepInHeaderYOffset)
                 .offset(x: 0, y: animationState.stickyOffsetY)
                 .foregroundColor(animationState.nameColor)
@@ -31,13 +30,11 @@ struct HeaderDescriptionView: View {
             Text(subtitle)
                 .foregroundColor(animationState.photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7))
                 .font(.system(.subheadline))
-                .frame(width: screen.width)
                 .frame(height: animationState.subTextSize)
                 .offset(x: 0, y: animationState.stickyOffsetY)
                 .opacity(animationState.phoneOpacity)
                 .padding(.bottom, animationState.textBottomPadding)
         }
-
     }
 }
 
@@ -47,25 +44,26 @@ private extension ProfileAnimationState {
 
     // MARK: - Name
 
-    var nameMinY: CGFloat {
-        return smallPhotoMaxY - textSize
+    var maximumNameOffsetY: CGFloat {
+        return smallPhotoMaxY - safeAreaInsets.top
     }
+
     var nameColor: Color {
-        return photoState.isScaled ? .white.opacity(0.9) : .black
+        return photoState.isScaled ? .white : .black
     }
 
     var keepInHeaderYOffset: CGFloat {
-        return offset > nameMinY ? offset - nameMinY : 0
+        return offset >= maximumNameOffsetY ? offset - maximumNameOffsetY : 0
     }
 
     // MARK: - Phone
 
     var phoneColor: Color {
-        return photoState.isScaled ? .white.opacity(0.7) : .black.opacity(0.7)
+        return photoState.isScaled ? .white.opacity(0.9) : .black.opacity(0.7)
     }
 
     var phoneOpacity: CGFloat {
-        return (nameMinY - offset) / nameMinY
+        return (maximumNameOffsetY - offset) / maximumNameOffsetY
     }
 
     // MARK: - Other

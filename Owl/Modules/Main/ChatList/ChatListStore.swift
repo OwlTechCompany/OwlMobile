@@ -14,6 +14,7 @@ struct ChatList {
     // MARK: - State
 
     struct State: Equatable {
+        var user: User
         var chats: IdentifiedArrayOf<ChatListCell.State>
         var chatsData: [ChatsListPrivateItem]
 
@@ -29,6 +30,7 @@ struct ChatList {
         case openProfile
         case newPrivateChat
         case onAppear
+        case updateUser(User)
         case getChatsResult(Result<[ChatsListPrivateItem], NSError>)
 
         case chats(id: String, action: ChatListCell.Action)
@@ -40,6 +42,7 @@ struct ChatList {
     struct Environment {
         let authClient: AuthClient
         let chatsClient: FirestoreChatsClient
+        let userClient: UserClient
     }
 
     // MARK: - Reducer
@@ -53,11 +56,20 @@ struct ChatList {
             return .none
 
         case .onAppear:
-            guard let authUser = environment.authClient.currentUser() else {
-                return .none
-            }
-            return environment.chatsClient.getChats(authUser)
-                .catchToEffect(Action.getChatsResult)
+            return .merge(
+                environment.chatsClient.getChats()
+                    .catchToEffect(Action.getChatsResult),
+
+                Effect.run { subscriber in
+                    environment.userClient.firestoreUser
+                        .compactMap { $0 }
+                        .sink { subscriber.send(.updateUser($0)) }
+                }
+            )
+
+        case let .updateUser(user):
+            state.user = user
+            return .none
 
         case let .chats(id, .open):
             guard let chat = state.chatsData.first(where: { $0.id == id }) else {

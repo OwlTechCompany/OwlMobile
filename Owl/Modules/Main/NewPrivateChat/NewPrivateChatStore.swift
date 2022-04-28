@@ -18,7 +18,7 @@ struct NewPrivateChat {
         var emptyViewState: EmptyViewState = .onAppear
         var isLoading: Bool = false
         var users: [User] = []
-        var cells: IdentifiedArrayOf<NewPrivateChatCell.State> = .init()
+        var cells: IdentifiedArrayOf<NewPrivateChatCell.State> = []
 
         enum EmptyViewState {
             case onAppear

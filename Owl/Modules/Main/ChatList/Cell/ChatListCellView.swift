@@ -15,12 +15,9 @@ struct ChatListCellView: View {
     var body: some View {
         WithViewStore(self.store) { viewStore in
             HStack(alignment: .top, spacing: 16) {
-                Image(uiImage: viewStore.chatImage)
-                    .resizable()
+                PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName, isThumbnail: true)
                     .frame(width: 56, height: 56)
-                    .background(Color.white)
                     .clipShape(Circle())
-                    .scaledToFill()
                     .modifier(ShadowModifier())
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -105,6 +102,19 @@ private extension ChatListCell.State {
         default:
             return 48
         }
+    }
+
+}
+
+extension ChatListCell.State {
+
+    init(model: ChatsListPrivateItem) {
+        id = model.id
+        photo = model.companion.photo
+        chatName = model.name
+        lastMessage = model.lastMessage?.messageText ?? ""
+        lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
+        unreadMessagesNumber = 0
     }
 
 }

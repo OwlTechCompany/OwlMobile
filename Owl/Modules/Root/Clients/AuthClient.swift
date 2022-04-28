@@ -17,71 +17,65 @@ struct AuthClient {
     static var firebaseAuth: Auth { Auth.auth() }
     static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
 
-    var currentUser: () -> Firebase.User?
-
-    var verifyPhoneNumber: (String) -> Effect<String, Error>
+    var verifyPhoneNumber: (String) -> Effect<String, NSError>
     var setAPNSToken: (Data) -> Effect<Void, Never>
-    var canHandleNotification: (
-        [AnyHashable: Any],
-        @escaping (UIBackgroundFetchResult) -> Void
-    ) -> Effect<Void, Never>
-
+    var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Effect<Void, Never>
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
     var signOut: () -> Void
 }
 
+// MARK: - Live
+
 extension AuthClient {
 
     static let live = AuthClient(
-        currentUser: { firebaseAuth.currentUser },
-        verifyPhoneNumber: { phoneNumber in
-            .future { completion in
-                if AuthClient.testPhones.contains(phoneNumber) {
-                    firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
-                }
-                phoneAuthProvider
-                    .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-                        if let error = error {
-                            completion(.failure(error))
-                            return
-                        }
-                        completion(.success(verificationID!))
-                    }
-            }
-        },
-        setAPNSToken: { deviceToken in
-            .fireAndForget {
-                firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
-            }
-        },
-        canHandleNotification: { userInfo, completionHandler in
-            .fireAndForget {
-                if firebaseAuth.canHandleNotification(userInfo) {
-                    completionHandler(.noData)
-                }
-            }
-        },
-        signIn: { signInModel in
-            .future { completion in
-                let credential = phoneAuthProvider.credential(
-                    withVerificationID: signInModel.verificationID,
-                    verificationCode: signInModel.verificationCode
-                )
-                firebaseAuth.signIn(with: credential) { authResult, error in
-                    if let error = error {
-                        completion(.failure(error as NSError))
-                    } else if let authResult = authResult {
-                        completion(.success(authResult))
-                    } else {
-                        completion(.failure(.init(domain: "", code: 1)))
-                    }
-                }
-            }
-        },
-        signOut: {
-            try? firebaseAuth.signOut()
-        }
+        verifyPhoneNumber: verifyPhoneNumberLive,
+        setAPNSToken: setAPNSTokenLive,
+        canHandleNotification: canHandleNotificationLive,
+        signIn: signInLive,
+        signOut: signOutLive
     )
+
+    static private func verifyPhoneNumberLive(phoneNumber: String) -> Effect<String, NSError> {
+        if AuthClient.testPhones.contains(phoneNumber) {
+            firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
+        }
+        return phoneAuthProvider
+            .verifyPhoneNumber(phoneNumber)
+            .mapError { $0 as NSError }
+            .eraseToEffect()
+    }
+
+    static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
+        }
+    }
+
+    static private func canHandleNotificationLive(
+        model: DidReceiveRemoteNotificationModel
+    ) -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            if firebaseAuth.canHandleNotification(model.userInfo) {
+                model.completionHandler(.noData)
+            }
+        }
+    }
+
+    static private func signInLive(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
+        let credential = phoneAuthProvider.credential(
+            withVerificationID: signInModel.verificationID,
+            verificationCode: signInModel.verificationCode
+        )
+        return firebaseAuth
+            .signIn(with: credential)
+            .mapError { $0 as NSError }
+            .eraseToEffect()
+    }
+
+    static private func signOutLive() {
+        try? firebaseAuth.signOut()
+    }
 
 }
 

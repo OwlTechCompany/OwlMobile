@@ -106,6 +106,9 @@ struct EnterCodeView: View {
 // MARK: - Preview
 
 struct EnterCodeView_Previews: PreviewProvider {
+
+    static let userClient = UserClient.live(userDefaults: .live())
+
     static var previews: some View {
         EnterCodeView(
             store: Store(
@@ -116,8 +119,8 @@ struct EnterCodeView_Previews: PreviewProvider {
                 reducer: EnterCode.reducer,
                 environment: EnterCode.Environment(
                     authClient: .live,
-                    userDefaultsClient: .live,
-                    firestoreUsersClient: .live
+                    userDefaultsClient: .live(),
+                    firestoreUsersClient: .live(userClient: userClient)
                 )
             )
         )

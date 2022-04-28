@@ -23,12 +23,10 @@ final class ScrollViewDelegate: NSObject, UIScrollViewDelegate, ObservableObject
     @Published var scrollViewDidEndDragging: ScrollViewChanged?
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("-----scrollViewDidScroll\(scrollView.contentOffset.y)")
         scrollViewDidScroll = ScrollViewChanged(scrollView: scrollView)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        print("!!!!!scrollViewDidEndDragging\(scrollView.contentOffset.y)")
         scrollViewDidEndDragging = ScrollViewChanged(scrollView: scrollView)
     }
 }

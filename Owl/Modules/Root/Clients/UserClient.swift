@@ -14,9 +14,7 @@ import FirebaseAuthCombineSwift
 
 struct UserClient {
 
-    static var liveCancellable: Cancellable?
-
-    var firebaseUser: CurrentValueSubject<Firebase.User?, Never>
+    var authUser: CurrentValueSubject<Firebase.User?, Never>
     var firestoreUser: CurrentValueSubject<User?, Never>
 
     var setup: () -> Void
@@ -24,22 +22,22 @@ struct UserClient {
 
 extension UserClient {
 
-    static var live: Self {
-        liveCancellable?.cancel()
-        let firebaseUser = CurrentValueSubject<Firebase.User?, Never>(nil)
-        let firestoreUser = CurrentValueSubject<User?, Never>(nil)
+    static func live(userDefaults: UserDefaultsClient) -> Self {
+        var liveCancellables: Set<AnyCancellable> = []
+        let authUser = CurrentValueSubject<Firebase.User?, Never>(nil)
+        let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
         var userCancellable: Cancellable?
         return Self(
-            firebaseUser: firebaseUser,
+            authUser: authUser,
             firestoreUser: firestoreUser,
             setup: {
                 // Set current user immediately
-                firebaseUser.send(Auth.auth().currentUser)
+                authUser.send(Auth.auth().currentUser)
 
                 // Subscribe for updates
-                liveCancellable = Auth.auth().authStateDidChangePublisher()
+                Auth.auth().authStateDidChangePublisher()
                     .sink { user in
-                        firebaseUser.send(user)
+                        authUser.send(user)
 
                         // If Firebase.User changes we need to update firestoreUser
                         userCancellable?.cancel()
@@ -49,13 +47,16 @@ extension UserClient {
                                 .snapshotPublisher()
                                 .map { try? $0.data(as: User.self) }
                                 .on(value: {
+                                    userDefaults.setUser($0)
                                     firestoreUser.send($0)
                                 })
                                 .sink()
                         } else {
+                            userDefaults.setUser(nil)
                             firestoreUser.send(nil)
                         }
                     }
+                    .store(in: &liveCancellables)
             }
         )
     }
