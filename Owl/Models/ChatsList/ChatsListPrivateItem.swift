@@ -32,6 +32,14 @@ extension ChatsListPrivateItem {
         }
     }
 
+    var me: User {
+        if user1.uid != Auth.auth().currentUser!.uid {
+            return user2
+        } else {
+            return user1
+        }
+    }
+
     var name: String {
         return companion.fullName
     }
