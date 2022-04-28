@@ -46,7 +46,7 @@ struct ChatMessage {
 extension ChatMessage.State {
 
     init(message: Message, companion: User) {
-        self.id = message.id
+        self.id = message.id ?? ""
         self.text = message.messageText
         self.sentAt = message.sentAt
         self.sentBy = ""
