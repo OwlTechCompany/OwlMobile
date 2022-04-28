@@ -104,7 +104,7 @@ struct ChatView: View {
         WithViewStore(store) { viewStore in
             ZStack(alignment: .top) {
                 Rectangle().fill(Colors.Blue._7.swiftUIColor)
-                    .frame(height: textFieldBackgroundHeigh)
+                    .frame(height: textFieldBackgroundHeight)
 
                 HStack(spacing: 16) {
                     TextField("Message...", text: viewStore.binding(\.$newMessage))
