@@ -102,11 +102,7 @@ struct EnterUserDataView: View {
                 }
             }
             .disabled(viewStore.isLoading)
-            .overlay(
-                viewStore.isLoading
-                    ? Loader()
-                    : nil
-            )
+            .overlay(viewStore.isLoading ? Loader() : nil)
             .alert(
                 self.store.scope(state: \.alert),
                 dismiss: .dismissAlert
