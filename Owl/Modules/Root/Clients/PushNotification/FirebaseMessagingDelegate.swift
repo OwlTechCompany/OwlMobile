@@ -16,8 +16,8 @@ final class FirebaseMessagingDelegate: NSObject, MessagingDelegate {
 
         public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
-            case let (.didReceiveRegistrationToken(lhs, lhsToken), .didReceiveRegistrationToken(rhs, rhsToken)):
-                return lhs == rhs && lhsToken == rhsToken
+            case (.didReceiveRegistrationToken, .didReceiveRegistrationToken):
+                return false
             }
         }
     }
@@ -29,7 +29,7 @@ final class FirebaseMessagingDelegate: NSObject, MessagingDelegate {
     }
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        self.subscriber.send(
+        subscriber.send(
             .didReceiveRegistrationToken(messaging, fcmToken: fcmToken)
         )
     }

@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct PushNotificationClient {
 
     var getNotificationSettings: Effect<Settings, Never>
-    var registerForRemoteNotifications: (UNAuthorizationOptions) -> Effect<Bool, NSError>
+    var requestAuthorization: (UNAuthorizationOptions) -> Effect<Bool, NSError>
     var setAPNSToken: (Data) -> Void
     var register: () -> Effect<Never, Never>
 

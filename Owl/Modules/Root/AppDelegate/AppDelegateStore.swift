@@ -59,14 +59,14 @@ extension AppDelegate {
                 .receive(on: DispatchQueue.main)
                 .flatMap { settings in
                     settings.authorizationStatus == .authorized
-                    ? environment.pushNotificationClient.registerForRemoteNotifications([.alert, .sound])
-                    : .none
+                        ? environment.pushNotificationClient.requestAuthorization([.alert, .sound])
+                        : .none
                 }
                 .receive(on: DispatchQueue.main)
                 .flatMap { isSucceed in
                     isSucceed
-                    ? environment.pushNotificationClient.register()
-                    : .none
+                        ? environment.pushNotificationClient.register()
+                        : .none
                 }
                 .receive(on: DispatchQueue.main)
                 .eraseToEffect()
@@ -96,7 +96,6 @@ extension AppDelegate {
                 .fireAndForget()
 
         case let .didRegisterForRemoteNotifications(.success(data)):
-
             environment.authClient.setAPNSToken(data)
             environment.pushNotificationClient.setAPNSToken(data)
             return .none

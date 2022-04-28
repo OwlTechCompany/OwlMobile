@@ -9,11 +9,10 @@ import UIKit
 
 class DidReceiveRemoteNotificationModel: Equatable {
 
-
     var userInfo: [AnyHashable: Any]
     var completionHandler: (UIBackgroundFetchResult) -> Void
 
-    init(userInfo: [AnyHashable : Any], completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    init(userInfo: [AnyHashable: Any], completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         self.userInfo = userInfo
         self.completionHandler = completionHandler
     }

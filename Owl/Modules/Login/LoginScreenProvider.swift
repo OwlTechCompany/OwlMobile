@@ -30,7 +30,11 @@ extension Login.ScreenProvider {
     }
 
     struct EnterUserDataRoute: Routable {
-        static var statePath = /State.enterCode
+        static var statePath = /State.enterUserData
+    }
+
+    struct SetupPermissionsRoute: Routable {
+        static var statePath = /State.setupPermissions
     }
 
     // MARK: - State handling
@@ -40,6 +44,7 @@ extension Login.ScreenProvider {
         case enterPhone(EnterPhone.State)
         case enterCode(EnterCode.State)
         case enterUserData(EnterUserData.State)
+        case setupPermissions(SetupPermissions.State)
 
         var id: String {
             switch self {
@@ -51,6 +56,8 @@ extension Login.ScreenProvider {
                 return EnterCodeRoute.id
             case .enterUserData:
                 return EnterUserDataRoute.id
+            case .setupPermissions:
+                return SetupPermissionsRoute.id
             }
         }
     }
@@ -62,6 +69,7 @@ extension Login.ScreenProvider {
         case enterPhone(EnterPhone.Action)
         case enterCode(EnterCode.Action)
         case enterUserData(EnterUserData.Action)
+        case setupPermissions(SetupPermissions.Action)
     }
 
     // MARK: - Reducer handling
@@ -71,10 +79,8 @@ extension Login.ScreenProvider {
             .pullback(
                 state: /State.onboarding,
                 action: /Action.onboarding,
-                environment: {
-                    Onboarding.Environment(
-                        pushNotificationClient: $0.pushNotificationClient
-                    )
+                environment: { _ in
+                    Onboarding.Environment()
                 }
             ),
         EnterPhone.reducer
@@ -109,7 +115,18 @@ extension Login.ScreenProvider {
                     EnterUserData.Environment(
                         authClient: $0.authClient,
                         firestoreUsersClient: $0.firestoreUsersClient,
-                        storageClient: $0.storageClient
+                        storageClient: $0.storageClient,
+                        pushNotificationClient: $0.pushNotificationClient
+                    )
+                }
+            ),
+        SetupPermissions.reducer
+            .pullback(
+                state: /State.setupPermissions,
+                action: /Action.setupPermissions,
+                environment: {
+                    SetupPermissions.Environment(
+                        pushNotificationClient: $0.pushNotificationClient
                     )
                 }
             )

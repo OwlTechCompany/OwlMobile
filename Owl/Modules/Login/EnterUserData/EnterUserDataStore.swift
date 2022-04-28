@@ -41,6 +41,8 @@ struct EnterUserData {
 
         case dismissAlert
 
+        case next(showSetupPermissions: Bool)
+
         case binding(BindingAction<State>)
     }
 
@@ -50,6 +52,7 @@ struct EnterUserData {
         let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
+        let pushNotificationClient: PushNotificationClient
     }
 
     // MARK: - Reducer
@@ -70,7 +73,13 @@ struct EnterUserData {
             return .none
 
         case .later:
-            return .none
+            state.isLoading = true
+            return environment.pushNotificationClient
+                .getNotificationSettings
+                .map { $0.authorizationStatus == .authorized }
+                .receive(on: DispatchQueue.main)
+                .flatMap { Effect(value: .next(showSetupPermissions: !$0)) }
+                .eraseToEffect()
 
         case .save:
             if let image = state.selectedImage {
@@ -104,8 +113,12 @@ struct EnterUserData {
                 .catchToEffect(Action.updateUserResult)
 
         case .updateUserResult(.success):
-            state.isLoading = false
-            return .none
+            return environment.pushNotificationClient
+                .getNotificationSettings
+                .map { $0.authorizationStatus == .authorized }
+                .receive(on: DispatchQueue.main)
+                .flatMap { Effect(value: .next(showSetupPermissions: !$0)) }
+                .eraseToEffect()
 
         case let .uploadPhotoResult(.failure(error)),
              let .updateUserResult(.failure(error)):
@@ -119,6 +132,10 @@ struct EnterUserData {
 
         case .dismissAlert:
             state.alert = nil
+            return .none
+
+        case .next:
+            state.isLoading = false
             return .none
 
         case .binding:

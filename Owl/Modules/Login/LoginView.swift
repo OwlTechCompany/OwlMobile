@@ -32,6 +32,11 @@ struct LoginView: View {
                     then: EnterCodeView.init
                 )
                 CaseLet(
+                    state: /Login.ScreenProvider.State.setupPermissions,
+                    action: Login.ScreenProvider.Action.setupPermissions,
+                    then: SetupPermissionsView.init
+                )
+                CaseLet(
                     state: /Login.ScreenProvider.State.enterUserData,
                     action: Login.ScreenProvider.Action.enterUserData,
                     then: EnterUserDataView.init

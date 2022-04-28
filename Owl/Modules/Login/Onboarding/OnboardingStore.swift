@@ -16,35 +16,17 @@ struct Onboarding {
     // MARK: - Action
 
     enum Action: Equatable {
-        case startTapped
-        case registerForRemoteNotificationsResult(Result<Bool, NSError>)
         case startMessaging
     }
 
     // MARK: - Environment
 
-    struct Environment {
-        var pushNotificationClient: PushNotificationClient
-    }
+    struct Environment { }
 
     // MARK: - Reducer
 
     static let reducer = Reducer<State, Action, Environment> { _, action, environment in
         switch action {
-        case .startTapped:
-            return environment.pushNotificationClient
-                .registerForRemoteNotifications([.alert, .sound, .badge])
-                .receive(on: DispatchQueue.main)
-                .catchToEffect(Action.registerForRemoteNotificationsResult)
-
-        case let .registerForRemoteNotificationsResult(.success(result)):
-            print(result)
-            return Effect(value: .startMessaging)
-
-        case .registerForRemoteNotificationsResult(.failure):
-            print("ERROR")
-            return .none
-
         case .startMessaging:
             return .none
         }

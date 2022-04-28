@@ -35,7 +35,7 @@ struct OnboardingView: View {
                 Spacer()
 
                 Button(
-                    action: { viewStore.send(.startTapped) },
+                    action: { viewStore.send(.startMessaging) },
                     label: { Text("Start Messaging") }
                 )
                 .buttonStyle(BigButtonStyle())
@@ -52,14 +52,12 @@ struct OnboardingView: View {
 
 // MARK: - Preview
 
-//struct OnboardingView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        OnboardingView(store: Store(
-//            initialState: Onboarding.State(),
-//            reducer: Onboarding.reducer,
-//            environment: Onboarding.Environment(
-//                pushNotification: .live(firestoreUserClient: .live(userClient: .live(userDefaults: .live())))
-//            )
-//        ))
-//    }
-//}
+struct OnboardingView_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingView(store: Store(
+            initialState: Onboarding.State(),
+            reducer: Onboarding.reducer,
+            environment: Onboarding.Environment()
+        ))
+    }
+}

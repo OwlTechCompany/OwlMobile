@@ -16,7 +16,7 @@ extension PushNotificationClient {
     static func live() -> PushNotificationClient {
         PushNotificationClient(
             getNotificationSettings: getNotificationSettings,
-            registerForRemoteNotifications: registerForRemoteNotifications,
+            requestAuthorization: requestAuthorization,
             setAPNSToken: setAPNSToken,
             register: register,
             userNotificationCenterDelegate: userNotificationCenterDelegate,
@@ -36,7 +36,7 @@ fileprivate extension PushNotificationClient {
         }
     }
 
-    static func registerForRemoteNotifications(authOptions: UNAuthorizationOptions) -> Effect<Bool, NSError> {
+    static func requestAuthorization(authOptions: UNAuthorizationOptions) -> Effect<Bool, NSError> {
         Effect.future { callback in
             UNUserNotificationCenter.current()
                 .requestAuthorization(options: authOptions) { granted, error in
@@ -50,6 +50,7 @@ fileprivate extension PushNotificationClient {
     }
 
     static func setAPNSToken(data: Data) {
+        Messaging.messaging().apnsToken = nil
         Messaging.messaging().apnsToken = data
     }
 

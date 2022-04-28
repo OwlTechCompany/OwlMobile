@@ -31,6 +31,9 @@ extension UserClient {
             authUser: authUser,
             firestoreUser: firestoreUser,
             setup: {
+                if userDefaults.getUser() == nil {
+                    try? Auth.auth().signOut()
+                }
                 // Set current user immediately
                 authUser.send(Auth.auth().currentUser)
 
