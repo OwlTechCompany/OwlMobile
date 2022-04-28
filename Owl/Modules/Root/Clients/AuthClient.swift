@@ -17,7 +17,7 @@ struct AuthClient {
     static var firebaseAuth: Auth { Auth.auth() }
     static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
 
-    var verifyPhoneNumber: (String) -> Effect<String, Error>
+    var verifyPhoneNumber: (String) -> Effect<String, NSError>
     var setAPNSToken: (Data) -> Effect<Void, Never>
     var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Effect<Void, Never>
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
@@ -36,12 +36,13 @@ extension AuthClient {
         signOut: signOutLive
     )
 
-    static private func verifyPhoneNumberLive(phoneNumber: String) -> Effect<String, Error> {
+    static private func verifyPhoneNumberLive(phoneNumber: String) -> Effect<String, NSError> {
         if AuthClient.testPhones.contains(phoneNumber) {
             firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
         }
         return phoneAuthProvider
             .verifyPhoneNumber(phoneNumber)
+            .mapError { $0 as NSError }
             .eraseToEffect()
     }
 

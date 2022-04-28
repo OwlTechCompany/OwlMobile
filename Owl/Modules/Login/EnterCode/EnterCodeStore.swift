@@ -84,7 +84,6 @@ struct EnterCode {
             state.isLoading = true
             return environment.authClient
                 .verifyPhoneNumber(state.phoneNumber)
-                .mapError { $0 as NSError }
                 .catchToEffect(Action.verificationIDResult)
 
         case let .authDataResult(.failure(error)),
