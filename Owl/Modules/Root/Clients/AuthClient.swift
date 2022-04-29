@@ -14,7 +14,11 @@ import FirebaseAuthCombineSwift
 
 struct AuthClient {
 
-    static var firebaseAuth: Auth { Auth.auth() }
+    static var firebaseAuth: Auth {
+        let auth = Auth.auth()
+        auth.useEmulator(withHost: "\(host)", port: 9099)
+        return auth
+    }
     static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
 
     var verifyPhoneNumber: (String) -> Effect<String, NSError>

@@ -21,7 +21,16 @@ extension FirebaseClient {
     )
 
     static func setupLive() {
+//        let host = "192.168.31.30"
         FirebaseApp.configure()
+        let firestoreSettings = Firestore.firestore().settings
+        firestoreSettings.host = "\(host):8080"
+        firestoreSettings.isPersistenceEnabled = false
+        firestoreSettings.isSSLEnabled = false
+        Firestore.firestore().settings = firestoreSettings
     }
 
 }
+
+//let host = "localhost"
+let host = "192.168.31.30"
