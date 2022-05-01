@@ -7,7 +7,6 @@
 
 import ComposableArchitecture
 import FirebaseAuth
-import UIKit
 
 struct EnterCode {
 
