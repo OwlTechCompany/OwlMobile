@@ -120,9 +120,19 @@ struct App {
             return .none
 
         case .main(.delegate(.logout)):
-            environment.authClient.signOut()
+            let update = UserUpdate(fcmToken: "")
             state.set(.login)
-            return .none
+            return Effect.concatenate(
+                environment.firestoreUsersClient
+                    .updateMe(update)
+                    .fireAndForget(),
+
+                environment.authClient
+                    .signOut()
+                    .fireAndForget(),
+
+                Effect.cancel(id: MainListenersId())
+            )
 
         case .appDelegate:
             return .none

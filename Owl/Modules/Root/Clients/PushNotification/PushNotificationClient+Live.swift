@@ -50,9 +50,10 @@ fileprivate extension PushNotificationClient {
         }
     }
 
-    static func setAPNSToken(data: Data) {
-        Messaging.messaging().apnsToken = nil
-        Messaging.messaging().apnsToken = data
+    static func setAPNSToken(data: Data) -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            FirebaseClient.messaging.apnsToken = data
+        }
     }
 
     static func register() -> Effect<Never, Never> {
@@ -63,10 +64,8 @@ fileprivate extension PushNotificationClient {
 
     static func currentFCMToken() -> Effect<String, Never> {
         Effect.future { completion in
-            Messaging.messaging().token { token, error in
-                if let error = error {
-//                    completion(.failure(.))
-                } else if let token = token {
+            FirebaseClient.messaging.token { token, _ in
+                if let token = token {
                     completion(.success(token))
                 }
             }
@@ -90,7 +89,7 @@ fileprivate extension PushNotificationClient {
         Effect
             .run { subscriber in
                 var delegate: Optional = FirebaseMessagingDelegate(subscriber: subscriber)
-                Messaging.messaging().delegate = delegate
+                FirebaseClient.messaging.delegate = delegate
                 return AnyCancellable {
                     delegate = nil
                 }

@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseMessaging
 
 struct SetupPermissions {
 
@@ -42,7 +43,13 @@ struct SetupPermissions {
             return .none
 
         case let .registerForRemoteNotificationsResult(.success(result)):
-            return Effect(value: .next)
+            return Effect.concatenate(
+                environment.pushNotificationClient
+                    .register()
+                    .fireAndForget(),
+
+                Effect(value: .next)
+            )
 
         case .registerForRemoteNotificationsResult(.failure):
             return .none

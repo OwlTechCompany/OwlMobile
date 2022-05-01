@@ -16,6 +16,7 @@ struct FirebaseClient {
     static let phoneAuthProvider = PhoneAuthProvider.provider()
     static let firestore = Firestore.firestore()
     static let storage = Storage.storage()
+    static let messaging = Messaging.messaging()
 
     var setup: () -> Void
 

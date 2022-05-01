@@ -15,15 +15,12 @@ struct PushNotificationClient {
 
     var getNotificationSettings: Effect<Settings, Never>
     var requestAuthorization: (UNAuthorizationOptions) -> Effect<Bool, NSError>
-    var setAPNSToken: (Data) -> Void
+    var setAPNSToken: (Data) -> Effect<Void, Never>
     var register: () -> Effect<Never, Never>
     var currentFCMToken: () -> Effect<String, Never>
 
     var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
     var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>
-
-
-    
 }
 
 extension PushNotificationClient {
@@ -71,7 +68,7 @@ extension PushNotificationClient.Notification {
 extension PushNotificationClient.Notification.Response {
 
     init(rawValue: UNNotificationResponse) {
-        self.notification = .init(rawValue: rawValue.notification)
+        self.notification = PushNotificationClient.Notification(rawValue: rawValue.notification)
     }
 
 }

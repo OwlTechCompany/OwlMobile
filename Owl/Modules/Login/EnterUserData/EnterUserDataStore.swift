@@ -41,7 +41,8 @@ struct EnterUserData {
 
         case dismissAlert
 
-        case next(showSetupPermissions: Bool)
+        case checkNotificationService
+        case next(needSetupPermissions: Bool)
 
         case binding(BindingAction<State>)
     }
@@ -74,12 +75,7 @@ struct EnterUserData {
 
         case .later:
             state.isLoading = true
-            return environment.pushNotificationClient
-                .getNotificationSettings
-                .map { $0.authorizationStatus == .authorized }
-                .receive(on: DispatchQueue.main)
-                .flatMap { Effect(value: .next(showSetupPermissions: !$0)) }
-                .eraseToEffect()
+            return Effect(value: .checkNotificationService)
 
         case .save:
             if let image = state.selectedImage {
@@ -113,12 +109,7 @@ struct EnterUserData {
                 .catchToEffect(Action.updateUserResult)
 
         case .updateUserResult(.success):
-            return environment.pushNotificationClient
-                .getNotificationSettings
-                .map { $0.authorizationStatus == .authorized }
-                .receive(on: DispatchQueue.main)
-                .flatMap { Effect(value: .next(showSetupPermissions: !$0)) }
-                .eraseToEffect()
+            return Effect(value: .checkNotificationService)
 
         case let .uploadPhotoResult(.failure(error)),
              let .updateUserResult(.failure(error)):
@@ -129,6 +120,27 @@ struct EnterUserData {
                 dismissButton: .default(TextState("Ok"))
             )
             return .none
+
+        case .checkNotificationService:
+            return environment.pushNotificationClient
+                .getNotificationSettings
+                .receive(on: DispatchQueue.main)
+                .flatMap { settings -> Effect<Action, Never> in
+                    switch settings.authorizationStatus {
+                    case .notDetermined:
+                        return Effect(value: .next(needSetupPermissions: true))
+
+                    default:
+                        return Effect.concatenate(
+                            environment.pushNotificationClient
+                                .register()
+                                .fireAndForget(),
+
+                            Effect(value: .next(needSetupPermissions: false))
+                        )
+                    }
+                }
+                .eraseToEffect()
 
         case .dismissAlert:
             state.alert = nil

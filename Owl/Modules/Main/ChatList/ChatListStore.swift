@@ -61,6 +61,7 @@ struct ChatList {
                         .sink { subscriber.send(.updateUser($0)) }
                 }
             )
+            .cancellable(id: MainListenersId())
 
         case let .updateUser(user):
             state.user = user

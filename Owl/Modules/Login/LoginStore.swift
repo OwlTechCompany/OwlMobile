@@ -76,21 +76,27 @@ struct Login {
             case .userExists:
                 return environment.pushNotificationClient
                     .getNotificationSettings
-                    .map { $0.authorizationStatus == .authorized }
                     .receive(on: DispatchQueue.main)
-                    .flatMap { authorized -> Effect<Action, Never> in
-                        switch authorized {
-                        case true:
-                            return Effect(value: .delegate(.loginSuccess))
-                        case false:
+                    .flatMap { settings -> Effect<Action, Never> in
+                        switch settings.authorizationStatus {
+                        case .notDetermined:
                             return Effect(value: .showSetupPermission)
+
+                        default:
+                            return Effect.concatenate(
+                                environment.pushNotificationClient
+                                    .register()
+                                    .fireAndForget(),
+
+                                Effect(value: .delegate(.loginSuccess))
+                            )
                         }
                     }
                     .eraseToEffect()
             }
 
-        case let .routeAction(_, .enterUserData(.next(showSetupPermissions))):
-            switch showSetupPermissions {
+        case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
+            switch needSetupPermissions {
             case true:
                 return Effect(value: .showSetupPermission)
 
@@ -111,19 +117,6 @@ struct Login {
 
         case .updateRoutes:
             return .none
-
-        case .delegate(.loginSuccess):
-            return .concatenate(
-                environment.pushNotificationClient
-                    .register()
-                    .fireAndForget(),
-
-                environment.pushNotificationClient
-                    .currentFCMToken()
-                    .map { UserUpdate(fcmToken: $0) }
-                    .flatMap { environment.firestoreUsersClient.updateMe($0) }
-                    .fireAndForget()
-            )
 
         case .delegate:
             return .none

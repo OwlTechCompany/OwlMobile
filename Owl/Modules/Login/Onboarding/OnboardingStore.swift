@@ -25,7 +25,7 @@ struct Onboarding {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, environment in
+    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
         switch action {
         case .startMessaging:
             return .none

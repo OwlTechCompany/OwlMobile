@@ -248,10 +248,10 @@
 				5D35EC822800246900624717 /* AuthClient.swift */,
 				5FD33DC2280CC315009E9FBB /* UserClient.swift */,
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
-				5FBCF9EB281AEDCC00734BA0 /* PushNotification */,
 				5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */,
 				5FE318062809E4B5007F7816 /* ValidationClient.swift */,
 				5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */,
+				5FBCF9EB281AEDCC00734BA0 /* PushNotification */,
 				5FE31828280A218F007F7816 /* Firestore */,
 				5FB6DAA328183AA60037C38B /* Storage */,
 			);

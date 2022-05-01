@@ -22,6 +22,9 @@ extension AppDelegate {
         case didRegisterForRemoteNotifications(Result<Data, NSError>)
         case didReceiveRemoteNotification(DidReceiveRemoteNotificationModel)
         case userNotificationCenterDelegate(UserNotificationCenterDelegate.Event)
+
+        case sendFCMToken(token: String?)
+
         case firebaseMessagingDelegate(FirebaseMessagingDelegate.Event)
     }
 
@@ -63,8 +66,11 @@ extension AppDelegate {
                         : .none
                 }
                 .receive(on: DispatchQueue.main)
-                .flatMap { isSucceed in
-                    isSucceed
+                .flatMap { isSucceed -> Effect<Never, Never> in
+//                    if isSucceed {
+//                        Messaging.messaging().isAutoInitEnabled = true
+//                    }
+                    return isSucceed
                         ? environment.pushNotificationClient.register()
                         : .none
                 }
@@ -87,8 +93,30 @@ extension AppDelegate {
             return .none
 
         case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):
+            return Effect(value: .sendFCMToken(token: fcmToken))
 
-            guard let fcmToken = fcmToken else {
+        case let .didRegisterForRemoteNotifications(.success(data)):
+            return .merge(
+                environment.authClient
+                    .setAPNSToken(data)
+                    .fireAndForget(),
+
+                Effect.concatenate(
+                    environment.pushNotificationClient
+                        .setAPNSToken(data)
+                        .fireAndForget(),
+
+                    environment.pushNotificationClient
+                        .currentFCMToken()
+                        .flatMap {
+                            Effect(value: .sendFCMToken(token: $0))
+                        }
+                        .eraseToEffect()
+                )
+            )
+
+        case let .sendFCMToken(token):
+            guard let fcmToken = token else {
                 return .none
             }
             let userUpdate = UserUpdate(fcmToken: fcmToken)
@@ -96,17 +124,11 @@ extension AppDelegate {
                 .updateMe(userUpdate)
                 .fireAndForget()
 
-        case let .didRegisterForRemoteNotifications(.success(data)):
-            environment.authClient.setAPNSToken(data)
-            environment.pushNotificationClient.setAPNSToken(data)
-            return .none
-
         case let .didRegisterForRemoteNotifications(.failure(error)):
             return .none
 
         case let .didReceiveRemoteNotification(model):
-            environment.authClient
-                .canHandleNotification(model)
+            environment.authClient.handleIfAuthNotification(model)
             model.completionHandler(.newData)
             return .none
         }

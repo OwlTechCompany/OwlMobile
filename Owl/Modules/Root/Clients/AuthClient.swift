@@ -15,10 +15,10 @@ import FirebaseAuthCombineSwift
 struct AuthClient {
 
     var verifyPhoneNumber: (String) -> Effect<String, NSError>
-    var setAPNSToken: (Data) -> Void // Effect<Void, Never>
-    var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Void // -> Effect<Void, Never>
+    var setAPNSToken: (Data) -> Effect<Void, Never>
+    var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void // -> Effect<Void, Never>
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
-    var signOut: () -> Void
+    var signOut: () -> Effect<Void, Never>
 }
 
 // MARK: - Live
@@ -29,7 +29,7 @@ extension AuthClient {
         AuthClient(
             verifyPhoneNumber: verifyPhoneNumberLive,
             setAPNSToken: setAPNSTokenLive,
-            canHandleNotification: canHandleNotificationLive,
+            handleIfAuthNotification: handleIfAuthNotification,
             signIn: signInLive,
             signOut: signOutLive
         )
@@ -47,14 +47,14 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func setAPNSTokenLive(deviceToken: Data) { // -> Effect<Void, Never> {
-//        Effect.fireAndForget {
-        FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
-        print("~~~~~ set setAPNSToken AuthClient")
-//        }
+    static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
+            print("~~~~~ set setAPNSToken AuthClient")
+        }
     }
 
-    static private func canHandleNotificationLive(
+    static private func handleIfAuthNotification(
         model: DidReceiveRemoteNotificationModel
     ) {
         if FirebaseClient.auth.canHandleNotification(model.userInfo) {
@@ -73,8 +73,10 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func signOutLive() {
-        try? FirebaseClient.auth.signOut()
+    static private func signOutLive() -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            try? FirebaseClient.auth.signOut()
+        }
     }
 
 }
