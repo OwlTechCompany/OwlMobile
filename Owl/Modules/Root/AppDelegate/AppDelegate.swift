@@ -57,6 +57,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             userInfo: userInfo,
             completionHandler: completionHandler
         )
+        print(userInfo)
         viewStore.send(.didReceiveRemoteNotification(model))
 //        model.completionHandler(.newData)
 //        completionHandler(.newData)

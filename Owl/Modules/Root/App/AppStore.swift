@@ -60,9 +60,9 @@ struct App {
             let userDefaultsClient = UserDefaultsClient.live()
             let userClient = UserClient.live(userDefaults: userDefaultsClient)
             return Self(
-                firebaseClient: .live,
+                firebaseClient: .live(),
                 userClient: userClient,
-                authClient: .live,
+                authClient: .live(),
                 userDefaultsClient: userDefaultsClient,
                 validationClient: .live(),
                 firestoreUsersClient: .live(userClient: userClient),

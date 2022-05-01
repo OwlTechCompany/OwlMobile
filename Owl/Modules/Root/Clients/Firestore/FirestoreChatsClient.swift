@@ -16,8 +16,8 @@ struct FirestoreChatsClient {
     static var cancellables = Set<AnyCancellable>()
 
     struct Collection {
-        static let chats = Firestore.firestore().collection("chats")
-        static let chatsMessages = Firestore.firestore().collection("chatsMessages")
+        static let chats = FirebaseClient.firestore.collection("chats")
+        static let chatsMessages = FirebaseClient.firestore.collection("chatsMessages")
     }
 
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
@@ -147,7 +147,7 @@ extension FirestoreChatsClient {
             },
             sendMessage: { newMessage in
                 Effect.future { callback in
-                    let batch = Firestore.firestore().batch()
+                    let batch = FirebaseClient.firestore.batch()
 
                     let newDocument = Collection.chatsMessages.document(newMessage.chatId).collection("messages").document()
                     var message = newMessage.message

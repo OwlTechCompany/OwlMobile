@@ -14,13 +14,6 @@ import FirebaseAuthCombineSwift
 
 struct AuthClient {
 
-    static var firebaseAuth: Auth {
-        let auth = Auth.auth()
-        auth.useEmulator(withHost: "\(host)", port: 9099)
-        return auth
-    }
-    static var phoneAuthProvider: PhoneAuthProvider { PhoneAuthProvider.provider() }
-
     var verifyPhoneNumber: (String) -> Effect<String, NSError>
     var setAPNSToken: (Data) -> Void // Effect<Void, Never>
     var canHandleNotification: (DidReceiveRemoteNotificationModel) -> Void // -> Effect<Void, Never>
@@ -32,19 +25,23 @@ struct AuthClient {
 
 extension AuthClient {
 
-    static let live = AuthClient(
-        verifyPhoneNumber: verifyPhoneNumberLive,
-        setAPNSToken: setAPNSTokenLive,
-        canHandleNotification: canHandleNotificationLive,
-        signIn: signInLive,
-        signOut: signOutLive
-    )
+    static func live() -> AuthClient {
+        AuthClient(
+            verifyPhoneNumber: verifyPhoneNumberLive,
+            setAPNSToken: setAPNSTokenLive,
+            canHandleNotification: canHandleNotificationLive,
+            signIn: signInLive,
+            signOut: signOutLive
+        )
+    }
 
-    static private func verifyPhoneNumberLive(phoneNumber: String) -> Effect<String, NSError> {
+    static private func verifyPhoneNumberLive(
+        phoneNumber: String
+    ) -> Effect<String, NSError> {
         if AuthClient.testPhones.contains(phoneNumber) {
-            firebaseAuth.settings?.isAppVerificationDisabledForTesting = true
+            FirebaseClient.auth.settings?.isAppVerificationDisabledForTesting = true
         }
-        return phoneAuthProvider
+        return FirebaseClient.phoneAuthProvider
             .verifyPhoneNumber(phoneNumber)
             .mapError { $0 as NSError }
             .eraseToEffect()
@@ -52,36 +49,32 @@ extension AuthClient {
 
     static private func setAPNSTokenLive(deviceToken: Data) { // -> Effect<Void, Never> {
 //        Effect.fireAndForget {
-        firebaseAuth.setAPNSToken(deviceToken, type: .unknown)
+        FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
         print("~~~~~ set setAPNSToken AuthClient")
 //        }
     }
 
     static private func canHandleNotificationLive(
         model: DidReceiveRemoteNotificationModel
-    ) { // -> Effect<Void, Never> {
-//        Effect.fireAndForget {
-            if firebaseAuth.canHandleNotification(model.userInfo) {
-                model.completionHandler(.noData)
-            } else {
-//                model.completionHandler(.newData)
-            }
-//        }
+    ) {
+        if FirebaseClient.auth.canHandleNotification(model.userInfo) {
+            model.completionHandler(.noData)
+        }
     }
 
     static private func signInLive(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
-        let credential = phoneAuthProvider.credential(
+        let credential = FirebaseClient.phoneAuthProvider.credential(
             withVerificationID: signInModel.verificationID,
             verificationCode: signInModel.verificationCode
         )
-        return firebaseAuth
+        return FirebaseClient.auth
             .signIn(with: credential)
             .mapError { $0 as NSError }
             .eraseToEffect()
     }
 
     static private func signOutLive() {
-        try? firebaseAuth.signOut()
+        try? FirebaseClient.auth.signOut()
     }
 
 }

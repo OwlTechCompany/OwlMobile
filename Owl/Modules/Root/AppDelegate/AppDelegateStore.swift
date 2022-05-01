@@ -87,6 +87,7 @@ extension AppDelegate {
             return .none
 
         case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):
+
             guard let fcmToken = fcmToken else {
                 return .none
             }

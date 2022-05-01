@@ -32,20 +32,20 @@ extension UserClient {
             firestoreUser: firestoreUser,
             setup: {
                 if userDefaults.getUser() == nil {
-                    try? Auth.auth().signOut()
+                    try? FirebaseClient.auth.signOut()
                 }
                 // Set current user immediately
-                authUser.send(Auth.auth().currentUser)
+                authUser.send(FirebaseClient.auth.currentUser)
 
                 // Subscribe for updates
-                Auth.auth().authStateDidChangePublisher()
+                FirebaseClient.auth.authStateDidChangePublisher()
                     .sink { user in
                         authUser.send(user)
 
                         // If Firebase.User changes we need to update firestoreUser
                         userCancellable?.cancel()
                         if let user = user {
-                            userCancellable = Firestore.firestore().collection("users")
+                            userCancellable = FirebaseClient.firestore.collection("users")
                                 .document(user.uid)
                                 .snapshotPublisher()
                                 .map { try? $0.data(as: User.self) }
