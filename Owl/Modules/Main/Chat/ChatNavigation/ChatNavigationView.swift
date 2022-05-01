@@ -42,12 +42,9 @@ struct ChatNavigationView: View {
 
                     Spacer(minLength: 16)
 
-                    viewStore.chatImage
-                        .resizable()
+                    PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName, isThumbnail: true)
                         .frame(width: 42, height: 42)
-                        .background(Color.white)
                         .clipShape(Circle())
-                        .scaledToFill()
                         .onTapGesture { viewStore.send(.chatDetails) }
                 }
                 .padding(8)

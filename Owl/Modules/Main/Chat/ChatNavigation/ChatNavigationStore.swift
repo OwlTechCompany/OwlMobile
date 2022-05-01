@@ -13,7 +13,7 @@ struct ChatNavigation {
     // MARK: - State
 
     struct State: Equatable {
-        let chatImage: Image
+        let photo: Photo
         let chatName: String
         let chatDescription: String
     }
@@ -46,10 +46,7 @@ struct ChatNavigation {
 extension ChatNavigation.State {
 
     init(model: ChatsListPrivateItem) {
-        let nameFirstLater = model.companion.firstName?.first ?? "o"
-        self.chatImage = Image(
-            systemName: "\(String(nameFirstLater).lowercased()).circle"
-        )
+        self.photo = model.companion.photo
         self.chatName = model.name
         self.chatDescription = model.companion.phoneNumber ?? ""
     }
