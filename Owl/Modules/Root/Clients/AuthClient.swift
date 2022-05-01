@@ -50,7 +50,6 @@ extension AuthClient {
     static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
         Effect.fireAndForget {
             FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
-            print("~~~~~ set setAPNSToken AuthClient")
         }
     }
 
