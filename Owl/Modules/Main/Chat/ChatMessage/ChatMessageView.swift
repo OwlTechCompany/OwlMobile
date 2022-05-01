@@ -55,6 +55,7 @@ struct ChatMessageView: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .frame(width: screen.width, alignment: viewStore.alignment)
+            .onAppear { viewStore.send(.wasShown) }
         }
         .background(
             Color(.systemGroupedBackground)

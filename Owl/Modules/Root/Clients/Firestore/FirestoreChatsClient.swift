@@ -13,18 +13,22 @@ import FirebaseAuth
 
 struct FirestoreChatsClient {
 
-    static var cancellables = Set<AnyCancellable>()
-
     struct Collection {
         static let chats = Firestore.firestore().collection("chats")
         static let chatsMessages = Firestore.firestore().collection("chatsMessages")
     }
 
+    static var cancellables = Set<AnyCancellable>()
+
+    let variables: Variables
+
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
 
-    var getMessages: (String) -> Effect<[MessageResponse], NSError>
+    var getLastMessages: () -> Effect<[MessageResponse], NSError>
+    var subscribeForNewMessages: () -> Effect<[MessageResponse], NSError>
+    var getNextMessages: () -> Effect<[MessageResponse], NSError>
     var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
 
@@ -34,7 +38,9 @@ extension FirestoreChatsClient {
 
     // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
+        let variables = Variables()
         return Self(
+            variables: variables,
             getChats: {
                 Effect.run { subscriber in
                     guard let authUser = userClient.authUser.value else {
@@ -76,7 +82,6 @@ extension FirestoreChatsClient {
                             value: { snapshot in
                                 if let document = snapshot.documents.first {
                                     do {
-                                        // TODO: Add new model
                                         let chatsListPrivateItem = try document.data(as: ChatsListPrivateItem.self)
                                         callback(.success(.chatItem(chatsListPrivateItem)))
                                     } catch let error as NSError {
@@ -122,27 +127,104 @@ extension FirestoreChatsClient {
                         .store(in: &cancellables)
                 }
             },
-            getMessages: { chatID in
-                Effect.run { subcriber in
-                    Collection.chatsMessages.document(chatID).collection("messages").order(by: "sentAt", descending: false)
-                        .snapshotPublisher()
+            getLastMessages: {
+                Effect.future { callback in
+                    guard let chatID = variables.openedChatId else {
+                        return
+                    }
+
+                    Collection.chatsMessages.document(chatID).collection("messages")
+                        .order(by: "sentAt", descending: false)
+                        .limit(toLast: 25)
+                        .getDocuments()
                         .on { snapshot in
-                            print(snapshot)
+                            guard
+                                let lastDocumentSnapshot = snapshot.documents.first,
+                                let subscribeForNewMessagesSnapshot = snapshot.documents.last
+                            else {
+                                return
+                            }
+                            variables.lastDocumentSnapshot = lastDocumentSnapshot
+                            variables.subscribeForNewMessagesSnapshot = subscribeForNewMessagesSnapshot
+
                             let items = snapshot.documents.compactMap { document -> MessageResponse? in
                                 do {
                                     return try document.data(as: MessageResponse.self)
                                 } catch let error as NSError {
-                                    subcriber.send(completion: .failure(error))
+                                    callback(.failure(error))
                                     return nil
                                 }
                             }
-                            subcriber.send(items)
-
-                        }
-                        error: { error in
-                            subcriber.send(completion: .failure(error as NSError))
+                            callback(.success(items))
+                        } error: { error in
+                            callback(.failure(error as NSError))
                         }
                         .sink()
+                        .store(in: &cancellables)
+                }
+            },
+            subscribeForNewMessages: {
+                Effect.run { subscriber in
+                    guard
+                        let chatID = variables.openedChatId,
+                        let snapshot = variables.subscribeForNewMessagesSnapshot
+                    else {
+                        return Empty<Any, NSError>(completeImmediately: true)
+                            .sink()
+                    }
+
+                    return Collection.chatsMessages.document(chatID).collection("messages")
+                        .order(by: "sentAt", descending: false)
+                        .start(afterDocument: snapshot)
+                        .snapshotPublisher()
+                        .on { snapshot in
+                            let items = snapshot.documents.compactMap { document -> MessageResponse? in
+                                do {
+                                    return try document.data(as: MessageResponse.self)
+                                } catch let error as NSError {
+                                    subscriber.send(completion: .failure(error))
+                                    return nil
+                                }
+                            }
+                            subscriber.send(items)
+                        }
+                        error: { error in
+                            subscriber.send(completion: .failure(error as NSError))
+                        }
+                        .sink()
+                }
+            },
+            getNextMessages: {
+                Effect.future { callback in
+                    guard
+                        let chatID = variables.openedChatId,
+                        let snapshot = variables.lastDocumentSnapshot
+                    else {
+                        return
+                    }
+
+                    Collection.chatsMessages.document(chatID).collection("messages")
+                        .order(by: "sentAt", descending: false)
+                        .end(beforeDocument: snapshot)
+                        .limit(toLast: 25)
+                        .getDocuments()
+                        .on { snapshot in
+                            let items = snapshot.documents.compactMap { document -> MessageResponse? in
+                                do {
+                                    return try document.data(as: MessageResponse.self)
+                                } catch let error as NSError {
+                                    callback(.failure(error))
+                                    return nil
+                                }
+                            }
+                            callback(.success(items))
+                            variables.lastDocumentSnapshot = snapshot.documents.first
+                        }
+                        error: { error in
+                            callback(.failure(error as NSError))
+                        }
+                        .sink()
+                        .store(in: &cancellables)
                 }
             },
             sendMessage: { newMessage in
@@ -177,4 +259,27 @@ extension FirestoreChatsClient {
             }
         )
     }
+
+    static func messages(query: Query) {
+
+    }
+}
+
+
+extension FirestoreChatsClient {
+
+    class Variables {
+        var openedChatId: String?
+        var lastDocumentSnapshot: DocumentSnapshot?
+        var subscribeForNewMessagesSnapshot: DocumentSnapshot?
+
+        internal init(
+            openedChatId: String? = nil,
+            lastDocumentSnapshot: DocumentSnapshot? = nil
+        ) {
+            self.openedChatId = openedChatId
+            self.lastDocumentSnapshot = lastDocumentSnapshot
+        }
+    }
+
 }

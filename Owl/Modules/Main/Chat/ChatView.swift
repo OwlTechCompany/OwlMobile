@@ -65,16 +65,21 @@ struct ChatView: View {
                                 )
                             }
                             .onChange(of: viewStore.messages) { newValue in
+                                guard
+                                    let lastMessage = newValue.last,
+                                    isFirstUpdate
+                                else {
+                                    return
+                                }
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                isFirstUpdate.toggle()
+                            }
+                            .onChange(of: viewStore.newMessages) { newValue in
                                 guard let lastMessage = newValue.last else {
                                     return
                                 }
-                                if isFirstUpdate {
-                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                    isFirstUpdate.toggle()
-                                } else if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
-                                    withAnimation {
-                                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                    }
+                                if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
+                                    withAnimation { proxy.scrollTo(lastMessage.id, anchor: .bottom) }
                                 }
                             }
                             .animation(.none, value: keyboard)
