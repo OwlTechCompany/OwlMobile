@@ -49,7 +49,7 @@ extension ChatMessage.State {
         self.id = message.id ?? ""
         self.text = message.messageText
         self.sentAt = message.sentAt
-        self.sentBy = ""
+        self.sentBy = message.sentBy
         self.type = message.sentBy == companion.uid ? .sentForMe : .sentByMe
     }
     
