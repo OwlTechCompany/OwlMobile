@@ -31,73 +31,79 @@ struct ChatView: View {
     var body: some View {
 
         WithViewStore(store) { viewStore in
-            VStack(spacing: 0) {
-                ScrollView {
-                    ScrollViewReader { proxy in
-                        LazyVStack {
-
-                            ForEachStore(
-                                self.store.scope(
-                                    state: \.messages,
-                                    action: Chat.Action.messages(id:action:)
-                                ),
-                                content: {
-                                    ChatMessageView(store: $0)
-                                        .listRowSeparator(.hidden)
-                                        .listRowInsets(.init())
-                                }
-                            )
-                        }
-                        .onChange(of: viewStore.messages) { newValue in
-                            guard let lastMessage = newValue.last else {
-                                return
-                            }
-                            if isFirstUpdate {
-                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                isFirstUpdate.toggle()
-                            } else {
-                                withAnimation {
-                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                }
-                            }
-                        }
-                        .animation(.none, value: keyboard)
-                    }
-                }
-                .introspectScrollView { scrollView in
-                    self.scrollView = scrollView
-                }
-                .onTapGesture { focusedField = nil }
-
-                textField
-            }
-            .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
-            .frame(width: screen.width)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
+            ZStack {
+                VStack {
                     ChatNavigationView(
                         store: store.scope(
                             state: \.navigation,
                             action: Chat.Action.navigation
                         )
                     )
+
+                    Spacer()
+                }
+                .zIndex(1)
+
+                VStack(spacing: 0) {
+                    ScrollView {
+                        ScrollViewReader { proxy in
+                            Rectangle()
+                                .foregroundColor(Color(.systemGroupedBackground))
+                                .frame(height: 44)
+
+                            LazyVStack {
+                                ForEachStore(
+                                    self.store.scope(
+                                        state: \.messages,
+                                        action: Chat.Action.messages(id:action:)
+                                    ),
+                                    content: {
+                                        ChatMessageView(store: $0)
+                                            .listRowSeparator(.hidden)
+                                            .listRowInsets(.init())
+                                    }
+                                )
+                            }
+                            .onChange(of: viewStore.messages) { newValue in
+                                guard let lastMessage = newValue.last else {
+                                    return
+                                }
+                                if isFirstUpdate {
+                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                    isFirstUpdate.toggle()
+                                } else if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
+                                    withAnimation {
+                                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                    }
+                                }
+                            }
+                            .animation(.none, value: keyboard)
+                        }
+                    }
+                    .introspectScrollView { scrollView in self.scrollView = scrollView }
+                    .onTapGesture { focusedField = nil }
+
+                    textField
+                }
+                .zIndex(0)
+                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
+                .frame(width: screen.width)
+                .navigationBarBackButtonHidden(true)
+                .ignoresSafeArea(.all, edges: .bottom)
+                .onAppear { viewStore.send(.onAppear) }
+                .onReceive(Publishers.keyboardHeightPublisher) { newValue in
+                    if keyboard.height != newValue.height {
+                        keyboard = newValue
+                        scrollView.setContentOffset(
+                            .init(x: 0, y: scrollView.contentOffset.y + scrollViewContentOffsetY),
+                            animated: true
+                        )
+                    }
                 }
             }
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .ignoresSafeArea(.all, edges: .bottom)
-            .onAppear { viewStore.send(.onAppear) }
-            .onReceive(Publishers.keyboardHeightPublisher) { newValue in
-                if keyboard.height != newValue.height {
-                    keyboard = newValue
-                    scrollView.setContentOffset(
-                        .init(x: 0, y: scrollView.contentOffset.y + scrollViewContentOffsetY),
-                        animated: true
-                    )
-                }
-            }
+            .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+            .navigationBarHidden(true)
         }
-        .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
     }
 
     var textField: some View {
@@ -151,8 +157,8 @@ private extension ChatView {
         keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
     }
 
-    var needsScrollToNewMessage: Bool {
-        return true
+    var isLastMessageAppearing: Bool {
+        scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 20 + Constants.textFieldBackgroundHeigh
     }
 
 }

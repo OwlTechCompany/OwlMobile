@@ -25,6 +25,7 @@ enum Photo: Codable, Equatable {
         switch self {
         case let .url(url):
             return try container.encode(url)
+
         case .placeholder:
             return try container.encodeNil()
         }
