@@ -6,12 +6,23 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
-struct Message: Codable, Equatable, Identifiable {
+struct MessageRequest: Encodable, Equatable, Identifiable {
 
     var id: String?
     let messageText: String
-    let sentAt: Date
+    @ServerTimestamp var sentAt: Timestamp?
     let sentBy: String
     
+}
+
+struct MessageResponse: Decodable, Equatable, Identifiable {
+
+    let id: String
+    let messageText: String
+    let sentAt: Timestamp?
+    let sentBy: String
+
 }

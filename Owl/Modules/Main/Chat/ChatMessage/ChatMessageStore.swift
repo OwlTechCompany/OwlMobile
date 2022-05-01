@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import SwiftUI
+import Firebase
 
 struct ChatMessage {
 
@@ -15,7 +16,7 @@ struct ChatMessage {
     struct State: Equatable, Identifiable, Hashable {
         let id: String
         let text: String
-        let sentAt: Date
+        let sentAt: Timestamp?
         let sentBy: String // Not used for now; Added for groups
         let type: MessageType
     }
@@ -45,8 +46,8 @@ struct ChatMessage {
 
 extension ChatMessage.State {
 
-    init(message: Message, companion: User) {
-        self.id = message.id ?? ""
+    init(message: MessageResponse, companion: User) {
+        self.id = message.id
         self.text = message.messageText
         self.sentAt = message.sentAt
         self.sentBy = message.sentBy

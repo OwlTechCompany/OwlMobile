@@ -10,7 +10,7 @@ import Firebase
 import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
 
-struct ChatsListPrivateItem: Codable, Equatable {
+struct ChatsListPrivateItem: Decodable, Equatable {
 
     let id: String
     let createdAt: Date
@@ -18,7 +18,7 @@ struct ChatsListPrivateItem: Codable, Equatable {
     let members: [String]
     let user1: User
     let user2: User
-    let lastMessage: Message?
+    let lastMessage: MessageResponse?
 
 }
 
