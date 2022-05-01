@@ -15,7 +15,13 @@ struct Chat {
         var chatID: String
         var companion: User
         var navigation: ChatNavigation.State
-        var messages: IdentifiedArrayOf<ChatMessage.State>
+        var newMessages: [ChatMessage.State]
+        var oldMessages: [ChatMessage.State]
+        var isLoading: Bool = false
+
+        var messages: IdentifiedArrayOf<ChatMessage.State> {
+            IdentifiedArrayOf(uniqueElements: oldMessages + newMessages)
+        }
 
         var model: ChatsListPrivateItem
         
@@ -29,6 +35,8 @@ struct Chat {
         case messages(id: String, action: ChatMessage.Action)
 
         case getMessagesResult(Result<[MessageResponse], NSError>)
+        case getLastMessagesResult(Result<[MessageResponse], NSError>)
+        case getOldMessagesResult(Result<[MessageResponse], NSError>)
         case binding(BindingAction<State>)
         case onAppear
         case sendMessage
@@ -48,13 +56,29 @@ struct Chat {
         case .navigation:
             return .none
 
+        case let .getLastMessagesResult(.success(messages)):
+            state.oldMessages = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
+            return environment.chatsClient.subscribeForNewMessages()
+                .catchToEffect(Action.getMessagesResult)
+
+        case let .getLastMessagesResult(.failure(error)):
+            return .none
+
         case let .getMessagesResult(.success(messages)):
-            state.messages = .init(uniqueElements: messages.map {
-                ChatMessage.State(message: $0, companion: state.companion)
-            })
+            state.newMessages = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
             return .none
 
         case let .getMessagesResult(.failure(error)):
+            return .none
+
+        case let .getOldMessagesResult(.success(messages)):
+            let update = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
+            state.oldMessages.insert(contentsOf: update, at: 0)
+            state.isLoading = false
+            return .none
+
+        case let .getOldMessagesResult(.failure(error)):
+            state.isLoading = false
             return .none
 
         case .binding(\.$newMessage):
@@ -83,6 +107,15 @@ struct Chat {
 
         case .sendMessageResult:
             return .none
+
+        case let .messages(id, .wasShown):
+            guard id == state.messages.first?.id && !state.isLoading else {
+                return .none
+            }
+            state.isLoading = true
+//            return environment.chatsClient.getNextMessages()
+//                .catchToEffect(Action.getOldMessagesResult)
+            return .none
         }
     }
     .binding()
@@ -107,17 +140,16 @@ extension Chat.State {
         self.navigation = .init(model: model)
         self.model = model
         if let lastMessage = model.lastMessage {
-            self.messages = .init(
-                uniqueElements: [
-                    ChatMessage.State(
-                        message: lastMessage,
-                        companion: model.companion
-                    )
-                ]
-            )
+            self.newMessages = [
+//                ChatMessage.State(
+//                    message: lastMessage,
+//                    companion: model.companion
+//                )
+            ]
         } else {
-            self.messages = []
+            self.newMessages = []
         }
+        self.oldMessages = []
     }
 
 }

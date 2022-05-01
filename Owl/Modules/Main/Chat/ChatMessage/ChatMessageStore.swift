@@ -29,7 +29,7 @@ struct ChatMessage {
     // MARK: - Action
 
     enum Action: Equatable {
-
+        case wasShown
     }
 
     // MARK: - Environment
