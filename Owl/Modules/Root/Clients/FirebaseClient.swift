@@ -31,7 +31,7 @@ struct FirebaseClient {
 extension FirebaseClient {
 
     static func live() -> FirebaseClient {
-        let state = State.development(host: "192.168.31.21")
+        let state = State.development(host: "192.168.31.26")
 
         return FirebaseClient(
             state: state,

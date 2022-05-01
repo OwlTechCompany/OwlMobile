@@ -67,10 +67,7 @@ extension AppDelegate {
                 }
                 .receive(on: DispatchQueue.main)
                 .flatMap { isSucceed -> Effect<Never, Never> in
-//                    if isSucceed {
-//                        Messaging.messaging().isAutoInitEnabled = true
-//                    }
-                    return isSucceed
+                    isSucceed
                         ? environment.pushNotificationClient.register()
                         : .none
                 }
@@ -85,9 +82,9 @@ extension AppDelegate {
             )
 
         case let .userNotificationCenterDelegate(.willPresentNotification(notification, completionHandler)):
-            return .fireAndForget {
-                completionHandler([.banner, .sound])
-            }
+            return environment.pushNotificationClient
+                .handlePushNotification(notification, completionHandler)
+                .fireAndForget()
 
         case .userNotificationCenterDelegate:
             return .none

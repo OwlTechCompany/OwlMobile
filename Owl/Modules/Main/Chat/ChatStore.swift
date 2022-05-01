@@ -7,6 +7,8 @@
 
 import ComposableArchitecture
 
+var openedChatId: String?
+
 struct Chat {
 
     // MARK: - State

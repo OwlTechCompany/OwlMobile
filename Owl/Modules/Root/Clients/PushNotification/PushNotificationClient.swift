@@ -18,6 +18,10 @@ struct PushNotificationClient {
     var setAPNSToken: (Data) -> Effect<Void, Never>
     var register: () -> Effect<Never, Never>
     var currentFCMToken: () -> Effect<String, Never>
+    var handlePushNotification: (
+        PushNotificationClient.Notification,
+        _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) -> Effect<Void, Never>
 
     var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
     var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>

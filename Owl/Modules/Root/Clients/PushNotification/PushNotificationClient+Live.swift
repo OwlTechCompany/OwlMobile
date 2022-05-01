@@ -10,6 +10,7 @@ import Combine
 import Firebase
 import ComposableArchitecture
 import UIKit
+import AVKit
 
 extension PushNotificationClient {
 
@@ -20,6 +21,7 @@ extension PushNotificationClient {
             setAPNSToken: setAPNSToken,
             register: register,
             currentFCMToken: { currentFCMToken() },
+            handlePushNotification: handlePushNotification,
             userNotificationCenterDelegate: userNotificationCenterDelegate,
             firebaseMessagingDelegate: firebaseMessagingDelegate
         )
@@ -68,6 +70,32 @@ fileprivate extension PushNotificationClient {
                 if let token = token {
                     completion(.success(token))
                 }
+            }
+        }
+    }
+
+    static func handlePushNotification (
+        notification: PushNotificationClient.Notification,
+        completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) -> Effect<Void, Never> {
+        Effect.fireAndForget {
+            guard
+                let json = notification.request.content.userInfo as? [String: Any]
+            else {
+                return
+            }
+            do {
+                let data = try JSONSerialization.data(withJSONObject: json)
+                let push = try JSONDecoder().decode(Push.self, from: data)
+                if push.chatId == openedChatId {
+                    completionHandler([])
+                    // TODO: Move to Chat view
+                    AudioServicesPlayAlertSound(1301)
+                } else {
+                    completionHandler([.banner, .sound])
+                }
+            } catch let error {
+                print(error.localizedDescription)
             }
         }
     }
