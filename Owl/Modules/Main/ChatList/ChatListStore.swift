@@ -51,6 +51,8 @@ struct ChatList {
             return .none
 
         case .onAppear:
+            // This is workaround because .onDisappear can't
+            // call viewState in ChatView
             openedChatId = nil
             return .merge(
                 environment.chatsClient.getChats()
