@@ -8,6 +8,8 @@
 import Foundation
 
 struct NewMessage {
+
     let chatId: String
     let message: MessageRequest
+    
 }
