@@ -28,7 +28,7 @@ struct Chat {
         case navigation(ChatNavigation.Action)
         case messages(id: String, action: ChatMessage.Action)
 
-        case getMessagesResult(Result<[Message], NSError>)
+        case getMessagesResult(Result<[MessageResponse], NSError>)
         case binding(BindingAction<State>)
         case onAppear
         case sendMessage
@@ -70,9 +70,8 @@ struct Chat {
         case .sendMessage:
             let newMessage = NewMessage(
                 chatId: state.model.id,
-                message: Message(
+                message: MessageRequest(
                     messageText: state.newMessage,
-                    sentAt: Date(),
                     sentBy: state.model.me.uid
                 )
             )

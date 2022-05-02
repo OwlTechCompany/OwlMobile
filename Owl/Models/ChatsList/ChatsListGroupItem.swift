@@ -6,14 +6,15 @@
 //
 
 import Foundation
+import Firebase
 
-struct ChatsListGroupItem: Codable {
+struct ChatsListGroupItem: Decodable {
     
     let id: String
     let name: String
     let createdAt: Date
     let createdBy: String
     let members: [String]
-    let lastMessage: Message
+    let lastMessage: MessageResponse
 
 }
