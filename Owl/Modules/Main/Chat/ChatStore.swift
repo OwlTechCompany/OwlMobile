@@ -17,7 +17,10 @@ struct Chat {
         var navigation: ChatNavigation.State
         var newMessages: [ChatMessage.State]
         var oldMessages: [ChatMessage.State]
-        var isLoading: Bool = false
+        var isNeedToScroll: Bool = false
+        var isPaginationEnabled: Bool = false
+
+        var scrollTo: MessageResponse?
 
         var messages: IdentifiedArrayOf<ChatMessage.State> {
             IdentifiedArrayOf(uniqueElements: oldMessages + newMessages)
@@ -41,6 +44,8 @@ struct Chat {
         case onAppear
         case sendMessage
         case sendMessageResult(Result<Bool, NSError>)
+        case setIsPaginationEnabled(Bool)
+        case setIsNeedToScroll(Bool)
     }
 
     // MARK: - Environment
@@ -74,11 +79,12 @@ struct Chat {
         case let .getOldMessagesResult(.success(messages)):
             let update = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
             state.oldMessages.insert(contentsOf: update, at: 0)
-            state.isLoading = false
+            state.scrollTo = messages.last
+//            state.isNeedToScroll = false
             return .none
 
         case let .getOldMessagesResult(.failure(error)):
-            state.isLoading = false
+//            state.isNeedToScroll = false
             return .none
 
         case .binding(\.$newMessage):
@@ -88,6 +94,7 @@ struct Chat {
             return .none
 
         case .onAppear:
+            state.isNeedToScroll = true
             environment.chatsClient.variables.openedChatId = state.chatID
             return environment.chatsClient.getLastMessages()
                 .catchToEffect(Action.getLastMessagesResult)
@@ -108,12 +115,30 @@ struct Chat {
             return .none
 
         case let .messages(id, .wasShown):
-            guard id == state.messages.first?.id && !state.isLoading else {
+            switch state.isPaginationEnabled {
+            case true:
+                guard id == state.messages.first?.id else {
+                    return .none
+                }
+                state.isPaginationEnabled = false
+                return environment.chatsClient.getNextMessages()
+                    .catchToEffect(Action.getOldMessagesResult)
+
+            case false:
+                guard let scrollTo = state.scrollTo,
+                    id == scrollTo.id else {
+                    return .none
+                }
+                state.isNeedToScroll = true
                 return .none
             }
-            state.isLoading = true
-//            return environment.chatsClient.getNextMessages()
-//                .catchToEffect(Action.getOldMessagesResult)
+
+        case let .setIsPaginationEnabled(isOn):
+            state.isPaginationEnabled = isOn
+            return .none
+
+        case let .setIsNeedToScroll(isOn):
+            state.isNeedToScroll = isOn
             return .none
         }
     }
@@ -138,16 +163,7 @@ extension Chat.State {
         self.companion = model.companion
         self.navigation = .init(model: model)
         self.model = model
-        if let lastMessage = model.lastMessage {
-            self.newMessages = [
-//                ChatMessage.State(
-//                    message: lastMessage,
-//                    companion: model.companion
-//                )
-            ]
-        } else {
-            self.newMessages = []
-        }
+        self.newMessages = []
         self.oldMessages = []
     }
 

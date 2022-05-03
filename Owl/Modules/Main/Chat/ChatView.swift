@@ -12,10 +12,18 @@ import UIKit
 import Combine
 
 struct ChatView: View {
+    // comment
 
     @State var isFirstUpdate: Bool = true
     @State var scrollView = UIScrollView()
     @State var keyboard = Keyboard.initialValue
+
+    @State var scrollDisabled: Bool = false
+    @State private var observation: NSKeyValueObservation?
+    @State var oldMessage: ChatMessage.State?
+
+
+    @State var some: CGFloat = 0
 
     @FocusState private var focusedField: Field?
     @Environment(\.safeAreaInsets) var safeAreaInsets
@@ -65,15 +73,36 @@ struct ChatView: View {
                                 )
                             }
                             .onChange(of: viewStore.messages) { newValue in
-                                guard
-                                    let lastMessage = newValue.last,
-                                    isFirstUpdate
-                                else {
-                                    return
-                                }
-                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                isFirstUpdate.toggle()
+//                                oldMessage = newValue.first
+
+//                                guard
+//                                    let lastMessage = newValue.last,
+//                                    isFirstUpdate,
+//                                    viewStore.isNeedToScroll
+//                                else {
+//                                    return
+//                                }
+
+//                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+//                                isFirstUpdate.toggle()
+//                                viewStore.send(.setIsPaginationEnabled(true))
                             }
+                            .onChange(of: viewStore.isNeedToScroll, perform: { isNeedToScroll in
+                                print("--- KILLL SCROLL")
+
+                                if !isFirstUpdate, isNeedToScroll, let first = viewStore.scrollTo {
+                                    proxy.scrollTo(first.id, anchor: .top)
+                                    viewStore.send(.setIsPaginationEnabled(true))
+                                    viewStore.send(.setIsNeedToScroll(false))
+//                                    oldMessage = viewStore.messages.first
+                                } else if isFirstUpdate, isNeedToScroll, let lastMessage = viewStore.messages.last {
+                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                    isFirstUpdate.toggle()
+                                    viewStore.send(.setIsPaginationEnabled(true))
+                                    viewStore.send(.setIsNeedToScroll(false))
+//                                    oldMessage = viewStore.messages.first
+                                }
+                            })
                             .onChange(of: viewStore.newMessages) { newValue in
                                 guard let lastMessage = newValue.last else {
                                     return
@@ -85,7 +114,13 @@ struct ChatView: View {
                             .animation(.none, value: keyboard)
                         }
                     }
-                    .introspectScrollView { scrollView in self.scrollView = scrollView }
+                    .disabled(scrollDisabled)
+                    .introspectScrollView { scrollView in
+                        self.scrollView = scrollView
+                        observation = scrollView.observe(\.contentOffset) { scrollView, value in
+                            print("--- contentOffset", scrollView.contentOffset.y)
+                        }
+                    }
                     .onTapGesture { focusedField = nil }
 
                     textField
