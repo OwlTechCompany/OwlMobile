@@ -43,6 +43,8 @@ struct App {
         case login(Login.Action)
         case main(Main.Action)
 
+        case setupMain
+        case signOut
         case handlePushRoute(Result<PushRoute, NSError>)
     }
 
@@ -111,6 +113,8 @@ struct App {
             if environment.userClient.authUser.value != nil,
                let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
+                return Effect(value: .setupMain)
+
             } else {
                 state.set(.login)
             }
@@ -119,22 +123,16 @@ struct App {
         case .login(.delegate(.loginSuccess)):
             if let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
+                return Effect(value: .setupMain)
             }
             return .none
 
         case .main(.delegate(.logout)):
-            let update = UserUpdate(fcmToken: "")
-            state.set(.login)
             return Effect.concatenate(
                 environment.firestoreUsersClient
-                    .updateMe(update)
+                    .updateMe(UserUpdate(fcmToken: ""))
                     .fireAndForget(),
-
-                environment.authClient
-                    .signOut()
-                    .fireAndForget(),
-
-                Effect.cancel(id: MainListenersId())
+                Effect(value: .signOut)
             )
 
         case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
@@ -164,6 +162,23 @@ struct App {
 
         case let .handlePushRoute(.failure(error)):
             return .none
+
+        case .setupMain:
+            return Effect.run { subscriber in
+                environment.userClient
+                    .firestoreUser
+                    .removeDuplicates()
+                    .sink { user in
+                        if user == nil {
+                            subscriber.send(.signOut)
+                        }
+                    }
+            }
+
+        case .signOut:
+            state.set(.login)
+            environment.authClient.signOut()
+            return Effect.cancel(id: MainListenersId())
 
         case .appDelegate:
             return .none

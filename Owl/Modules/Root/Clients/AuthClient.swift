@@ -16,9 +16,9 @@ struct AuthClient {
 
     var verifyPhoneNumber: (String) -> Effect<String, NSError>
     var setAPNSToken: (Data) -> Effect<Void, Never>
-    var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void // -> Effect<Void, Never>
+    var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
-    var signOut: () -> Effect<Void, Never>
+    var signOut: () -> Void
 }
 
 // MARK: - Live
@@ -72,10 +72,8 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func signOutLive() -> Effect<Void, Never> {
-        Effect.fireAndForget {
-            try? FirebaseClient.auth.signOut()
-        }
+    static private func signOutLive() {
+        try? FirebaseClient.auth.signOut()
     }
 
 }

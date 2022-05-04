@@ -23,7 +23,7 @@ struct UserClient {
 extension UserClient {
 
     static func live(userDefaults: UserDefaultsClient) -> Self {
-        var liveCancellables: Set<AnyCancellable> = []
+        var authCancellables: Set<AnyCancellable> = []
         let authUser = CurrentValueSubject<Firebase.User?, Never>(nil)
         let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
         var userCancellable: Cancellable?
@@ -59,7 +59,7 @@ extension UserClient {
                             firestoreUser.send(nil)
                         }
                     }
-                    .store(in: &liveCancellables)
+                    .store(in: &authCancellables)
             }
         )
     }

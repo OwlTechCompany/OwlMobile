@@ -74,7 +74,6 @@ struct ChatList {
             guard let chat = state.chatsData.first(where: { $0.id == id }) else {
                 return .none
             }
-            openedChatId = chat.id
             return Effect(value: .open(chat))
 
         case let .getChatsResult(.success(items)):

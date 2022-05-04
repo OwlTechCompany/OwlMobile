@@ -66,6 +66,7 @@ struct Chat {
             return .none
 
         case .onAppear:
+            openedChatId = state.chatID
             return environment.chatsClient.getMessages(state.chatID)
                 .catchToEffect(Action.getMessagesResult)
                 .cancellable(id: MainListenersId())
