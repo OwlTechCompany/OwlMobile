@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct MockedDataClient {
 
@@ -31,43 +32,43 @@ struct MockedDataClient {
             lastName: "No",
             photo: .placeholder
         ),
-        lastMessage: Message(
+        lastMessage: MessageResponse(
             id: "1",
             messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         )
     )
 
     static let chatMessages = [
-        Message(
+        MessageResponse(
             id: "1",
             messageText: "But I must explain to you how all this mistaken idea?",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         ),
-        Message(
+        MessageResponse(
             id: "2",
             messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
         ),
-        Message(
+        MessageResponse(
             id: "3",
             messageText: "no resultant pleasure 👍",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
         ),
-        Message(
+        MessageResponse(
             id: "4",
             messageText: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         ),
-        Message(
+        MessageResponse(
             id: "5",
             messageText: "Ha every!",
-            sentAt: Date(),
+            sentAt: Timestamp(date: Date()),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         )
     ]

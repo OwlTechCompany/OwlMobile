@@ -24,7 +24,7 @@ struct FirestoreChatsClient {
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
 
-    var getMessages: (String) -> Effect<[Message], NSError>
+    var getMessages: (String) -> Effect<[MessageResponse], NSError>
     var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
 
@@ -128,9 +128,9 @@ extension FirestoreChatsClient {
                         .snapshotPublisher()
                         .on { snapshot in
                             print(snapshot)
-                            let items = snapshot.documents.compactMap { document -> Message? in
+                            let items = snapshot.documents.compactMap { document -> MessageResponse? in
                                 do {
-                                    return try document.data(as: Message.self)
+                                    return try document.data(as: MessageResponse.self)
                                 } catch let error as NSError {
                                     subcriber.send(completion: .failure(error))
                                     return nil

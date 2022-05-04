@@ -17,6 +17,7 @@
 		5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */; };
 		5D35EC8E28076EDF00624717 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8D28076EDE00624717 /* Loader.swift */; };
 		5D37F219281B16E5000027BE /* KeyboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D37F218281B16E5000027BE /* KeyboardExtensions.swift */; };
+		5D37F21F28207506000027BE /* MessageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D37F21E28207506000027BE /* MessageResponse.swift */; };
 		5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */; };
 		5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */; };
 		5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */; };
@@ -34,7 +35,7 @@
 		5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A77E27FF33E100C2ECBA /* Assets.swift */; };
 		5DCD57A0280C423300186FE2 /* ChatsListPrivateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */; };
 		5DCD57A2280C424D00186FE2 /* ChatsListGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */; };
-		5DCD57A5280C42A200186FE2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A4280C42A200186FE2 /* Message.swift */; };
+		5DCD57A5280C42A200186FE2 /* MessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A4280C42A200186FE2 /* MessageRequest.swift */; };
 		5DCD57A8280C436F00186FE2 /* ChatListCellStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */; };
 		5DCD57AA280C63DE00186FE2 /* MockedDataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */; };
 		5DCD57AD280C6B9600186FE2 /* ChatNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57AC280C6B9600186FE2 /* ChatNavigationStore.swift */; };
@@ -136,6 +137,7 @@
 		5D35EC8A2803544A00624717 /* UserDefaultsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsClient.swift; sourceTree = "<group>"; };
 		5D35EC8D28076EDE00624717 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		5D37F218281B16E5000027BE /* KeyboardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardExtensions.swift; sourceTree = "<group>"; };
+		5D37F21E28207506000027BE /* MessageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageResponse.swift; sourceTree = "<group>"; };
 		5D4CF9EA2809ED7900A1B705 /* ChatListStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListStore.swift; sourceTree = "<group>"; };
 		5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenProvider.swift; sourceTree = "<group>"; };
@@ -153,7 +155,7 @@
 		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListPrivateItem.swift; sourceTree = "<group>"; };
 		5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListGroupItem.swift; sourceTree = "<group>"; };
-		5DCD57A4280C42A200186FE2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		5DCD57A4280C42A200186FE2 /* MessageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRequest.swift; sourceTree = "<group>"; };
 		5DCD57A7280C436F00186FE2 /* ChatListCellStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellStore.swift; sourceTree = "<group>"; };
 		5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDataClient.swift; sourceTree = "<group>"; };
 		5DCD57AC280C6B9600186FE2 /* ChatNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationStore.swift; sourceTree = "<group>"; };
@@ -293,6 +295,16 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		5D37F21D282074EA000027BE /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */,
+				5DCD57A4280C42A200186FE2 /* MessageRequest.swift */,
+				5D37F21E28207506000027BE /* MessageResponse.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
 		5D4CF9E92809ED4D00A1B705 /* ChatList */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,8 +400,7 @@
 		5DCD57A3280C428F00186FE2 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				5DCD57A4280C42A200186FE2 /* Message.swift */,
-				5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */,
+				5D37F21D282074EA000027BE /* Messages */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -999,6 +1010,7 @@
 				5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */,
 				5DCD57AA280C63DE00186FE2 /* MockedDataClient.swift in Sources */,
 				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
+				5D37F21F28207506000027BE /* MessageResponse.swift in Sources */,
 				5FB6DAB22818AAD90037C38B /* Photo.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5FBCF9F1281AF58F00734BA0 /* PushNotificationClientLive.swift in Sources */,
@@ -1009,7 +1021,7 @@
 				5DCD57B2280C9D8D00186FE2 /* ChatMessageStore.swift in Sources */,
 				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
 				5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */,
-				5DCD57A5280C42A200186FE2 /* Message.swift in Sources */,
+				5DCD57A5280C42A200186FE2 /* MessageRequest.swift in Sources */,
 				5FD33DC9280DBE8E009E9FBB /* ProfileStore.swift in Sources */,
 				5F71A663280C60210024F44A /* NewPrivateChatStore.swift in Sources */,
 				5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */,

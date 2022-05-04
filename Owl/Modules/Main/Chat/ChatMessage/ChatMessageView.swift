@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import SwiftUI
+import Firebase
 
 struct ChatMessageView: View {
 
@@ -24,11 +25,17 @@ struct ChatMessageView: View {
                         .font(.system(size: 16))
                         .multilineTextAlignment(.leading)
 
-                    Text(
-                        viewStore.sentAt,
-                        format: Date.FormatStyle().hour().minute()
-                    )
-                    .font(.system(size: 11, weight: .light, design: .monospaced))
+                    if let time = viewStore.sentAt?.dateValue() {
+                        Text(
+                            time,
+                            format: Date.FormatStyle().hour().minute()
+                        )
+                        .font(.system(size: 11, weight: .light, design: .monospaced))
+                    } else {
+                        Text("Sending..")
+                            .font(.system(size: 11, weight: .light, design: .monospaced))
+                    }
+
                 }
                 .foregroundColor(.white)
                 .padding(.vertical, Constants.messagePaddingVertical)
@@ -114,7 +121,7 @@ struct ChatMessageView_Previews: PreviewProvider {
                     initialState: .init(
                         id: "",
                         text: "I love you - - - - - - -",
-                        sentAt: Date(),
+                        sentAt: Timestamp(date: Date()),
                         sentBy: "D. D.",
                         type: .sentByMe
                     ),
@@ -129,7 +136,7 @@ struct ChatMessageView_Previews: PreviewProvider {
                     initialState: .init(
                         id: "",
                         text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.\n\nEaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-                        sentAt: Date(),
+                        sentAt: Timestamp(date: Date()),
                         sentBy: "D. D.",
                         type: .sentForMe
                     ),
