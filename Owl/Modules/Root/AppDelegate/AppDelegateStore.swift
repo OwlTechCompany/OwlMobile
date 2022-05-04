@@ -105,9 +105,7 @@ extension AppDelegate {
 
                     environment.pushNotificationClient
                         .currentFCMToken()
-                        .flatMap {
-                            Effect(value: .sendFCMToken(token: $0))
-                        }
+                        .flatMap { Effect(value: .sendFCMToken(token: $0)) }
                         .eraseToEffect()
                 )
             )

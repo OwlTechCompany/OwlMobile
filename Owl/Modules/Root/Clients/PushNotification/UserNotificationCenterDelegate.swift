@@ -13,7 +13,7 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
 
     enum Event: Equatable {
         case didReceiveResponse(
-            PushNotificationClient.Notification.Response,
+            PushNotificationClient.Response,
             completionHandler: () -> Void
         )
         case openSettingsForNotification(PushNotificationClient.Notification?)
@@ -48,7 +48,12 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         subscriber.send(
-            .didReceiveResponse(.init(rawValue: response), completionHandler: completionHandler)
+            .didReceiveResponse(
+                PushNotificationClient.Response(
+                    unNotificationResponse: response
+                ),
+                completionHandler: completionHandler
+            )
         )
     }
 
@@ -57,7 +62,9 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
         openSettingsFor notification: UNNotification?
     ) {
         subscriber.send(
-            .openSettingsForNotification(notification.map(PushNotificationClient.Notification.init(rawValue:)))
+            .openSettingsForNotification(
+                notification.map(PushNotificationClient.Notification.init(unNotification:))
+            )
         )
     }
 
@@ -76,7 +83,7 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
         }
         subscriber.send(
             .willPresentNotification(
-                .init(rawValue: notification),
+                PushNotificationClient.Notification(unNotification: notification),
                 completionHandler: completionHandler
             )
         )

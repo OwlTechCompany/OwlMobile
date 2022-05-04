@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import FirebaseAuth
+import UserNotifications
 
 struct App {
 
@@ -41,6 +42,8 @@ struct App {
         case appDelegate(AppDelegate.Action)
         case login(Login.Action)
         case main(Main.Action)
+
+        case handlePushRoute(Result<PushRoute, NSError>)
     }
 
     // MARK: - Environment
@@ -133,6 +136,34 @@ struct App {
 
                 Effect.cancel(id: MainListenersId())
             )
+
+        case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
+            let action = response.actionIdentifier
+            if action == UNNotificationDefaultActionIdentifier {
+                return environment.pushNotificationClient
+                    .handleDidReceiveResponse(
+                        response,
+                        completionHandler
+                    )
+                    .mapError { $0 as NSError }
+                    .catchToEffect(Action.handlePushRoute)
+            } else {
+                return .none
+            }
+
+        case let .handlePushRoute(.success(pushRoute)):
+            guard environment.userClient.firestoreUser.value != nil else {
+                return .none
+            }
+            switch pushRoute {
+            case let .openChat(chatsListPrivateItem):
+                let chatState = Chat.State(model: chatsListPrivateItem)
+                state.main?.routes.push(.chat(chatState))
+            }
+            return .none
+
+        case let .handlePushRoute(.failure(error)):
+            return .none
 
         case .appDelegate:
             return .none

@@ -109,6 +109,8 @@
 		5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */; };
 		5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31841280ADB02007F7816 /* EnterUserDataView.swift */; };
 		5FF264D2281F1155000FD185 /* Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264D1281F1155000FD185 /* Push.swift */; };
+		5FF264D428218B11000FD185 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264D328218B11000FD185 /* JSONDecoder.swift */; };
+		5FF264D628228075000FD185 /* PushRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264D528228075000FD185 /* PushRoute.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -211,6 +213,8 @@
 		5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataStore.swift; sourceTree = "<group>"; };
 		5FE31841280ADB02007F7816 /* EnterUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataView.swift; sourceTree = "<group>"; };
 		5FF264D1281F1155000FD185 /* Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Push.swift; sourceTree = "<group>"; };
+		5FF264D328218B11000FD185 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
+		5FF264D528228075000FD185 /* PushRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRoute.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -501,6 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				5F9DFC90280B1C4C00E73206 /* DocumentReference+Ext.swift */,
+				5FF264D328218B11000FD185 /* JSONDecoder.swift */,
 			);
 			path = Firestore;
 			sourceTree = "<group>";
@@ -712,6 +717,7 @@
 			isa = PBXGroup;
 			children = (
 				5FF264D1281F1155000FD185 /* Push.swift */,
+				5FF264D528228075000FD185 /* PushRoute.swift */,
 			);
 			path = Push;
 			sourceTree = "<group>";
@@ -890,7 +896,9 @@
 				5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
+				5FF264D428218B11000FD185 /* JSONDecoder.swift in Sources */,
 				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
+				5FF264D628228075000FD185 /* PushRoute.swift in Sources */,
 				5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */,

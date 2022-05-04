@@ -8,7 +8,7 @@
 import Foundation
 
 struct Push {
-    var chatId: String
+    var chat: ChatsListPrivateItem
 }
 
 // MARK: - Decodable

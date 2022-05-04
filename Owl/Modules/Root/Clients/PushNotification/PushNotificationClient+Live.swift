@@ -11,6 +11,7 @@ import Firebase
 import ComposableArchitecture
 import UIKit
 import AVKit
+import FirebaseFirestoreSwift
 
 extension PushNotificationClient {
 
@@ -22,6 +23,7 @@ extension PushNotificationClient {
             register: register,
             currentFCMToken: { currentFCMToken() },
             handlePushNotification: handlePushNotification,
+            handleDidReceiveResponse: handleDidReceiveResponse,
             userNotificationCenterDelegate: userNotificationCenterDelegate,
             firebaseMessagingDelegate: firebaseMessagingDelegate
         )
@@ -77,26 +79,46 @@ fileprivate extension PushNotificationClient {
     static func handlePushNotification (
         notification: PushNotificationClient.Notification,
         completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) -> Effect<Void, Never> {
-        Effect.fireAndForget {
-            guard
-                let json = notification.request.content.userInfo as? [String: Any]
-            else {
-                return
-            }
-            do {
-                let data = try JSONSerialization.data(withJSONObject: json)
-                let push = try JSONDecoder().decode(Push.self, from: data)
-                if push.chatId == openedChatId {
+    ) -> Effect<Void, NSError> {
+        Effect.result {
+            Result<Void, Error> {
+                guard let json = notification.request.content.userInfo as? [String: Any] else {
+                    throw NSError(domain: "Invalid user info", code: 1)
+                }
+                let data = try JSONSerialization.data(
+                    withJSONObject: json,
+                    options: [.fragmentsAllowed]
+                )
+
+                let push = try JSONDecoder.customFirestore.decode(Push.self, from: data)
+                if push.chat.id == openedChatId {
                     completionHandler([])
                     // TODO: Move to Chat view
                     AudioServicesPlayAlertSound(1301)
                 } else {
                     completionHandler([.banner, .sound])
                 }
-            } catch let error {
-                print(error.localizedDescription)
             }
+            .mapError { $0 as NSError }
+        }
+    }
+
+    static func handleDidReceiveResponse(
+        response: PushNotificationClient.Response,
+        completionHandler: @escaping () -> Void
+    ) -> Effect<PushRoute, NSError> {
+        Effect.result {
+            return Result<PushRoute, Error> {
+                guard let json = response.notification.request.content.userInfo as? [String: Any] else {
+                    throw NSError(domain: "Invalid user info", code: 1)
+                }
+                let data = try JSONSerialization.data(withJSONObject: json, options: [.fragmentsAllowed])
+                let push = try JSONDecoder.customFirestore.decode(Push.self, from: data)
+                completionHandler()
+                // Only one push route
+                return PushRoute.openChat(push.chat)
+            }
+            .mapError { $0 as NSError }
         }
     }
 

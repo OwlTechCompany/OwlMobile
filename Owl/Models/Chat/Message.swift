@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct Message: Codable, Equatable, Identifiable {
 
@@ -13,5 +14,5 @@ struct Message: Codable, Equatable, Identifiable {
     let messageText: String
     let sentAt: Date
     let sentBy: String
-    
+
 }

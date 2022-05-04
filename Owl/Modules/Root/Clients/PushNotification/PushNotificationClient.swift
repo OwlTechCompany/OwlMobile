@@ -21,7 +21,11 @@ struct PushNotificationClient {
     var handlePushNotification: (
         PushNotificationClient.Notification,
         _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) -> Effect<Void, Never>
+    ) -> Effect<Void, NSError>
+    var handleDidReceiveResponse: (
+        PushNotificationClient.Response,
+        _ completionHandler: @escaping () -> Void
+    ) -> Effect<PushRoute, NSError>
 
     var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
     var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>
@@ -32,47 +36,35 @@ extension PushNotificationClient {
     struct Notification: Equatable {
         var date: Date
         var request: UNNotificationRequest
+    }
 
-        init(
-            date: Date,
-            request: UNNotificationRequest
-        ) {
-            self.date = date
-            self.request = request
-        }
-
-        struct Response: Equatable {
-            var notification: Notification
-
-            init(notification: Notification) {
-                self.notification = notification
-            }
-        }
+    struct Response: Equatable {
+        var notification: Notification
+        var actionIdentifier: String
     }
 
     struct Settings: Equatable {
         var authorizationStatus: UNAuthorizationStatus
-
-        init(authorizationStatus: UNAuthorizationStatus) {
-            self.authorizationStatus = authorizationStatus
-        }
     }
 
 }
 
 extension PushNotificationClient.Notification {
 
-    init(rawValue: UNNotification) {
-        self.date = rawValue.date
-        self.request = rawValue.request
+    init(unNotification: UNNotification) {
+        self.date = unNotification.date
+        self.request = unNotification.request
     }
 
 }
 
-extension PushNotificationClient.Notification.Response {
+extension PushNotificationClient.Response {
 
-    init(rawValue: UNNotificationResponse) {
-        self.notification = PushNotificationClient.Notification(rawValue: rawValue.notification)
+    init(unNotificationResponse: UNNotificationResponse) {
+        self.notification = PushNotificationClient.Notification(
+            unNotification: unNotificationResponse.notification
+        )
+        self.actionIdentifier = unNotificationResponse.actionIdentifier
     }
 
 }
