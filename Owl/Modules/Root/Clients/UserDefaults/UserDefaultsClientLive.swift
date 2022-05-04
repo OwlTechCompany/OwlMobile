@@ -23,7 +23,7 @@ extension UserDefaultsClient {
 
 }
 
-private extension UserDefaultsClient {
+fileprivate extension UserDefaultsClient {
 
     // MARK: - VerificationID
 

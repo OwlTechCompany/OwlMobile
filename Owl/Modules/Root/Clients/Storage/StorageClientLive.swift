@@ -28,7 +28,7 @@ extension StorageClient {
 
 }
 
-private extension StorageClient {
+fileprivate extension StorageClient {
 
     static func setMyPhotoLive(
         userClient: UserClient,

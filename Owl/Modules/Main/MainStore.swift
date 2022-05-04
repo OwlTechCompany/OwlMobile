@@ -9,9 +9,9 @@ import TCACoordinators
 import ComposableArchitecture
 import SwiftUI
 
-struct MainListenersId: Hashable {}
-
 struct Main {
+
+    struct ListenersId: Hashable {}
 
     // MARK: - State
 

@@ -19,7 +19,7 @@ struct SetupPermissions {
     enum Action: Equatable {
         case grandPermission
         case later
-        case registerForRemoteNotificationsResult(Result<Bool, NSError>)
+        case requestAuthorizationResult(Result<Bool, NSError>)
         case next
     }
 
@@ -37,12 +37,12 @@ struct SetupPermissions {
             return environment.pushNotificationClient
                 .requestAuthorization([.alert, .sound, .badge])
                 .receive(on: DispatchQueue.main)
-                .catchToEffect(Action.registerForRemoteNotificationsResult)
+                .catchToEffect(Action.requestAuthorizationResult)
 
         case .later:
             return .none
 
-        case let .registerForRemoteNotificationsResult(.success(result)):
+        case let .requestAuthorizationResult(.success(result)):
             return Effect.concatenate(
                 environment.pushNotificationClient
                     .register()
@@ -51,7 +51,7 @@ struct SetupPermissions {
                 Effect(value: .next)
             )
 
-        case .registerForRemoteNotificationsResult(.failure):
+        case .requestAuthorizationResult(.failure):
             return .none
 
         case .next:

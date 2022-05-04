@@ -21,9 +21,10 @@ extension AuthClient {
             signOut: signOut
         )
     }
+
 }
 
-private extension AuthClient {
+fileprivate extension AuthClient {
 
     static func verifyPhoneNumber(
         phoneNumber: String

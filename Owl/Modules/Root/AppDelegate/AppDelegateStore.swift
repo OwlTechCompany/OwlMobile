@@ -21,10 +21,8 @@ extension AppDelegate {
         case didFinishLaunching
         case didRegisterForRemoteNotifications(Result<Data, NSError>)
         case didReceiveRemoteNotification(DidReceiveRemoteNotificationModel)
-        case userNotificationCenterDelegate(UserNotificationCenterDelegate.Event)
-
         case sendFCMToken(token: String?)
-
+        case userNotificationCenterDelegate(UserNotificationCenterDelegate.Event)
         case firebaseMessagingDelegate(FirebaseMessagingDelegate.Event)
     }
 
@@ -106,6 +104,7 @@ extension AppDelegate {
 
                     environment.pushNotificationClient
                         .currentFCMToken()
+                        .ignoreFailure()
                         .flatMap { Effect(value: .sendFCMToken(token: $0)) }
                         .eraseToEffect()
                 )

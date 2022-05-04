@@ -14,6 +14,7 @@ struct UserDefaultsClient {
 
     var setUser: (User?) -> Void
     var getUser: () -> User?
+    
 }
 
 // MARK: - Key

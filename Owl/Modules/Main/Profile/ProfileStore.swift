@@ -48,7 +48,7 @@ struct Profile {
                     .compactMap { $0 }
                     .sink { subscriber.send(.updateUser($0)) }
             }
-            .cancellable(id: MainListenersId())
+            .cancellable(id: Main.ListenersId())
 
         case let .updateUser(user):
             state.user = user

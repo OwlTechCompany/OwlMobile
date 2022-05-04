@@ -21,7 +21,7 @@ extension PushNotificationClient {
             requestAuthorization: requestAuthorization,
             setAPNSToken: setAPNSToken,
             register: register,
-            currentFCMToken: { currentFCMToken() },
+            currentFCMToken: currentFCMToken,
             handlePushNotification: handlePushNotification,
             handleDidReceiveResponse: handleDidReceiveResponse,
             userNotificationCenterDelegate: userNotificationCenterDelegate,
@@ -66,11 +66,13 @@ fileprivate extension PushNotificationClient {
         }
     }
 
-    static func currentFCMToken() -> Effect<String, Never> {
+    static func currentFCMToken() -> Effect<String, NSError> {
         Effect.future { completion in
-            FirebaseClient.messaging.token { token, _ in
+            FirebaseClient.messaging.token { token, error in
                 if let token = token {
                     completion(.success(token))
+                } else if let error = error {
+                    completion(.failure(error as NSError))
                 }
             }
         }

@@ -10,15 +10,16 @@ import FirebaseFirestore
 
 extension JSONDecoder {
 
+    private enum FirestoreDateCodingKeys: String, CodingKey {
+        case nanoseconds = "_nanoseconds"
+        case seconds = "_seconds"
+    }
+
     static var customFirestore: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .custom({ decoder in
-            enum CodingKeys: String, CodingKey {
-                case nanoseconds = "_nanoseconds"
-                case seconds = "_seconds"
-            }
             do {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
+                let container = try decoder.container(keyedBy: FirestoreDateCodingKeys.self)
                 let nano = try container.decode(Int32.self, forKey: .nanoseconds)
                 let sec = try container.decode(Int64.self, forKey: .seconds)
                 let timestamp = Timestamp(seconds: sec, nanoseconds: nano)

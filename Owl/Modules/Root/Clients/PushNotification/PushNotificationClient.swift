@@ -17,7 +17,7 @@ struct PushNotificationClient {
     var requestAuthorization: (UNAuthorizationOptions) -> Effect<Bool, NSError>
     var setAPNSToken: (Data) -> Effect<Void, Never>
     var register: () -> Effect<Never, Never>
-    var currentFCMToken: () -> Effect<String, Never>
+    var currentFCMToken: () -> Effect<String, NSError>
     var handlePushNotification: (
         PushNotificationClient.Notification,
         _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void

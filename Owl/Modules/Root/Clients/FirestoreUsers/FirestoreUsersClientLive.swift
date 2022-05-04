@@ -22,7 +22,7 @@ extension FirestoreUsersClient {
 
 }
 
-private extension FirestoreUsersClient {
+fileprivate extension FirestoreUsersClient {
 
     static func setMeIfNeeded(
         userClient: UserClient

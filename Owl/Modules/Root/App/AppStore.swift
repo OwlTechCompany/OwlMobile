@@ -117,15 +117,17 @@ struct App {
 
             } else {
                 state.set(.login)
+                return .none
             }
-            return .none
 
         case .login(.delegate(.loginSuccess)):
             if let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
                 return Effect(value: .subscribeOnUserChange)
+                
+            } else {
+                return .none
             }
-            return .none
 
         case .main(.delegate(.logout)):
             return Effect.concatenate(
@@ -179,7 +181,7 @@ struct App {
         case .signOut:
             state.set(.login)
             environment.authClient.signOut()
-            return Effect.cancel(id: MainListenersId())
+            return Effect.cancel(id: Main.ListenersId())
 
         case .appDelegate:
             return .none

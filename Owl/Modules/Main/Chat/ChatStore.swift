@@ -69,7 +69,7 @@ struct Chat {
             openedChatId = state.chatID
             return environment.chatsClient.getMessages(state.chatID)
                 .catchToEffect(Action.getMessagesResult)
-                .cancellable(id: MainListenersId())
+                .cancellable(id: Main.ListenersId())
 
         case .sendMessage:
             let newMessage = NewMessage(

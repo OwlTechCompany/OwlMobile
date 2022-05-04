@@ -19,9 +19,10 @@ extension FirebaseClient {
             setup: { setup(state: state) }
         )
     }
+    
 }
 
-private extension FirebaseClient {
+fileprivate extension FirebaseClient {
 
     static func setup(
         state: State

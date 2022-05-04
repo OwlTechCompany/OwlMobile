@@ -18,7 +18,7 @@ extension ValidationClient {
 
 }
 
-private extension ValidationClient {
+fileprivate extension ValidationClient {
 
     static func phoneValidation(
         phone: String,
