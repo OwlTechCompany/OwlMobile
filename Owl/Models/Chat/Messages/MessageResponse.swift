@@ -13,7 +13,7 @@ struct MessageResponse: Decodable, Equatable, Identifiable {
 
     let id: String
     let messageText: String
-    let sentAt: Timestamp?
+    let sentAt: Date?
     let sentBy: String
 
 }

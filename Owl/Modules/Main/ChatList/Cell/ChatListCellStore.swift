@@ -48,7 +48,7 @@ extension ChatListCell.State {
         photo = model.companion.photo
         chatName = model.name
         lastMessage = model.lastMessage?.messageText ?? ""
-        lastMessageSendTime = model.lastMessage?.sentAt?.dateValue() ?? Date()
+        lastMessageSendTime = model.lastMessage?.sentAt ?? Date()
         unreadMessagesNumber = 0
     }
 

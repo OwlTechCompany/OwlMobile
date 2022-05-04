@@ -11,8 +11,8 @@ import Firebase
 extension FirebaseClient {
 
     static func live() -> FirebaseClient {
-        //        let state = State.production
-        let state = State.development(host: "192.168.31.26")
+        let state = State.production
+//        let state = State.development(host: "192.168.31.26")
 
         return FirebaseClient(
             state: state,
