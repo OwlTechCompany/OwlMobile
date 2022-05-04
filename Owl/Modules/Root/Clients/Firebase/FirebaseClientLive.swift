@@ -1,37 +1,18 @@
 //
-//  FirebaseClient.swift
+//  FirebaseClientLive.swift
 //  Owl
 //
-//  Created by Anastasia Holovash on 07.04.2022.
+//  Created by Denys Danyliuk on 04.05.2022.
 //
 
 import Foundation
 import Firebase
 
-struct FirebaseClient {
-
-    var state: State
-
-    static let auth = Auth.auth()
-    static let phoneAuthProvider = PhoneAuthProvider.provider()
-    static let firestore = Firestore.firestore()
-    static let storage = Storage.storage()
-    static let messaging = Messaging.messaging()
-
-    var setup: () -> Void
-
-    enum State {
-        case production
-        case development(host: String)
-    }
-}
-
-// MARK: - Live
-
 extension FirebaseClient {
 
     static func live() -> FirebaseClient {
-        let state = State.production //.development(host: "192.168.31.26")
+        //        let state = State.production
+        let state = State.development(host: "192.168.31.26")
 
         return FirebaseClient(
             state: state,
@@ -40,7 +21,7 @@ extension FirebaseClient {
     }
 }
 
-fileprivate extension FirebaseClient {
+private extension FirebaseClient {
 
     static func setup(
         state: State

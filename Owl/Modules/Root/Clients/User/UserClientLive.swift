@@ -1,24 +1,16 @@
 //
-//  UserClient.swift
+//  UserClientLive.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 18.04.2022.
+//  Created by Denys Danyliuk on 04.05.2022.
 //
 
-import Foundation
 import ComposableArchitecture
 import Combine
 import Firebase
+import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
 import FirebaseAuthCombineSwift
-
-struct UserClient {
-
-    var authUser: CurrentValueSubject<Firebase.User?, Never>
-    var firestoreUser: CurrentValueSubject<User?, Never>
-
-    var setup: () -> Void
-}
 
 extension UserClient {
 

@@ -1,8 +1,8 @@
 //
-//  FirestoreUsersClient.swift
+//  FirestoreUsersClientLive.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 16.04.2022.
+//  Created by Denys Danyliuk on 04.05.2022.
 //
 
 import Combine
@@ -10,29 +10,21 @@ import ComposableArchitecture
 import FirebaseFirestoreCombineSwift
 import Firebase
 
-struct FirestoreUsersClient {
-
-    static var collection = FirebaseClient.firestore.collection("users")
-
-    var setMeIfNeeded: () -> Effect<SignInUserType, NSError>
-    var updateMe: (UserUpdate) -> Effect<Bool, NSError>
-
-    var users: (UserQuery) -> Effect<[User], NSError>
-}
-
-// MARK: - Live
-
 extension FirestoreUsersClient {
 
     static func live(userClient: UserClient) -> FirestoreUsersClient {
         FirestoreUsersClient(
-            setMeIfNeeded: { setMeIfNeededLive(userClient: userClient) },
-            updateMe: { updateMeLive(userUpdate: $0, userClient: userClient) },
-            users: usersLive
+            setMeIfNeeded: { setMeIfNeeded(userClient: userClient) },
+            updateMe: { updateMe(userUpdate: $0, userClient: userClient) },
+            users: users
         )
     }
 
-    static private func setMeIfNeededLive(
+}
+
+private extension FirestoreUsersClient {
+
+    static func setMeIfNeeded(
         userClient: UserClient
     ) -> Effect<SignInUserType, NSError> {
         guard let authUser = userClient.authUser.value else {
@@ -64,10 +56,9 @@ extension FirestoreUsersClient {
             }
             .mapError { $0 as NSError }
             .eraseToEffect()
-
     }
 
-    static private func updateMeLive(
+    static func updateMe(
         userUpdate: UserUpdate,
         userClient: UserClient
     ) -> Effect<Bool, NSError> {
@@ -82,7 +73,7 @@ extension FirestoreUsersClient {
             .eraseToEffect()
     }
 
-    static func usersLive(userQuery: UserQuery) -> Effect<[User], NSError> {
+    static func users(userQuery: UserQuery) -> Effect<[User], NSError> {
         return collection
             .whereField("phoneNumber", isEqualTo: userQuery.phoneNumber)
             .getDocuments()
@@ -94,4 +85,5 @@ extension FirestoreUsersClient {
             .mapError { $0 as NSError }
             .eraseToEffect()
     }
+    
 }

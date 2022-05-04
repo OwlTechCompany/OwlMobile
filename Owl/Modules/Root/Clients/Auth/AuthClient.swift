@@ -17,6 +17,7 @@ struct AuthClient {
     var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void
     var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
     var signOut: () -> Void
+    
 }
 
 // MARK: - Test Phones
