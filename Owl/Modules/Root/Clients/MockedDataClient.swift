@@ -35,7 +35,7 @@ struct MockedDataClient {
         lastMessage: MessageResponse(
             id: "1",
             messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         )
     )
@@ -44,31 +44,31 @@ struct MockedDataClient {
         MessageResponse(
             id: "1",
             messageText: "But I must explain to you how all this mistaken idea?",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         ),
         MessageResponse(
             id: "2",
             messageText: "Cool!😊 let's meet at 16:00. Jklndjf dkf jkss djfn ljf fkhshfkeune fjufuufukk klfn fjj fjufuufukk k",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
         ),
         MessageResponse(
             id: "3",
             messageText: "no resultant pleasure 👍",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "f1jCGeHXjbSrMWmGb7E2q6CX4xx1"
         ),
         MessageResponse(
             id: "4",
             messageText: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         ),
         MessageResponse(
             id: "5",
             messageText: "Ha every!",
-            sentAt: Timestamp(date: Date()),
+            sentAt: Date(),
             sentBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3"
         )
     ]

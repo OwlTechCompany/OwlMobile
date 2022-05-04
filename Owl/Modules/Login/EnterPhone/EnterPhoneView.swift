@@ -92,7 +92,7 @@ struct EnterPhoneNumber_Previews: PreviewProvider {
             initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
             reducer: EnterPhone.reducer,
             environment: EnterPhone.Environment(
-                authClient: .live,
+                authClient: .live(),
                 userDefaultsClient: .live(),
                 phoneValidation: ValidationClient.live().phoneValidation
             )

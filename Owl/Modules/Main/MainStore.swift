@@ -11,6 +11,8 @@ import SwiftUI
 
 struct Main {
 
+    struct ListenersId: Hashable {}
+
     // MARK: - State
 
     struct State: Equatable, IdentifiedRouterState {

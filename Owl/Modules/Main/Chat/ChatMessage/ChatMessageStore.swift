@@ -16,7 +16,7 @@ struct ChatMessage {
     struct State: Equatable, Identifiable, Hashable {
         let id: String
         let text: String
-        let sentAt: Timestamp?
+        let sentAt: Date?
         let sentBy: String // Not used for now; Added for groups
         let type: MessageType
     }

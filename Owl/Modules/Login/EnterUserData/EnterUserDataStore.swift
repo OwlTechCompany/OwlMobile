@@ -41,6 +41,9 @@ struct EnterUserData {
 
         case dismissAlert
 
+        case checkNotificationService
+        case next(needSetupPermissions: Bool)
+
         case binding(BindingAction<State>)
     }
 
@@ -50,6 +53,7 @@ struct EnterUserData {
         let authClient: AuthClient
         let firestoreUsersClient: FirestoreUsersClient
         let storageClient: StorageClient
+        let pushNotificationClient: PushNotificationClient
     }
 
     // MARK: - Reducer
@@ -70,7 +74,8 @@ struct EnterUserData {
             return .none
 
         case .later:
-            return .none
+            state.isLoading = true
+            return Effect(value: .checkNotificationService)
 
         case .save:
             if let image = state.selectedImage {
@@ -104,8 +109,7 @@ struct EnterUserData {
                 .catchToEffect(Action.updateUserResult)
 
         case .updateUserResult(.success):
-            state.isLoading = false
-            return .none
+            return Effect(value: .checkNotificationService)
 
         case let .uploadPhotoResult(.failure(error)),
              let .updateUserResult(.failure(error)):
@@ -117,8 +121,33 @@ struct EnterUserData {
             )
             return .none
 
+        case .checkNotificationService:
+            return environment.pushNotificationClient
+                .getNotificationSettings
+                .receive(on: DispatchQueue.main)
+                .flatMap { settings -> Effect<Action, Never> in
+                    switch settings.authorizationStatus {
+                    case .notDetermined:
+                        return Effect(value: .next(needSetupPermissions: true))
+
+                    default:
+                        return Effect.concatenate(
+                            environment.pushNotificationClient
+                                .register()
+                                .fireAndForget(),
+
+                            Effect(value: .next(needSetupPermissions: false))
+                        )
+                    }
+                }
+                .eraseToEffect()
+
         case .dismissAlert:
             state.alert = nil
+            return .none
+
+        case .next:
+            state.isLoading = false
             return .none
 
         case .binding:
