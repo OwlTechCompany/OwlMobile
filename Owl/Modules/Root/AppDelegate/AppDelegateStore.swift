@@ -56,6 +56,7 @@ extension AppDelegate {
                 .firebaseMessagingDelegate
                 .map(Action.firebaseMessagingDelegate)
 
+            // Register for notifications on startup
             let setupPushNotificationEffect: Effect<AppDelegate.Action, Never> = environment
                 .pushNotificationClient
                 .getNotificationSettings

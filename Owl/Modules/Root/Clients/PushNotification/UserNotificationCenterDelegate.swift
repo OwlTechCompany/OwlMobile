@@ -74,13 +74,6 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
         withCompletionHandler completionHandler:
         @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        guard let json = notification.request.content.userInfo as? [String: Any] else {
-            return
-        }
-        if let theJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]) {
-            let theJSONText = String(data: theJSONData, encoding: .ascii)
-            print("Push data:\n\(theJSONText!)")
-        }
         subscriber.send(
             .willPresentNotification(
                 PushNotificationClient.Notification(unNotification: notification),

@@ -1,41 +1,31 @@
 //
-//  AuthClient.swift
+//  AuthClient+Live.swift
 //  Owl
 //
-//  Created by Anastasia Holovash on 08.04.2022.
+//  Created by Denys Danyliuk on 04.05.2022.
 //
 
-import UIKit
 import ComposableArchitecture
 import Combine
-import Firebase
-import FirebaseFirestoreCombineSwift
+import FirebaseAuth
 import FirebaseAuthCombineSwift
-
-struct AuthClient {
-
-    var verifyPhoneNumber: (String) -> Effect<String, NSError>
-    var setAPNSToken: (Data) -> Effect<Void, Never>
-    var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void
-    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
-    var signOut: () -> Void
-}
-
-// MARK: - Live
 
 extension AuthClient {
 
     static func live() -> AuthClient {
         AuthClient(
-            verifyPhoneNumber: verifyPhoneNumberLive,
-            setAPNSToken: setAPNSTokenLive,
+            verifyPhoneNumber: verifyPhoneNumber,
+            setAPNSToken: setAPNSToken,
             handleIfAuthNotification: handleIfAuthNotification,
-            signIn: signInLive,
-            signOut: signOutLive
+            signIn: signIn,
+            signOut: signOut
         )
     }
+}
 
-    static private func verifyPhoneNumberLive(
+private extension AuthClient {
+
+    static func verifyPhoneNumber(
         phoneNumber: String
     ) -> Effect<String, NSError> {
         if AuthClient.testPhones.contains(phoneNumber) {
@@ -47,13 +37,13 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func setAPNSTokenLive(deviceToken: Data) -> Effect<Void, Never> {
+    static func setAPNSToken(deviceToken: Data) -> Effect<Void, Never> {
         Effect.fireAndForget {
             FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
         }
     }
 
-    static private func handleIfAuthNotification(
+    static func handleIfAuthNotification(
         model: DidReceiveRemoteNotificationModel
     ) {
         if FirebaseClient.auth.canHandleNotification(model.userInfo) {
@@ -61,7 +51,7 @@ extension AuthClient {
         }
     }
 
-    static private func signInLive(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
+    static func signIn(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
         let credential = FirebaseClient.phoneAuthProvider.credential(
             withVerificationID: signInModel.verificationID,
             verificationCode: signInModel.verificationCode
@@ -72,23 +62,8 @@ extension AuthClient {
             .eraseToEffect()
     }
 
-    static private func signOutLive() {
+    static func signOut() {
         try? FirebaseClient.auth.signOut()
     }
-
-}
-
-// MARK: - Test Phones
-
-extension AuthClient {
-
-    static let testPhones: [String] = [
-        "+380931314850",
-        "+380991111111",
-        "+380992222222",
-        "+380993333333",
-        "+380994444444",
-        "+380995555555"
-    ]
 
 }

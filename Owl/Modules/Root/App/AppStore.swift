@@ -43,7 +43,7 @@ struct App {
         case login(Login.Action)
         case main(Main.Action)
 
-        case setupMain
+        case subscribeOnUserChange
         case signOut
         case handlePushRoute(Result<PushRoute, NSError>)
     }
@@ -113,7 +113,7 @@ struct App {
             if environment.userClient.authUser.value != nil,
                let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
-                return Effect(value: .setupMain)
+                return Effect(value: .subscribeOnUserChange)
 
             } else {
                 state.set(.login)
@@ -123,7 +123,7 @@ struct App {
         case .login(.delegate(.loginSuccess)):
             if let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
-                return Effect(value: .setupMain)
+                return Effect(value: .subscribeOnUserChange)
             }
             return .none
 
@@ -163,15 +163,16 @@ struct App {
         case let .handlePushRoute(.failure(error)):
             return .none
 
-        case .setupMain:
+        case .subscribeOnUserChange:
             return Effect.run { subscriber in
                 environment.userClient
                     .firestoreUser
                     .removeDuplicates()
                     .sink { user in
-                        if user == nil {
-                            subscriber.send(.signOut)
+                        guard user == nil else {
+                            return
                         }
+                        subscriber.send(.signOut)
                     }
             }
 

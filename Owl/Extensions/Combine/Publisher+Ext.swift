@@ -37,23 +37,25 @@ extension Publisher {
 }
 
 extension Publisher where Output == Never {
-    public func setOutputType<NewOutput>(to _: NewOutput.Type) -> AnyPublisher<NewOutput, Failure> {
+
+    func setOutputType<NewOutput>(to _: NewOutput.Type) -> AnyPublisher<NewOutput, Failure> {
         func absurd<A>(_ never: Never) -> A {}
         return self.map(absurd).eraseToAnyPublisher()
     }
+
 }
 
 extension Publisher {
-    public func ignoreOutput<NewOutput>(
+
+    func ignoreOutput<NewOutput>(
         setOutputType: NewOutput.Type
     ) -> AnyPublisher<NewOutput, Failure> {
-        return
         self
             .ignoreOutput()
             .setOutputType(to: NewOutput.self)
     }
 
-    public func ignoreFailure<NewFailure>(
+    func ignoreFailure<NewFailure>(
         setFailureType: NewFailure.Type
     ) -> AnyPublisher<Output, NewFailure> {
         self
@@ -62,10 +64,11 @@ extension Publisher {
             .eraseToAnyPublisher()
     }
 
-    public func ignoreFailure() -> AnyPublisher<Output, Never> {
+    func ignoreFailure() -> AnyPublisher<Output, Never> {
         self
             .catch { _ in Empty() }
             .setFailureType(to: Never.self)
             .eraseToAnyPublisher()
     }
+
 }

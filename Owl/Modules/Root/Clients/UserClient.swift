@@ -23,17 +23,14 @@ struct UserClient {
 extension UserClient {
 
     static func live(userDefaults: UserDefaultsClient) -> Self {
-        var authCancellables: Set<AnyCancellable> = []
         let authUser = CurrentValueSubject<Firebase.User?, Never>(nil)
         let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
+        var authCancellables = Set<AnyCancellable>()
         var userCancellable: Cancellable?
         return Self(
             authUser: authUser,
             firestoreUser: firestoreUser,
             setup: {
-                if userDefaults.getUser() == nil {
-                    try? FirebaseClient.auth.signOut()
-                }
                 // Set current user immediately
                 authUser.send(FirebaseClient.auth.currentUser)
 
