@@ -2,7 +2,7 @@
 //  UserClientLive.swift
 //  Owl
 //
-//  Created by Denys Danyliuk on 04.05.2022.
+//  Created by Denys Danyliuk on 18.04.2022.
 //
 
 import ComposableArchitecture
