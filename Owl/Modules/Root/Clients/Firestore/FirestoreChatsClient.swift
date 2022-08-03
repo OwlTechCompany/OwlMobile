@@ -16,9 +16,13 @@ struct FirestoreChatsClient {
     static var cancellables = Set<AnyCancellable>()
 
     struct Collection {
-        static let chats = Firestore.firestore().collection("chats")
-        static let chatsMessages = Firestore.firestore().collection("chatsMessages")
+        static let chats = FirebaseClient.firestore.collection("chats")
+        static let chatsMessages = FirebaseClient.firestore.collection("chatsMessages")
     }
+
+    // As we can't simply synchronise states with deep navigation
+    // Let's store openedChatId here for now.
+    var openedChatId: CurrentValueSubject<String?, Never>
 
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
@@ -35,6 +39,7 @@ extension FirestoreChatsClient {
     // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
         return Self(
+            openedChatId: CurrentValueSubject(nil),
             getChats: {
                 Effect.run { subscriber in
                     guard let authUser = userClient.authUser.value else {
@@ -147,7 +152,7 @@ extension FirestoreChatsClient {
             },
             sendMessage: { newMessage in
                 Effect.future { callback in
-                    let batch = Firestore.firestore().batch()
+                    let batch = FirebaseClient.firestore.batch()
 
                     let newDocument = Collection.chatsMessages.document(newMessage.chatId).collection("messages").document()
                     var message = newMessage.message

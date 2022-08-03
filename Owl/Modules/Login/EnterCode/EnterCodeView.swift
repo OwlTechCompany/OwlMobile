@@ -118,7 +118,7 @@ struct EnterCodeView_Previews: PreviewProvider {
                 ),
                 reducer: EnterCode.reducer,
                 environment: EnterCode.Environment(
-                    authClient: .live,
+                    authClient: .live(),
                     userDefaultsClient: .live(),
                     firestoreUsersClient: .live(userClient: userClient)
                 )

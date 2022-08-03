@@ -64,8 +64,10 @@ struct Chat {
             return .none
 
         case .onAppear:
+            environment.chatsClient.openedChatId.send(state.chatID)
             return environment.chatsClient.getMessages(state.chatID)
                 .catchToEffect(Action.getMessagesResult)
+                .cancellable(id: Main.ListenersId())
 
         case .sendMessage:
             let newMessage = NewMessage(

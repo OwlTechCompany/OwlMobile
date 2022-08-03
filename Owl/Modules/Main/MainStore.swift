@@ -11,6 +11,8 @@ import SwiftUI
 
 struct Main {
 
+    struct ListenersId: Hashable {}
+
     // MARK: - State
 
     struct State: Equatable, IdentifiedRouterState {
@@ -103,7 +105,7 @@ struct Main {
         case .delegate:
             return .none
 
-        case .routeAction(_, action: let action):
+        case .routeAction:
             return .none
 
         case .updateRoutes:

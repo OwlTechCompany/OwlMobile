@@ -51,6 +51,9 @@ struct ChatList {
             return .none
 
         case .onAppear:
+            // This is workaround because .onDisappear can't
+            // call viewState in ChatView
+            environment.chatsClient.openedChatId.send(nil)
             return .merge(
                 environment.chatsClient.getChats()
                     .catchToEffect(Action.getChatsResult),
@@ -61,6 +64,7 @@ struct ChatList {
                         .sink { subscriber.send(.updateUser($0)) }
                 }
             )
+            .cancellable(id: Main.ListenersId())
 
         case let .updateUser(user):
             state.user = user

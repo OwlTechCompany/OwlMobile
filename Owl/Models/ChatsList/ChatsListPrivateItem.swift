@@ -25,7 +25,7 @@ struct ChatsListPrivateItem: Decodable, Equatable {
 extension ChatsListPrivateItem {
 
     var companion: User {
-        if user1.uid == Auth.auth().currentUser!.uid {
+        if user1.uid == FirebaseClient.auth.currentUser!.uid {
             return user2
         } else {
             return user1
@@ -33,7 +33,7 @@ extension ChatsListPrivateItem {
     }
 
     var me: User {
-        if user1.uid != Auth.auth().currentUser!.uid {
+        if user1.uid != FirebaseClient.auth.currentUser!.uid {
             return user2
         } else {
             return user1
