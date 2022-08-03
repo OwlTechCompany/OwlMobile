@@ -61,12 +61,13 @@ struct ChatView: View {
                                         ChatMessageView(store: $0)
                                             .listRowSeparator(.hidden)
                                             .listRowInsets(.init())
+                                            .rotationEffect(Angle(degrees: 180)).scaleEffect(x: -1.0, y: 1.0, anchor: .center)
                                     }
                                 )
                             }
                             .onChange(of: viewStore.messages) { newValue in
                                 guard
-                                    let lastMessage = newValue.last,
+                                    let lastMessage = newValue.first,
                                     isFirstUpdate
                                 else {
                                     return
@@ -75,7 +76,7 @@ struct ChatView: View {
                                 isFirstUpdate.toggle()
                             }
                             .onChange(of: viewStore.newMessages) { newValue in
-                                guard let lastMessage = newValue.last else {
+                                guard let lastMessage = newValue.first else {
                                     return
                                 }
                                 if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
@@ -85,6 +86,7 @@ struct ChatView: View {
                             .animation(.none, value: keyboard)
                         }
                     }
+                    .rotationEffect(Angle(degrees: 180)).scaleEffect(x: -1.0, y: 1.0, anchor: .center)
                     .introspectScrollView { scrollView in self.scrollView = scrollView }
                     .onTapGesture { focusedField = nil }
 
@@ -100,7 +102,7 @@ struct ChatView: View {
                     if keyboard.height != newValue.height {
                         keyboard = newValue
                         scrollView.setContentOffset(
-                            .init(x: 0, y: scrollView.contentOffset.y + scrollViewContentOffsetY),
+                            .init(x: 0, y: scrollView.contentOffset.y - scrollViewContentOffsetY),
                             animated: true
                         )
                     }
@@ -162,6 +164,7 @@ private extension ChatView {
         keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
     }
 
+    // TODO: update
     var isLastMessageAppearing: Bool {
         scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 20 + Constants.textFieldBackgroundHeigh
     }
