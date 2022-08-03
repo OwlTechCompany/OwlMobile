@@ -116,7 +116,7 @@ fileprivate extension PushNotificationClient {
                 let data = try JSONSerialization.data(withJSONObject: json, options: [.fragmentsAllowed])
                 let push = try JSONDecoder.customFirestore.decode(Push.self, from: data)
                 completionHandler()
-                // Only one push route
+                // There is no routing logic. If we tap on push, we open chat.
                 return PushRoute.openChat(push.chat)
             }
             .mapError { $0 as NSError }
