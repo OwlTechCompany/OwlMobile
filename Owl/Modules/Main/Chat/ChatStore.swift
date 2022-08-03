@@ -20,7 +20,7 @@ struct Chat {
         var isLoading: Bool = false
 
         var messages: IdentifiedArrayOf<ChatMessage.State> {
-            IdentifiedArrayOf(uniqueElements: oldMessages + newMessages)
+            IdentifiedArrayOf(uniqueElements: newMessages + oldMessages)
         }
 
         var model: ChatsListPrivateItem
@@ -73,7 +73,7 @@ struct Chat {
 
         case let .getOldMessagesResult(.success(messages)):
             let update = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
-            state.oldMessages.insert(contentsOf: update, at: 0)
+            state.oldMessages.append(contentsOf: update)
             state.isLoading = false
             return .none
 
@@ -108,13 +108,12 @@ struct Chat {
             return .none
 
         case let .messages(id, .wasShown):
-            guard id == state.messages.first?.id && !state.isLoading else {
+            guard id == state.messages.last?.id && !state.isLoading else {
                 return .none
             }
             state.isLoading = true
-//            return environment.chatsClient.getNextMessages()
-//                .catchToEffect(Action.getOldMessagesResult)
-            return .none
+            return environment.chatsClient.getNextMessages()
+                .catchToEffect(Action.getOldMessagesResult)
         }
     }
     .binding()
