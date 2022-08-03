@@ -7,8 +7,6 @@
 
 import ComposableArchitecture
 
-var openedChatId: String?
-
 struct Chat {
 
     // MARK: - State
@@ -66,7 +64,7 @@ struct Chat {
             return .none
 
         case .onAppear:
-            openedChatId = state.chatID
+            environment.chatsClient.openedChatId.send(state.chatID)
             return environment.chatsClient.getMessages(state.chatID)
                 .catchToEffect(Action.getMessagesResult)
                 .cancellable(id: Main.ListenersId())

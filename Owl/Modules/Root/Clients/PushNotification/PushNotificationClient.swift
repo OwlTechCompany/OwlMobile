@@ -20,7 +20,8 @@ struct PushNotificationClient {
     var currentFCMToken: () -> Effect<String, NSError>
     var handlePushNotification: (
         PushNotificationClient.Notification,
-        _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+        _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void,
+        _ openedChatId: String?
     ) -> Effect<Void, NSError>
     var handleDidReceiveResponse: (
         PushNotificationClient.Response,

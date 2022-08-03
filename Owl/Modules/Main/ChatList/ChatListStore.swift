@@ -53,7 +53,7 @@ struct ChatList {
         case .onAppear:
             // This is workaround because .onDisappear can't
             // call viewState in ChatView
-            openedChatId = nil
+            environment.chatsClient.openedChatId.send(nil)
             return .merge(
                 environment.chatsClient.getChats()
                     .catchToEffect(Action.getChatsResult),

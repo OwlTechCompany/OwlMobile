@@ -105,7 +105,7 @@ struct Main {
         case .delegate:
             return .none
 
-        case .routeAction(_, action: let action):
+        case .routeAction:
             return .none
 
         case .updateRoutes:

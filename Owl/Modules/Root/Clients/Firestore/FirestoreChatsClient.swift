@@ -20,6 +20,10 @@ struct FirestoreChatsClient {
         static let chatsMessages = FirebaseClient.firestore.collection("chatsMessages")
     }
 
+    // As we can't simply synchronise states with deep navigation
+    // Let's store openedChatId here for now.
+    var openedChatId: CurrentValueSubject<String?, Never>
+
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
@@ -35,6 +39,7 @@ extension FirestoreChatsClient {
     // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
         return Self(
+            openedChatId: CurrentValueSubject(nil),
             getChats: {
                 Effect.run { subscriber in
                     guard let authUser = userClient.authUser.value else {

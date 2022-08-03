@@ -205,7 +205,8 @@ extension App.Environment {
             userClient: userClient,
             authClient: authClient,
             firestoreUserClient: firestoreUsersClient,
-            pushNotificationClient: pushNotificationClient
+            pushNotificationClient: pushNotificationClient,
+            firestoreChatsClient: chatsClient
         )
     }
 

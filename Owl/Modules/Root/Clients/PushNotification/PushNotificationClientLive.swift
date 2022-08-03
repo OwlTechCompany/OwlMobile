@@ -80,7 +80,8 @@ fileprivate extension PushNotificationClient {
 
     static func handlePushNotification (
         notification: PushNotificationClient.Notification,
-        completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+        completionHandler: @escaping (UNNotificationPresentationOptions) -> Void,
+        openedChatId: String?
     ) -> Effect<Void, NSError> {
         Effect.result {
             Result<Void, Error> {
@@ -95,8 +96,6 @@ fileprivate extension PushNotificationClient {
                 let push = try JSONDecoder.customFirestore.decode(Push.self, from: data)
                 if push.chat.id == openedChatId {
                     completionHandler([])
-                    // TODO: Move to Chat view
-                    AudioServicesPlayAlertSound(1301)
                 } else {
                     completionHandler([.banner, .sound])
                 }

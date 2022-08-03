@@ -34,6 +34,7 @@ extension AppDelegate {
         let authClient: AuthClient
         let firestoreUserClient: FirestoreUsersClient
         let pushNotificationClient: PushNotificationClient
+        let firestoreChatsClient: FirestoreChatsClient
     }
 
     // MARK: - Reducer
@@ -82,7 +83,11 @@ extension AppDelegate {
 
         case let .userNotificationCenterDelegate(.willPresentNotification(notification, completionHandler)):
             return environment.pushNotificationClient
-                .handlePushNotification(notification, completionHandler)
+                .handlePushNotification(
+                    notification,
+                    completionHandler,
+                    environment.firestoreChatsClient.openedChatId.value
+                )
                 .fireAndForget()
 
         case .userNotificationCenterDelegate:
