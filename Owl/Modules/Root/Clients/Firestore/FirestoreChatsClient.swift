@@ -134,13 +134,13 @@ extension FirestoreChatsClient {
                     }
 
                     Collection.chatsMessages.document(chatID).collection("messages")
-                        .order(by: "sentAt", descending: false)
-                        .limit(toLast: 25)
+                        .order(by: "sentAt", descending: true)
+                        .limit(to: 25)
                         .getDocuments()
                         .on { snapshot in
                             guard
-                                let lastDocumentSnapshot = snapshot.documents.first,
-                                let subscribeForNewMessagesSnapshot = snapshot.documents.last
+                                let lastDocumentSnapshot = snapshot.documents.last,
+                                let subscribeForNewMessagesSnapshot = snapshot.documents.first
                             else {
                                 return
                             }
@@ -174,8 +174,8 @@ extension FirestoreChatsClient {
                     }
 
                     return Collection.chatsMessages.document(chatID).collection("messages")
-                        .order(by: "sentAt", descending: false)
-                        .start(afterDocument: snapshot)
+                        .order(by: "sentAt", descending: true)
+                        .end(beforeDocument: snapshot)
                         .snapshotPublisher()
                         .on { snapshot in
                             let items = snapshot.documents.compactMap { document -> MessageResponse? in
@@ -204,9 +204,9 @@ extension FirestoreChatsClient {
                     }
 
                     Collection.chatsMessages.document(chatID).collection("messages")
-                        .order(by: "sentAt", descending: false)
-                        .end(beforeDocument: snapshot)
-                        .limit(toLast: 25)
+                        .order(by: "sentAt", descending: true)
+                        .start(afterDocument: snapshot)
+                        .limit(to: 25)
                         .getDocuments()
                         .on { snapshot in
                             let items = snapshot.documents.compactMap { document -> MessageResponse? in
@@ -218,7 +218,7 @@ extension FirestoreChatsClient {
                                 }
                             }
                             callback(.success(items))
-                            variables.lastDocumentSnapshot = snapshot.documents.first
+                            variables.lastDocumentSnapshot = snapshot.documents.last
                         }
                         error: { error in
                             callback(.failure(error as NSError))
