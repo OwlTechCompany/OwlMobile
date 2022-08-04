@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import FirebaseStorage
+import ComposableArchitecture
 
 struct FirebaseClient {
 
@@ -26,4 +27,18 @@ struct FirebaseClient {
         case development(host: String)
     }
     
+}
+
+extension DependencyValues {
+
+    var firebaseClient: FirebaseClient {
+        get { self[FirebaseClientKey.self] }
+        set { self[FirebaseClientKey.self] = newValue }
+    }
+
+    enum FirebaseClientKey: LiveDependencyKey {
+        static var testValue = FirebaseClient.unimplemented
+        static let liveValue = FirebaseClient.live()
+    }
+
 }

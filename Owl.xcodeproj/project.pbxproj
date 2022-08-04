@@ -72,6 +72,8 @@
 		5FA683A8289C22C6002DFEDF /* PushNotificationClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683A7289C22C6002DFEDF /* PushNotificationClientUnimplemented.swift */; };
 		5FA683AA289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */; };
 		5FA683AC289C238A002DFEDF /* StorageClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */; };
+		5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */; };
+		5FA683B0289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */; };
 		5FA7D862280435F500AA48B5 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA7D861280435F500AA48B5 /* TCACoordinators */; };
 		5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginStore.swift */; };
 		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
@@ -203,6 +205,8 @@
 		5FA683A7289C22C6002DFEDF /* PushNotificationClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientUnimplemented.swift; sourceTree = "<group>"; };
+		5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClientUnimplemented.swift; sourceTree = "<group>"; };
+		5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA7D863280435FF00AA48B5 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
 		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
@@ -750,6 +754,7 @@
 			isa = PBXGroup;
 			children = (
 				5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */,
+				5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */,
 			);
 			path = Firestore;
 			sourceTree = "<group>";
@@ -797,6 +802,7 @@
 			children = (
 				5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */,
 				5FF264DE2822BC08000FD185 /* FirebaseClientLive.swift */,
+				5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -1048,6 +1054,7 @@
 				5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */,
 				5D37F21F28207506000027BE /* MessageResponse.swift in Sources */,
 				5FB6DAB22818AAD90037C38B /* Photo.swift in Sources */,
+				5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */,
 				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
 				5FBCF9F1281AF58F00734BA0 /* PushNotificationClientLive.swift in Sources */,
 				5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */,
@@ -1082,6 +1089,7 @@
 				5FB6DA95281721690037C38B /* ScrollViewDelegate.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5FBCF9F5281B133200734BA0 /* SetupPermissionsStore.swift in Sources */,
+				5FA683B0289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift in Sources */,
 				5FA683A4289C2234002DFEDF /* UserDefaultsClientUnimplemented.swift in Sources */,
 				5F727FC1280765B000FABF26 /* SignIn.swift in Sources */,
 				5F727FBD2807647300FABF26 /* MainStore.swift in Sources */,
