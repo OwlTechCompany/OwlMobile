@@ -64,10 +64,7 @@ struct SetupPermissionsView_Previews: PreviewProvider {
     static var previews: some View {
         SetupPermissionsView(store: Store(
             initialState: SetupPermissions.State(),
-            reducer: SetupPermissions.reducer,
-            environment: SetupPermissions.Environment(
-                pushNotificationClient: .live()
-            )
+            reducer: SetupPermissions()
         ))
     }
 }
