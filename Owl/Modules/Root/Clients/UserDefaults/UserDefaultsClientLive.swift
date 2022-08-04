@@ -6,13 +6,6 @@
 //
 
 import Foundation
-import ComposableArchitecture
-
-extension DependencyValues.UserDefaultsKey: LiveDependencyKey {
-
-    static let liveValue = UserDefaultsClient.live()
-
-}
 
 extension UserDefaultsClient {
 

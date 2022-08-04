@@ -9,7 +9,6 @@ import Combine
 import ComposableArchitecture
 import FirebaseFirestoreCombineSwift
 import Firebase
-import XCTestDynamicOverlay
 
 struct FirestoreUsersClient {
 
@@ -21,29 +20,18 @@ struct FirestoreUsersClient {
 
 }
 
-extension FirestoreUsersClient {
-
-    static let unimplemented = Self(
-        setMeIfNeeded: XCTUnimplemented("\(Self.self).setMeIfNeeded"),
-        updateMe: XCTUnimplemented("\(Self.self).updateMe"),
-        users: XCTUnimplemented("\(Self.self).users")
-    )
-
-}
-
 extension DependencyValues {
 
     var firestoreUsersClient: FirestoreUsersClient {
-        get {
-            self[FirestoreUsersClientKey.self]
-        }
-        set {
-            self[FirestoreUsersClientKey.self] = newValue
-        }
+        get { self[FirestoreUsersClientKey.self] }
+        set { self[FirestoreUsersClientKey.self] = newValue }
     }
 
-    enum FirestoreUsersClientKey: DependencyKey {
+    enum FirestoreUsersClientKey: LiveDependencyKey {
         static var testValue = FirestoreUsersClient.unimplemented
+        static let liveValue = FirestoreUsersClient.live(
+            userClient: DependencyValues.current.userClient
+        )
     }
 
 }

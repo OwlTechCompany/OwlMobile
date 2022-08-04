@@ -9,7 +9,6 @@ import ComposableArchitecture
 import Combine
 import FirebaseAuth
 import FirebaseAuthCombineSwift
-import XCTestDynamicOverlay
 
 struct AuthClient {
 
@@ -21,15 +20,17 @@ struct AuthClient {
     
 }
 
-extension AuthClient {
+extension DependencyValues {
 
-    static let unimplemented = Self(
-        verifyPhoneNumber: XCTUnimplemented("\(Self.self).verifyPhoneNumber"),
-        setAPNSToken: XCTUnimplemented("\(Self.self).setAPNSToken"),
-        handleIfAuthNotification: XCTUnimplemented("\(Self.self).handleIfAuthNotification"),
-        signIn: XCTUnimplemented("\(Self.self).signIn"),
-        signOut: XCTUnimplemented("\(Self.self).signOut")
-    )
+    var authClient: AuthClient {
+        get { self[AuthClientKey.self] }
+        set { self[AuthClientKey.self] = newValue }
+    }
+
+    enum AuthClientKey: LiveDependencyKey {
+        static var testValue = AuthClient.unimplemented
+        static let liveValue = AuthClient.live()
+    }
 
 }
 
@@ -45,22 +46,5 @@ extension AuthClient {
         "+380994444444",
         "+380995555555"
     ]
-
-}
-
-extension DependencyValues {
-
-    var authClient: AuthClient {
-        get {
-            self[AuthClientKey.self]
-        }
-        set {
-            self[AuthClientKey.self] = newValue
-        }
-    }
-
-    enum AuthClientKey: DependencyKey {
-        static var testValue = AuthClient.unimplemented
-    }
 
 }

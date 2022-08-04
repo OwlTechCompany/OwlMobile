@@ -10,12 +10,6 @@ import Combine
 import FirebaseAuth
 import FirebaseAuthCombineSwift
 
-extension DependencyValues.AuthClientKey: LiveDependencyKey {
-
-    static let liveValue = AuthClient.live()
-
-}
-
 extension AuthClient {
 
     static func live() -> AuthClient {

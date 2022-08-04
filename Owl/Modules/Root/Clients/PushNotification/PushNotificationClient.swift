@@ -10,7 +10,6 @@ import Combine
 import Firebase
 import ComposableArchitecture
 import UserNotifications
-import XCTestDynamicOverlay
 
 struct PushNotificationClient {
 
@@ -79,36 +78,16 @@ extension PushNotificationClient.Settings {
 
 }
 
-extension PushNotificationClient {
-
-    static let unimplemented = Self(
-        getNotificationSettings: .unimplemented("\(Self.self).getNotificationSettings"),
-        requestAuthorization: XCTUnimplemented("\(Self.self).requestAuthorization"),
-        setAPNSToken: XCTUnimplemented("\(Self.self).setAPNSToken"),
-        register: XCTUnimplemented("\(Self.self).register"),
-        currentFCMToken: XCTUnimplemented("\(Self.self).currentFCMToken"),
-        handlePushNotification: XCTUnimplemented("\(Self.self).handlePushNotification"),
-        handleDidReceiveResponse: XCTUnimplemented("\(Self.self).handleDidReceiveResponse"),
-        userNotificationCenterDelegate: .unimplemented("\(Self.self).userNotificationCenterDelegate"),
-        firebaseMessagingDelegate: .unimplemented("\(Self.self).firebaseMessagingDelegate")
-    )
-
-}
-
-
 extension DependencyValues {
 
     var pushNotificationClient: PushNotificationClient {
-        get {
-            self[PushNotificationClientKey.self]
-        }
-        set {
-            self[PushNotificationClientKey.self] = newValue
-        }
+        get { self[PushNotificationClientKey.self] }
+        set { self[PushNotificationClientKey.self] = newValue }
     }
 
     enum PushNotificationClientKey: DependencyKey {
         static var testValue = PushNotificationClient.unimplemented
+        static let liveValue = PushNotificationClient.live()
     }
 
 }

@@ -7,8 +7,8 @@
 
 import Foundation
 import ComposableArchitecture
-import XCTestDynamicOverlay
 
+// TODO: Use userDefaults from KPIHub
 struct UserDefaultsClient {
 
     var setVerificationID: (String) -> Void
@@ -30,30 +30,16 @@ extension UserDefaultsClient {
 
 }
 
-extension UserDefaultsClient {
-
-    static let unimplemented = Self(
-        setVerificationID: XCTUnimplemented("\(Self.self).setVerificationID"),
-        getVerificationID: XCTUnimplemented("\(Self.self).getVerificationID"),
-        setUser: XCTUnimplemented("\(Self.self).setUser"),
-        getUser: XCTUnimplemented("\(Self.self).getUser")
-    )
-
-}
-
 extension DependencyValues {
 
     var userDefaultsClient: UserDefaultsClient {
-        get {
-            self[UserDefaultsKey.self]
-        }
-        set {
-            self[UserDefaultsKey.self] = newValue
-        }
+        get { self[UserDefaultsKey.self] }
+        set { self[UserDefaultsKey.self] = newValue }
     }
 
-    enum UserDefaultsKey: DependencyKey {
+    enum UserDefaultsKey: LiveDependencyKey {
         static var testValue = UserDefaultsClient.unimplemented
+        static let liveValue = UserDefaultsClient.live()
     }
-
+    
 }

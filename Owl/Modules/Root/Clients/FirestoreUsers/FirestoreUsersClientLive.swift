@@ -9,14 +9,7 @@ import Combine
 import ComposableArchitecture
 import FirebaseFirestoreCombineSwift
 import Firebase
-
-extension DependencyValues.FirestoreUsersClientKey: LiveDependencyKey {
-
-    static let liveValue = FirestoreUsersClient.live(
-        userClient: DependencyValues.UserClientKey.liveValue
-    )
-
-}
+import XCTestDynamicOverlay
 
 extension FirestoreUsersClient {
 

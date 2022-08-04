@@ -12,14 +12,6 @@ import FirebaseStorage
 import FirebaseStorageCombineSwift
 import CoreGraphics
 
-extension DependencyValues.StorageClientKey: LiveDependencyKey {
-
-    static let liveValue = StorageClient.live(
-        userClient: DependencyValues.current.userClient // TODO: This or static props?
-    )
-
-}
-
 extension StorageClient {
 
     static func live(userClient: UserClient) -> StorageClient {

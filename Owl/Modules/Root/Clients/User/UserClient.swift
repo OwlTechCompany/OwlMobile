@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 import Firebase
-import FirebaseFirestoreSwift
-import FirebaseFirestoreCombineSwift
-import FirebaseAuthCombineSwift
-import XCTestDynamicOverlay
 import ComposableArchitecture
 
 struct UserClient {
@@ -22,29 +18,18 @@ struct UserClient {
     
 }
 
-extension UserClient {
-
-    static let unimplemented = Self(
-        authUser: CurrentValueSubject(nil),
-        firestoreUser: CurrentValueSubject(nil),
-        setup: XCTUnimplemented("\(Self.self).setup")
-    )
-
-}
-
 extension DependencyValues {
 
     var userClient: UserClient {
-        get {
-            self[UserClientKey.self]
-        }
-        set {
-            self[UserClientKey.self] = newValue
-        }
+        get { self[UserClientKey.self] }
+        set { self[UserClientKey.self] = newValue }
     }
 
-    enum UserClientKey: DependencyKey {
+    enum UserClientKey: LiveDependencyKey {
         static var testValue = UserClient.unimplemented
+        static let liveValue = UserClient.live(
+            userDefaults: DependencyValues.current.userDefaultsClient
+        )
     }
 
 }

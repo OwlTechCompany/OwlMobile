@@ -7,7 +7,6 @@
 
 import Foundation
 import ComposableArchitecture
-import XCTestDynamicOverlay
 
 struct ValidationClient {
 
@@ -15,27 +14,16 @@ struct ValidationClient {
     
 }
 
-extension ValidationClient {
-
-    static let unimplemented = Self(
-        phoneValidation: XCTUnimplemented("\(Self.self).phoneValidation")
-    )
-
-}
-
 extension DependencyValues {
 
     var validationClient: ValidationClient {
-        get {
-            self[ValidationClientKey.self]
-        }
-        set {
-            self[ValidationClientKey.self] = newValue
-        }
+        get { self[ValidationClientKey.self] }
+        set { self[ValidationClientKey.self] = newValue }
     }
 
-    enum ValidationClientKey: DependencyKey {
+    enum ValidationClientKey: LiveDependencyKey {
         static var testValue = ValidationClient.unimplemented
+        static let liveValue = ValidationClient.live()
     }
 
 }

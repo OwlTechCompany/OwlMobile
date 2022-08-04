@@ -24,28 +24,18 @@ struct StorageClient {
     var setMyPhoto: (Data) -> Effect<URL, NSError>
 }
 
-extension StorageClient {
-
-    static let unimplemented = Self(
-        compressionQuality: 0.7,
-        setMyPhoto: XCTUnimplemented("\(Self.self).setMyPhoto")
-    )
-
-}
-
 extension DependencyValues {
 
     var storageClient: StorageClient {
-        get {
-            self[StorageClientKey.self]
-        }
-        set {
-            self[StorageClientKey.self] = newValue
-        }
+        get { self[StorageClientKey.self] }
+        set { self[StorageClientKey.self] = newValue }
     }
 
-    enum StorageClientKey: DependencyKey {
+    enum StorageClientKey: LiveDependencyKey {
         static var testValue = StorageClient.unimplemented
+        static let liveValue = StorageClient.live(
+            userClient: DependencyValues.current.userClient
+        )
     }
 
 }

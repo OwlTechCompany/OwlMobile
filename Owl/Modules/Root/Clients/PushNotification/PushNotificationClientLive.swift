@@ -10,14 +10,7 @@ import Combine
 import Firebase
 import ComposableArchitecture
 import UIKit
-import AVKit
 import FirebaseFirestoreSwift
-
-extension DependencyValues.PushNotificationClientKey: LiveDependencyKey {
-
-    static let liveValue = PushNotificationClient.live()
-
-}
 
 extension PushNotificationClient {
 

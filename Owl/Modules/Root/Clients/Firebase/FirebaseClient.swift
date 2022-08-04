@@ -11,6 +11,7 @@ import FirebaseStorage
 
 struct FirebaseClient {
 
+    // Make not static?
     static let auth = Auth.auth()
     static let phoneAuthProvider = PhoneAuthProvider.provider()
     static let firestore = Firestore.firestore()
