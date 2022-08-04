@@ -88,12 +88,12 @@ struct App {
                 environment: { $0.appDelegate }
             ),
 
-        Login.reducer
+        Reducer(Login())
             .optional()
             .pullback(
                 state: \State.login,
                 action: /Action.login,
-                environment: { $0.login }
+                environment: { _ in () }
             ),
 
         Main.reducer
@@ -207,17 +207,6 @@ extension App.Environment {
             firestoreUserClient: firestoreUsersClient,
             pushNotificationClient: pushNotificationClient,
             firestoreChatsClient: chatsClient
-        )
-    }
-
-    var login: Login.Environment {
-        Login.Environment(
-            authClient: authClient,
-            userDefaultsClient: userDefaultsClient,
-            validationClient: validationClient,
-            firestoreUsersClient: firestoreUsersClient,
-            storageClient: storageClient,
-            pushNotificationClient: pushNotificationClient
         )
     }
 

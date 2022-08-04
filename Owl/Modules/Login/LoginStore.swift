@@ -10,7 +10,7 @@ import ComposableArchitecture
 import SwiftUI
 import FirebaseAuth
 
-struct Login {
+struct Login: ReducerProtocol {
 
     // MARK: - State
 
@@ -40,164 +40,89 @@ struct Login {
         }
     }
 
-    // MARK: - Environment
+    @Dependency(\.authClient) var authClient
+    @Dependency(\.userDefaultsClient) var userDefaultsClient
+    @Dependency(\.validationClient) var validationClient
+    @Dependency(\.firestoreUsersClient) var firestoreUsersClient
+    @Dependency(\.storageClient) var storageClient
+    @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    struct Environment {
-        let authClient: AuthClient
-        let userDefaultsClient: UserDefaultsClient
-        let validationClient: ValidationClient
-        let firestoreUsersClient: FirestoreUsersClient
-        let storageClient: StorageClient
-        let pushNotificationClient: PushNotificationClient
-    }
-
-    // MARK: - Reducer
-
-//    var body: some ReducerProtocolOf<Self> {
-//        Reduce { state, action in
-//            switch action {
-//            case .routeAction(_, .onboarding(.startMessaging)):
-//                state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
-//                return .none
-//
-//            case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
-//                guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
-//                    return .none
-//                }
-//                let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
-//                state.routes.push(.enterCode(enterCodeState))
-//                return .none
-//
-//            case let .routeAction(_, .enterCode(.setMeResult(.success(setMeSuccess)))):
-//                switch setMeSuccess {
-//                case .newUser:
-//                    state.routes.push(.enterUserData(EnterUserData.State()))
-//                    return .none
-//
-//                case .userExists:
-//                    return environment.pushNotificationClient
-//                        .getNotificationSettings
-//                        .receive(on: DispatchQueue.main)
-//                        .flatMap { settings -> Effect<Action, Never> in
-//                            switch settings.authorizationStatus {
-//                            case .notDetermined:
-//                                return Effect(value: .showSetupPermission)
-//
-//                            default:
-//                                return Effect.concatenate(
-//                                    environment.pushNotificationClient
-//                                        .register()
-//                                        .fireAndForget(),
-//
-//                                    Effect(value: .delegate(.loginSuccess))
-//                                )
-//                            }
-//                        }
-//                        .eraseToEffect()
-//                }
-//
-//            case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
-//                switch needSetupPermissions {
-//                case true:
-//                    return Effect(value: .showSetupPermission)
-//
-//                case false:
-//                    return Effect(value: .delegate(.loginSuccess))
-//                }
-//
-//            case .showSetupPermission:
-//                state.routes.push(.setupPermissions(SetupPermissions.State()))
-//                return .none
-//
-//            case .routeAction(_, .setupPermissions(.later)),
-//                    .routeAction(_, .setupPermissions(.next)):
-//                return Effect(value: .delegate(.loginSuccess))
-//
-//            case .routeAction:
-//                return .none
-//
-//            case .updateRoutes:
-//                return .none
-//
-//            case .delegate:
-//                return .none
-//            }
-//        }
-//    }
-
-    static private let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
-        switch action {
-        case .routeAction(_, .onboarding(.startMessaging)):
-            state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
-            return .none
-
-        case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
-            guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
-                return .none
-            }
-            let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
-            state.routes.push(.enterCode(enterCodeState))
-            return .none
-
-        case let .routeAction(_, .enterCode(.setMeResult(.success(setMeSuccess)))):
-            switch setMeSuccess {
-            case .newUser:
-                state.routes.push(.enterUserData(EnterUserData.State()))
+    var bodyCore: some ReducerProtocolOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .routeAction(_, .onboarding(.startMessaging)):
+                state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
                 return .none
 
-            case .userExists:
-                return environment.pushNotificationClient
-                    .getNotificationSettings
-                    .receive(on: DispatchQueue.main)
-                    .flatMap { settings -> Effect<Action, Never> in
-                        switch settings.authorizationStatus {
-                        case .notDetermined:
-                            return Effect(value: .showSetupPermission)
+            case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
+                guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+                    return .none
+                }
+                let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
+                state.routes.push(.enterCode(enterCodeState))
+                return .none
 
-                        default:
-                            return Effect.concatenate(
-                                environment.pushNotificationClient
-                                    .register()
-                                    .fireAndForget(),
+            case let .routeAction(_, .enterCode(.setMeResult(.success(setMeSuccess)))):
+                switch setMeSuccess {
+                case .newUser:
+                    state.routes.push(.enterUserData(EnterUserData.State()))
+                    return .none
 
-                                Effect(value: .delegate(.loginSuccess))
-                            )
+                case .userExists:
+                    return pushNotificationClient.getNotificationSettings
+                        .receive(on: DispatchQueue.main)
+                        .flatMap { settings -> Effect<Action, Never> in
+                            switch settings.authorizationStatus {
+                            case .notDetermined:
+                                return Effect(value: .showSetupPermission)
+
+                            default:
+                                return Effect.concatenate(
+                                    pushNotificationClient.register()
+                                        .fireAndForget(),
+
+                                    Effect(value: .delegate(.loginSuccess))
+                                )
+                            }
                         }
-                    }
-                    .eraseToEffect()
-            }
+                        .eraseToEffect()
+                }
 
-        case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
-            switch needSetupPermissions {
-            case true:
-                return Effect(value: .showSetupPermission)
+            case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
+                switch needSetupPermissions {
+                case true:
+                    return Effect(value: .showSetupPermission)
 
-            case false:
+                case false:
+                    return Effect(value: .delegate(.loginSuccess))
+                }
+
+            case .showSetupPermission:
+                state.routes.push(.setupPermissions(SetupPermissions.State()))
+                return .none
+
+            case .routeAction(_, .setupPermissions(.later)),
+                    .routeAction(_, .setupPermissions(.next)):
                 return Effect(value: .delegate(.loginSuccess))
+
+            case .routeAction:
+                return .none
+
+            case .updateRoutes:
+                return .none
+
+            case .delegate:
+                return .none
             }
-
-        case .showSetupPermission:
-            state.routes.push(.setupPermissions(SetupPermissions.State()))
-            return .none
-
-        case .routeAction(_, .setupPermissions(.later)),
-             .routeAction(_, .setupPermissions(.next)):
-            return Effect(value: .delegate(.loginSuccess))
-
-        case .routeAction:
-            return .none
-
-        case .updateRoutes:
-            return .none
-
-        case .delegate:
-            return .none
         }
     }
 
-    static let reducer = Reducer<State, Action, Environment>.combine(
-        Login.ScreenProvider.reducer
-            .forEachIdentifiedRoute(environment: { $0 })
-            .withRouteReducer(reducerCore)
-    )
+    var body: some ReducerProtocolOf<Self> {
+        Reduce(
+            Reducer(Login.ScreenProvider())
+                .forEachIdentifiedRoute(environment: { () })
+                .withRouteReducer(Reducer(bodyCore)),
+            environment: ()
+        )
+    }
 }

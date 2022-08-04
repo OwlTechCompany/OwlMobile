@@ -13,7 +13,7 @@ extension Login {
     struct ScreenProvider {}
 }
 
-extension Login.ScreenProvider {
+extension Login.ScreenProvider: ReducerProtocol {
 
     // MARK: - Routes
 
@@ -74,46 +74,36 @@ extension Login.ScreenProvider {
 
     // MARK: - Reducer handling
 
-    static let reducer = Reducer<State, Action, Login.Environment>.combine(
-//        Onboarding()
-//            .body.red
-//        Reduce(clockReducer, environment: ClockEnvironment(mainQueue: self.mainQueue))
-//        Reduce.ini
+    var body: some ReducerProtocolOf<Self> {
+        ScopeCase(
+            state: /State.onboarding,
+            action: /Action.onboarding,
+            { Onboarding() }
+        )
 
-        Reducer(Onboarding())
-            .pullback(
-                state: /State.onboarding,
-                action: /Action.onboarding,
-                environment: { _ in () }
-            ),
+        ScopeCase(
+            state: /State.enterPhone,
+            action: /Action.enterPhone,
+            { EnterPhone() }
+        )
 
-        Reducer(EnterPhone())
-            .pullback(
-                state: /State.enterPhone,
-                action: /Action.enterPhone,
-                environment: { _ in () }
-            ),
+        ScopeCase(
+            state: /State.enterCode,
+            action: /Action.enterCode,
+            { EnterCode() }
+        )
 
-        Reducer(EnterCode())
-            .pullback(
-                state: /State.enterCode,
-                action: /Action.enterCode,
-                environment: { _ in () }
-            ),
+        ScopeCase(
+            state: /State.enterUserData,
+            action: /Action.enterUserData,
+            { EnterUserData() }
+        )
 
-        Reducer(EnterUserData())
-            .pullback(
-                state: /State.enterUserData,
-                action: /Action.enterUserData,
-                environment: { _ in () }
-            ),
-
-        Reducer(SetupPermissions())
-            .pullback(
-                state: /State.setupPermissions,
-                action: /Action.setupPermissions,
-                environment: { _ in () }
-            )
-    )
+        ScopeCase(
+            state: /State.setupPermissions,
+            action: /Action.setupPermissions,
+            { SetupPermissions() }
+        )
+    }
 
 }
