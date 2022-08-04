@@ -1,22 +1,11 @@
 //
-//  UserDefaultsClient.swift
+//  UserDefaultsClientLive.swift
 //  Owl
 //
 //  Created by Anastasia Holovash on 10.04.2022.
 //
 
 import Foundation
-
-struct UserDefaultsClient {
-
-    var setVerificationID: (String) -> Void
-    var getVerificationID: () -> (String)
-
-    var setUser: (User?) -> Void
-    var getUser: () -> User?
-}
-
-// MARK: - Live
 
 extension UserDefaultsClient {
 
@@ -25,23 +14,27 @@ extension UserDefaultsClient {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
         return UserDefaultsClient(
-            setVerificationID: { setVerificationIDLive(verificationID: $0, defaults: defaults) },
-            getVerificationID: { getVerificationIDLive(defaults: defaults) },
-            setUser: { setUserLive(user: $0, defaults: defaults, encoder: encoder) },
-            getUser: { getUserLive(defaults: defaults, decoder: decoder) }
+            setVerificationID: { setVerificationID(verificationID: $0, defaults: defaults) },
+            getVerificationID: { getVerificationID(defaults: defaults) },
+            setUser: { setUser(user: $0, defaults: defaults, encoder: encoder) },
+            getUser: { getUser(defaults: defaults, decoder: decoder) }
         )
     }
 
+}
+
+fileprivate extension UserDefaultsClient {
+
     // MARK: - VerificationID
 
-    static private func setVerificationIDLive(
+    static func setVerificationID(
         verificationID: String,
         defaults: UserDefaults
     ) {
         defaults.set(verificationID, forKey: Key.authVerificationID.rawValue)
     }
 
-    static private func getVerificationIDLive(
+    static func getVerificationID(
         defaults: UserDefaults
     ) -> String {
         defaults.string(forKey: Key.authVerificationID.rawValue) ?? ""
@@ -49,7 +42,7 @@ extension UserDefaultsClient {
 
     // MARK: - User
 
-    static private func setUserLive(
+    static func setUser(
         user: User?,
         defaults: UserDefaults,
         encoder: JSONEncoder
@@ -65,7 +58,7 @@ extension UserDefaultsClient {
         }
     }
 
-    static private func getUserLive(
+    static func getUser(
         defaults: UserDefaults,
         decoder: JSONDecoder
     ) -> User? {
@@ -77,15 +70,4 @@ extension UserDefaultsClient {
         }
         return user
     }
-}
-
-// MARK: - Key
-
-extension UserDefaultsClient {
-
-    enum Key: String {
-        case authVerificationID
-        case user
-    }
-
 }

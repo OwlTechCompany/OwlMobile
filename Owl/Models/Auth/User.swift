@@ -17,6 +17,7 @@ struct User {
     let firstName: String?
     let lastName: String?
     let photo: Photo
+    var fcmToken: String?
 }
 
 // MARK: - Encodable
@@ -29,6 +30,7 @@ extension User: Codable {
         case firstName
         case lastName
         case photo
+        case fcmToken
     }
 
     init(from decoder: Decoder) throws {
@@ -38,6 +40,7 @@ extension User: Codable {
         firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
         lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
         photo = try container.decodeIfPresent(Photo.self, forKey: .photo) ?? .placeholder
+        fcmToken = try container.decodeIfPresent(String.self, forKey: .fcmToken)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -47,6 +50,7 @@ extension User: Codable {
         try container.encode(firstName ?? User.defaultFirstName, forKey: .firstName)
         try container.encode(lastName ?? User.defaultLastName, forKey: .lastName)
         try container.encode(photo, forKey: .photo)
+        try container.encode(fcmToken, forKey: .fcmToken)
     }
 }
 

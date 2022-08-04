@@ -25,7 +25,7 @@ struct ChatMessageView: View {
                         .font(.system(size: 16))
                         .multilineTextAlignment(.leading)
 
-                    if let time = viewStore.sentAt?.dateValue() {
+                    if let time = viewStore.sentAt {
                         Text(
                             time,
                             format: Date.FormatStyle().hour().minute()
@@ -122,7 +122,7 @@ struct ChatMessageView_Previews: PreviewProvider {
                     initialState: .init(
                         id: "",
                         text: "I love you - - - - - - -",
-                        sentAt: Timestamp(date: Date()),
+                        sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentByMe
                     ),
@@ -137,7 +137,7 @@ struct ChatMessageView_Previews: PreviewProvider {
                     initialState: .init(
                         id: "",
                         text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.\n\nEaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-                        sentAt: Timestamp(date: Date()),
+                        sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentForMe
                     ),

@@ -7,6 +7,7 @@
 
 import UIKit
 import ComposableArchitecture
+import FirebaseMessaging
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
 

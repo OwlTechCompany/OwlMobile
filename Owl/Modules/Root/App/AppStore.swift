@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import FirebaseAuth
+import UserNotifications
 
 struct App {
 
@@ -41,6 +42,10 @@ struct App {
         case appDelegate(AppDelegate.Action)
         case login(Login.Action)
         case main(Main.Action)
+
+        case subscribeOnUserChange
+        case signOut
+        case handlePushRoute(Result<PushRoute, NSError>)
     }
 
     // MARK: - Environment
@@ -54,19 +59,21 @@ struct App {
         let firestoreUsersClient: FirestoreUsersClient
         let chatsClient: FirestoreChatsClient
         let storageClient: StorageClient
+        let pushNotificationClient: PushNotificationClient
 
         static var live: Self {
             let userDefaultsClient = UserDefaultsClient.live()
             let userClient = UserClient.live(userDefaults: userDefaultsClient)
             return Self(
-                firebaseClient: .live,
+                firebaseClient: .live(),
                 userClient: userClient,
-                authClient: .live,
+                authClient: .live(),
                 userDefaultsClient: userDefaultsClient,
                 validationClient: .live(),
                 firestoreUsersClient: .live(userClient: userClient),
                 chatsClient: .live(userClient: userClient),
-                storageClient: .live(userClient: userClient)
+                storageClient: .live(userClient: userClient),
+                pushNotificationClient: .live()
             )
         }
     }
@@ -106,21 +113,75 @@ struct App {
             if environment.userClient.authUser.value != nil,
                let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
+                return Effect(value: .subscribeOnUserChange)
+
             } else {
                 state.set(.login)
+                return .none
             }
-            return .none
 
         case .login(.delegate(.loginSuccess)):
             if let user = environment.userClient.firestoreUser.value {
                 state.set(.main(user))
+                return Effect(value: .subscribeOnUserChange)
+                
+            } else {
+                return .none
+            }
+
+        case .main(.delegate(.logout)):
+            return Effect.concatenate(
+                environment.firestoreUsersClient
+                    .updateMe(UserUpdate(fcmToken: ""))
+                    .fireAndForget(),
+                Effect(value: .signOut)
+            )
+
+        case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
+            let action = response.actionIdentifier
+            if action == UNNotificationDefaultActionIdentifier {
+                return environment.pushNotificationClient
+                    .handleDidReceiveResponse(
+                        response,
+                        completionHandler
+                    )
+                    .mapError { $0 as NSError }
+                    .catchToEffect(Action.handlePushRoute)
+            } else {
+                return .none
+            }
+
+        case let .handlePushRoute(.success(pushRoute)):
+            guard environment.userClient.firestoreUser.value != nil else {
+                return .none
+            }
+            switch pushRoute {
+            case let .openChat(chatsListPrivateItem):
+                let chatState = Chat.State(model: chatsListPrivateItem)
+                state.main?.routes.push(.chat(chatState))
             }
             return .none
 
-        case .main(.delegate(.logout)):
-            environment.authClient.signOut()
-            state.set(.login)
+        case let .handlePushRoute(.failure(error)):
             return .none
+
+        case .subscribeOnUserChange:
+            return Effect.run { subscriber in
+                environment.userClient
+                    .firestoreUser
+                    .removeDuplicates()
+                    .sink { user in
+                        guard user == nil else {
+                            return
+                        }
+                        subscriber.send(.signOut)
+                    }
+            }
+
+        case .signOut:
+            state.set(.login)
+            environment.authClient.signOut()
+            return Effect.cancel(id: Main.ListenersId())
 
         case .appDelegate:
             return .none
@@ -142,7 +203,10 @@ extension App.Environment {
         AppDelegate.Environment(
             firebaseClient: firebaseClient,
             userClient: userClient,
-            authClient: authClient
+            authClient: authClient,
+            firestoreUserClient: firestoreUsersClient,
+            pushNotificationClient: pushNotificationClient,
+            firestoreChatsClient: chatsClient
         )
     }
 
@@ -152,7 +216,8 @@ extension App.Environment {
             userDefaultsClient: userDefaultsClient,
             validationClient: validationClient,
             firestoreUsersClient: firestoreUsersClient,
-            storageClient: storageClient
+            storageClient: storageClient,
+            pushNotificationClient: pushNotificationClient
         )
     }
 

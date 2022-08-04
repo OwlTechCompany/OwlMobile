@@ -1,5 +1,5 @@
 //
-//  Message.swift
+//  MessageRequest.swift
 //  Owl
 //
 //  Created by Anastasia Holovash on 17.04.2022.
@@ -16,13 +16,4 @@ struct MessageRequest: Encodable, Equatable, Identifiable {
     @ServerTimestamp var sentAt: Timestamp?
     let sentBy: String
     
-}
-
-struct MessageResponse: Decodable, Equatable, Identifiable {
-
-    let id: String
-    let messageText: String
-    let sentAt: Timestamp?
-    let sentBy: String
-
 }
