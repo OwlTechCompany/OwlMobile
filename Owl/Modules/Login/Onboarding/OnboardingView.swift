@@ -56,8 +56,7 @@ struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(store: Store(
             initialState: Onboarding.State(),
-            reducer: Onboarding.reducer,
-            environment: Onboarding.Environment()
+            reducer: Onboarding()
         ))
     }
 }

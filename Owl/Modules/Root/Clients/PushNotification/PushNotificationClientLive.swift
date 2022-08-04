@@ -13,6 +13,12 @@ import UIKit
 import AVKit
 import FirebaseFirestoreSwift
 
+extension DependencyValues.PushNotificationClientKey: LiveDependencyKey {
+
+    static let liveValue = PushNotificationClient.live()
+
+}
+
 extension PushNotificationClient {
 
     static func live() -> PushNotificationClient {

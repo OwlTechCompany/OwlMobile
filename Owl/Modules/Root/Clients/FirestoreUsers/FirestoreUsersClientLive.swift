@@ -10,6 +10,14 @@ import ComposableArchitecture
 import FirebaseFirestoreCombineSwift
 import Firebase
 
+extension DependencyValues.FirestoreUsersClientKey: LiveDependencyKey {
+
+    static let liveValue = FirestoreUsersClient.live(
+        userClient: DependencyValues.UserClientKey.liveValue
+    )
+
+}
+
 extension FirestoreUsersClient {
 
     static func live(userClient: UserClient) -> FirestoreUsersClient {

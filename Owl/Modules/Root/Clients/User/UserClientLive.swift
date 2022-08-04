@@ -12,6 +12,14 @@ import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
 import FirebaseAuthCombineSwift
 
+extension DependencyValues.UserClientKey: LiveDependencyKey {
+
+    static let liveValue = UserClient.live(
+        userDefaults: DependencyValues.UserDefaultsKey.liveValue
+    )
+
+}
+
 extension UserClient {
 
     static func live(userDefaults: UserDefaultsClient) -> Self {

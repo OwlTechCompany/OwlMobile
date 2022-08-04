@@ -7,7 +7,7 @@
 
 import ComposableArchitecture
 
-struct Onboarding {
+struct Onboarding: ReducerProtocol {
 
     // MARK: - State
 
@@ -19,17 +19,15 @@ struct Onboarding {
         case startMessaging
     }
 
-    // MARK: - Environment
-
-    struct Environment { }
-
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
-        switch action {
-        case .startMessaging:
-            return .none
+    var body: some ReducerProtocolOf<Self> {
+        Reduce { _, action in
+            switch action {
+            case .startMessaging:
+                return .none
+            }
         }
     }
-    
+
 }

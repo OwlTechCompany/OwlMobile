@@ -116,12 +116,7 @@ struct EnterCodeView_Previews: PreviewProvider {
                     verificationCode: "123",
                     phoneNumber: "+380992177560"
                 ),
-                reducer: EnterCode.reducer,
-                environment: EnterCode.Environment(
-                    authClient: .live(),
-                    userDefaultsClient: .live(),
-                    firestoreUsersClient: .live(userClient: userClient)
-                )
+                reducer: EnterCode()
             )
         )
     }

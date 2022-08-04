@@ -6,6 +6,13 @@
 //
 
 import Foundation
+import ComposableArchitecture
+
+extension DependencyValues.ValidationClientKey: LiveDependencyKey {
+
+    static let liveValue = ValidationClient.live()
+
+}
 
 extension ValidationClient {
 

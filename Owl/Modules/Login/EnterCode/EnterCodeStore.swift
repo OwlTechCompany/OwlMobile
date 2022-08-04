@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import FirebaseAuth
 
-struct EnterCode {
+struct EnterCode: ReducerProtocol {
 
     // MARK: - State
 
@@ -35,76 +35,72 @@ struct EnterCode {
         case binding(BindingAction<State>)
     }
 
-    // MARK: - Environment
+    @Dependency(\.authClient) var authClient
+    @Dependency(\.userDefaultsClient) var userDefaultsClient
+    @Dependency(\.firestoreUsersClient) var firestoreUsersClient
 
-    struct Environment {
-        let authClient: AuthClient
-        let userDefaultsClient: UserDefaultsClient
-        let firestoreUsersClient: FirestoreUsersClient
-    }
+    var body: some ReducerProtocolOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$verificationCode):
+                if state.verificationCode.count == EnterCodeView.Constants.codeSize {
+                    return Effect(value: .sendCode)
+                } else {
+                    return .none
+                }
 
-    // MARK: - Reducer
+            case .sendCode:
+                state.isLoading = true
+                let verificationID = userDefaultsClient.getVerificationID()
+                let model = SignIn(
+                    verificationID: verificationID,
+                    verificationCode: state.verificationCode
+                )
+                return authClient.signIn(model)
+                    .catchToEffect(Action.authDataResult)
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
-        switch action {
-        case .binding(\.$verificationCode):
-            if state.verificationCode.count == EnterCodeView.Constants.codeSize {
-                return Effect(value: .sendCode)
-            } else {
+            case .authDataResult(.success):
+                return Effect(value: .setMe)
+
+            case .setMe:
+                return firestoreUsersClient.setMeIfNeeded()
+                    .catchToEffect(Action.setMeResult)
+
+            case .setMeResult(.success):
+                state.isLoading = false
+                return .none
+
+            case let .verificationIDResult(.success(verificationId)):
+                state.isLoading = false
+                userDefaultsClient.setVerificationID(verificationId)
+                return .none
+
+            case .resendCode:
+                state.isLoading = true
+                return authClient
+                    .verifyPhoneNumber(state.phoneNumber)
+                    .catchToEffect(Action.verificationIDResult)
+
+            case let .authDataResult(.failure(error)),
+                let .verificationIDResult(.failure(error)),
+                let .setMeResult(.failure(error)):
+                state.isLoading = false
+                state.alert = .init(
+                    title: TextState("Error"),
+                    message: TextState("\(error.localizedDescription)"),
+                    dismissButton: .default(TextState("Ok"))
+                )
+                return .none
+
+            case .dismissAlert:
+                state.alert = nil
+                return .none
+
+            case .binding:
                 return .none
             }
-
-        case .sendCode:
-            state.isLoading = true
-            let verificationID = environment.userDefaultsClient.getVerificationID()
-            let model = SignIn(
-                verificationID: verificationID,
-                verificationCode: state.verificationCode
-            )
-            return environment.authClient.signIn(model)
-                .catchToEffect(Action.authDataResult)
-
-        case .authDataResult(.success):
-            return Effect(value: .setMe)
-
-        case .setMe:
-            return environment.firestoreUsersClient.setMeIfNeeded()
-                .catchToEffect(Action.setMeResult)
-
-        case .setMeResult(.success):
-            state.isLoading = false
-            return .none
-
-        case let .verificationIDResult(.success(verificationId)):
-            state.isLoading = false
-            environment.userDefaultsClient.setVerificationID(verificationId)
-            return .none
-
-        case .resendCode:
-            state.isLoading = true
-            return environment.authClient
-                .verifyPhoneNumber(state.phoneNumber)
-                .catchToEffect(Action.verificationIDResult)
-
-        case let .authDataResult(.failure(error)),
-             let .verificationIDResult(.failure(error)),
-             let .setMeResult(.failure(error)):
-            state.isLoading = false
-            state.alert = .init(
-                title: TextState("Error"),
-                message: TextState("\(error.localizedDescription)"),
-                dismissButton: .default(TextState("Ok"))
-            )
-            return .none
-
-        case .dismissAlert:
-            state.alert = nil
-            return .none
-
-        case .binding:
-            return .none
         }
+        .binding()
     }
-    .binding()
 
 }

@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import FirebaseMessaging
 
-struct SetupPermissions {
+struct SetupPermissions: ReducerProtocol {
 
     // MARK: - State
 
@@ -23,39 +23,35 @@ struct SetupPermissions {
         case next
     }
 
-    // MARK: - Environment
-
-    struct Environment {
-        var pushNotificationClient: PushNotificationClient
-    }
+    @Dependency(\.pushNotificationClient) var pushNotificationClient
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, environment in
-        switch action {
-        case .grandPermission:
-            return environment.pushNotificationClient
-                .requestAuthorization([.alert, .sound, .badge])
-                .receive(on: DispatchQueue.main)
-                .catchToEffect(Action.requestAuthorizationResult)
+    var body: some ReducerProtocolOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .grandPermission:
+                return pushNotificationClient.requestAuthorization([.alert, .sound, .badge])
+                    .receive(on: DispatchQueue.main)
+                    .catchToEffect(Action.requestAuthorizationResult)
 
-        case .later:
-            return .none
+            case .later:
+                return .none
 
-        case let .requestAuthorizationResult(.success(result)):
-            return Effect.concatenate(
-                environment.pushNotificationClient
-                    .register()
-                    .fireAndForget(),
+            case let .requestAuthorizationResult(.success(result)):
+                return Effect.concatenate(
+                    pushNotificationClient.register()
+                        .fireAndForget(),
 
-                Effect(value: .next)
-            )
+                    Effect(value: .next)
+                )
 
-        case .requestAuthorizationResult(.failure):
-            return .none
+            case .requestAuthorizationResult(.failure):
+                return .none
 
-        case .next:
-            return .none
+            case .next:
+                return .none
+            }
         }
     }
 

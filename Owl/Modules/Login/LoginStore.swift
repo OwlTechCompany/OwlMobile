@@ -53,6 +53,78 @@ struct Login {
 
     // MARK: - Reducer
 
+//    var body: some ReducerProtocolOf<Self> {
+//        Reduce { state, action in
+//            switch action {
+//            case .routeAction(_, .onboarding(.startMessaging)):
+//                state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
+//                return .none
+//
+//            case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
+//                guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+//                    return .none
+//                }
+//                let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
+//                state.routes.push(.enterCode(enterCodeState))
+//                return .none
+//
+//            case let .routeAction(_, .enterCode(.setMeResult(.success(setMeSuccess)))):
+//                switch setMeSuccess {
+//                case .newUser:
+//                    state.routes.push(.enterUserData(EnterUserData.State()))
+//                    return .none
+//
+//                case .userExists:
+//                    return environment.pushNotificationClient
+//                        .getNotificationSettings
+//                        .receive(on: DispatchQueue.main)
+//                        .flatMap { settings -> Effect<Action, Never> in
+//                            switch settings.authorizationStatus {
+//                            case .notDetermined:
+//                                return Effect(value: .showSetupPermission)
+//
+//                            default:
+//                                return Effect.concatenate(
+//                                    environment.pushNotificationClient
+//                                        .register()
+//                                        .fireAndForget(),
+//
+//                                    Effect(value: .delegate(.loginSuccess))
+//                                )
+//                            }
+//                        }
+//                        .eraseToEffect()
+//                }
+//
+//            case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
+//                switch needSetupPermissions {
+//                case true:
+//                    return Effect(value: .showSetupPermission)
+//
+//                case false:
+//                    return Effect(value: .delegate(.loginSuccess))
+//                }
+//
+//            case .showSetupPermission:
+//                state.routes.push(.setupPermissions(SetupPermissions.State()))
+//                return .none
+//
+//            case .routeAction(_, .setupPermissions(.later)),
+//                    .routeAction(_, .setupPermissions(.next)):
+//                return Effect(value: .delegate(.loginSuccess))
+//
+//            case .routeAction:
+//                return .none
+//
+//            case .updateRoutes:
+//                return .none
+//
+//            case .delegate:
+//                return .none
+//            }
+//        }
+//    }
+
     static private let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .routeAction(_, .onboarding(.startMessaging)):

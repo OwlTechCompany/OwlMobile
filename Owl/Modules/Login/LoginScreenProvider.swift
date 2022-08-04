@@ -75,58 +75,44 @@ extension Login.ScreenProvider {
     // MARK: - Reducer handling
 
     static let reducer = Reducer<State, Action, Login.Environment>.combine(
-        Onboarding.reducer
+//        Onboarding()
+//            .body.red
+//        Reduce(clockReducer, environment: ClockEnvironment(mainQueue: self.mainQueue))
+//        Reduce.ini
+
+        Reducer(Onboarding())
             .pullback(
                 state: /State.onboarding,
                 action: /Action.onboarding,
-                environment: { _ in Onboarding.Environment() }
+                environment: { _ in () }
             ),
-        EnterPhone.reducer
+
+        Reducer(EnterPhone())
             .pullback(
                 state: /State.enterPhone,
                 action: /Action.enterPhone,
-                environment: {
-                    EnterPhone.Environment(
-                        authClient: $0.authClient,
-                        userDefaultsClient: $0.userDefaultsClient,
-                        phoneValidation: $0.validationClient.phoneValidation
-                    )
-                }
+                environment: { _ in () }
             ),
-        EnterCode.reducer
+
+        Reducer(EnterCode())
             .pullback(
                 state: /State.enterCode,
                 action: /Action.enterCode,
-                environment: {
-                    EnterCode.Environment(
-                        authClient: $0.authClient,
-                        userDefaultsClient: $0.userDefaultsClient,
-                        firestoreUsersClient: $0.firestoreUsersClient
-                    )
-                }
+                environment: { _ in () }
             ),
-        EnterUserData.reducer
+
+        Reducer(EnterUserData())
             .pullback(
                 state: /State.enterUserData,
                 action: /Action.enterUserData,
-                environment: {
-                    EnterUserData.Environment(
-                        authClient: $0.authClient,
-                        firestoreUsersClient: $0.firestoreUsersClient,
-                        storageClient: $0.storageClient,
-                        pushNotificationClient: $0.pushNotificationClient
-                    )
-                }
+                environment: { _ in () }
             ),
-        SetupPermissions.reducer
+
+        Reducer(SetupPermissions())
             .pullback(
                 state: /State.setupPermissions,
                 action: /Action.setupPermissions,
-                environment: {
-                    SetupPermissions.Environment(
-                        pushNotificationClient: $0.pushNotificationClient
-                    )
-                }
+                environment: { _ in () }
             )
     )
 

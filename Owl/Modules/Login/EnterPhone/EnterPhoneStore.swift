@@ -7,9 +7,9 @@
 
 import ComposableArchitecture
 
-struct EnterPhone {
+struct EnterPhone: ReducerProtocol {
 
-    // MARK: - ViewState
+    // MARK: - State
 
     struct State: Equatable {
         @BindableState var phoneNumber: String
@@ -18,7 +18,7 @@ struct EnterPhone {
         var isLoading: Bool
     }
 
-    // MARK: - ViewAction
+    // MARK: - Action
 
     enum Action: Equatable, BindableAction {
         case sendPhoneNumber
@@ -28,50 +28,46 @@ struct EnterPhone {
         case binding(BindingAction<State>)
     }
 
-    // MARK: - Environment
+    @Dependency(\.authClient) var authClient
+    @Dependency(\.userDefaultsClient) var userDefaultsClient
+    @Dependency(\.validationClient) var validationClient
 
-    struct Environment {
-        let authClient: AuthClient
-        let userDefaultsClient: UserDefaultsClient
-        let phoneValidation: (String) -> Bool
-    }
+    var body: some ReducerProtocolOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$phoneNumber):
+                state.isPhoneNumberValid = validationClient.phoneValidation(state.phoneNumber)
+                return .none
 
-    // MARK: - Reducer
+            case .sendPhoneNumber:
+                state.isLoading = true
+                return authClient
+                    .verifyPhoneNumber(state.phoneNumber)
+                    .catchToEffect(Action.verificationIDResult)
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
-        switch action {
-        case .binding(\.$phoneNumber):
-            state.isPhoneNumberValid = environment.phoneValidation(state.phoneNumber)
-            return .none
+            case let .verificationIDResult(.success(verificationId)):
+                state.isLoading = false
+                userDefaultsClient.setVerificationID(verificationId)
+                return .none
 
-        case .sendPhoneNumber:
-            state.isLoading = true
-            return environment.authClient
-                .verifyPhoneNumber(state.phoneNumber)
-                .catchToEffect(Action.verificationIDResult)
+            case let .verificationIDResult(.failure(error)):
+                state.isLoading = false
+                state.alert = .init(
+                    title: TextState("Error"),
+                    message: TextState("\(error.localizedDescription)"),
+                    dismissButton: .default(TextState("Ok"))
+                )
+                return .none
 
-        case let .verificationIDResult(.success(verificationId)):
-            state.isLoading = false
-            environment.userDefaultsClient.setVerificationID(verificationId)
-            return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
 
-        case let .verificationIDResult(.failure(error)):
-            state.isLoading = false
-            state.alert = .init(
-                title: TextState("Error"),
-                message: TextState("\(error.localizedDescription)"),
-                dismissButton: .default(TextState("Ok"))
-            )
-            return .none
-
-        case .dismissAlert:
-            state.alert = nil
-            return .none
-
-        case .binding:
-            return .none
+            case .binding:
+                return .none
+            }
         }
+        .binding()
     }
-    .binding()
 
 }
