@@ -131,13 +131,7 @@ struct EnterUserDataView_Previews: PreviewProvider {
     static var previews: some View {
         EnterUserDataView(store: Store(
             initialState: EnterUserData.State(),
-            reducer: EnterUserData.reducer,
-            environment: EnterUserData.Environment(
-                authClient: .live(),
-                firestoreUsersClient: .live(userClient: userClient),
-                storageClient: .live(userClient: userClient),
-                pushNotificationClient: .live()
-            )
+            reducer: EnterUserData()
         ))
     }
 }
