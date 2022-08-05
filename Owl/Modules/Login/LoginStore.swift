@@ -53,7 +53,7 @@ struct Login: ReducerProtocol {
                 return .none
 
             case let .path(.element(id, .enterPhone(.verificationIDResult(.success)))):
-                guard case var (.enterPhone(enterPhoneState)) = state.$path[id: id] else {
+                guard case let (.enterPhone(enterPhoneState)) = state.$path[id: id] else {
                     return .none
                 }
                 let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
