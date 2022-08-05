@@ -9,7 +9,7 @@ import TCACoordinators
 import ComposableArchitecture
 import SwiftUI
 
-struct Main {
+struct Main: ReducerProtocol {
 
     struct ListenersId: Hashable {}
 
@@ -43,80 +43,74 @@ struct Main {
         }
     }
 
-    // MARK: - Environment
+    @Dependency(\.userClient) var userClient
 
-    struct Environment {
-        let userClient: UserClient
-        let authClient: AuthClient
-        let chatsClient: FirestoreChatsClient
-        let firestoreUsersClient: FirestoreUsersClient
-        let storageClient: StorageClient
-    }
+    var bodyCore: some ReducerProtocolOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .routeAction(_, .chatList(.newPrivateChat)):
+                state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
+                return .none
 
-    // MARK: - Reducer
+            case .routeAction(_, .chatList(.openProfile)):
+                guard let firestoreUser = userClient.firestoreUser.value else {
+                    return Effect(value: .delegate(.logout))
+                }
+                let profileState = Profile.State(user: firestoreUser)
+                state.routes.push(.profile(profileState))
+                return .none
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
-        switch action {
-        case .routeAction(_, .chatList(.newPrivateChat)):
-            state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
-            return .none
+            case let .routeAction(_, .chatList(.open(chat))):
+                state.routes.push(.chat(.init(model: chat)))
+                return .none
 
-        case .routeAction(_, .chatList(.openProfile)):
-            guard let firestoreUser = environment.userClient.firestoreUser.value else {
+            case .routeAction(_, .chat(.navigation(.back))):
+                state.routes.pop()
+                return .none
+
+            case let .routeAction(_, .newPrivateChat(.openChat(item))):
+                return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
+                    provider.dismiss()
+                    provider.push(.chat(.init(model: item)))
+                }
+
+            case .routeAction(_, .profile(.close)):
+                state.routes.pop()
+                return .none
+
+            case .routeAction(_, .profile(.edit)):
+                guard let firestoreUser = userClient.firestoreUser.value else {
+                    return Effect(value: .delegate(.logout))
+                }
+                let editProfileState = EditProfile.State(user: firestoreUser)
+                state.routes.push(.editProfile(editProfileState))
+                return .none
+
+            case .routeAction(_, .editProfile(.updateUserResult(.success))):
+                state.routes.pop()
+                return .none
+
+            case .routeAction(_, .profile(.logout)):
                 return Effect(value: .delegate(.logout))
+
+            case .delegate:
+                return .none
+
+            case .routeAction:
+                return .none
+
+            case .updateRoutes:
+                return .none
             }
-            let profileState = Profile.State(user: firestoreUser)
-            state.routes.push(.profile(profileState))
-            return .none
-
-        case let .routeAction(_, .chatList(.open(chat))):
-            state.routes.push(.chat(.init(model: chat)))
-            return .none
-
-        case .routeAction(_, .chat(.navigation(.back))):
-            state.routes.pop()
-            return .none
-
-        case let .routeAction(_, .newPrivateChat(.openChat(item))):
-            return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
-                provider.dismiss()
-                provider.push(.chat(.init(model: item)))
-            }
-
-        case .routeAction(_, .profile(.close)):
-            state.routes.pop()
-            return .none
-
-        case .routeAction(_, .profile(.edit)):
-            guard let firestoreUser = environment.userClient.firestoreUser.value else {
-                return Effect(value: .delegate(.logout))
-            }
-            let editProfileState = EditProfile.State(user: firestoreUser)
-            state.routes.push(.editProfile(editProfileState))
-            return .none
-
-        case .routeAction(_, .editProfile(.updateUserResult(.success))):
-            state.routes.pop()
-            return .none
-
-        case .routeAction(_, .profile(.logout)):
-            return Effect(value: .delegate(.logout))
-
-        case .delegate:
-            return .none
-
-        case .routeAction:
-            return .none
-
-        case .updateRoutes:
-            return .none
         }
     }
 
-    static let reducer = Reducer<State, Action, Environment>.combine(
-        Main.ScreenProvider.reducer
-            .forEachIdentifiedRoute(environment: { $0 })
-            .withRouteReducer(reducerCore)
-    )
-
+    var body: some ReducerProtocolOf<Self> {
+        Reduce(
+            Reducer(Main.ScreenProvider())
+                .forEachIdentifiedRoute(environment: { () })
+                .withRouteReducer(Reducer(bodyCore)),
+            environment: ()
+        )
+    }
 }

@@ -10,10 +10,19 @@ import TCACoordinators
 
 extension Main {
 
-    struct ScreenProvider {}
+    struct ScreenProvider {
+
+        // TODO: Remove after migration Main.ScreenProvider to ReducerProtocol
+        @Dependency(\.authClient) var authClient
+        @Dependency(\.userClient) var userClient
+        @Dependency(\.firestoreChatsClient) var firestoreChatsClient
+        @Dependency(\.firestoreUsersClient) var firestoreUsersClient
+        @Dependency(\.storageClient) var storageClient
+
+    }
 }
 
-extension Main.ScreenProvider {
+extension Main.ScreenProvider: ReducerProtocol {
 
     // MARK: - Routes
 
@@ -76,64 +85,59 @@ extension Main.ScreenProvider {
         case editProfile(EditProfile.Action)
     }
 
-    // MARK: - Reducer handling
-
-    static let reducer = Reducer<State, Action, Main.Environment>.combine(
-        ChatList.reducer
-            .pullback(
-                state: /State.chatList,
-                action: /Action.chatList,
-                environment: {
-                    ChatList.Environment(
-                        authClient: $0.authClient,
-                        chatsClient: $0.chatsClient,
-                        userClient: $0.userClient
-                    )
-                }
-            ),
-        Chat.reducer
-            .pullback(
-                state: /State.chat,
-                action: /Action.chat,
-                environment: {
-                    Chat.Environment(
-                        chatsClient: $0.chatsClient
-                    )
-                }
-            ),
-        NewPrivateChat.reducer
-            .pullback(
-                state: /State.newPrivateChat,
-                action: /Action.newPrivateChat,
-                environment: {
-                    NewPrivateChat.Environment(
-                        userClient: $0.userClient,
-                        chatsClient: $0.chatsClient,
-                        firestoreUsersClient: $0.firestoreUsersClient
-                    )
-                }
-            ),
-        Profile.reducer
-            .pullback(
-                state: /State.profile,
-                action: /Action.profile,
-                environment: {
-                    Profile.Environment(
-                        userClient: $0.userClient
-                    )
-                }
-            ),
-        EditProfile.reducer
-            .pullback(
-                state: /State.editProfile,
-                action: /Action.editProfile,
-                environment: {
-                    EditProfile.Environment(
-                        firestoreUsersClient: $0.firestoreUsersClient,
-                        storageClient: $0.storageClient
-                    )
-                }
+    var body: some ReducerProtocolOf<Self> {
+        ScopeCase(
+            state: /State.chatList,
+            action: /Action.chatList
+        ) {
+            Reduce(
+                ChatList.reducer,
+                environment: ChatList.Environment(
+                    authClient: authClient,
+                    chatsClient: firestoreChatsClient,
+                    userClient: userClient
+                )
             )
-    )
+        }
+
+        ScopeCase(
+            state: /State.newPrivateChat,
+            action: /Action.newPrivateChat
+        ) {
+            Reduce(
+                NewPrivateChat.reducer,
+                environment: NewPrivateChat.Environment(
+                    userClient: userClient,
+                    chatsClient: firestoreChatsClient,
+                    firestoreUsersClient: firestoreUsersClient
+                )
+            )
+        }
+
+        ScopeCase(
+            state: /State.profile,
+            action: /Action.profile
+        ) {
+            Reduce(
+                Profile.reducer,
+                environment: Profile.Environment(
+                    userClient: userClient
+                )
+            )
+        }
+
+        ScopeCase(
+            state: /State.editProfile,
+            action: /Action.editProfile
+        ) {
+            Reduce(
+                EditProfile.reducer,
+                environment: EditProfile.Environment(
+                    firestoreUsersClient: firestoreUsersClient,
+                    storageClient: storageClient
+                )
+            )
+        }
+    }
 
 }

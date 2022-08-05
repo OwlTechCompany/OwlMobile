@@ -51,8 +51,6 @@ struct App: ReducerProtocol {
     @Dependency(\.userClient) var userClient
     @Dependency(\.authClient) var authClient
     @Dependency(\.firestoreUsersClient) var firestoreUsersClient
-    @Dependency(\.firestoreChatsClient) var firestoreChatsClient
-    @Dependency(\.storageClient) var storageClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
     var body: some ReducerProtocolOf<Self> {
@@ -154,18 +152,7 @@ struct App: ReducerProtocol {
         .ifLet(
             state: \State.main,
             action: /Action.main,
-            then: {
-                Reduce(
-                    Main.reducer,
-                    environment: Main.Environment(
-                        userClient: userClient,
-                        authClient: authClient,
-                        chatsClient: firestoreChatsClient,
-                        firestoreUsersClient: firestoreUsersClient,
-                        storageClient: storageClient
-                    )
-                )
-            }
+            then: { Main() }
         )
     }
 
