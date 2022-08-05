@@ -86,16 +86,11 @@ struct EnterPhoneView: View {
 
 // MARK: - Preview
 
-//struct EnterPhoneNumber_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EnterPhoneView(store: Store(
-//            initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
-//            reducer: EnterPhone.reducer,
-//            environment: EnterPhone.Environment(
-//                authClient: .live(),
-//                userDefaultsClient: .live(),
-//                phoneValidation: ValidationClient.live().phoneValidation
-//            )
-//        ))
-//    }
-//}
+struct EnterPhoneNumber_Previews: PreviewProvider {
+    static var previews: some View {
+        EnterPhoneView(store: Store(
+            initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
+            reducer: EnterPhone()
+        ))
+    }
+}

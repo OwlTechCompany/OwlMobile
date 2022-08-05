@@ -38,7 +38,7 @@ struct SetupPermissions: ReducerProtocol {
             case .later:
                 return .none
 
-            case let .requestAuthorizationResult(.success(result)):
+            case .requestAuthorizationResult(.success):
                 return Effect.concatenate(
                     pushNotificationClient.register()
                         .fireAndForget(),

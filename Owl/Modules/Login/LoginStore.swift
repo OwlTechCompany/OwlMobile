@@ -55,7 +55,7 @@ struct Login: ReducerProtocol {
                 return .none
 
             case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
-                guard var enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+                guard let enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
                     return .none
                 }
                 let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)

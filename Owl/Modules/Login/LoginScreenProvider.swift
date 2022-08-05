@@ -77,33 +77,38 @@ extension Login.ScreenProvider: ReducerProtocol {
     var body: some ReducerProtocolOf<Self> {
         ScopeCase(
             state: /State.onboarding,
-            action: /Action.onboarding,
-            { Onboarding() }
-        )
+            action: /Action.onboarding
+        ) {
+            Onboarding()
+        }
 
         ScopeCase(
             state: /State.enterPhone,
-            action: /Action.enterPhone,
-            { EnterPhone() }
-        )
+            action: /Action.enterPhone
+        ) {
+            EnterPhone()
+        }
 
         ScopeCase(
             state: /State.enterCode,
-            action: /Action.enterCode,
-            { EnterCode() }
-        )
+            action: /Action.enterCode
+        ) {
+            EnterCode()
+        }
 
         ScopeCase(
             state: /State.enterUserData,
-            action: /Action.enterUserData,
-            { EnterUserData() }
-        )
+            action: /Action.enterUserData
+        ) {
+            EnterUserData()
+        }
 
         ScopeCase(
             state: /State.setupPermissions,
-            action: /Action.setupPermissions,
-            { SetupPermissions() }
-        )
+            action: /Action.setupPermissions
+        ) {
+            SetupPermissions()
+        }
     }
 
 }
