@@ -26,10 +26,21 @@ struct FirestoreChatsClient {
     var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
     var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
 
-    var getLastMessages: () -> Effect<[MessageResponse], NSError>
-    var subscribeForNewMessages: () -> Effect<[MessageResponse], NSError>
-    var getNextMessages: () -> Effect<[MessageResponse], NSError>
+    var getLastMessages: () -> Effect<GetLastMessagesResponse, NSError>
+    var subscribeForNewMessages: (DocumentSnapshot) -> Effect<[MessageResponse], NSError>
+    var getNextMessages: (DocumentSnapshot) -> Effect<GetNextMessagesResponse, NSError>
     var sendMessage: (NewMessage) -> Effect<Bool, NSError>
+}
+
+struct GetLastMessagesResponse: Equatable {
+    let messageResponse: [MessageResponse]
+    let lastDocumentSnapshot: DocumentSnapshot
+    let subscribeForNewMessagesSnapshot: DocumentSnapshot
+}
+
+struct GetNextMessagesResponse: Equatable {
+    let messageResponse: [MessageResponse]
+    let lastDocumentSnapshot: DocumentSnapshot?
 }
 
 // MARK: - Live
@@ -38,9 +49,9 @@ extension FirestoreChatsClient {
 
     // swiftlint:disable function_body_length
     static func live(userClient: UserClient) -> Self {
-        let variables = Variables()
+        let openedChatId = CurrentValueSubject<String?, Never>(nil)
         return Self(
-            openedChatId: CurrentValueSubject(nil),
+            openedChatId: openedChatId,
             getChats: {
                 Effect.run { subscriber in
                     guard let authUser = userClient.authUser.value else {
@@ -129,7 +140,7 @@ extension FirestoreChatsClient {
             },
             getLastMessages: {
                 Effect.future { callback in
-                    guard let chatID = variables.openedChatId else {
+                    guard let chatID = openedChatId.value else {
                         return
                     }
 
@@ -144,8 +155,6 @@ extension FirestoreChatsClient {
                             else {
                                 return
                             }
-                            variables.lastDocumentSnapshot = lastDocumentSnapshot
-                            variables.subscribeForNewMessagesSnapshot = subscribeForNewMessagesSnapshot
 
                             let items = snapshot.documents.compactMap { document -> MessageResponse? in
                                 do {
@@ -155,7 +164,12 @@ extension FirestoreChatsClient {
                                     return nil
                                 }
                             }
-                            callback(.success(items))
+                            let response = GetLastMessagesResponse(
+                                messageResponse: items,
+                                lastDocumentSnapshot: lastDocumentSnapshot,
+                                subscribeForNewMessagesSnapshot: subscribeForNewMessagesSnapshot
+                            )
+                            callback(.success(response))
                         } error: { error in
                             callback(.failure(error as NSError))
                         }
@@ -163,12 +177,9 @@ extension FirestoreChatsClient {
                         .store(in: &cancellables)
                 }
             },
-            subscribeForNewMessages: {
+            subscribeForNewMessages: { snapshot in
                 Effect.run { subscriber in
-                    guard
-                        let chatID = variables.openedChatId,
-                        let snapshot = variables.subscribeForNewMessagesSnapshot
-                    else {
+                    guard let chatID = openedChatId.value else {
                         return Empty<Any, NSError>(completeImmediately: true)
                             .sink()
                     }
@@ -194,12 +205,9 @@ extension FirestoreChatsClient {
                         .sink()
                 }
             },
-            getNextMessages: {
+            getNextMessages: { snapshot in
                 Effect.future { callback in
-                    guard
-                        let chatID = variables.openedChatId,
-                        let snapshot = variables.lastDocumentSnapshot
-                    else {
+                    guard let chatID = openedChatId.value else {
                         return
                     }
 
@@ -217,8 +225,11 @@ extension FirestoreChatsClient {
                                     return nil
                                 }
                             }
-                            callback(.success(items))
-                            variables.lastDocumentSnapshot = snapshot.documents.last
+                            let response = GetNextMessagesResponse(
+                                messageResponse: items,
+                                lastDocumentSnapshot: snapshot.documents.last
+                            )
+                            callback(.success(response))
                         }
                         error: { error in
                             callback(.failure(error as NSError))
@@ -263,23 +274,4 @@ extension FirestoreChatsClient {
     static func messages(query: Query) {
 
     }
-}
-
-
-extension FirestoreChatsClient {
-
-    class Variables {
-        var openedChatId: String?
-        var lastDocumentSnapshot: DocumentSnapshot?
-        var subscribeForNewMessagesSnapshot: DocumentSnapshot?
-
-        internal init(
-            openedChatId: String? = nil,
-            lastDocumentSnapshot: DocumentSnapshot? = nil
-        ) {
-            self.openedChatId = openedChatId
-            self.lastDocumentSnapshot = lastDocumentSnapshot
-        }
-    }
-
 }
