@@ -15,54 +15,13 @@ extension Login {
 
 extension Login.ScreenProvider: ReducerProtocol {
 
-    // MARK: - Routes
-
-    struct OnboardingRoute: Routable {
-        static var statePath = /State.onboarding
-    }
-
-    struct EnterPhoneRoute: Routable {
-        static var statePath = /State.enterPhone
-    }
-
-    struct EnterCodeRoute: Routable {
-        static var statePath = /State.enterCode
-    }
-
-    struct EnterUserDataRoute: Routable {
-        static var statePath = /State.enterUserData
-    }
-
-    struct SetupPermissionsRoute: Routable {
-        static var statePath = /State.setupPermissions
-    }
-
-    // MARK: - State handling
-
-    enum State: Equatable, Identifiable {
+    enum State: Equatable, Hashable {
         case onboarding(Onboarding.State)
         case enterPhone(EnterPhone.State)
         case enterCode(EnterCode.State)
         case enterUserData(EnterUserData.State)
         case setupPermissions(SetupPermissions.State)
-
-        var id: String {
-            switch self {
-            case .onboarding:
-                return OnboardingRoute.id
-            case .enterPhone:
-                return EnterPhoneRoute.id
-            case .enterCode:
-                return EnterCodeRoute.id
-            case .enterUserData:
-                return EnterUserDataRoute.id
-            case .setupPermissions:
-                return SetupPermissionsRoute.id
-            }
-        }
     }
-
-    // MARK: - Action handling
 
     enum Action: Equatable {
         case onboarding(Onboarding.Action)

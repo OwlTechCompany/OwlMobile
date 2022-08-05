@@ -12,7 +12,7 @@ struct SetupPermissions: ReducerProtocol {
 
     // MARK: - State
 
-    struct State: Equatable { }
+    struct State: Equatable, Hashable { }
 
     // MARK: - Action
 

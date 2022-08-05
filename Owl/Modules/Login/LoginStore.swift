@@ -14,26 +14,24 @@ struct Login: ReducerProtocol {
 
     // MARK: - State
 
-    struct State: Equatable, IdentifiedRouterState {
+    struct State: Equatable {
 
-        var routes: IdentifiedArrayOf<Route<ScreenProvider.State>>
+        @NavigationStateOf<Login.ScreenProvider> var path
 
-        static let initialState = State(
-            routes: [
-                .root(.onboarding(Onboarding.State()), embedInNavigationView: true)
-            ]
-        )
+        init() {
+            path.append(.onboarding(.init()))
+        }
+
     }
 
     // MARK: - Action
 
-    enum Action: Equatable, IdentifiedRouterAction {
+    enum Action: Equatable {
 
         case delegate(DelegateAction)
 
         case showSetupPermission
-        case routeAction(ScreenProvider.State.ID, action: ScreenProvider.Action)
-        case updateRoutes(IdentifiedArrayOf<Route<ScreenProvider.State>>)
+        case path(NavigationActionOf<Login.ScreenProvider>)
 
         enum DelegateAction: Equatable {
             case loginSuccess
@@ -47,25 +45,25 @@ struct Login: ReducerProtocol {
     @Dependency(\.storageClient) var storageClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    var bodyCore: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocolOf<Self> {
         Reduce { state, action in
             switch action {
-            case .routeAction(_, .onboarding(.startMessaging)):
-                state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
+            case .path(.element(_, .onboarding(.startMessaging))):
+                state.path.append(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
                 return .none
 
-            case .routeAction(_, .enterPhone(.verificationIDResult(.success))):
-                guard let enterPhoneState = state.subState(routePath: ScreenProvider.EnterPhoneRoute.self) else {
+            case let .path(.element(id, .enterPhone(.verificationIDResult(.success)))):
+                guard case var (.enterPhone(enterPhoneState)) = state.$path[id: id] else {
                     return .none
                 }
                 let enterCodeState = EnterCode.State(phoneNumber: enterPhoneState.phoneNumber)
-                state.routes.push(.enterCode(enterCodeState))
+                state.path.append(.enterCode(enterCodeState))
                 return .none
 
-            case let .routeAction(_, .enterCode(.setMeResult(.success(setMeSuccess)))):
+            case let .path(.element(_, .enterCode(.setMeResult(.success(setMeSuccess))))):
                 switch setMeSuccess {
                 case .newUser:
-                    state.routes.push(.enterUserData(EnterUserData.State()))
+                    state.path.append(.enterUserData(EnterUserData.State()))
                     return .none
 
                 case .userExists:
@@ -88,7 +86,7 @@ struct Login: ReducerProtocol {
                         .eraseToEffect()
                 }
 
-            case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
+            case let .path(.element(_, .enterUserData(.next(needSetupPermissions)))):
                 switch needSetupPermissions {
                 case true:
                     return Effect(value: .showSetupPermission)
@@ -98,31 +96,30 @@ struct Login: ReducerProtocol {
                 }
 
             case .showSetupPermission:
-                state.routes.push(.setupPermissions(SetupPermissions.State()))
+                state.path.append(.setupPermissions(SetupPermissions.State()))
                 return .none
 
-            case .routeAction(_, .setupPermissions(.later)),
-                    .routeAction(_, .setupPermissions(.next)):
+            case .path(.element(_, .setupPermissions(.later))):
                 return Effect(value: .delegate(.loginSuccess))
 
-            case .routeAction:
-                return .none
-
-            case .updateRoutes:
+            case .path:
                 return .none
 
             case .delegate:
                 return .none
             }
         }
+        .navigationDestination(state: \.$path, action: /Action.path) {
+            Login.ScreenProvider()
+        }
     }
 
-    var body: some ReducerProtocolOf<Self> {
-        Reduce(
-            Reducer(Login.ScreenProvider())
-                .forEachIdentifiedRoute(environment: { () })
-                .withRouteReducer(Reducer(bodyCore)),
-            environment: ()
-        )
-    }
+//    var body: some ReducerProtocolOf<Self> {
+//        Reduce(
+//            Reducer(Login.ScreenProvider())
+//                .forEachIdentifiedRoute(environment: { () })
+//                .withRouteReducer(Reducer(bodyCore)),
+//            environment: ()
+//        )
+//    }
 }

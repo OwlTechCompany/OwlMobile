@@ -46,6 +46,7 @@ struct OnboardingView: View {
             Color(.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
         )
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

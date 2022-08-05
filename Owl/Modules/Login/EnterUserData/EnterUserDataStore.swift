@@ -12,7 +12,7 @@ struct EnterUserData: ReducerProtocol {
 
     // MARK: - State
 
-    struct State: Equatable {
+    struct State: Equatable, Hashable {
 
         @BindableState var selectedImage: UIImage?
         @BindableState var firstName: String = ""
@@ -23,6 +23,15 @@ struct EnterUserData: ReducerProtocol {
 
         var alert: AlertState<Action>?
         @BindableState var showImagePicker: Bool = false
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(selectedImage)
+            hasher.combine(firstName)
+            hasher.combine(lastName)
+            hasher.combine(saveButtonEnabled)
+            hasher.combine(isLoading)
+            hasher.combine(showImagePicker)
+        }
     }
 
     // MARK: - Action

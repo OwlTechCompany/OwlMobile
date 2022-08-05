@@ -21,7 +21,7 @@ struct App: ReducerProtocol {
         mutating func set(_ currentState: CurrentState) {
             switch currentState {
             case .login:
-                self.login = .initialState
+                self.login = .init()
                 self.main = .none
 
             case let .main(user):

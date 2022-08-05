@@ -11,11 +11,17 @@ struct EnterPhone: ReducerProtocol {
 
     // MARK: - State
 
-    struct State: Equatable {
+    struct State: Equatable, Hashable {
         @BindableState var phoneNumber: String
         var isPhoneNumberValid: Bool = false
         var alert: AlertState<Action>?
         var isLoading: Bool
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(phoneNumber)
+            hasher.combine(isPhoneNumberValid)
+            hasher.combine(isLoading)
+        }
     }
 
     // MARK: - Action
