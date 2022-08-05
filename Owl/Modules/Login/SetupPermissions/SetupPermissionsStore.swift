@@ -28,7 +28,7 @@ struct SetupPermissions: ReducerProtocol {
     // MARK: - Reducer
 
     var body: some ReducerProtocolOf<Self> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .grandPermission:
                 return pushNotificationClient.requestAuthorization([.alert, .sound, .badge])
