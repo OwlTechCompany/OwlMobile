@@ -42,9 +42,9 @@ struct Chat {
         case sendMessage
         case sendMessageResult(Result<Bool, NSError>)
 
-        case getMessagesResult(Result<[MessageResponse], NSError>)
-        case getLastMessagesResult(Result<GetLastMessagesResponse, NSError>)
-        case getOldMessagesResult(Result<GetNextMessagesResponse, NSError>)
+        case getMessages(Result<[MessageResponse], NSError>)
+        case getLastMessages(Result<GetLastMessagesResponse, NSError>)
+        case getPaginatedMessages(Result<GetNextMessagesResponse, NSError>)
     }
 
     // MARK: - Environment
@@ -60,7 +60,7 @@ struct Chat {
         case .navigation:
             return .none
 
-        case let .messages(id, .wasShown):
+        case let .messages(id, .onAppear):
             guard
                 id == state.messages.last?.id && !state.isLoading,
                 let lastDocumentSnapshot = state.lastDocumentSnapshot
@@ -70,7 +70,7 @@ struct Chat {
 
             state.isLoading = true
             return environment.chatsClient.getNextMessages(lastDocumentSnapshot)
-                .catchToEffect(Action.getOldMessagesResult)
+                .catchToEffect(Action.getPaginatedMessages)
 
         case .binding(\.$newMessage):
             return .none
@@ -81,7 +81,7 @@ struct Chat {
         case .onAppear:
             environment.chatsClient.openedChatId.send(state.chatID)
             return environment.chatsClient.getLastMessages()
-                .catchToEffect(Action.getLastMessagesResult)
+                .catchToEffect(Action.getLastMessages)
                 .cancellable(id: Main.ListenersId())
 
         case .sendMessage:
@@ -99,30 +99,30 @@ struct Chat {
         case .sendMessageResult:
             return .none
 
-        case let .getMessagesResult(.success(messages)):
+        case let .getMessages(.success(messages)):
             state.newMessages = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
             return .none
 
-        case let .getMessagesResult(.failure(error)):
+        case let .getMessages(.failure(error)):
             return .none
 
-        case let .getLastMessagesResult(.success(response)):
+        case let .getLastMessages(.success(response)):
             state.oldMessages = response.messageResponse.map { ChatMessage.State(message: $0, companion: state.companion) }
             state.lastDocumentSnapshot = response.lastDocumentSnapshot
             return environment.chatsClient.subscribeForNewMessages(response.subscribeForNewMessagesSnapshot)
-                .catchToEffect(Action.getMessagesResult)
+                .catchToEffect(Action.getMessages)
 
-        case let .getLastMessagesResult(.failure(error)):
+        case let .getLastMessages(.failure(error)):
             return .none
 
-        case let .getOldMessagesResult(.success(response)):
+        case let .getPaginatedMessages(.success(response)):
             let update = response.messageResponse.map { ChatMessage.State(message: $0, companion: state.companion) }
             state.oldMessages.append(contentsOf: update)
             state.lastDocumentSnapshot = response.lastDocumentSnapshot
             state.isLoading = false
             return .none
 
-        case let .getOldMessagesResult(.failure(error)):
+        case let .getPaginatedMessages(.failure(error)):
             state.isLoading = false
             return .none
         }

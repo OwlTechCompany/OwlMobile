@@ -16,9 +16,7 @@ struct FirestoreChatsClient {
         static let chats = FirebaseClient.firestore.collection("chats")
         static let chatsMessages = FirebaseClient.firestore.collection("chatsMessages")
     }
-
-    static var cancellables = Set<AnyCancellable>()
-
+    
     var openedChatId: CurrentValueSubject<String?, Never>
 
     var getChats: () -> Effect<[ChatsListPrivateItem], NSError>

@@ -281,7 +281,7 @@
 				5FF264E32822BD2B000FD185 /* Validation */,
 				5FBCF9EB281AEDCC00734BA0 /* PushNotification */,
 				5FF264E62822BDA3000FD185 /* FirestoreUsers */,
-				5FE31828280A218F007F7816 /* Firestore */,
+				5FE31828280A218F007F7816 /* FirestoreChats */,
 				5FB6DAA328183AA60037C38B /* Storage */,
 			);
 			path = Clients;
@@ -738,13 +738,13 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
-		5FE31828280A218F007F7816 /* Firestore */ = {
+		5FE31828280A218F007F7816 /* FirestoreChats */ = {
 			isa = PBXGroup;
 			children = (
 				5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */,
 				5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */,
 			);
-			path = Firestore;
+			path = FirestoreChats;
 			sourceTree = "<group>";
 		};
 		5FE3183E280ADADC007F7816 /* EnterUserData */ = {
