@@ -1,0 +1,41 @@
+name: CD
+on:
+#  push:
+#    branches: [ main ]
+#  pull_request:
+#    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions a tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploying to Testflight
+    runs-on: macos-12
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.3.1'
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Deploy iOS Beta to TestFlight via Fastlane
+        uses: maierj/fastlane-action@v1.4.0
+        with:
+          lane: closed_beta
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 100
+          APP_STORE_CONNECT_TEAM_ID: '${{ secrets.APP_STORE_CONNECT_TEAM_ID }}'
+          APPSTORE_CONNECT_APP_ID: '${{ secrets.APPSTORE_CONNECT_APP_ID }}'
+          BUNDLE_IDENTIFIER: '${{ secrets.BUNDLE_IDENTIFIER }}'
+          APPLE_ID: '${{ secrets.APPLE_ID }}'
+          DEVELOPER_PORTAL_TEAM_ID: '${{ secrets.DEVELOPER_PORTAL_TEAM_ID }}'
+          MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
+          GIT_AUTHORIZATION: '${{ secrets.GIT_AUTHORIZATION }}'
+          TEMP_KEYCHAIN_PASSWORD: '${{ secrets.TEMP_KEYCHAIN_PASSWORD }}'
+          TEMP_KEYCHAIN_USER: '${{ secrets.TEMP_KEYCHAIN_USER }}'
+          API_KEY_ID: '${{ secrets.API_KEY_ID }}'
+          API_KEY_ISSUER_ID: '${{ secrets.API_KEY_ISSUER_ID }}'
+          API_KEY: '${{ secrets.API_KEY }}'
