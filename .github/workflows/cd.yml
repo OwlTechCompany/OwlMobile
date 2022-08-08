@@ -24,6 +24,7 @@ jobs:
         env:
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
           APP_STORE_CONNECT_TEAM_ID: '${{ secrets.APP_STORE_CONNECT_TEAM_ID }}'
+          APPSTORE_CONNECT_APP_ID: '${{ secrets.APPSTORE_CONNECT_APP_ID }}'
           BUNDLE_IDENTIFIER: '${{ secrets.BUNDLE_IDENTIFIER }}'
           APPLE_ID: '${{ secrets.APPLE_ID }}'
           DEVELOPER_PORTAL_TEAM_ID: '${{ secrets.DEVELOPER_PORTAL_TEAM_ID }}'
