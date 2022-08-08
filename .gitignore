@@ -67,3 +67,6 @@ fastlane/report.xml
 
 # Vim
 *.swp
+
+
+*.zip
