@@ -12,15 +12,14 @@
 
 default_platform(:ios)
 
-DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
-DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
-PROVISIONING_PROFILE_SPECIFIER = ENV["PROVISIONING_PROFILE_SPECIFIER"]
-TEMP_KEYCHAIN_USER = ENV["TEMP_KEYCHAIN_USER"]
-TEMP_KEYCHAIN_PASSWORD = ENV["TEMP_KEYCHAIN_PASSWORD"]
-APPLE_ISSUER_ID = ENV["APPLE_ISSUER_ID"]
-APPLE_KEY_ID = ENV["APPLE_KEY_ID"]
-APPLE_KEY_CONTENT = ENV["APPLE_KEY_CONTENT"]
-GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+APPSTORE_CONNECT_APP_ID = # ENV["APPSTORE_CONNECT_APP_ID"]
+BUNDLE_IDENTIFIER = # ENV["BUNDLE_IDENTIFIER"]
+TEMP_KEYCHAIN_USER = # ENV["TEMP_KEYCHAIN_USER"]
+TEMP_KEYCHAIN_PASSWORD = # ENV["TEMP_KEYCHAIN_PASSWORD"]
+API_KEY_ISSUER_ID = # ENV["API_KEY_ISSUER_ID"]
+API_KEY_ID = # ENV["API_KEY_ID"]
+API_KEY = # ENV["API_KEY"]
+GIT_AUTHORIZATION = # ENV["GIT_AUTHORIZATION"]
 
 
 def delete_temp_keychain(name)
@@ -50,22 +49,18 @@ platform :ios do
     ensure_temp_keychain(keychain_name, keychain_password)
 
     api_key = app_store_connect_api_key(
-      key_id: APPLE_KEY_ID,
-      issuer_id: APPLE_ISSUER_ID,
-      key_content: APPLE_KEY_CONTENT,            
+      key_id: API_KEY_ID,
+      issuer_id: API_KEY_ISSUER_ID,
+      key_content: API_KEY,            
       duration: 1200,            
       in_house: false
     )
     
     increment_build_number(xcodeproj: "Owl.xcodeproj")
-    
-    cocoapods(
-      clean_install: true
-    )
 
     match(
       type: 'appstore',
-      app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
       git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
       readonly: true,
       keychain_name: keychain_name,
@@ -80,20 +75,40 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         provisioningProfiles: { 
-            DEVELOPER_APP_ID => PROVISIONING_PROFILE_SPECIFIER
+            BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
         }
       }
     )
 
     pilot(
-      apple_id: "#{DEVELOPER_APP_ID}",
-      app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
+      apple_id: "#{APPSTORE_CONNECT_APP_ID}",
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
       skip_waiting_for_build_processing: true,
       skip_submission: true,
       distribute_external: false,
       notify_external_testers: false,
       ipa: "./Owl.ipa"
     )
+
+    currentBuildNumber = get_build_number(xcodeproj: "Owl.xcodeproj").to_i
+    app_version = get_version_number(xcodeproj: "Owl.xcodeproj", target: "Owl")
+
+    commit_version_bump(
+      xcodeproj: "Owl.xcodeproj",
+      message: "Bump build number #{currentBuildNumber} [ci skip]",
+      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
+    )
+
+    push_to_git_remote(
+      remote: "origin",
+      force_with_lease: true
+    )
+
+    add_git_tag(
+      tag: "v#{app_version}.#{currentBuildNumber}-production"
+    )
+
+    push_git_tags
 
     delete_temp_keychain(keychain_name)
   end
