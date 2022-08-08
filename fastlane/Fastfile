@@ -48,6 +48,9 @@ platform :ios do
     keychain_password = TEMP_KEYCHAIN_PASSWORD
     ensure_temp_keychain(keychain_name, keychain_password)
 
+    puts "App: #{API_KEY_ID}"
+
+
     api_key = app_store_connect_api_key(
       key_id: API_KEY_ID,
       issuer_id: API_KEY_ISSUER_ID,
