@@ -97,22 +97,17 @@ platform :ios do
     currentBuildNumber = get_build_number(xcodeproj: "Owl.xcodeproj").to_i
     app_version = get_version_number(xcodeproj: "Owl.xcodeproj", target: "Owl")
 
+    clean_build_artifacts
+
     commit_version_bump(
       xcodeproj: "Owl.xcodeproj",
-      message: "Bump build number #{currentBuildNumber} [ci skip]",
+      message: "Bump build number #{currentBuildNumber}",
       include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
 
-    push_to_git_remote(
-      remote: "origin",
-      force_with_lease: true
-    )
-
     add_git_tag(
-      tag: "v#{app_version}.#{currentBuildNumber}-production"
+      tag: "v#{app_version}.#{currentBuildNumber}-beta"
     )
-
-    push_git_tags
 
     delete_temp_keychain(keychain_name)
   end

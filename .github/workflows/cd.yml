@@ -18,7 +18,15 @@ jobs:
           xcode-version: '13.3.1'
 
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+
+      - name: GIT setup config
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "owl.tech.company@gmail.com"
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
@@ -39,3 +47,9 @@ jobs:
           API_KEY_ID: '${{ secrets.API_KEY_ID }}'
           API_KEY_ISSUER_ID: '${{ secrets.API_KEY_ISSUER_ID }}'
           API_KEY: '${{ secrets.API_KEY }}'
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
