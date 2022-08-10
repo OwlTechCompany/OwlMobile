@@ -105,6 +105,8 @@ platform :ios do
 
     push_to_git_remote(
       remote: "origin",
+      local_branch: "develop",
+      remote_branch: "develop",
       force_with_lease: true
     )
 
