@@ -26,6 +26,9 @@
 		5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */; };
 		5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */; };
 		5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */; };
+		5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */; };
+		5D7EAF43289D93AB00A7FC2B /* GetLastMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */; };
+		5D7EAF45289D93C200A7FC2B /* GetNextMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -146,6 +149,9 @@
 		5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
 		5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClient.swift; sourceTree = "<group>"; };
+		5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientLive.swift; sourceTree = "<group>"; };
+		5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLastMessagesResponse.swift; sourceTree = "<group>"; };
+		5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNextMessagesResponse.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
@@ -275,7 +281,7 @@
 				5FF264E32822BD2B000FD185 /* Validation */,
 				5FBCF9EB281AEDCC00734BA0 /* PushNotification */,
 				5FF264E62822BDA3000FD185 /* FirestoreUsers */,
-				5FE31828280A218F007F7816 /* Firestore */,
+				5FE31828280A218F007F7816 /* FirestoreChats */,
 				5FB6DAA328183AA60037C38B /* Storage */,
 			);
 			path = Clients;
@@ -324,6 +330,15 @@
 				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
 			);
 			path = Chat;
+			sourceTree = "<group>";
+		};
+		5D7EAF41289D93A200A7FC2B /* GetMessages */ = {
+			isa = PBXGroup;
+			children = (
+				5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */,
+				5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */,
+			);
+			path = GetMessages;
 			sourceTree = "<group>";
 		};
 		5DA8A74E27FF260700C2ECBA = {
@@ -400,6 +415,7 @@
 		5DCD57A3280C428F00186FE2 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				5D7EAF41289D93A200A7FC2B /* GetMessages */,
 				5D37F21D282074EA000027BE /* Messages */,
 			);
 			path = Chat;
@@ -722,12 +738,13 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
-		5FE31828280A218F007F7816 /* Firestore */ = {
+		5FE31828280A218F007F7816 /* FirestoreChats */ = {
 			isa = PBXGroup;
 			children = (
 				5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */,
+				5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */,
 			);
-			path = Firestore;
+			path = FirestoreChats;
 			sourceTree = "<group>";
 		};
 		5FE3183E280ADADC007F7816 /* EnterUserData */ = {
@@ -978,10 +995,12 @@
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
 				5FF264D428218B11000FD185 /* JSONDecoder.swift in Sources */,
 				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
+				5D7EAF45289D93C200A7FC2B /* GetNextMessagesResponse.swift in Sources */,
 				5FF264D628228075000FD185 /* PushRoute.swift in Sources */,
 				5FF264E52822BD3B000FD185 /* ValidationClientLive.swift in Sources */,
 				5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */,
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
+				5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */,
 				5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
 				5FB6DA9E281722B20037C38B /* HeaderDescriptionView.swift in Sources */,
@@ -1000,6 +1019,7 @@
 				5DCD57AF280C6BA500186FE2 /* ChatNavigationView.swift in Sources */,
 				5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */,
 				5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */,
+				5D7EAF43289D93AB00A7FC2B /* GetLastMessagesResponse.swift in Sources */,
 				5FF264D2281F1155000FD185 /* Push.swift in Sources */,
 				5FF264DF2822BC08000FD185 /* FirebaseClientLive.swift in Sources */,
 				5F71A665280C602A0024F44A /* NewPrivateChatView.swift in Sources */,
