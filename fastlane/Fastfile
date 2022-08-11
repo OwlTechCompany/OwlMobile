@@ -105,11 +105,6 @@ platform :ios do
       include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
 
-    push_to_git_remote(
-      remote: "origin",
-      force_with_lease: true
-    )
-
     add_git_tag(
       tag: "v#{app_version}.#{currentBuildNumber}-beta"
     )

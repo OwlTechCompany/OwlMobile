@@ -39,3 +39,9 @@ jobs:
           API_KEY_ID: '${{ secrets.API_KEY_ID }}'
           API_KEY_ISSUER_ID: '${{ secrets.API_KEY_ISSUER_ID }}'
           API_KEY: '${{ secrets.API_KEY }}'
+
+      - name: GIT push changes
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "username@users.noreply.github.com"
+          git push
