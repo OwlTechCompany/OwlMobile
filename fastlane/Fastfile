@@ -99,16 +99,11 @@ platform :ios do
 
     clean_build_artifacts
 
-    reset_git_repo(
-      files: [
-        ".bundle/config."
-      ]
-    )
-
     commit_version_bump(
       xcodeproj: "Owl.xcodeproj",
       message: "Bump build number #{currentBuildNumber}",
-      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
+      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved],
+      ignore: .bundle/config.
     )
 
     push_to_git_remote(
