@@ -109,8 +109,6 @@ platform :ios do
       tag: "v#{app_version}.#{currentBuildNumber}-beta"
     )
 
-    push_git_tags
-
     delete_temp_keychain(keychain_name)
   end
 end

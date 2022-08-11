@@ -44,4 +44,4 @@ jobs:
         run: |
           git config --global user.name "CI"
           git config --global user.email "username@users.noreply.github.com"
-          git push
+          git push origin --tags
