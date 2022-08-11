@@ -58,9 +58,9 @@ platform :ios do
     
     increment_build_number(xcodeproj: "Owl.xcodeproj")
 
-#    cocoapods(
-#      clean_install: true
-#    )
+    cocoapods(
+      clean_install: true
+    )
 
     match(
       type: 'appstore',
@@ -99,9 +99,15 @@ platform :ios do
 
     clean_build_artifacts
 
+    reset_git_repo(
+      files: [
+        ".bundle/config."
+      ]
+    )
+
     commit_version_bump(
       xcodeproj: "Owl.xcodeproj",
-      message: "Bump build number #{currentBuildNumber} [ci skip]",
+      message: "Bump build number #{currentBuildNumber}",
       include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
 
@@ -111,7 +117,7 @@ platform :ios do
     )
 
     add_git_tag(
-      tag: "v#{app_version}.#{currentBuildNumber}-production"
+      tag: "v#{app_version}.#{currentBuildNumber}-beta"
     )
 
     push_git_tags
