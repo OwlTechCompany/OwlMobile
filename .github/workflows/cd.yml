@@ -18,7 +18,7 @@ jobs:
           xcode-version: '13.3.1'
 
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
@@ -43,5 +43,9 @@ jobs:
       - name: GIT push changes
         run: |
           git config --global user.name "CI"
-          git config --global user.email "username@users.noreply.github.com"
+          git config --global user.email "owl.tech.company@gmail.com"
           git push origin --tags
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated Change

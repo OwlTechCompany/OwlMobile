@@ -58,42 +58,6 @@ platform :ios do
     
     increment_build_number(xcodeproj: "Owl.xcodeproj")
 
-    cocoapods(
-      clean_install: true
-    )
-
-    match(
-      type: 'appstore',
-      app_identifier: "#{BUNDLE_IDENTIFIER}",
-      git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
-      readonly: true,
-      keychain_name: keychain_name,
-      keychain_password: keychain_password,
-      api_key: api_key
-    )
-
-    gym(
-      configuration: "Release",
-      workspace: "Owl.xcworkspace",
-      scheme: "Owl",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: { 
-            BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
-        }
-      }
-    )
-
-    pilot(
-      apple_id: "#{APPSTORE_CONNECT_APP_ID}",
-      app_identifier: "#{BUNDLE_IDENTIFIER}",
-      skip_waiting_for_build_processing: true,
-      skip_submission: true,
-      distribute_external: false,
-      notify_external_testers: false,
-      ipa: "./Owl.ipa"
-    )
-
     currentBuildNumber = get_build_number(xcodeproj: "Owl.xcodeproj").to_i
     app_version = get_version_number(xcodeproj: "Owl.xcodeproj", target: "Owl")
 
