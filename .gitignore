@@ -71,3 +71,4 @@ fastlane/report.xml
 
 *.zip
 *.env.default
+.bundle/

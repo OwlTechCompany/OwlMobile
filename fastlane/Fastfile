@@ -102,8 +102,7 @@ platform :ios do
     commit_version_bump(
       xcodeproj: "Owl.xcodeproj",
       message: "Bump build number #{currentBuildNumber}",
-      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved],
-      ignore: .bundle/config.
+      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
 
     push_to_git_remote(
