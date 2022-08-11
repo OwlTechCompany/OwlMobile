@@ -47,4 +47,5 @@ jobs:
 
       - name: GIT push changes
         run: |
+          git commit -am "Automated test"
           git push origin --tags
