@@ -48,10 +48,6 @@ jobs:
           API_KEY_ISSUER_ID: '${{ secrets.API_KEY_ISSUER_ID }}'
           API_KEY: '${{ secrets.API_KEY }}'
 
-      - name: GIT push changes
-        run: |
-          git commit -am "Automated test"
-
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
