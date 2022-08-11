@@ -97,13 +97,13 @@ platform :ios do
     currentBuildNumber = get_build_number(xcodeproj: "Owl.xcodeproj").to_i
     app_version = get_version_number(xcodeproj: "Owl.xcodeproj", target: "Owl")
 
+    clean_build_artifacts
+
     commit_version_bump(
       xcodeproj: "Owl.xcodeproj",
       message: "Bump build number #{currentBuildNumber} [ci skip]",
       include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
-
-    clean_build_artifacts
 
     push_to_git_remote(
       remote: "origin",
