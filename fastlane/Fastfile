@@ -103,10 +103,10 @@ platform :ios do
       include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
     )
 
+    clean_build_artifacts
+
     push_to_git_remote(
       remote: "origin",
-      local_branch: "develop",
-      remote_branch: "develop",
       force_with_lease: true
     )
 
