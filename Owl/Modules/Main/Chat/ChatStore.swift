@@ -148,16 +148,7 @@ extension Chat.State {
         self.companion = model.companion
         self.navigation = .init(model: model)
         self.model = model
-        if let lastMessage = model.lastMessage {
-            self.newMessages = [
-                ChatMessage.State(
-                    message: lastMessage,
-                    companion: model.companion
-                )
-            ]
-        } else {
-            self.newMessages = []
-        }
+        self.newMessages = []
         self.oldMessages = []
     }
 
