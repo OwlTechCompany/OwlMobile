@@ -23,7 +23,7 @@ extension FirestoreChatsClient {
             createPrivateChat: createPrivateChat,
             getLastMessages: { getLastMessages(chatId: openedChatId) },
             subscribeForNewMessages: { snapshot in subscribeForNewMessages(snapshot, chatId: openedChatId) },
-            getNextMessages: { snapshot in getNextMessages(snapshot, chatId: openedChatId) },
+            getPaginatedMessages: { snapshot in getPaginatedMessages(snapshot, chatId: openedChatId) },
             sendMessage: sendMessage
         )
     }
@@ -138,10 +138,10 @@ fileprivate extension FirestoreChatsClient {
             .eraseToEffect()
     }
     
-    static func getNextMessages(
+    static func getPaginatedMessages(
         _ snapshot: DocumentSnapshot,
         chatId: CurrentValueSubject<String?, Never>
-    ) -> Effect<GetNextMessagesResponse, NSError> {
+    ) -> Effect<GetPaginatedMessagesResponse, NSError> {
         guard let chatID = chatId.value else {
             return Effect(error: NSError())
         }
@@ -151,11 +151,11 @@ fileprivate extension FirestoreChatsClient {
             .start(afterDocument: snapshot)
             .limit(to: 25)
             .getDocuments()
-            .tryMap { snapshot -> GetNextMessagesResponse in
+            .tryMap { snapshot -> GetPaginatedMessagesResponse in
                 let items = try snapshot.documents.map { document in
                     try document.data(as: MessageResponse.self)
                 }
-                return GetNextMessagesResponse(
+                return GetPaginatedMessagesResponse(
                     messageResponse: items,
                     lastDocumentSnapshot: snapshot.documents.last
                 )

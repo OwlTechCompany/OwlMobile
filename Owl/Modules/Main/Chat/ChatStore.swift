@@ -44,7 +44,7 @@ struct Chat {
 
         case getMessages(Result<[MessageResponse], NSError>)
         case getLastMessages(Result<GetLastMessagesResponse, NSError>)
-        case getPaginatedMessages(Result<GetNextMessagesResponse, NSError>)
+        case getPaginatedMessages(Result<GetPaginatedMessagesResponse, NSError>)
     }
 
     // MARK: - Environment
@@ -69,7 +69,7 @@ struct Chat {
             }
 
             state.isLoading = true
-            return environment.chatsClient.getNextMessages(lastDocumentSnapshot)
+            return environment.chatsClient.getPaginatedMessages(lastDocumentSnapshot)
                 .catchToEffect(Action.getPaginatedMessages)
 
         case .binding(\.$newMessage):
@@ -148,16 +148,7 @@ extension Chat.State {
         self.companion = model.companion
         self.navigation = .init(model: model)
         self.model = model
-        if let lastMessage = model.lastMessage {
-            self.newMessages = [
-                ChatMessage.State(
-                    message: lastMessage,
-                    companion: model.companion
-                )
-            ]
-        } else {
-            self.newMessages = []
-        }
+        self.newMessages = []
         self.oldMessages = []
     }
 
