@@ -28,7 +28,7 @@
 		5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */; };
 		5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */; };
 		5D7EAF43289D93AB00A7FC2B /* GetLastMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */; };
-		5D7EAF45289D93C200A7FC2B /* GetNextMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */; };
+		5D7EAF45289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF44289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift */; };
 		5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75A27FF260700C2ECBA /* OwlApp.swift */; };
 		5DA8A75D27FF260700C2ECBA /* EnterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */; };
 		5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DA8A75E27FF260900C2ECBA /* Images.xcassets */; };
@@ -151,7 +151,7 @@
 		5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClient.swift; sourceTree = "<group>"; };
 		5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientLive.swift; sourceTree = "<group>"; };
 		5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLastMessagesResponse.swift; sourceTree = "<group>"; };
-		5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNextMessagesResponse.swift; sourceTree = "<group>"; };
+		5D7EAF44289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPaginatedMessagesResponse.swift; sourceTree = "<group>"; };
 		5DA8A75727FF260700C2ECBA /* Owl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Owl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DA8A75A27FF260700C2ECBA /* OwlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwlApp.swift; sourceTree = "<group>"; };
 		5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneView.swift; sourceTree = "<group>"; };
@@ -336,7 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */,
-				5D7EAF44289D93C200A7FC2B /* GetNextMessagesResponse.swift */,
+				5D7EAF44289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift */,
 			);
 			path = GetMessages;
 			sourceTree = "<group>";
@@ -365,8 +365,8 @@
 				5D35EC7F27FF8E5100624717 /* Info.plist */,
 				5D35EC7E27FF846200624717 /* Owl.entitlements */,
 				5F9F4E4027FF4F4400915572 /* Modules */,
+				5D35EC7B27FF7AE500624717 /* Clients */,
 				5F727FBE2807659000FABF26 /* Models */,
-				5FE318092809ED72007F7816 /* Modifiers */,
 				5FD33DC4280DBA7E009E9FBB /* SharedViews */,
 				5F9F4E3827FF463800915572 /* Extensions */,
 				5DA8A77D27FF33D300C2ECBA /* Generated */,
@@ -581,7 +581,6 @@
 				5DA8A75A27FF260700C2ECBA /* OwlApp.swift */,
 				5F727FB92807644600FABF26 /* App */,
 				5F727FBA2807644D00FABF26 /* AppDelegate */,
-				5D35EC7B27FF7AE500624717 /* Clients */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -705,6 +704,7 @@
 		5FD33DC4280DBA7E009E9FBB /* SharedViews */ = {
 			isa = PBXGroup;
 			children = (
+				5FE318092809ED72007F7816 /* Modifiers */,
 				5FD33DC5280DBA8C009E9FBB /* SearchBar.swift */,
 			);
 			path = SharedViews;
@@ -995,7 +995,7 @@
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
 				5FF264D428218B11000FD185 /* JSONDecoder.swift in Sources */,
 				5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */,
-				5D7EAF45289D93C200A7FC2B /* GetNextMessagesResponse.swift in Sources */,
+				5D7EAF45289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift in Sources */,
 				5FF264D628228075000FD185 /* PushRoute.swift in Sources */,
 				5FF264E52822BD3B000FD185 /* ValidationClientLive.swift in Sources */,
 				5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */,
@@ -1210,7 +1210,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
@@ -1234,7 +1234,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.owl.tech.Owl";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.owl.tech.Owl";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1248,7 +1248,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
@@ -1272,7 +1272,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.owl.tech.Owl";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.owl.tech.Owl";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

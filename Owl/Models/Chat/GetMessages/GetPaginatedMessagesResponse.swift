@@ -1,5 +1,5 @@
 //
-//  GetNextMessagesResponse.swift
+//  GetPaginatedMessagesResponse.swift
 //  Owl
 //
 //  Created by Anastasia Holovash on 05.08.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-struct GetNextMessagesResponse: Equatable {
+struct GetPaginatedMessagesResponse: Equatable {
     let messageResponse: [MessageResponse]
     let lastDocumentSnapshot: DocumentSnapshot?
 }

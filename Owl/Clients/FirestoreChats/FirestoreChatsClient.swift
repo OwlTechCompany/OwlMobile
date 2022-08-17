@@ -27,6 +27,6 @@ struct FirestoreChatsClient {
 
     var getLastMessages: () -> Effect<GetLastMessagesResponse, NSError>
     var subscribeForNewMessages: (DocumentSnapshot) -> Effect<[MessageResponse], NSError>
-    var getNextMessages: (DocumentSnapshot) -> Effect<GetNextMessagesResponse, NSError>
+    var getPaginatedMessages: (DocumentSnapshot) -> Effect<GetPaginatedMessagesResponse, NSError>
     var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
