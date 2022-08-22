@@ -39,7 +39,9 @@ struct EnterCode: ReducerProtocol {
     @Dependency(\.userDefaultsClient) var userDefaultsClient
     @Dependency(\.firestoreUsersClient) var firestoreUsersClient
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .binding(\.$verificationCode):
@@ -100,7 +102,6 @@ struct EnterCode: ReducerProtocol {
                 return .none
             }
         }
-        .binding()
     }
 
 }

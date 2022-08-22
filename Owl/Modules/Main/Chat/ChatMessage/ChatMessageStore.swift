@@ -38,7 +38,7 @@ struct ChatMessage {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, _, _ in
+    static let reducer = AnyReducer<State, Action, Environment> { _, _, _ in
         return .none
     }
 

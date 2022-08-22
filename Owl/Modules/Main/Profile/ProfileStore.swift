@@ -40,7 +40,7 @@ struct Profile {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .onAppear:
             return Effect.run { subscriber in

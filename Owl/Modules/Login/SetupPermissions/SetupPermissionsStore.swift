@@ -27,7 +27,8 @@ struct SetupPermissions: ReducerProtocol {
 
     // MARK: - Reducer
 
-    var body: some ReducerProtocolOf<Self> {
+    @ReducerBuilderOf<Self>
+    var body: some ReducerProtocol<State, Action> {
         Reduce { _, action in
             switch action {
             case .grandPermission:

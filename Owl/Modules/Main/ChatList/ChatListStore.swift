@@ -42,7 +42,7 @@ struct ChatList {
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducerCore = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .newPrivateChat:
             return .none
@@ -89,7 +89,7 @@ struct ChatList {
         }
     }
 
-    static let reducer = Reducer<State, Action, Environment>.combine(
+    static let reducer = AnyReducer<State, Action, Environment>.combine(
         ChatListCell.reducer
             .forEach(
                 state: \.chats,

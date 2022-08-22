@@ -52,7 +52,9 @@ struct EnterUserData: ReducerProtocol {
     @Dependency(\.storageClient) var storageClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+    
         Reduce { state, action in
             switch action {
             case .showImagePicker:
@@ -149,7 +151,6 @@ struct EnterUserData: ReducerProtocol {
                 return .none
             }
         }
-        .binding()
     }
 
 }

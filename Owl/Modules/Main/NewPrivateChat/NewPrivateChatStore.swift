@@ -54,7 +54,7 @@ struct NewPrivateChat {
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducerCore = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .search:
             state.isLoading = true
@@ -133,7 +133,7 @@ struct NewPrivateChat {
     }
     .binding()
 
-    static let reducer = Reducer<State, Action, Environment>.combine(
+    static let reducer = AnyReducer<State, Action, Environment>.combine(
         NewPrivateChatCell.reducer
             .forEach(
                 state: \State.cells,

@@ -47,7 +47,7 @@ struct Login: ReducerProtocol {
     @Dependency(\.storageClient) var storageClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    var bodyCore: some ReducerProtocolOf<Self> {
+    var bodyCore: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .routeAction(_, .onboarding(.startMessaging)):
@@ -117,11 +117,11 @@ struct Login: ReducerProtocol {
         }
     }
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
         Reduce(
-            Reducer(Login.ScreenProvider())
+            AnyReducer(Login.ScreenProvider())
                 .forEachIdentifiedRoute(environment: { () })
-                .withRouteReducer(Reducer(bodyCore)),
+                .withRouteReducer(AnyReducer(bodyCore)),
             environment: ()
         )
     }

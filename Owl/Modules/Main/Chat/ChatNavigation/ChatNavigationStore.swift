@@ -31,7 +31,7 @@ struct ChatNavigation {
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, _ in
+    static let reducer = AnyReducer<State, Action, Environment> { _, action, _ in
         switch action {
         case .back:
             return .none

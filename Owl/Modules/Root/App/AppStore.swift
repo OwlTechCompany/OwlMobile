@@ -53,7 +53,7 @@ struct App: ReducerProtocol {
     @Dependency(\.firestoreUsersClient) var firestoreUsersClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
         Scope(state: \State.appDelegate, action: /Action.appDelegate) {
             AppDelegateStore()
         }
@@ -145,12 +145,12 @@ struct App: ReducerProtocol {
         }
         // TODO: Move to IfLetReducer if possible
         .ifLet(
-            state: \State.login,
+            \State.login,
             action: /Action.login,
             then: { Login() }
         )
         .ifLet(
-            state: \State.main,
+            \State.main,
             action: /Action.main,
             then: { Main() }
         )

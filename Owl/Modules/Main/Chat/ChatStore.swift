@@ -43,7 +43,7 @@ struct Chat {
 
     // MARK: - Reducer
 
-    static let reducerCore = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducerCore = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .navigation:
             return .none
@@ -87,7 +87,7 @@ struct Chat {
     }
     .binding()
 
-    static let reducer = Reducer<State, Action, Environment>.combine(
+    static let reducer = AnyReducer<State, Action, Environment>.combine(
         ChatNavigation.reducer
             .pullback(
                 state: \State.navigation,

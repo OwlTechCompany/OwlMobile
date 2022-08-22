@@ -45,7 +45,7 @@ struct Main: ReducerProtocol {
 
     @Dependency(\.userClient) var userClient
 
-    var bodyCore: some ReducerProtocolOf<Self> {
+    var bodyCore: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .routeAction(_, .chatList(.newPrivateChat)):
@@ -105,11 +105,11 @@ struct Main: ReducerProtocol {
         }
     }
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
         Reduce(
-            Reducer(Main.ScreenProvider())
+            AnyReducer(Main.ScreenProvider())
                 .forEachIdentifiedRoute(environment: { () })
-                .withRouteReducer(Reducer(bodyCore)),
+                .withRouteReducer(AnyReducer(bodyCore)),
             environment: ()
         )
     }

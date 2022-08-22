@@ -85,8 +85,8 @@ extension Main.ScreenProvider: ReducerProtocol {
         case editProfile(EditProfile.Action)
     }
 
-    var body: some ReducerProtocolOf<Self> {
-        ScopeCase(
+    var body: some ReducerProtocol<State, Action> {
+        Scope(
             state: /State.chatList,
             action: /Action.chatList
         ) {
@@ -100,7 +100,7 @@ extension Main.ScreenProvider: ReducerProtocol {
             )
         }
 
-        ScopeCase(
+        Scope(
             state: /State.newPrivateChat,
             action: /Action.newPrivateChat
         ) {
@@ -114,7 +114,7 @@ extension Main.ScreenProvider: ReducerProtocol {
             )
         }
 
-        ScopeCase(
+        Scope(
             state: /State.profile,
             action: /Action.profile
         ) {
@@ -126,7 +126,7 @@ extension Main.ScreenProvider: ReducerProtocol {
             )
         }
 
-        ScopeCase(
+        Scope(
             state: /State.editProfile,
             action: /Action.editProfile
         ) {

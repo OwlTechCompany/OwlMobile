@@ -32,7 +32,9 @@ struct EnterPhone: ReducerProtocol {
     @Dependency(\.userDefaultsClient) var userDefaultsClient
     @Dependency(\.validationClient) var validationClient
 
-    var body: some ReducerProtocolOf<Self> {
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .binding(\.$phoneNumber):
@@ -67,7 +69,6 @@ struct EnterPhone: ReducerProtocol {
                 return .none
             }
         }
-        .binding()
     }
 
 }
