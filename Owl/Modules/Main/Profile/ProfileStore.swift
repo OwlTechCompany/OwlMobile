@@ -61,7 +61,7 @@ struct Profile {
             return .none
 
         case .logoutTapped:
-            state.alert = .init(
+            state.alert = AlertState(
                 title: TextState("Are you sure?"),
                 primaryButton: .cancel(TextState("Cancel")),
                 secondaryButton: .destructive(

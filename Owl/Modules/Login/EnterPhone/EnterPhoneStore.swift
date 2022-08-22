@@ -54,7 +54,7 @@ struct EnterPhone: ReducerProtocol {
 
             case let .verificationIDResult(.failure(error)):
                 state.isLoading = false
-                state.alert = .init(
+                state.alert = AlertState(
                     title: TextState("Error"),
                     message: TextState("\(error.localizedDescription)"),
                     dismissButton: .default(TextState("Ok"))
