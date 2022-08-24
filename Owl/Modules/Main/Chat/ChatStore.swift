@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import Firebase
+import IdentifiedCollections
 
 struct Chat {
 
@@ -15,7 +17,13 @@ struct Chat {
         var chatID: String
         var companion: User
         var navigation: ChatNavigation.State
-        var messages: IdentifiedArrayOf<ChatMessage.State>
+        var newMessages: [ChatMessage.State]
+        var oldMessages: [ChatMessage.State]
+        var isLoading: Bool = false
+        var lastDocumentSnapshot: DocumentSnapshot?
+        var messages: IdentifiedArrayOf<ChatMessage.State> {
+            IdentifiedArrayOf(uniqueElements: newMessages + oldMessages)
+        }
 
         var model: ChatsListPrivateItem
         
@@ -28,11 +36,15 @@ struct Chat {
         case navigation(ChatNavigation.Action)
         case messages(id: String, action: ChatMessage.Action)
 
-        case getMessagesResult(Result<[MessageResponse], NSError>)
         case binding(BindingAction<State>)
         case onAppear
+
         case sendMessage
         case sendMessageResult(Result<Bool, NSError>)
+
+        case getMessages(Result<[MessageResponse], NSError>)
+        case getLastMessages(Result<GetLastMessagesResponse, NSError>)
+        case getPaginatedMessages(Result<GetPaginatedMessagesResponse, NSError>)
     }
 
     // MARK: - Environment
@@ -48,14 +60,17 @@ struct Chat {
         case .navigation:
             return .none
 
-        case let .getMessagesResult(.success(messages)):
-            state.messages = .init(uniqueElements: messages.map {
-                ChatMessage.State(message: $0, companion: state.companion)
-            })
-            return .none
+        case let .messages(id, .onAppear):
+            guard
+                id == state.messages.last?.id && !state.isLoading,
+                let lastDocumentSnapshot = state.lastDocumentSnapshot
+            else {
+                return .none
+            }
 
-        case let .getMessagesResult(.failure(error)):
-            return .none
+            state.isLoading = true
+            return environment.chatsClient.getPaginatedMessages(lastDocumentSnapshot)
+                .catchToEffect(Action.getPaginatedMessages)
 
         case .binding(\.$newMessage):
             return .none
@@ -65,8 +80,8 @@ struct Chat {
 
         case .onAppear:
             environment.chatsClient.openedChatId.send(state.chatID)
-            return environment.chatsClient.getMessages(state.chatID)
-                .catchToEffect(Action.getMessagesResult)
+            return environment.chatsClient.getLastMessages()
+                .catchToEffect(Action.getLastMessages)
                 .cancellable(id: Main.ListenersId())
 
         case .sendMessage:
@@ -82,6 +97,33 @@ struct Chat {
                 .catchToEffect(Action.sendMessageResult)
 
         case .sendMessageResult:
+            return .none
+
+        case let .getMessages(.success(messages)):
+            state.newMessages = messages.map { ChatMessage.State(message: $0, companion: state.companion) }
+            return .none
+
+        case let .getMessages(.failure(error)):
+            return .none
+
+        case let .getLastMessages(.success(response)):
+            state.oldMessages = response.messageResponse.map { ChatMessage.State(message: $0, companion: state.companion) }
+            state.lastDocumentSnapshot = response.lastDocumentSnapshot
+            return environment.chatsClient.subscribeForNewMessages(response.subscribeForNewMessagesSnapshot)
+                .catchToEffect(Action.getMessages)
+
+        case let .getLastMessages(.failure(error)):
+            return .none
+
+        case let .getPaginatedMessages(.success(response)):
+            let update = response.messageResponse.map { ChatMessage.State(message: $0, companion: state.companion) }
+            state.oldMessages.append(contentsOf: update)
+            state.lastDocumentSnapshot = response.lastDocumentSnapshot
+            state.isLoading = false
+            return .none
+
+        case let .getPaginatedMessages(.failure(error)):
+            state.isLoading = false
             return .none
         }
     }
@@ -106,18 +148,8 @@ extension Chat.State {
         self.companion = model.companion
         self.navigation = .init(model: model)
         self.model = model
-        if let lastMessage = model.lastMessage {
-            self.messages = .init(
-                uniqueElements: [
-                    ChatMessage.State(
-                        message: lastMessage,
-                        companion: model.companion
-                    )
-                ]
-            )
-        } else {
-            self.messages = []
-        }
+        self.newMessages = []
+        self.oldMessages = []
     }
 
 }

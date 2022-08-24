@@ -1,0 +1,114 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+default_platform(:ios)
+
+APPSTORE_CONNECT_APP_ID = ENV["APPSTORE_CONNECT_APP_ID"]
+BUNDLE_IDENTIFIER = ENV["BUNDLE_IDENTIFIER"]
+TEMP_KEYCHAIN_USER = ENV["TEMP_KEYCHAIN_USER"]
+TEMP_KEYCHAIN_PASSWORD = ENV["TEMP_KEYCHAIN_PASSWORD"]
+API_KEY_ISSUER_ID = ENV["API_KEY_ISSUER_ID"]
+API_KEY_ID = ENV["API_KEY_ID"]
+API_KEY = ENV["API_KEY"]
+GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+
+
+def delete_temp_keychain(name)
+  delete_keychain(
+    name: name
+  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+end
+
+def create_temp_keychain(name, password)
+  create_keychain(
+    name: name,
+    password: password,
+    unlock: false,
+    timeout: 0
+  )
+end
+
+def ensure_temp_keychain(name, password)
+  delete_temp_keychain(name)
+  create_temp_keychain(name, password)
+end
+
+platform :ios do
+  lane :closed_beta do
+    keychain_name = TEMP_KEYCHAIN_USER
+    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    api_key = app_store_connect_api_key(
+      key_id: API_KEY_ID,
+      issuer_id: API_KEY_ISSUER_ID,
+      key_content: API_KEY,            
+      duration: 1200,            
+      in_house: false
+    )
+    
+    increment_build_number(xcodeproj: "Owl.xcodeproj")
+
+    cocoapods(
+      clean_install: true
+    )
+
+    match(
+      type: 'appstore',
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
+      git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+      readonly: true,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+      api_key: api_key
+    )
+
+    gym(
+      configuration: "Release",
+      workspace: "Owl.xcworkspace",
+      scheme: "Owl",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: { 
+            BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
+        }
+      }
+    )
+
+    pilot(
+      apple_id: "#{APPSTORE_CONNECT_APP_ID}",
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      distribute_external: false,
+      notify_external_testers: false,
+      ipa: "./Owl.ipa"
+    )
+
+    currentBuildNumber = get_build_number(xcodeproj: "Owl.xcodeproj").to_i
+    app_version = get_version_number(xcodeproj: "Owl.xcodeproj", target: "Owl")
+
+    clean_build_artifacts
+
+    commit_version_bump(
+      xcodeproj: "Owl.xcodeproj",
+      message: "Bump build number #{currentBuildNumber}",
+      include: %w[Gemfile.lock Owl.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved Owl.xcworkspace/xcshareddata/swiftpm/Package.resolved]
+    )
+
+    add_git_tag(
+      tag: "v#{app_version}.#{currentBuildNumber}-beta"
+    )
+
+    delete_temp_keychain(keychain_name)
+  end
+end

@@ -47,10 +47,6 @@ struct ChatView: View {
                 VStack(spacing: 0) {
                     ScrollView {
                         ScrollViewReader { proxy in
-                            Rectangle()
-                                .foregroundColor(Color(.systemGroupedBackground))
-                                .frame(height: 44)
-
                             LazyVStack {
                                 ForEachStore(
                                     self.store.scope(
@@ -61,45 +57,47 @@ struct ChatView: View {
                                         ChatMessageView(store: $0)
                                             .listRowSeparator(.hidden)
                                             .listRowInsets(.init())
+                                            .rotationEffect(Angle(degrees: 180)).scaleEffect(x: -1.0, y: 1.0, anchor: .center)
                                     }
                                 )
                             }
                             .onChange(of: viewStore.messages) { newValue in
-                                guard let lastMessage = newValue.last else {
+                                guard
+                                    let lastMessage = newValue.first,
+                                    isFirstUpdate
+                                else {
                                     return
                                 }
-                                if isFirstUpdate {
-                                    proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                    isFirstUpdate.toggle()
-                                } else if lastMessage.sentBy != viewStore.companion.uid || isLastMessageAppearing {
-                                    withAnimation {
-                                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                                    }
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                isFirstUpdate.toggle()
+                            }
+                            .onChange(of: viewStore.newMessages) { newValue in
+                                guard
+                                    let lastMessage = newValue.first,
+                                    lastMessage.sentBy != viewStore.companion.uid
+                                else {
+                                    return
                                 }
+                                withAnimation { proxy.scrollTo(lastMessage.id, anchor: .bottom) }
                             }
                             .animation(.none, value: keyboard)
+
+                            Rectangle()
+                                .foregroundColor(Color(.systemGroupedBackground))
+                                .frame(height: safeAreaInsets.top + 44)
                         }
                     }
+                    .rotationEffect(Angle(degrees: 180)).scaleEffect(x: -1.0, y: 1.0, anchor: .center)
                     .introspectScrollView { scrollView in self.scrollView = scrollView }
                     .onTapGesture { focusedField = nil }
+                    .ignoresSafeArea(.all, edges: .top)
 
                     textField
                 }
                 .zIndex(0)
-                .animation(.spring().speed(0.5 / keyboard.duration), value: keyboard)
                 .frame(width: screen.width)
                 .navigationBarBackButtonHidden(true)
-                .ignoresSafeArea(.all, edges: .bottom)
                 .onAppear { viewStore.send(.onAppear) }
-                .onReceive(Publishers.keyboardHeightPublisher) { newValue in
-                    if keyboard.height != newValue.height {
-                        keyboard = newValue
-                        scrollView.setContentOffset(
-                            .init(x: 0, y: scrollView.contentOffset.y + scrollViewContentOffsetY),
-                            animated: true
-                        )
-                    }
-                }
             }
             .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
             .navigationBarHidden(true)
@@ -109,8 +107,15 @@ struct ChatView: View {
     var textField: some View {
         WithViewStore(store) { viewStore in
             ZStack(alignment: .top) {
-                Rectangle().fill(Colors.Blue._7.swiftUIColor)
-                    .frame(height: textFieldBackgroundHeight)
+                VStack(spacing: 0) {
+                    Rectangle()
+                        .fill(Colors.Blue._7.swiftUIColor)
+                        .frame(height: 1)
+
+                    Rectangle()
+                        .fill(Color(.systemGroupedBackground))
+                        .frame(height: textFieldBackgroundHeight)
+                }
 
                 HStack(spacing: 16) {
                     TextField("Message...", text: viewStore.binding(\.$newMessage))
@@ -132,7 +137,6 @@ struct ChatView: View {
                 }
                 .padding(.horizontal, 8)
                 .padding(.top, Constants.textFieldVerticalPadding)
-                .padding(.bottom, safeAreaInsets.bottom)
             }
         }
     }
@@ -150,15 +154,7 @@ private extension ChatView {
     var textFieldBackgroundHeight: CGFloat {
         keyboardIsUp
         ? Constants.textFieldBackgroundHeigh + keyboard.height + Constants.editionTextFieldBottomPadding
-        : Constants.textFieldBackgroundHeigh + safeAreaInsets.bottom
-    }
-
-    var scrollViewContentOffsetY: CGFloat {
-        keyboardIsUp ? keyboard.height - safeAreaInsets.bottom + 6 : 0
-    }
-
-    var isLastMessageAppearing: Bool {
-        scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 20 + Constants.textFieldBackgroundHeigh
+        : Constants.textFieldBackgroundHeigh + 6
     }
 
 }
