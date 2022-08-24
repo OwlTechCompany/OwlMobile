@@ -10,7 +10,6 @@ import ComposableArchitecture
 import XCTestDynamicOverlay
 import Combine
 
-// TODO: Move to FirestoreChatsClient.swift
 extension DependencyValues {
 
     var firestoreChatsClient: FirestoreChatsClient {
