@@ -85,7 +85,7 @@ extension DependencyValues {
         set { self[PushNotificationClientKey.self] = newValue }
     }
 
-    enum PushNotificationClientKey: LiveDependencyKey {
+    enum PushNotificationClientKey: DependencyKey {
         static var testValue = PushNotificationClient.unimplemented
         static var liveValue = PushNotificationClient.live()
     }

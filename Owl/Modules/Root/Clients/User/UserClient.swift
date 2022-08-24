@@ -25,7 +25,7 @@ extension DependencyValues {
         set { self[UserClientKey.self] = newValue }
     }
 
-    enum UserClientKey: LiveDependencyKey {
+    enum UserClientKey: DependencyKey {
         static var testValue = UserClient.unimplemented
         static let liveValue = UserClient.live(
             userDefaults: DependencyValues.current.userDefaultsClient

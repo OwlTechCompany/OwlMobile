@@ -21,7 +21,7 @@ extension DependencyValues {
         set { self[ValidationClientKey.self] = newValue }
     }
 
-    enum ValidationClientKey: LiveDependencyKey {
+    enum ValidationClientKey: DependencyKey {
         static var testValue = ValidationClient.unimplemented
         static let liveValue = ValidationClient.live()
     }

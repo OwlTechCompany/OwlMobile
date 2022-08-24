@@ -31,7 +31,7 @@ extension DependencyValues {
         set { self[StorageClientKey.self] = newValue }
     }
 
-    enum StorageClientKey: LiveDependencyKey {
+    enum StorageClientKey: DependencyKey {
         static var testValue = StorageClient.unimplemented
         static let liveValue = StorageClient.live(
             userClient: DependencyValues.current.userClient

@@ -27,7 +27,7 @@ extension DependencyValues {
         set { self[FirestoreUsersClientKey.self] = newValue }
     }
 
-    enum FirestoreUsersClientKey: LiveDependencyKey {
+    enum FirestoreUsersClientKey: DependencyKey {
         static var testValue = FirestoreUsersClient.unimplemented
         static let liveValue = FirestoreUsersClient.live(
             userClient: DependencyValues.current.userClient

@@ -54,7 +54,7 @@ struct EnterUserData: ReducerProtocol {
 
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-    
+
         Reduce { state, action in
             switch action {
             case .showImagePicker:

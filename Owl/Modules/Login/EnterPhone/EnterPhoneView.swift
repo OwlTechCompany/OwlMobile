@@ -72,7 +72,7 @@ struct EnterPhoneView: View {
                 : nil
             )
             .alert(
-                self.store.scope(state: \.alert),
+                store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
         }
@@ -89,7 +89,10 @@ struct EnterPhoneView: View {
 struct EnterPhoneNumber_Previews: PreviewProvider {
     static var previews: some View {
         EnterPhoneView(store: Store(
-            initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
+            initialState: EnterPhone.State(
+                phoneNumber: "+38099217756",
+                isLoading: false
+            ),
             reducer: EnterPhone()
         ))
     }

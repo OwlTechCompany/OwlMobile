@@ -37,7 +37,7 @@ extension DependencyValues {
         set { self[UserDefaultsKey.self] = newValue }
     }
 
-    enum UserDefaultsKey: LiveDependencyKey {
+    enum UserDefaultsKey: DependencyKey {
         static var testValue = UserDefaultsClient.unimplemented
         static let liveValue = UserDefaultsClient.live()
     }

@@ -27,7 +27,7 @@ extension DependencyValues {
         set { self[AuthClientKey.self] = newValue }
     }
 
-    enum AuthClientKey: LiveDependencyKey {
+    enum AuthClientKey: DependencyKey {
         static var testValue = AuthClient.unimplemented
         static let liveValue = AuthClient.live()
     }

@@ -1326,7 +1326,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
-				branch = protocol;
+				branch = "protocol-beta";
 				kind = branch;
 			};
 		};

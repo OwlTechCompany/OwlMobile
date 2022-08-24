@@ -36,7 +36,7 @@ extension DependencyValues {
         set { self[FirebaseClientKey.self] = newValue }
     }
 
-    enum FirebaseClientKey: LiveDependencyKey {
+    enum FirebaseClientKey: DependencyKey {
         static var testValue = FirebaseClient.unimplemented
         static let liveValue = FirebaseClient.live()
     }

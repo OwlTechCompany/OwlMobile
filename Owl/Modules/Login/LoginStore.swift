@@ -102,7 +102,7 @@ struct Login: ReducerProtocol {
                 return .none
 
             case .routeAction(_, .setupPermissions(.later)),
-                    .routeAction(_, .setupPermissions(.next)):
+                 .routeAction(_, .setupPermissions(.next)):
                 return Effect(value: .delegate(.loginSuccess))
 
             case .routeAction:

@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "8467858fc4cee858511380ac0f9ea5a17d007b5d",
-        "version" : "9.3.0"
+        "revision" : "cbaa7ce7063d5ab22414962ec63366ccbba26034",
+        "version" : "9.4.1"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "19605024d59eaefdb1f6a2cb11ebe75df4421126",
-        "version" : "2.0.0"
+        "revision" : "d4289da23e978f37c344ea6a386e5546e2466294",
+        "version" : "2.1.0"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
-        "branch" : "protocol",
-        "revision" : "a3a09a6a6fcd522601527b5d57fb0ec52cde3dc2"
+        "branch" : "protocol-beta",
+        "revision" : "e00022c9959829aafed4d15707699f94749a346c"
       }
     },
     {
@@ -204,7 +204,7 @@
       "location" : "https://github.com/ddanilyuk/TCACoordinators",
       "state" : {
         "branch" : "main",
-        "revision" : "b6507b56d6b2e091d7128cc13da159a6585e318a"
+        "revision" : "59f35409eb38a8f4849021a61fbb9d648e71ba71"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "ef8e14e7ce1c0c304c644c6ba365d06c468ded6b",
-        "version" : "0.3.3"
+        "revision" : "38bc9242e4388b80bd23ddfdf3071428859e3260",
+        "version" : "0.4.0"
       }
     }
   ],
