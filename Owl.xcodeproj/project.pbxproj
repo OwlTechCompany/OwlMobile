@@ -76,7 +76,6 @@
 		5FA683AA289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */; };
 		5FA683AC289C238A002DFEDF /* StorageClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */; };
 		5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */; };
-		5FA683B0289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */; };
 		5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginStore.swift */; };
 		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
 		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
@@ -135,6 +134,7 @@
 		5FF264E82822BDB7000FD185 /* FirestoreUsersClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264E72822BDB7000FD185 /* FirestoreUsersClientLive.swift */; };
 		5FF264EA2822BE21000FD185 /* StorageClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264E92822BE21000FD185 /* StorageClientLive.swift */; };
 		DB037FC628B369FB004686E8 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = DB037FC528B369FB004686E8 /* TCACoordinators */; };
+		DBA2125B28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA2125A28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -212,7 +212,6 @@
 		5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClientUnimplemented.swift; sourceTree = "<group>"; };
-		5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA7D863280435FF00AA48B5 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
 		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
@@ -259,6 +258,7 @@
 		5FF264E42822BD3B000FD185 /* ValidationClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClientLive.swift; sourceTree = "<group>"; };
 		5FF264E72822BDB7000FD185 /* FirestoreUsersClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClientLive.swift; sourceTree = "<group>"; };
 		5FF264E92822BE21000FD185 /* StorageClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientLive.swift; sourceTree = "<group>"; };
+		DBA2125A28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientUnimplemented.swift; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -770,8 +770,8 @@
 			isa = PBXGroup;
 			children = (
 				5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */,
-				5FA683AF289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift */,
 				5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */,
+				DBA2125A28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift */,
 			);
 			path = FirestoreChats;
 			sourceTree = "<group>";
@@ -1023,6 +1023,7 @@
 			files = (
 				5DCD57B4280C9D9800186FE2 /* ChatMessageView.swift in Sources */,
 				5FA683A8289C22C6002DFEDF /* PushNotificationClientUnimplemented.swift in Sources */,
+				DBA2125B28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift in Sources */,
 				5FA683AC289C238A002DFEDF /* StorageClientUnimplemented.swift in Sources */,
 				5FA683AA289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift in Sources */,
 				5D35EC89280323C100624717 /* Collection+Ext.swift in Sources */,
@@ -1110,7 +1111,6 @@
 				5FB6DA95281721690037C38B /* ScrollViewDelegate.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
 				5FBCF9F5281B133200734BA0 /* SetupPermissionsStore.swift in Sources */,
-				5FA683B0289C290B002DFEDF /* FirestoreChatsClientUnimplemented.swift in Sources */,
 				5FA683A4289C2234002DFEDF /* UserDefaultsClientUnimplemented.swift in Sources */,
 				5F727FC1280765B000FABF26 /* SignIn.swift in Sources */,
 				5F727FBD2807647300FABF26 /* MainStore.swift in Sources */,

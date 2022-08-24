@@ -30,3 +30,19 @@ struct FirestoreChatsClient {
     var getPaginatedMessages: (DocumentSnapshot) -> Effect<GetPaginatedMessagesResponse, NSError>
     var sendMessage: (NewMessage) -> Effect<Bool, NSError>
 }
+
+extension DependencyValues {
+
+    var firestoreChatsClient: FirestoreChatsClient {
+        get { self[FirestoreChatsClientKey.self] }
+        set { self[FirestoreChatsClientKey.self] = newValue }
+    }
+
+    enum FirestoreChatsClientKey: DependencyKey {
+        static var testValue = FirestoreChatsClient.unimplemented
+        static var liveValue = FirestoreChatsClient.live(
+            userClient: DependencyValues.current.userClient
+        )
+    }
+
+}
