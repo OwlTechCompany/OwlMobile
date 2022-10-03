@@ -1,0 +1,16 @@
+//
+//  Production.xcconfig
+//  Owl
+//
+//  Created by Anastasia Holovash on 26.09.2022.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_ENVIRONMENT = production
+
+// App Settings
+APP_NAME = Owl
+
+FIREBASE_CLIENT_ID = com.googleusercontent.apps.307301319513-ds5fkvmt742fguur5cuqrapcm7v4ltn6

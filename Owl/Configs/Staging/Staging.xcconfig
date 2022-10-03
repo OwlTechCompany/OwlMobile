@@ -1,0 +1,16 @@
+//
+//  Staging.xcconfig
+//  Owl
+//
+//  Created by Anastasia Holovash on 26.09.2022.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_ENVIRONMENT = staging
+
+// App Settings
+APP_NAME = OwlStaging
+
+FIREBASE_CLIENT_ID = com.googleusercontent.apps.521883421376-gj27n83qsvriicv4mahqane5fkr4a6e6
