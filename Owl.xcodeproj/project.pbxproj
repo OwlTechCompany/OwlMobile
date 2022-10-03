@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D35EC7A27FF7A0B00624717 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */; };
 		5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */; };
 		5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC8028001E1100624717 /* PushNotificationClient.swift */; };
 		5D35EC832800246900624717 /* AuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D35EC822800246900624717 /* AuthClient.swift */; };
@@ -127,11 +126,13 @@
 
 /* Begin PBXFileReference section */
 		04636015FACA7B079E7B9551 /* Pods_Owl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Owl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CD7CE47722D8DCE6BF5A625 /* Pods-Owl.release production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release production.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release production.xcconfig"; sourceTree = "<group>"; };
+		2146603D5889302AABCCF9A9 /* Pods-Owl.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release staging.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release staging.xcconfig"; sourceTree = "<group>"; };
 		3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug.xcconfig"; sourceTree = "<group>"; };
 		5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 		5D35EC7E27FF846200624717 /* Owl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Owl.entitlements; sourceTree = "<group>"; };
-		5D35EC7F27FF8E5100624717 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5D35EC7F27FF8E5100624717 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D35EC8028001E1100624717 /* PushNotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationClient.swift; sourceTree = "<group>"; };
 		5D35EC822800246900624717 /* AuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthClient.swift; sourceTree = "<group>"; };
 		5D35EC842800473400624717 /* EnterCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeView.swift; sourceTree = "<group>"; };
@@ -159,6 +160,9 @@
 		5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		5DB770DE28E23B780086CB1B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5DB770E528E247BE0086CB1B /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
+		5DB770E628E2482A0086CB1B /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListPrivateItem.swift; sourceTree = "<group>"; };
 		5DCD57A1280C424D00186FE2 /* ChatsListGroupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListGroupItem.swift; sourceTree = "<group>"; };
 		5DCD57A4280C42A200186FE2 /* MessageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRequest.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 		5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		5DCD57B9280E185200186FE2 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		5DEA0FF02810B8F9000F1C20 /* NewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessage.swift; sourceTree = "<group>"; };
+		5EE5EC96C57488803E346FC6 /* Pods-Owl.debug production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug production.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug production.xcconfig"; sourceTree = "<group>"; };
 		5F71A662280C60210024F44A /* NewPrivateChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatStore.swift; sourceTree = "<group>"; };
 		5F71A664280C602A0024F44A /* NewPrivateChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatView.swift; sourceTree = "<group>"; };
 		5F71A668280C612A0024F44A /* NewPrivateChatCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatCellView.swift; sourceTree = "<group>"; };
@@ -237,6 +242,7 @@
 		5FF264E42822BD3B000FD185 /* ValidationClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationClientLive.swift; sourceTree = "<group>"; };
 		5FF264E72822BDB7000FD185 /* FirestoreUsersClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClientLive.swift; sourceTree = "<group>"; };
 		5FF264E92822BE21000FD185 /* StorageClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientLive.swift; sourceTree = "<group>"; };
+		6FF27E96CCA8C13852ED97FF /* Pods-Owl.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug staging.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug staging.xcconfig"; sourceTree = "<group>"; };
 		E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -266,6 +272,10 @@
 			children = (
 				3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */,
 				E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */,
+				5EE5EC96C57488803E346FC6 /* Pods-Owl.debug production.xcconfig */,
+				6FF27E96CCA8C13852ED97FF /* Pods-Owl.debug staging.xcconfig */,
+				0CD7CE47722D8DCE6BF5A625 /* Pods-Owl.release production.xcconfig */,
+				2146603D5889302AABCCF9A9 /* Pods-Owl.release staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -362,7 +372,7 @@
 		5DA8A75927FF260700C2ECBA /* Owl */ = {
 			isa = PBXGroup;
 			children = (
-				5D35EC7F27FF8E5100624717 /* Info.plist */,
+				5DB770DB28E23A9C0086CB1B /* Configs */,
 				5D35EC7E27FF846200624717 /* Owl.entitlements */,
 				5F9F4E4027FF4F4400915572 /* Modules */,
 				5D35EC7B27FF7AE500624717 /* Clients */,
@@ -387,7 +397,6 @@
 		5DA8A77C27FF313800C2ECBA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */,
 				5DA8A75E27FF260900C2ECBA /* Images.xcassets */,
 				5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */,
 			);
@@ -400,6 +409,34 @@
 				5DA8A77E27FF33E100C2ECBA /* Assets.swift */,
 			);
 			path = Generated;
+			sourceTree = "<group>";
+		};
+		5DB770DB28E23A9C0086CB1B /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				5D35EC7F27FF8E5100624717 /* Info.plist */,
+				5DB770DD28E23AD80086CB1B /* Production */,
+				5DB770DC28E23AD00086CB1B /* Staging */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		5DB770DC28E23AD00086CB1B /* Staging */ = {
+			isa = PBXGroup;
+			children = (
+				5DB770DE28E23B780086CB1B /* GoogleService-Info.plist */,
+				5DB770E528E247BE0086CB1B /* Staging.xcconfig */,
+			);
+			path = Staging;
+			sourceTree = "<group>";
+		};
+		5DB770DD28E23AD80086CB1B /* Production */ = {
+			isa = PBXGroup;
+			children = (
+				5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */,
+				5DB770E628E2482A0086CB1B /* Production.xcconfig */,
+			);
+			path = Production;
 			sourceTree = "<group>";
 		};
 		5DCD579E280C422400186FE2 /* ChatsList */ = {
@@ -836,6 +873,7 @@
 			buildPhases = (
 				1A24762DE6BC95EED44DEDFF /* [CP] Check Pods Manifest.lock */,
 				5DA8A77927FF2FC900C2ECBA /* SwiftGen */,
+				5DB770EA28E2572C0086CB1B /* Copy GoogleService Plist */,
 				5DA8A75327FF260700C2ECBA /* Sources */,
 				5DA8A75427FF260700C2ECBA /* Frameworks */,
 				5DA8A75527FF260700C2ECBA /* Resources */,
@@ -907,7 +945,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DA8A77B27FF312C00C2ECBA /* Colors.xcassets in Resources */,
-				5D35EC7A27FF7A0B00624717 /* GoogleService-Info.plist in Resources */,
 				5DA8A76227FF260900C2ECBA /* Preview Assets.xcassets in Resources */,
 				5DA8A75F27FF260900C2ECBA /* Images.xcassets in Resources */,
 			);
@@ -973,6 +1010,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
+		};
+		5DB770EA28E2572C0086CB1B /* Copy GoogleService Plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy GoogleService Plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/scripts/copy_firebase_plist.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1089,8 +1144,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		5DA8A76327FF260900C2ECBA /* Debug */ = {
+		5DA8A76327FF260900C2ECBA /* Debug Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E628E2482A0086CB1B /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1147,10 +1203,11 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = Debug;
+			name = "Debug Production";
 		};
-		5DA8A76427FF260900C2ECBA /* Release */ = {
+		5DA8A76427FF260900C2ECBA /* Release Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E628E2482A0086CB1B /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1201,23 +1258,24 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Release Production";
 		};
-		5DA8A76627FF260900C2ECBA /* Debug */ = {
+		5DA8A76627FF260900C2ECBA /* Debug Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */;
+			baseConfigurationReference = 5EE5EC96C57488803E346FC6 /* Pods-Owl.debug production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
 				DEVELOPMENT_TEAM = M92VXVU7J9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Owl/Info.plist;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1239,23 +1297,24 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug Production";
 		};
-		5DA8A76727FF260900C2ECBA /* Release */ = {
+		5DA8A76727FF260900C2ECBA /* Release Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E62C4967CBAE4AC302B3709D /* Pods-Owl.release.xcconfig */;
+			baseConfigurationReference = 0CD7CE47722D8DCE6BF5A625 /* Pods-Owl.release production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
 				DEVELOPMENT_TEAM = M92VXVU7J9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Owl/Info.plist;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1277,7 +1336,201 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "Release Production";
+		};
+		5DB770E128E240230086CB1B /* Debug Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E528E247BE0086CB1B /* Staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug Staging";
+		};
+		5DB770E228E240230086CB1B /* Debug Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6FF27E96CCA8C13852ED97FF /* Pods-Owl.debug staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 29;
+				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
+				DEVELOPMENT_TEAM = M92VXVU7J9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.owl.tech.Owl";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug Staging";
+		};
+		5DB770E328E2403F0086CB1B /* Release Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E528E247BE0086CB1B /* Staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release Staging";
+		};
+		5DB770E428E2403F0086CB1B /* Release Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2146603D5889302AABCCF9A9 /* Pods-Owl.release staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 29;
+				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
+				DEVELOPMENT_TEAM = M92VXVU7J9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.owl.tech.Owl";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release Staging";
 		};
 /* End XCBuildConfiguration section */
 
@@ -1285,20 +1538,24 @@
 		5DA8A75227FF260700C2ECBA /* Build configuration list for PBXProject "Owl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5DA8A76327FF260900C2ECBA /* Debug */,
-				5DA8A76427FF260900C2ECBA /* Release */,
+				5DA8A76327FF260900C2ECBA /* Debug Production */,
+				5DB770E128E240230086CB1B /* Debug Staging */,
+				5DA8A76427FF260900C2ECBA /* Release Production */,
+				5DB770E328E2403F0086CB1B /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release Production";
 		};
 		5DA8A76527FF260900C2ECBA /* Build configuration list for PBXNativeTarget "Owl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5DA8A76627FF260900C2ECBA /* Debug */,
-				5DA8A76727FF260900C2ECBA /* Release */,
+				5DA8A76627FF260900C2ECBA /* Debug Production */,
+				5DB770E228E240230086CB1B /* Debug Staging */,
+				5DA8A76727FF260900C2ECBA /* Release Production */,
+				5DB770E428E2403F0086CB1B /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release Production";
 		};
 /* End XCConfigurationList section */
 
