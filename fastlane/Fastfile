@@ -21,6 +21,9 @@ API_KEY_ID = ENV["API_KEY_ID"]
 API_KEY = ENV["API_KEY"]
 GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
 
+BUNDLE_IDENTIFIER_STAGING = ENV["BUNDLE_IDENTIFIER_STAGING"]
+FIREBASE_APP_ID = ENV["FIREBASE_APP_ID"]
+FIREBASE_CLI_TOKEN = ENV["FIREBASE_CLI_TOKEN"]
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -43,7 +46,7 @@ def ensure_temp_keychain(name, password)
 end
 
 platform :ios do
-  lane :closed_beta do
+  lane :deploy_production do
     keychain_name = TEMP_KEYCHAIN_USER
     keychain_password = TEMP_KEYCHAIN_PASSWORD
     ensure_temp_keychain(keychain_name, keychain_password)
@@ -73,7 +76,6 @@ platform :ios do
     )
 
     gym(
-      configuration: "Release",
       workspace: "Owl.xcworkspace",
       scheme: "Owl",
       export_method: "app-store",
@@ -81,7 +83,8 @@ platform :ios do
         provisioningProfiles: { 
             BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
         }
-      }
+      },
+      clean: true
     )
 
     pilot(
@@ -110,5 +113,58 @@ platform :ios do
     )
 
     delete_temp_keychain(keychain_name)
+  end
+
+  lane :deploy_staging do
+    keychain_name = TEMP_KEYCHAIN_USER
+    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: "#{FIREBASE_APP_ID}",
+      firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
+    )
+    increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
+
+    match(
+      type: 'adhoc',
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
+      git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+      readonly: true,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password
+    )
+    
+    gym(
+      workspace: "Owl.xcworkspace",
+      scheme: "OwlStaging",
+      export_method: "ad-hoc",
+      export_options: {
+        provisioningProfiles: { 
+            BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
+        }
+      },
+      clean: true
+    )
+
+    dsym_zip()
+
+    upload_symbols_to_crashlytics(
+      dsym_path: "Owl.app.dSYM.zip",
+      app_id: "#{FIREBASE_APP_ID}"
+    )
+
+    firebase_app_distribution(
+      app: firebaseAppID,
+      release_notes: "Git branch: #{git_branch()}}"
+    )
+  end
+
+  # Runs strict linting
+  lane :lint do
+    swiftlint(
+      mode: :lint,
+      strict: true
+    )
   end
 end
