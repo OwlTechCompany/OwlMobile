@@ -150,6 +150,7 @@
 		5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
 		5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClient.swift; sourceTree = "<group>"; };
+		5D7D46B728EECD6B00B410A5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClientLive.swift; sourceTree = "<group>"; };
 		5D7EAF42289D93AB00A7FC2B /* GetLastMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLastMessagesResponse.swift; sourceTree = "<group>"; };
 		5D7EAF44289D93C200A7FC2B /* GetPaginatedMessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPaginatedMessagesResponse.swift; sourceTree = "<group>"; };
@@ -160,7 +161,6 @@
 		5DA8A76127FF260900C2ECBA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DA8A77A27FF312C00C2ECBA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5DA8A77E27FF33E100C2ECBA /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
-		5DB770DE28E23B780086CB1B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DB770E528E247BE0086CB1B /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		5DB770E628E2482A0086CB1B /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		5DCD579F280C423300186FE2 /* ChatsListPrivateItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListPrivateItem.swift; sourceTree = "<group>"; };
@@ -424,7 +424,7 @@
 		5DB770DC28E23AD00086CB1B /* Staging */ = {
 			isa = PBXGroup;
 			children = (
-				5DB770DE28E23B780086CB1B /* GoogleService-Info.plist */,
+				5D7D46B728EECD6B00B410A5 /* GoogleService-Info.plist */,
 				5DB770E528E247BE0086CB1B /* Staging.xcconfig */,
 			);
 			path = Staging;

@@ -45,6 +45,16 @@ def ensure_temp_keychain(name, password)
   create_temp_keychain(name, password)
 end
 
+def crashlytics_binary_path
+  product_module_name = "Owl"  # Update with your module's name
+  derived_data_path = Fastlane::Actions::ClearDerivedDataAction
+    .available_options[0]
+    .default_value
+    .gsub('~', Dir.home)
+  glob_path = "#{derived_data_path}/#{product_module_name}-*/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
+  Dir.glob(glob_path)[0]
+end
+
 platform :ios do
   lane :deploy_production do
     keychain_name = TEMP_KEYCHAIN_USER
@@ -87,6 +97,14 @@ platform :ios do
       clean: true
     )
 
+    dsym_zip()
+
+    upload_symbols_to_crashlytics(
+      dsym_path: "Owl.app.dSYM.zip",
+      app_id: "#{FIREBASE_APP_ID}",
+      binary_path: crashlytics_binary_path
+    )
+
     pilot(
       apple_id: "#{APPSTORE_CONNECT_APP_ID}",
       app_identifier: "#{BUNDLE_IDENTIFIER}",
@@ -124,11 +142,11 @@ platform :ios do
       app: "#{FIREBASE_APP_ID}",
       firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
     )
-    increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
+    increment_build_number({ build_number: 1 })
 
     match(
       type: 'adhoc',
-      app_identifier: "#{BUNDLE_IDENTIFIER}",
+      app_identifier: "#{BUNDLE_IDENTIFIER_STAGING}",
       git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
       readonly: true,
       keychain_name: keychain_name,
@@ -141,7 +159,7 @@ platform :ios do
       export_method: "ad-hoc",
       export_options: {
         provisioningProfiles: { 
-            BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
+          BUNDLE_IDENTIFIER_STAGING => "match AdHoc #{BUNDLE_IDENTIFIER_STAGING}"
         }
       },
       clean: true
@@ -151,11 +169,13 @@ platform :ios do
 
     upload_symbols_to_crashlytics(
       dsym_path: "Owl.app.dSYM.zip",
-      app_id: "#{FIREBASE_APP_ID}"
+      app_id: "#{FIREBASE_APP_ID}",
+      binary_path: crashlytics_binary_path
     )
 
     firebase_app_distribution(
-      app: firebaseAppID,
+      app: "#{FIREBASE_APP_ID}",
+      firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
       release_notes: "Git branch: #{git_branch()}}"
     )
   end

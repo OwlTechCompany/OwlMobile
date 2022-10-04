@@ -17,11 +17,22 @@ jobs:
         with:
           xcode-version: '13.3.1'
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.0'
+          bundler-cache: false # runs 'bundle install' and caches installed gems automatically
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+
+      - name: Install bundle
+        run: bundle install
+
+      - name: Install pods
+        run: bundle exec pod install
 
       - name: GIT setup config
         run: |

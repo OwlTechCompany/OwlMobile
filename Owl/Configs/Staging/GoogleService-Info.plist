@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>521883421376-gj27n83qsvriicv4mahqane5fkr4a6e6.apps.googleusercontent.com</string>
+	<string>521883421376-689glh9cogtj7tnfa7e6ls1rnu28rho4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.521883421376-gj27n83qsvriicv4mahqane5fkr4a6e6</string>
+	<string>com.googleusercontent.apps.521883421376-689glh9cogtj7tnfa7e6ls1rnu28rho4</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCWB88SZXWVnJNRJt5BZB-TyEeHLyT9418</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.owl.tech.OwlStaging</string>
+	<string>com.owl.tech.Owl.staging</string>
 	<key>PROJECT_ID</key>
 	<string>owltech-staging</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:521883421376:ios:6feff409742f8c1666bb25</string>
+	<string>1:521883421376:ios:865bd9febe360cf366bb25</string>
 </dict>
 </plist>
