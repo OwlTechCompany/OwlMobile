@@ -54,5 +54,5 @@ jobs:
           TEMP_KEYCHAIN_PASSWORD: '${{ secrets.TEMP_KEYCHAIN_PASSWORD }}'
           TEMP_KEYCHAIN_USER: '${{ secrets.TEMP_KEYCHAIN_USER }}'
           BUNDLE_IDENTIFIER_STAGING: '${{ secrets.BUNDLE_IDENTIFIER_STAGING }}'
-          FIREBASE_APP_ID: '${{ secrets.FIREBASE_APP_ID }}'
+          FIREBASE_APP_ID_STAGING: '${{ secrets.FIREBASE_APP_ID_STAGING }}'
           FIREBASE_CLI_TOKEN: '${{ secrets.FIREBASE_CLI_TOKEN }}'
