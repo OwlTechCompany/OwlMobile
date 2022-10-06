@@ -20,9 +20,10 @@ API_KEY_ISSUER_ID = ENV["API_KEY_ISSUER_ID"]
 API_KEY_ID = ENV["API_KEY_ID"]
 API_KEY = ENV["API_KEY"]
 GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+FIREBASE_APP_ID = ENV["FIREBASE_APP_ID"]
 
 BUNDLE_IDENTIFIER_STAGING = ENV["BUNDLE_IDENTIFIER_STAGING"]
-FIREBASE_APP_ID = ENV["FIREBASE_APP_ID"]
+FIREBASE_APP_ID_STAGING = ENV["FIREBASE_APP_ID_STAGING"]
 FIREBASE_CLI_TOKEN = ENV["FIREBASE_CLI_TOKEN"]
 
 def delete_temp_keychain(name)
@@ -169,7 +170,7 @@ platform :ios do
 
     upload_symbols_to_crashlytics(
       dsym_path: "Owl.app.dSYM.zip",
-      app_id: "#{FIREBASE_APP_ID}",
+      app_id: "#{FIREBASE_APP_ID_STAGING}",
       binary_path: crashlytics_binary_path
     )
 
