@@ -97,6 +97,12 @@ struct Chat {
                 .catchToEffect(Action.sendMessageResult)
 
         case .sendMessageResult:
+            // Subscribe for updates if it is fist message in chat
+            guard !state.oldMessages.isEmpty else {
+                return environment.chatsClient.getLastMessages()
+                    .catchToEffect(Action.getLastMessages)
+                    .cancellable(id: Main.ListenersId())
+            }
             return .none
 
         case let .getMessages(.success(messages)):

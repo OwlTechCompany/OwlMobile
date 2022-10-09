@@ -13,6 +13,7 @@ struct MockedDataClient {
     static let chatsListPrivateItem = ChatsListPrivateItem(
         id: "123",
         createdAt: Date(),
+        updatedAt: Date(),
         createdBy: "5vhdMunt5FgHTBnaNTQHpM3qIhJ3",
         members: [
             "5vhdMunt5FgHTBnaNTQHpM3qIhJ3",
