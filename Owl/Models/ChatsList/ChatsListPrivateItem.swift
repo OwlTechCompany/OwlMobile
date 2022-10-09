@@ -25,25 +25,27 @@ struct ChatsListPrivateItem: Decodable, Equatable {
 extension ChatsListPrivateItem {
 
     var companion: User {
-        if user1.uid == FirebaseClient.auth.currentUser!.uid {
-            return user2
-        } else {
-            return user1
-        }
+        user1.uid == FirebaseClient.auth.currentUser!.uid
+        ? user2
+        : user1
     }
 
     var me: User {
-        if user1.uid != FirebaseClient.auth.currentUser!.uid {
-            return user2
-        } else {
-            return user1
-        }
+        user1.uid == FirebaseClient.auth.currentUser!.uid
+        ? user1
+        : user2
     }
 
     var name: String {
-        return companion.fullName
+        companion.fullName
     }
-    
+
+    var lastMessageAuthorName: String {
+        lastMessage?.sentBy == user1.uid
+        ? user1.fullName
+        : user2.fullName
+    }
+
 }
 
 

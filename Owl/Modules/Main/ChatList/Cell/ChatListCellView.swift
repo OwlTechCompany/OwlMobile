@@ -26,6 +26,11 @@ struct ChatListCellView: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
 
+                    Text(viewStore.lastMessageAuthorName)
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 12, weight: .semibold))
+                        .lineLimit(1)
+
                     Text(viewStore.lastMessage)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 12, weight: .regular))
