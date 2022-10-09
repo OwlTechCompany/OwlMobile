@@ -11,6 +11,10 @@ import Firebase
 import FirebaseFirestoreCombineSwift
 import Foundation
 
+enum FirestoreChatsClientError: Error {
+    case standard
+}
+
 extension FirestoreChatsClient {
     
     static func live(userClient: UserClient) -> Self {
@@ -99,7 +103,7 @@ fileprivate extension FirestoreChatsClient {
                     let lastDocumentSnapshot = snapshot.documents.last,
                     let subscribeForNewMessagesSnapshot = snapshot.documents.first
                 else {
-                    throw NSError()
+                    throw FirestoreChatsClientError.standard
                 }
                 
                 let items = try snapshot.documents.compactMap { document -> MessageResponse? in

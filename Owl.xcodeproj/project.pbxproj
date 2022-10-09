@@ -1275,7 +1275,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Owl/Configs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OwlStaging;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1314,7 +1314,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Owl/Configs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OwlStaging;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1414,7 +1414,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Owl/Configs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OwlStaging;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1508,7 +1508,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Owl/Configs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OwlStaging;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
