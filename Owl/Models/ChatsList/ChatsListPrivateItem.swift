@@ -42,9 +42,16 @@ extension ChatsListPrivateItem {
     }
 
     var lastMessageAuthorName: String {
-        lastMessage?.sentBy == user1.uid
-        ? user1.fullName
-        : user2.fullName
+        switch lastMessage?.sentBy {
+        case user1.uid:
+            return user1.fullName
+
+        case user2.uid:
+            return user2.fullName
+
+        default:
+            return String()
+        }
     }
 
 }
