@@ -14,6 +14,7 @@ struct ChatsListPrivateItem: Decodable, Equatable {
 
     let id: String
     let createdAt: Date
+    let updatedAt: Date?
     let createdBy: String
     let members: [String]
     let user1: User
@@ -53,6 +54,7 @@ struct PrivateChatCreate: Encodable {
 
     var id: String?
     @ServerTimestamp var createdAt: Timestamp?
+    @ServerTimestamp var updatedAt: Timestamp?
     let createdBy: String
     let members: [String]
     let user1: User

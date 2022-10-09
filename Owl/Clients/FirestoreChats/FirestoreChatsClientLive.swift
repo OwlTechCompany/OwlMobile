@@ -40,7 +40,9 @@ fileprivate extension FirestoreChatsClient {
         guard let authUser = userClient.authUser.value else {
             return Effect(error: NSError())
         }
-        return Collection.chats.whereField("members", arrayContains: authUser.uid)
+        return Collection.chats
+            .whereField("members", arrayContains: authUser.uid)
+            .order(by: "updatedAt", descending: true)
             .snapshotPublisher()
             .tryMap { snapshot in
                 try snapshot.documents.compactMap { document in
@@ -180,7 +182,13 @@ fileprivate extension FirestoreChatsClient {
         do {
             try batch.setData(from: message, forDocument: newDocument)
             let encodedMessage = try Firestore.Encoder().encode(message)
-            batch.updateData(["lastMessage": encodedMessage], forDocument: chat)
+            batch.updateData(
+                [
+                    "lastMessage": encodedMessage,
+                    "updatedAt": FieldValue.serverTimestamp()
+                ],
+                forDocument: chat
+            )
             
             return batch.commit()
                 .map { _ in true }
