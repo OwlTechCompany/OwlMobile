@@ -14,8 +14,9 @@ import CoreGraphics
 
 extension StorageClient {
 
-    static func live(userClient: UserClient) -> StorageClient {
-        StorageClient(
+    static func live() -> StorageClient {
+        @Dependency(\.userClient) var userClient
+        return StorageClient(
             compressionQuality: 0.4,
             setMyPhoto: {
                 setMyPhotoLive(
@@ -33,9 +34,9 @@ fileprivate extension StorageClient {
     static func setMyPhotoLive(
         userClient: UserClient,
         data: Data
-    ) -> Effect<URL, NSError> {
+    ) -> EffectPublisher<URL, NSError> {
         guard let authUser = userClient.authUser.value else {
-            return Effect(error: NSError(domain: "No user", code: 1))
+            return EffectPublisher(error: NSError(domain: "No user", code: 1))
         }
         let storageReference = Collection.users.child(authUser.uid)
 

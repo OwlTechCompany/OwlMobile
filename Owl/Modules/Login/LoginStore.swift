@@ -48,7 +48,7 @@ struct Login: ReducerProtocol {
     @Dependency(\.pushNotificationClient) var pushNotificationClient
 
     var bodyCore: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .routeAction(_, .onboarding(.startMessaging)):
                 state.routes.push(.enterPhone(EnterPhone.State(phoneNumber: "+380", isLoading: false)))
@@ -71,17 +71,17 @@ struct Login: ReducerProtocol {
                 case .userExists:
                     return pushNotificationClient.getNotificationSettings
                         .receive(on: DispatchQueue.main)
-                        .flatMap { settings -> Effect<Action, Never> in
+                        .flatMap { settings -> EffectPublisher<Action, Never> in
                             switch settings.authorizationStatus {
                             case .notDetermined:
-                                return Effect(value: .showSetupPermission)
+                                return EffectPublisher(value: .showSetupPermission)
 
                             default:
-                                return Effect.concatenate(
+                                return EffectPublisher.concatenate(
                                     pushNotificationClient.register()
                                         .fireAndForget(),
 
-                                    Effect(value: .delegate(.loginSuccess))
+                                    EffectPublisher(value: .delegate(.loginSuccess))
                                 )
                             }
                         }
@@ -91,10 +91,10 @@ struct Login: ReducerProtocol {
             case let .routeAction(_, .enterUserData(.next(needSetupPermissions))):
                 switch needSetupPermissions {
                 case true:
-                    return Effect(value: .showSetupPermission)
+                    return EffectPublisher(value: .showSetupPermission)
 
                 case false:
-                    return Effect(value: .delegate(.loginSuccess))
+                    return EffectPublisher(value: .delegate(.loginSuccess))
                 }
 
             case .showSetupPermission:
@@ -103,7 +103,7 @@ struct Login: ReducerProtocol {
 
             case .routeAction(_, .setupPermissions(.later)),
                  .routeAction(_, .setupPermissions(.next)):
-                return Effect(value: .delegate(.loginSuccess))
+                return EffectPublisher(value: .delegate(.loginSuccess))
 
             case .routeAction:
                 return .none
@@ -118,11 +118,9 @@ struct Login: ReducerProtocol {
     }
 
     var body: some ReducerProtocol<State, Action> {
-        Reduce(
-            AnyReducer(Login.ScreenProvider())
-                .forEachIdentifiedRoute(environment: { () })
-                .withRouteReducer(AnyReducer(bodyCore)),
-            environment: ()
-        )
+        bodyCore
+            .forEachRoute {
+                Login.ScreenProvider()
+            }
     }
 }

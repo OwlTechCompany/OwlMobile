@@ -22,9 +22,9 @@ final class FirebaseMessagingDelegate: NSObject, MessagingDelegate {
         }
     }
 
-    let subscriber: Effect<FirebaseMessagingDelegate.Event, Never>.Subscriber
+    let subscriber: EffectPublisher<FirebaseMessagingDelegate.Event, Never>.Subscriber
 
-    init(subscriber: Effect<FirebaseMessagingDelegate.Event, Never>.Subscriber) {
+    init(subscriber: EffectPublisher<FirebaseMessagingDelegate.Event, Never>.Subscriber) {
         self.subscriber = subscriber
     }
 

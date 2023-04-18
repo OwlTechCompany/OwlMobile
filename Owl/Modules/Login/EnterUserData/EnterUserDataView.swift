@@ -126,7 +126,7 @@ struct EnterUserDataView: View {
 
 struct EnterUserDataView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         EnterUserDataView(store: Store(

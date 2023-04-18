@@ -40,11 +40,11 @@ struct SetupPermissions: ReducerProtocol {
                 return .none
 
             case .requestAuthorizationResult(.success):
-                return Effect.concatenate(
+                return EffectPublisher.concatenate(
                     pushNotificationClient.register()
                         .fireAndForget(),
 
-                    Effect(value: .next)
+                    EffectPublisher(value: .next)
                 )
 
             case .requestAuthorizationResult(.failure):

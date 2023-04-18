@@ -58,7 +58,7 @@ struct ChatList {
                 environment.chatsClient.getChats()
                     .catchToEffect(Action.getChatsResult),
 
-                Effect.run { subscriber in
+                EffectPublisher.run { subscriber in
                     environment.userClient.firestoreUser
                         .compactMap { $0 }
                         .sink { subscriber.send(.updateUser($0)) }
@@ -74,7 +74,7 @@ struct ChatList {
             guard let chat = state.chatsData.first(where: { $0.id == id }) else {
                 return .none
             }
-            return Effect(value: .open(chat))
+            return EffectPublisher(value: .open(chat))
 
         case let .getChatsResult(.success(items)):
             state.chats = .init(uniqueElements: items.map(ChatListCell.State.init(model:)))

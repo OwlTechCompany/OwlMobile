@@ -14,7 +14,9 @@ import FirebaseAuthCombineSwift
 
 extension UserClient {
 
-    static func live(userDefaults: UserDefaultsClient) -> Self {
+    static func live() -> Self {
+        @Dependency(\.userDefaultsClient) var userDefaults
+        
         let authUser = CurrentValueSubject<Firebase.User?, Never>(nil)
         let firestoreUser = CurrentValueSubject<User?, Never>(userDefaults.getUser())
         var authCancellables = Set<AnyCancellable>()

@@ -12,10 +12,10 @@ import FirebaseAuthCombineSwift
 
 struct AuthClient {
 
-    var verifyPhoneNumber: (String) -> Effect<String, NSError>
-    var setAPNSToken: (Data) -> Effect<Void, Never>
+    var verifyPhoneNumber: (String) -> EffectPublisher<String, NSError>
+    var setAPNSToken: (Data) -> EffectPublisher<Void, Never>
     var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void
-    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
+    var signIn: (SignIn) -> EffectPublisher<AuthDataResult, NSError>
     var signOut: () -> Void
     
 }

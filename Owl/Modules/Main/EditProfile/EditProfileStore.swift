@@ -70,9 +70,9 @@ struct EditProfile {
 
         case .save:
             if let image = state.selectedImage {
-                return Effect(value: .uploadPhoto(image))
+                return EffectPublisher(value: .uploadPhoto(image))
             } else {
-                return Effect(value: .updateUser(nil))
+                return EffectPublisher(value: .updateUser(nil))
             }
 
         case let .uploadPhoto(image):
@@ -80,14 +80,14 @@ struct EditProfile {
             let compressionQuality = environment.storageClient.compressionQuality
             guard let data = image.jpegData(compressionQuality: compressionQuality) else {
                 let error = NSError(domain: "Unable to compress", code: 1)
-                return Effect(value: .updateUserResult(.failure(error)))
+                return EffectPublisher(value: .updateUserResult(.failure(error)))
             }
             return environment.storageClient.setMyPhoto(data)
                 .catchToEffect(Action.uploadPhotoResult)
 
         case let .uploadPhotoResult(.success(url)):
             state.isLoading = false
-            return Effect(value: .updateUser(url))
+            return EffectPublisher(value: .updateUser(url))
 
         case let .updateUser(photoURL):
             state.isLoading = true

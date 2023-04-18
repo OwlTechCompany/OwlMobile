@@ -46,7 +46,7 @@ struct EnterCode: ReducerProtocol {
             switch action {
             case .binding(\.$verificationCode):
                 if state.verificationCode.count == EnterCodeView.Constants.codeSize {
-                    return Effect(value: .sendCode)
+                    return EffectPublisher(value: .sendCode)
                 } else {
                     return .none
                 }
@@ -62,7 +62,7 @@ struct EnterCode: ReducerProtocol {
                     .catchToEffect(Action.authDataResult)
 
             case .authDataResult(.success):
-                return Effect(value: .setMe)
+                return EffectPublisher(value: .setMe)
 
             case .setMe:
                 return firestoreUsersClient.setMeIfNeeded()

@@ -81,10 +81,10 @@ struct NewPrivateChat {
         case let .chatWithUserResult(.success(response)):
             switch response {
             case let .chatItem(item):
-                return Effect(value: .openChat(item))
+                return EffectPublisher(value: .openChat(item))
 
             case let .needToCreate(userID):
-                return Effect(value: .createPrivateChat(opponentId: userID))
+                return EffectPublisher(value: .createPrivateChat(opponentId: userID))
             }
 
         case let .createPrivateChat(userId):
@@ -106,7 +106,7 @@ struct NewPrivateChat {
                 .catchToEffect(Action.createPrivateChatResult)
 
         case let .createPrivateChatResult(.success(item)):
-            return Effect(value: .openChat(item))
+            return EffectPublisher(value: .openChat(item))
 
         case let .searchResult(.failure(error)),
              let .chatWithUserResult(.failure(error)),

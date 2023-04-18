@@ -103,7 +103,7 @@ struct NewPrivateChatView: View {
 
 struct NewPrivateChatView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         NavigationView {
@@ -112,8 +112,8 @@ struct NewPrivateChatView_Previews: PreviewProvider {
                 reducer: NewPrivateChat.reducer,
                 environment: NewPrivateChat.Environment(
                     userClient: userClient,
-                    chatsClient: .live(userClient: userClient),
-                    firestoreUsersClient: .live(userClient: userClient)
+                    chatsClient: .live(),
+                    firestoreUsersClient: .live()
                 )
             ))
         }

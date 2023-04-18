@@ -64,7 +64,7 @@ struct App: ReducerProtocol {
                 if userClient.authUser.value != nil,
                    let user = userClient.firestoreUser.value {
                     state.set(.main(user))
-                    return Effect(value: .subscribeOnUserChange)
+                    return EffectPublisher(value: .subscribeOnUserChange)
 
                 } else {
                     state.set(.login)
@@ -74,18 +74,18 @@ struct App: ReducerProtocol {
             case .login(.delegate(.loginSuccess)):
                 if let user = userClient.firestoreUser.value {
                     state.set(.main(user))
-                    return Effect(value: .subscribeOnUserChange)
+                    return EffectPublisher(value: .subscribeOnUserChange)
 
                 } else {
                     return .none
                 }
 
             case .main(.delegate(.logout)):
-                return Effect.concatenate(
+                return EffectPublisher.concatenate(
                     firestoreUsersClient
                         .updateMe(UserUpdate(fcmToken: ""))
                         .fireAndForget(),
-                    Effect(value: .signOut)
+                    EffectPublisher(value: .signOut)
                 )
 
             case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
@@ -117,7 +117,7 @@ struct App: ReducerProtocol {
                 return .none
 
             case .subscribeOnUserChange:
-                return Effect.run { subscriber in
+                return EffectPublisher.run { subscriber in
                     userClient.firestoreUser
                         .removeDuplicates()
                         .sink { user in
@@ -131,7 +131,7 @@ struct App: ReducerProtocol {
             case .signOut:
                 state.set(.login)
                 authClient.signOut()
-                return Effect.cancel(id: Main.ListenersId())
+                return EffectPublisher.cancel(id: Main.ListenersId())
 
             case .appDelegate:
                 return .none

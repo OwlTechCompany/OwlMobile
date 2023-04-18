@@ -21,7 +21,7 @@ struct StorageClient {
     }
 
     var compressionQuality: CGFloat
-    var setMyPhoto: (Data) -> Effect<URL, NSError>
+    var setMyPhoto: (Data) -> EffectPublisher<URL, NSError>
 }
 
 extension DependencyValues {
@@ -33,9 +33,7 @@ extension DependencyValues {
 
     enum StorageClientKey: DependencyKey {
         static var testValue = StorageClient.unimplemented
-        static let liveValue = StorageClient.live(
-            userClient: DependencyValues.current.userClient
-        )
+        static let liveValue = StorageClient.live()
     }
 
 }

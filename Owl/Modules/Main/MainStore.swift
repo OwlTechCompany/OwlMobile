@@ -54,7 +54,7 @@ struct Main: ReducerProtocol {
 
             case .routeAction(_, .chatList(.openProfile)):
                 guard let firestoreUser = userClient.firestoreUser.value else {
-                    return Effect(value: .delegate(.logout))
+                    return EffectPublisher(value: .delegate(.logout))
                 }
                 let profileState = Profile.State(user: firestoreUser)
                 state.routes.push(.profile(profileState))
@@ -69,7 +69,7 @@ struct Main: ReducerProtocol {
                 return .none
 
             case let .routeAction(_, .newPrivateChat(.openChat(item))):
-                return Effect.routeWithDelaysIfUnsupported(state.routes) { provider in
+                return EffectPublisher.routeWithDelaysIfUnsupported(state.routes) { provider in
                     provider.dismiss()
                     provider.push(.chat(.init(model: item)))
                 }
@@ -80,7 +80,7 @@ struct Main: ReducerProtocol {
 
             case .routeAction(_, .profile(.edit)):
                 guard let firestoreUser = userClient.firestoreUser.value else {
-                    return Effect(value: .delegate(.logout))
+                    return EffectPublisher(value: .delegate(.logout))
                 }
                 let editProfileState = EditProfile.State(user: firestoreUser)
                 state.routes.push(.editProfile(editProfileState))
@@ -91,7 +91,7 @@ struct Main: ReducerProtocol {
                 return .none
 
             case .routeAction(_, .profile(.logout)):
-                return Effect(value: .delegate(.logout))
+                return EffectPublisher(value: .delegate(.logout))
 
             case .delegate:
                 return .none
@@ -106,11 +106,8 @@ struct Main: ReducerProtocol {
     }
 
     var body: some ReducerProtocol<State, Action> {
-        Reduce(
-            AnyReducer(Main.ScreenProvider())
-                .forEachIdentifiedRoute(environment: { () })
-                .withRouteReducer(AnyReducer(bodyCore)),
-            environment: ()
-        )
+        bodyCore.forEachRoute {
+            Main.ScreenProvider()
+        }
     }
 }

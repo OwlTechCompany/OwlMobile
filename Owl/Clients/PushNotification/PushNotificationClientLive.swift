@@ -32,16 +32,16 @@ extension PushNotificationClient {
 
 fileprivate extension PushNotificationClient {
 
-    static var getNotificationSettings: Effect<Settings, Never> {
-        Effect.future { callback in
+    static var getNotificationSettings: EffectPublisher<Settings, Never> {
+        EffectPublisher.future { callback in
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 callback(.success(.init(rawValue: settings)))
             }
         }
     }
 
-    static func requestAuthorization(authOptions: UNAuthorizationOptions) -> Effect<Bool, NSError> {
-        Effect.future { callback in
+    static func requestAuthorization(authOptions: UNAuthorizationOptions) -> EffectPublisher<Bool, NSError> {
+        EffectPublisher.future { callback in
             UNUserNotificationCenter.current()
                 .requestAuthorization(options: authOptions) { granted, error in
                     if let error = error {
@@ -53,20 +53,20 @@ fileprivate extension PushNotificationClient {
         }
     }
 
-    static func setAPNSToken(data: Data) -> Effect<Void, Never> {
-        Effect.fireAndForget {
+    static func setAPNSToken(data: Data) -> EffectPublisher<Void, Never> {
+        EffectPublisher.fireAndForget {
             FirebaseClient.messaging.apnsToken = data
         }
     }
 
-    static func register() -> Effect<Never, Never> {
-        Effect.fireAndForget {
+    static func register() -> EffectPublisher<Never, Never> {
+        EffectPublisher.fireAndForget {
             UIApplication.shared.registerForRemoteNotifications()
         }
     }
 
-    static func currentFCMToken() -> Effect<String, NSError> {
-        Effect.future { completion in
+    static func currentFCMToken() -> EffectPublisher<String, NSError> {
+        EffectPublisher.future { completion in
             FirebaseClient.messaging.token { token, error in
                 if let token = token {
                     completion(.success(token))
@@ -81,8 +81,8 @@ fileprivate extension PushNotificationClient {
         notification: PushNotificationClient.Notification,
         completionHandler: @escaping (UNNotificationPresentationOptions) -> Void,
         openedChatId: String?
-    ) -> Effect<Void, NSError> {
-        Effect.result {
+    ) -> EffectPublisher<Void, NSError> {
+        EffectPublisher.result {
             Result<Void, Error> {
                 guard let json = notification.request.content.userInfo as? [String: Any] else {
                     throw NSError(domain: "Invalid user info", code: 1)
@@ -106,8 +106,8 @@ fileprivate extension PushNotificationClient {
     static func handleDidReceiveResponse(
         response: PushNotificationClient.Response,
         completionHandler: @escaping () -> Void
-    ) -> Effect<PushRoute, NSError> {
-        Effect.result {
+    ) -> EffectPublisher<PushRoute, NSError> {
+        EffectPublisher.result {
             return Result<PushRoute, Error> {
                 guard let json = response.notification.request.content.userInfo as? [String: Any] else {
                     throw NSError(domain: "Invalid user info", code: 1)
@@ -122,8 +122,8 @@ fileprivate extension PushNotificationClient {
         }
     }
 
-    static var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never> {
-        Effect
+    static var userNotificationCenterDelegate: EffectPublisher<UserNotificationCenterDelegate.Event, Never> {
+        EffectPublisher
             .run { subscriber in
                 var delegate: Optional = UserNotificationCenterDelegate(subscriber: subscriber)
                 UNUserNotificationCenter.current().delegate = delegate
@@ -135,8 +135,8 @@ fileprivate extension PushNotificationClient {
             .eraseToEffect()
     }
 
-    static var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never> {
-        Effect
+    static var firebaseMessagingDelegate: EffectPublisher<FirebaseMessagingDelegate.Event, Never> {
+        EffectPublisher
             .run { subscriber in
                 var delegate: Optional = FirebaseMessagingDelegate(subscriber: subscriber)
                 FirebaseClient.messaging.delegate = delegate

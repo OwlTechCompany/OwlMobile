@@ -107,7 +107,7 @@ struct EnterCodeView: View {
 
 struct EnterCodeView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         EnterCodeView(

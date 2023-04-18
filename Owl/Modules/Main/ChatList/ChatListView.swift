@@ -56,7 +56,7 @@ struct ChatListView: View {
 
 struct ChatListView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         ChatListView(store: Store(
@@ -77,7 +77,7 @@ struct ChatListView_Previews: PreviewProvider {
             reducer: ChatList.reducer,
             environment: ChatList.Environment(
                 authClient: .live(),
-                chatsClient: .live(userClient: userClient),
+                chatsClient: .live(),
                 userClient: userClient
             )
         ))

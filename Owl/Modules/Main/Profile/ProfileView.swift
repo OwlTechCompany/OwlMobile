@@ -204,7 +204,7 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         ProfileView(store: Store(

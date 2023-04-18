@@ -185,7 +185,7 @@ struct ChatView_Previews: PreviewProvider {
             ChatView(store: Store(
                 initialState: .init(model: MockedDataClient.chatsListPrivateItem),
                 reducer: Chat.reducer,
-                environment: Chat.Environment(chatsClient: .live(userClient: .live(userDefaults: .live())))
+                environment: Chat.Environment(chatsClient: .live())
             ))
         }
     }

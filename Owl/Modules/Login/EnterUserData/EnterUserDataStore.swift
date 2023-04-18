@@ -72,13 +72,13 @@ struct EnterUserData: ReducerProtocol {
 
             case .later:
                 state.isLoading = true
-                return Effect(value: .checkNotificationService)
+                return EffectPublisher(value: .checkNotificationService)
 
             case .save:
                 if let image = state.selectedImage {
-                    return Effect(value: .uploadPhoto(image))
+                    return EffectPublisher(value: .uploadPhoto(image))
                 } else {
-                    return Effect(value: .updateUser(nil))
+                    return EffectPublisher(value: .updateUser(nil))
                 }
 
             case let .uploadPhoto(image):
@@ -86,14 +86,14 @@ struct EnterUserData: ReducerProtocol {
                 let compressionQuality = storageClient.compressionQuality
                 guard let data = image.jpegData(compressionQuality: compressionQuality) else {
                     let error = NSError(domain: "Unable to compress", code: 1)
-                    return Effect(value: .updateUserResult(.failure(error)))
+                    return EffectPublisher(value: .updateUserResult(.failure(error)))
                 }
                 return storageClient.setMyPhoto(data)
                     .catchToEffect(Action.uploadPhotoResult)
 
             case let .uploadPhotoResult(.success(url)):
                 state.isLoading = false
-                return Effect(value: .updateUser(url))
+                return EffectPublisher(value: .updateUser(url))
 
             case let .updateUser(photoURL):
                 state.isLoading = true
@@ -106,7 +106,7 @@ struct EnterUserData: ReducerProtocol {
                     .catchToEffect(Action.updateUserResult)
 
             case .updateUserResult(.success):
-                return Effect(value: .checkNotificationService)
+                return EffectPublisher(value: .checkNotificationService)
 
             case let .uploadPhotoResult(.failure(error)),
                 let .updateUserResult(.failure(error)):
@@ -122,18 +122,18 @@ struct EnterUserData: ReducerProtocol {
                 return pushNotificationClient
                     .getNotificationSettings
                     .receive(on: DispatchQueue.main)
-                    .flatMap { settings -> Effect<Action, Never> in
+                    .flatMap { settings -> EffectPublisher<Action, Never> in
                         switch settings.authorizationStatus {
                         case .notDetermined:
-                            return Effect(value: .next(needSetupPermissions: true))
+                            return EffectPublisher(value: .next(needSetupPermissions: true))
 
                         default:
-                            return Effect.concatenate(
+                            return EffectPublisher.concatenate(
                                 pushNotificationClient
                                     .register()
                                     .fireAndForget(),
 
-                                Effect(value: .next(needSetupPermissions: false))
+                                EffectPublisher(value: .next(needSetupPermissions: false))
                             )
                         }
                     }

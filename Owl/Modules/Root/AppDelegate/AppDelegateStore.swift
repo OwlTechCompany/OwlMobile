@@ -51,7 +51,7 @@ struct AppDelegateStore: ReducerProtocol {
                     .map(Action.firebaseMessagingDelegate)
 
                 // Register for notifications on startup
-                let setupPushNotificationEffect: Effect<AppDelegateStore.Action, Never> = pushNotificationClient
+                let setupPushNotificationEffect: EffectPublisher<AppDelegateStore.Action, Never> = pushNotificationClient
                     .getNotificationSettings
                     .receive(on: DispatchQueue.main)
                     .flatMap { settings in
@@ -60,7 +60,7 @@ struct AppDelegateStore: ReducerProtocol {
                         : .none
                     }
                     .receive(on: DispatchQueue.main)
-                    .flatMap { isSucceed -> Effect<Never, Never> in
+                    .flatMap { isSucceed -> EffectPublisher<Never, Never> in
                         isSucceed
                         ? pushNotificationClient.register()
                         : .none
@@ -88,7 +88,7 @@ struct AppDelegateStore: ReducerProtocol {
                 return .none
 
             case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):
-                return Effect(value: .sendFCMToken(token: fcmToken))
+                return EffectPublisher(value: .sendFCMToken(token: fcmToken))
 
             case let .didRegisterForRemoteNotifications(.success(data)):
                 return .merge(
@@ -96,7 +96,7 @@ struct AppDelegateStore: ReducerProtocol {
                         .setAPNSToken(data)
                         .fireAndForget(),
 
-                    Effect.concatenate(
+                    EffectPublisher.concatenate(
                         pushNotificationClient
                             .setAPNSToken(data)
                             .fireAndForget(),
@@ -104,7 +104,7 @@ struct AppDelegateStore: ReducerProtocol {
                         pushNotificationClient
                             .currentFCMToken()
                             .ignoreFailure()
-                            .flatMap { Effect(value: .sendFCMToken(token: $0)) }
+                            .flatMap { EffectPublisher(value: .sendFCMToken(token: $0)) }
                             .eraseToEffect()
                     )
                 )

@@ -124,7 +124,7 @@ struct EditProfileView: View {
 
 struct EditProfileView_Previews: PreviewProvider {
 
-    static let userClient = UserClient.live(userDefaults: .live())
+    static let userClient = UserClient.live()
 
     static var previews: some View {
         EditProfileView(store: Store(
@@ -139,8 +139,8 @@ struct EditProfileView_Previews: PreviewProvider {
             ),
             reducer: EditProfile.reducer,
             environment: EditProfile.Environment(
-                firestoreUsersClient: .live(userClient: userClient),
-                storageClient: .live(userClient: userClient)
+                firestoreUsersClient: .live(),
+                storageClient: .live()
             )
         ))
     }

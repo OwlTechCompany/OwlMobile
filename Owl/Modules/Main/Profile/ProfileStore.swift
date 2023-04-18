@@ -43,7 +43,7 @@ struct Profile {
     static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .onAppear:
-            return Effect.run { subscriber in
+            return EffectPublisher.run { subscriber in
                 environment.userClient.firestoreUser
                     .compactMap { $0 }
                     .sink { subscriber.send(.updateUser($0)) }
