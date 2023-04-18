@@ -15,7 +15,7 @@ struct OnboardingView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack(spacing: 50) {
-                    Image(uiImage: Asset.Images.owlBlack.image)
+                    Asset.Images.owlBlack.swiftUIImage
                         .frame(height: 270)
                         .cornerRadius(5)
 
