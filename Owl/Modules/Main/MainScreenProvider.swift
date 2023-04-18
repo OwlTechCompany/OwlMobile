@@ -42,7 +42,7 @@ extension Main.ScreenProvider: ReducerProtocol {
 
     enum State: Equatable, Identifiable {
         case chatList(ChatListFeature.State)
-        case chat(Chat.State)
+        case chat(ChatFeature.State)
         case newPrivateChat(NewPrivateChatFeature.State)
         case profile(ProfileFeature.State)
         case editProfile(EditProfileFeature.State)
@@ -71,7 +71,7 @@ extension Main.ScreenProvider: ReducerProtocol {
 
     enum Action: Equatable {
         case chatList(ChatListFeature.Action)
-        case chat(Chat.Action)
+        case chat(ChatFeature.Action)
         case newPrivateChat(NewPrivateChatFeature.Action)
         case profile(ProfileFeature.Action)
         case editProfile(EditProfileFeature.Action)
@@ -80,6 +80,10 @@ extension Main.ScreenProvider: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Scope(state: /State.chatList, action: /Action.chatList) {
             ChatListFeature()
+        }
+        
+        Scope(state: /State.chat, action: /Action.chat) {
+            ChatFeature()
         }
 
         Scope(state: /State.newPrivateChat, action: /Action.newPrivateChat) {

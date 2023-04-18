@@ -22,7 +22,7 @@
 		5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */; };
 		5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */; };
 		5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F4280A1C1600A1B705 /* ChatView.swift */; };
-		5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */; };
+		5D4CF9F7280A1C2400A1B705 /* ChatFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatFeature.swift */; };
 		5D4CF9F9280ADB1800A1B705 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */; };
 		5D4CF9FB280B491100A1B705 /* FirestoreChatsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */; };
 		5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7EAF3D289D934000A7FC2B /* FirestoreChatsClientLive.swift */; };
@@ -40,7 +40,7 @@
 		5DCD57A5280C42A200186FE2 /* MessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A4280C42A200186FE2 /* MessageRequest.swift */; };
 		5DCD57A8280C436F00186FE2 /* ChatListCellFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A7280C436F00186FE2 /* ChatListCellFeature.swift */; };
 		5DCD57AA280C63DE00186FE2 /* MockedDataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */; };
-		5DCD57AD280C6B9600186FE2 /* ChatNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57AC280C6B9600186FE2 /* ChatNavigationStore.swift */; };
+		5DCD57AD280C6B9600186FE2 /* ChatNavigationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57AC280C6B9600186FE2 /* ChatNavigationFeature.swift */; };
 		5DCD57AF280C6BA500186FE2 /* ChatNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57AE280C6BA500186FE2 /* ChatNavigationView.swift */; };
 		5DCD57B2280C9D8D00186FE2 /* ChatMessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */; };
 		5DCD57B4280C9D9800186FE2 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */; };
@@ -160,7 +160,7 @@
 		5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenProvider.swift; sourceTree = "<group>"; };
 		5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellView.swift; sourceTree = "<group>"; };
 		5D4CF9F4280A1C1600A1B705 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		5D4CF9F6280A1C2400A1B705 /* ChatFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatFeature.swift; sourceTree = "<group>"; };
 		5D4CF9F8280ADB1800A1B705 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		5D4CF9FA280B491000A1B705 /* FirestoreChatsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChatsClient.swift; sourceTree = "<group>"; };
 		5D7D46B728EECD6B00B410A5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		5DCD57A4280C42A200186FE2 /* MessageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRequest.swift; sourceTree = "<group>"; };
 		5DCD57A7280C436F00186FE2 /* ChatListCellFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellFeature.swift; sourceTree = "<group>"; };
 		5DCD57A9280C63DE00186FE2 /* MockedDataClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDataClient.swift; sourceTree = "<group>"; };
-		5DCD57AC280C6B9600186FE2 /* ChatNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationStore.swift; sourceTree = "<group>"; };
+		5DCD57AC280C6B9600186FE2 /* ChatNavigationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationFeature.swift; sourceTree = "<group>"; };
 		5DCD57AE280C6BA500186FE2 /* ChatNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationView.swift; sourceTree = "<group>"; };
 		5DCD57B1280C9D8D00186FE2 /* ChatMessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageStore.swift; sourceTree = "<group>"; };
 		5DCD57B3280C9D9800186FE2 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
@@ -360,10 +360,10 @@
 		5D4CF9F3280A1C0000A1B705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				5D4CF9F6280A1C2400A1B705 /* ChatFeature.swift */,
+				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
 				5DCD57B0280C9D2700186FE2 /* ChatMessage */,
 				5DCD57AB280C6ACB00186FE2 /* ChatNavigation */,
-				5D4CF9F6280A1C2400A1B705 /* ChatStore.swift */,
-				5D4CF9F4280A1C1600A1B705 /* ChatView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -496,7 +496,7 @@
 		5DCD57AB280C6ACB00186FE2 /* ChatNavigation */ = {
 			isa = PBXGroup;
 			children = (
-				5DCD57AC280C6B9600186FE2 /* ChatNavigationStore.swift */,
+				5DCD57AC280C6B9600186FE2 /* ChatNavigationFeature.swift */,
 				5DCD57AE280C6BA500186FE2 /* ChatNavigationView.swift */,
 			);
 			path = ChatNavigation;
@@ -1109,7 +1109,7 @@
 				5FF264EA2822BE21000FD185 /* StorageClientLive.swift in Sources */,
 				5FB6DAAF2818A8300037C38B /* UINavigationController+BackGesture.swift in Sources */,
 				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
-				5D4CF9F7280A1C2400A1B705 /* ChatStore.swift in Sources */,
+				5D4CF9F7280A1C2400A1B705 /* ChatFeature.swift in Sources */,
 				5FBCF9DD2819D76E00734BA0 /* UserQuery.swift in Sources */,
 				5FD33DCB280DBE98009E9FBB /* ProfileView.swift in Sources */,
 				5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */,
@@ -1152,7 +1152,7 @@
 				5D35EC8B2803544A00624717 /* UserDefaultsClient.swift in Sources */,
 				5DCD57A2280C424D00186FE2 /* ChatsListGroupItem.swift in Sources */,
 				5FB6DA9C2817227B0037C38B /* HeaderBlurView.swift in Sources */,
-				5DCD57AD280C6B9600186FE2 /* ChatNavigationStore.swift in Sources */,
+				5DCD57AD280C6B9600186FE2 /* ChatNavigationFeature.swift in Sources */,
 				5F9DFC8B280B165500E73206 /* SignInUserType.swift in Sources */,
 				5FF264E22822BC8B000FD185 /* UserDefaultsClientLive.swift in Sources */,
 				5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */,

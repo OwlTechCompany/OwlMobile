@@ -108,7 +108,7 @@ struct App: ReducerProtocol {
                 }
                 switch pushRoute {
                 case let .openChat(chatsListPrivateItem):
-                    let chatState = Chat.State(model: chatsListPrivateItem)
+                    let chatState = ChatFeature.State(model: chatsListPrivateItem)
                     state.main?.routes.push(.chat(chatState))
                 }
                 return .none
