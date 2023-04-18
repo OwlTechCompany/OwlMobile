@@ -14,6 +14,7 @@ struct ChatsListPrivateItem: Decodable, Equatable {
 
     let id: String
     let createdAt: Date
+    let updatedAt: Date?
     let createdBy: String
     let members: [String]
     let user1: User
@@ -25,25 +26,34 @@ struct ChatsListPrivateItem: Decodable, Equatable {
 extension ChatsListPrivateItem {
 
     var companion: User {
-        if user1.uid == FirebaseClient.auth.currentUser!.uid {
-            return user2
-        } else {
-            return user1
-        }
+        user1.uid == FirebaseClient.auth.currentUser!.uid
+        ? user2
+        : user1
     }
 
     var me: User {
-        if user1.uid != FirebaseClient.auth.currentUser!.uid {
-            return user2
-        } else {
-            return user1
-        }
+        user1.uid == FirebaseClient.auth.currentUser!.uid
+        ? user1
+        : user2
     }
 
     var name: String {
-        return companion.fullName
+        companion.fullName
     }
-    
+
+    var lastMessageAuthorName: String {
+        switch lastMessage?.sentBy {
+        case user1.uid:
+            return user1.fullName
+
+        case user2.uid:
+            return user2.fullName
+
+        default:
+            return String()
+        }
+    }
+
 }
 
 
@@ -51,6 +61,7 @@ struct PrivateChatCreate: Encodable {
 
     var id: String?
     @ServerTimestamp var createdAt: Timestamp?
+    @ServerTimestamp var updatedAt: Timestamp?
     let createdBy: String
     let members: [String]
     let user1: User

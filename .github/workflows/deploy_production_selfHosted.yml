@@ -1,4 +1,4 @@
-name: CD-selfHosted
+name: DeployProduction-selfHosted
 on:
   workflow_dispatch:
 
@@ -13,15 +13,21 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
+      - name: Install bundle
+        run: bundle install
+
+      - name: Install pods
+        run: bundle exec pod install
+
 #      - name: GIT setup config
 #        run: |
 #          git config --global user.name "CI"
 #          git config --global user.email "owl.tech.company@gmail.com"
 
-      - name: Deploy iOS Beta to TestFlight via Fastlane
+      - name: Deploy iOS Production to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:
-          lane: closed_beta
+          lane: deploy_production
         env:
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 100
@@ -37,6 +43,7 @@ jobs:
           API_KEY_ID: '${{ secrets.API_KEY_ID }}'
           API_KEY_ISSUER_ID: '${{ secrets.API_KEY_ISSUER_ID }}'
           API_KEY: '${{ secrets.API_KEY }}'
+          FIREBASE_APP_ID: '${{ secrets.FIREBASE_APP_ID }}'
 
       - name: Push changes
         uses: ad-m/github-push-action@master

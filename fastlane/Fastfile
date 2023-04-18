@@ -12,15 +12,28 @@
 
 default_platform(:ios)
 
-APPSTORE_CONNECT_APP_ID = ENV["APPSTORE_CONNECT_APP_ID"]
-BUNDLE_IDENTIFIER = ENV["BUNDLE_IDENTIFIER"]
+# Common
+
 TEMP_KEYCHAIN_USER = ENV["TEMP_KEYCHAIN_USER"]
 TEMP_KEYCHAIN_PASSWORD = ENV["TEMP_KEYCHAIN_PASSWORD"]
+GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+
+# Deploy Production values
+
+APPSTORE_CONNECT_APP_ID = ENV["APPSTORE_CONNECT_APP_ID"]
+BUNDLE_IDENTIFIER = ENV["BUNDLE_IDENTIFIER"]
 API_KEY_ISSUER_ID = ENV["API_KEY_ISSUER_ID"]
 API_KEY_ID = ENV["API_KEY_ID"]
 API_KEY = ENV["API_KEY"]
-GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+FIREBASE_APP_ID = ENV["FIREBASE_APP_ID"]
 
+# Deploy Staging values
+
+BUNDLE_IDENTIFIER_STAGING = ENV["BUNDLE_IDENTIFIER_STAGING"]
+FIREBASE_APP_ID_STAGING = ENV["FIREBASE_APP_ID_STAGING"]
+FIREBASE_CLI_TOKEN = ENV["FIREBASE_CLI_TOKEN"]
+
+# Functions
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -42,8 +55,23 @@ def ensure_temp_keychain(name, password)
   create_temp_keychain(name, password)
 end
 
+def crashlytics_binary_path
+  product_module_name = "Owl"  # Update with your module's name
+  derived_data_path = Fastlane::Actions::ClearDerivedDataAction
+    .available_options[0]
+    .default_value
+    .gsub('~', Dir.home)
+  glob_path = "#{derived_data_path}/#{product_module_name}-*/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
+  Dir.glob(glob_path)[0]
+end
+
+# Lanes
+
 platform :ios do
-  lane :closed_beta do
+
+  # Deploy Production
+
+  lane :deploy_production do
     keychain_name = TEMP_KEYCHAIN_USER
     keychain_password = TEMP_KEYCHAIN_PASSWORD
     ensure_temp_keychain(keychain_name, keychain_password)
@@ -73,7 +101,6 @@ platform :ios do
     )
 
     gym(
-      configuration: "Release",
       workspace: "Owl.xcworkspace",
       scheme: "Owl",
       export_method: "app-store",
@@ -81,7 +108,16 @@ platform :ios do
         provisioningProfiles: { 
             BUNDLE_IDENTIFIER => "match AppStore #{BUNDLE_IDENTIFIER}"
         }
-      }
+      },
+      clean: true
+    )
+
+    dsym_zip()
+
+    upload_symbols_to_crashlytics(
+      dsym_path: "Owl.app.dSYM.zip",
+      app_id: "#{FIREBASE_APP_ID}",
+      binary_path: crashlytics_binary_path
     )
 
     pilot(
@@ -106,9 +142,68 @@ platform :ios do
     )
 
     add_git_tag(
-      tag: "v#{app_version}.#{currentBuildNumber}-beta"
+      tag: "v#{app_version}.#{currentBuildNumber}"
     )
 
     delete_temp_keychain(keychain_name)
+  end
+
+  # Deploy Staging
+
+  lane :deploy_staging do
+    keychain_name = TEMP_KEYCHAIN_USER
+    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: "#{FIREBASE_APP_ID_STAGING}",
+      firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
+    )
+    increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
+
+    match(
+      type: 'adhoc',
+      app_identifier: "#{BUNDLE_IDENTIFIER_STAGING}",
+      git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+      readonly: true,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password
+    )
+    
+    gym(
+      workspace: "Owl.xcworkspace",
+      scheme: "OwlStaging",
+      export_method: "ad-hoc",
+      export_options: {
+        provisioningProfiles: { 
+          BUNDLE_IDENTIFIER_STAGING => "match AdHoc #{BUNDLE_IDENTIFIER_STAGING}"
+        }
+      },
+      clean: true
+    )
+
+    dsym_zip()
+
+    upload_symbols_to_crashlytics(
+      dsym_path: "Owl.app.dSYM.zip",
+      app_id: "#{FIREBASE_APP_ID_STAGING}",
+      binary_path: crashlytics_binary_path
+    )
+
+    firebase_app_distribution(
+      app: "#{FIREBASE_APP_ID_STAGING}",
+      firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
+      release_notes: "Git branch: #{git_branch()}",
+      groups: "General",
+    )
+  end
+
+  # Runs strict linting
+
+  lane :lint do
+    swiftlint(
+      mode: :lint,
+      strict: true
+    )
   end
 end
