@@ -15,13 +15,13 @@ struct App: ReducerProtocol {
 
     struct State: Equatable {
         var appDelegate: AppDelegateStore.State = AppDelegateStore.State()
-        var login: Login.State?
+        var login: LoginFlowCoordinator.State?
         var main: Main.State?
 
         mutating func set(_ currentState: CurrentState) {
             switch currentState {
             case .login:
-                self.login = .initialState
+                self.login = .init()
                 self.main = .none
 
             case let .main(user):
@@ -40,7 +40,7 @@ struct App: ReducerProtocol {
 
     enum Action: Equatable {
         case appDelegate(AppDelegateStore.Action)
-        case login(Login.Action)
+        case login(LoginFlowCoordinator.Action)
         case main(Main.Action)
 
         case subscribeOnUserChange
@@ -147,7 +147,7 @@ struct App: ReducerProtocol {
         .ifLet(
             \State.login,
             action: /Action.login,
-            then: { Login() }
+            then: { LoginFlowCoordinator() }
         )
         .ifLet(
             \State.main,

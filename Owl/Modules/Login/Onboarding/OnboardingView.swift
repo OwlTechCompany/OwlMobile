@@ -9,11 +9,10 @@ import SwiftUI
 import ComposableArchitecture
 
 struct OnboardingView: View {
-
-    var store: Store<Onboarding.State, Onboarding.Action>
+    let store: StoreOf<OnboardingFeature>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack(spacing: 50) {
                     Image(uiImage: Asset.Images.owlBlack.image)
@@ -55,8 +54,8 @@ struct OnboardingView: View {
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(store: Store(
-            initialState: Onboarding.State(),
-            reducer: Onboarding()
+            initialState: OnboardingFeature.State(),
+            reducer: OnboardingFeature()
         ))
     }
 }

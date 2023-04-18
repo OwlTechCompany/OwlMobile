@@ -1,5 +1,5 @@
 //
-//  EnterUserDataStore.swift
+//  EnterUserDataFeature.swift
 //  Owl
 //
 //  Created by Denys Danyliuk on 16.04.2022.
@@ -8,79 +8,78 @@
 import ComposableArchitecture
 import UIKit
 
-struct EnterUserData: ReducerProtocol {
-
+struct EnterUserDataFeature: Reducer {
+    
     // MARK: - State
-
+    
     struct State: Equatable {
-
-        @BindableState var selectedImage: UIImage?
-        @BindableState var firstName: String = ""
-        @BindableState var lastName: String = ""
-
+        @BindingState var selectedImage: UIImage?
+        @BindingState var firstName: String = ""
+        @BindingState var lastName: String = ""
+        
         var saveButtonEnabled: Bool = false
         var isLoading: Bool = false
-
+        
         var alert: AlertState<Action>?
-        @BindableState var showImagePicker: Bool = false
+        @BindingState var showImagePicker: Bool = false
     }
-
+    
     // MARK: - Action
-
+    
     enum Action: Equatable, BindableAction {
         case showImagePicker
-
+        
         case later
         case save
-
+        
         case uploadPhoto(UIImage)
         case uploadPhotoResult(Result<URL, NSError>)
-
+        
         case updateUser(_ photoURL: URL?)
         case updateUserResult(Result<Bool, NSError>)
-
+        
         case dismissAlert
-
+        
         case checkNotificationService
         case next(needSetupPermissions: Bool)
-
+        
         case binding(BindingAction<State>)
     }
-
+    
     @Dependency(\.authClient) var authClient
     @Dependency(\.firestoreUsersClient) var firestoreUsersClient
     @Dependency(\.storageClient) var storageClient
     @Dependency(\.pushNotificationClient) var pushNotificationClient
-
-    var body: some ReducerProtocol<State, Action> {
+    
+    var body: some ReducerOf<Self> {
         BindingReducer()
-
+        
         Reduce { state, action in
             switch action {
             case .showImagePicker:
                 state.showImagePicker = true
                 state.isLoading = true
                 return .none
-
+                
             case .binding(\.$showImagePicker):
                 state.isLoading = state.showImagePicker
                 return .none
-
+                
             case .binding(\.$firstName):
                 state.saveButtonEnabled = !state.firstName.isEmpty
                 return .none
-
+                
             case .later:
                 state.isLoading = true
                 return EffectPublisher(value: .checkNotificationService)
-
+                
             case .save:
                 if let image = state.selectedImage {
                     return EffectPublisher(value: .uploadPhoto(image))
                 } else {
                     return EffectPublisher(value: .updateUser(nil))
                 }
-
+                
             case let .uploadPhoto(image):
                 state.isLoading = true
                 let compressionQuality = storageClient.compressionQuality
@@ -90,11 +89,11 @@ struct EnterUserData: ReducerProtocol {
                 }
                 return storageClient.setMyPhoto(data)
                     .catchToEffect(Action.uploadPhotoResult)
-
+                
             case let .uploadPhotoResult(.success(url)):
                 state.isLoading = false
                 return EffectPublisher(value: .updateUser(url))
-
+                
             case let .updateUser(photoURL):
                 state.isLoading = true
                 let userUpdate = UserUpdate(
@@ -104,10 +103,10 @@ struct EnterUserData: ReducerProtocol {
                 )
                 return firestoreUsersClient.updateMe(userUpdate)
                     .catchToEffect(Action.updateUserResult)
-
+                
             case .updateUserResult(.success):
                 return EffectPublisher(value: .checkNotificationService)
-
+                
             case let .uploadPhotoResult(.failure(error)),
                 let .updateUserResult(.failure(error)):
                 state.isLoading = false
@@ -117,7 +116,7 @@ struct EnterUserData: ReducerProtocol {
                     dismissButton: .default(TextState("Ok"))
                 )
                 return .none
-
+                
             case .checkNotificationService:
                 return pushNotificationClient
                     .getNotificationSettings
@@ -126,31 +125,31 @@ struct EnterUserData: ReducerProtocol {
                         switch settings.authorizationStatus {
                         case .notDetermined:
                             return EffectPublisher(value: .next(needSetupPermissions: true))
-
+                            
                         default:
                             return EffectPublisher.concatenate(
                                 pushNotificationClient
                                     .register()
                                     .fireAndForget(),
-
+                                
                                 EffectPublisher(value: .next(needSetupPermissions: false))
                             )
                         }
                     }
                     .eraseToEffect()
-
+                
             case .dismissAlert:
                 state.alert = nil
                 return .none
-
+                
             case .next:
                 state.isLoading = false
                 return .none
-
+                
             case .binding:
                 return .none
             }
         }
     }
-
+    
 }

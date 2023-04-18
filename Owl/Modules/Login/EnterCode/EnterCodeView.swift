@@ -9,29 +9,29 @@ import SwiftUI
 import ComposableArchitecture
 
 struct EnterCodeView: View {
-
-    var store: Store<EnterCode.State, EnterCode.Action>
-
+    
+    let store: StoreOf<EnterCodeFeature>
+    
     @FocusState private var focusedField: Bool
-
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
-
+                
                 Color(UIColor.systemGroupedBackground).ignoresSafeArea(.all)
-
+                
                 VStack(spacing: 48.0) {
                     VStack(spacing: 16.0) {
                         Text("Enter Code")
                             .font(.system(size: 24, weight: .bold, design: .monospaced))
-
+                        
                         VStack(spacing: 8.0) {
                             Text("We have sent you an SMS with the code to")
                             Text(viewStore.phoneNumber)
                         }
                         .font(.system(size: 14, weight: .regular, design: .default))
                     }
-
+                    
                     ZStack {
                         HStack(spacing: 24.0) {
                             ForEach(Constants.codeSizeRange, id: \.self) { index in
@@ -50,7 +50,7 @@ struct EnterCodeView: View {
                                 }
                             }
                         }
-
+                        
                         TextField("", text: viewStore.binding(\.$verificationCode))
                             .textFieldStyle(PlainTextFieldStyle())
                             .font(.system(size: 24, weight: .bold, design: .monospaced))
@@ -71,7 +71,7 @@ struct EnterCodeView: View {
                                 }
                             }
                     }
-
+                    
                     Button(
                         action: { viewStore.send(.resendCode) },
                         label: {
@@ -95,7 +95,7 @@ struct EnterCodeView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
     }
-
+    
     enum Constants {
         static let codeSize = 6
         static let codeSizeRange: Range<Int> = 0 ..< Constants.codeSize
@@ -106,18 +106,17 @@ struct EnterCodeView: View {
 // MARK: - Preview
 
 struct EnterCodeView_Previews: PreviewProvider {
-
-    static let userClient = UserClient.live()
-
+        
     static var previews: some View {
         EnterCodeView(
             store: Store(
-                initialState: EnterCode.State(
+                initialState: EnterCodeFeature.State(
                     verificationCode: "123",
                     phoneNumber: "+380992177560"
                 ),
-                reducer: EnterCode()
+                reducer: EnterCodeFeature()
             )
         )
     }
+    
 }

@@ -51,10 +51,10 @@
 		5F71A665280C602A0024F44A /* NewPrivateChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F71A664280C602A0024F44A /* NewPrivateChatView.swift */; };
 		5F71A669280C612A0024F44A /* NewPrivateChatCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F71A668280C612A0024F44A /* NewPrivateChatCellView.swift */; };
 		5F71A66B280C61330024F44A /* NewPrivateChatCellStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F71A66A280C61330024F44A /* NewPrivateChatCellStore.swift */; };
-		5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingStore.swift */; };
-		5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeStore.swift */; };
-		5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */; };
-		5F727FB3280762D800FABF26 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB2280762D800FABF26 /* LoginView.swift */; };
+		5F727FAB2807623200FABF26 /* OnboardingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAA2807623200FABF26 /* OnboardingFeature.swift */; };
+		5F727FAF2807627100FABF26 /* EnterCodeFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FAE2807627100FABF26 /* EnterCodeFeature.swift */; };
+		5F727FB12807627F00FABF26 /* EnterPhoneFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB02807627F00FABF26 /* EnterPhoneFeature.swift */; };
+		5F727FB3280762D800FABF26 /* LoginFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB2280762D800FABF26 /* LoginFlowView.swift */; };
 		5F727FB52807632300FABF26 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB42807632300FABF26 /* AppStore.swift */; };
 		5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB62807638300FABF26 /* AppDelegateStore.swift */; };
 		5F727FBD2807647300FABF26 /* MainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FBC2807647300FABF26 /* MainStore.swift */; };
@@ -76,10 +76,10 @@
 		5FA683AA289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */; };
 		5FA683AC289C238A002DFEDF /* StorageClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */; };
 		5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */; };
-		5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginStore.swift */; };
+		5FA7D864280435FF00AA48B5 /* LoginFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginFlowCoordinator.swift */; };
 		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
 		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
-		5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */; };
+		5FA7D86D28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift */; };
 		5FB6DA932817211E0037C38B /* SafeAreaInsets+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA922817211E0037C38B /* SafeAreaInsets+Environment.swift */; };
 		5FB6DA95281721690037C38B /* ScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA94281721690037C38B /* ScrollViewDelegate.swift */; };
 		5FB6DA982817221A0037C38B /* UserImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA972817221A0037C38B /* UserImageView.swift */; };
@@ -100,7 +100,7 @@
 		5FBCF9ED281AEDE100734BA0 /* UserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9EC281AEDE100734BA0 /* UserNotificationCenterDelegate.swift */; };
 		5FBCF9EF281AF14000734BA0 /* FirebaseMessagingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9EE281AF14000734BA0 /* FirebaseMessagingDelegate.swift */; };
 		5FBCF9F1281AF58F00734BA0 /* PushNotificationClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9F0281AF58F00734BA0 /* PushNotificationClientLive.swift */; };
-		5FBCF9F5281B133200734BA0 /* SetupPermissionsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9F4281B133200734BA0 /* SetupPermissionsStore.swift */; };
+		5FBCF9F5281B133200734BA0 /* SetupPermissionsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9F4281B133200734BA0 /* SetupPermissionsFeature.swift */; };
 		5FBCF9F8281B134200734BA0 /* SetupPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBCF9F7281B134200734BA0 /* SetupPermissionsView.swift */; };
 		5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */; };
 		5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD33DC2280CC315009E9FBB /* UserClient.swift */; };
@@ -112,7 +112,7 @@
 		5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */; };
 		5FE31827280A2151007F7816 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31826280A2151007F7816 /* User.swift */; };
 		5FE3182A280A2197007F7816 /* FirestoreUsersClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */; };
-		5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */; };
+		5FE31840280ADAF4007F7816 /* EnterUserDataFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3183F280ADAF4007F7816 /* EnterUserDataFeature.swift */; };
 		5FE31842280ADB02007F7816 /* EnterUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE31841280ADB02007F7816 /* EnterUserDataView.swift */; };
 		5FE3C2EE289B18F20069A461 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE3C2ED289B18F20069A461 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		5FE3C2F0289B18F20069A461 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE3C2EF289B18F20069A461 /* FirebaseAuth */; };
@@ -187,10 +187,10 @@
 		5F71A664280C602A0024F44A /* NewPrivateChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatView.swift; sourceTree = "<group>"; };
 		5F71A668280C612A0024F44A /* NewPrivateChatCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatCellView.swift; sourceTree = "<group>"; };
 		5F71A66A280C61330024F44A /* NewPrivateChatCellStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrivateChatCellStore.swift; sourceTree = "<group>"; };
-		5F727FAA2807623200FABF26 /* OnboardingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStore.swift; sourceTree = "<group>"; };
-		5F727FAE2807627100FABF26 /* EnterCodeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeStore.swift; sourceTree = "<group>"; };
-		5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneStore.swift; sourceTree = "<group>"; };
-		5F727FB2280762D800FABF26 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		5F727FAA2807623200FABF26 /* OnboardingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeature.swift; sourceTree = "<group>"; };
+		5F727FAE2807627100FABF26 /* EnterCodeFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterCodeFeature.swift; sourceTree = "<group>"; };
+		5F727FB02807627F00FABF26 /* EnterPhoneFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPhoneFeature.swift; sourceTree = "<group>"; };
+		5F727FB2280762D800FABF26 /* LoginFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlowView.swift; sourceTree = "<group>"; };
 		5F727FB42807632300FABF26 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		5F727FB62807638300FABF26 /* AppDelegateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateStore.swift; sourceTree = "<group>"; };
 		5F727FBC2807647300FABF26 /* MainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainStore.swift; sourceTree = "<group>"; };
@@ -212,10 +212,10 @@
 		5FA683A9289C2323002DFEDF /* FirestoreUsersClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClientUnimplemented.swift; sourceTree = "<group>"; };
-		5FA7D863280435FF00AA48B5 /* LoginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStore.swift; sourceTree = "<group>"; };
+		5FA7D863280435FF00AA48B5 /* LoginFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlowCoordinator.swift; sourceTree = "<group>"; };
 		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
-		5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenProvider.swift; sourceTree = "<group>"; };
+		5FA7D86C28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginFlowCoordinator+Path.swift"; sourceTree = "<group>"; };
 		5FB6DA922817211E0037C38B /* SafeAreaInsets+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafeAreaInsets+Environment.swift"; sourceTree = "<group>"; };
 		5FB6DA94281721690037C38B /* ScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDelegate.swift; sourceTree = "<group>"; };
 		5FB6DA972817221A0037C38B /* UserImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageView.swift; sourceTree = "<group>"; };
@@ -235,7 +235,7 @@
 		5FBCF9EC281AEDE100734BA0 /* UserNotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		5FBCF9EE281AF14000734BA0 /* FirebaseMessagingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessagingDelegate.swift; sourceTree = "<group>"; };
 		5FBCF9F0281AF58F00734BA0 /* PushNotificationClientLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationClientLive.swift; sourceTree = "<group>"; };
-		5FBCF9F4281B133200734BA0 /* SetupPermissionsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPermissionsStore.swift; sourceTree = "<group>"; };
+		5FBCF9F4281B133200734BA0 /* SetupPermissionsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPermissionsFeature.swift; sourceTree = "<group>"; };
 		5FBCF9F7281B134200734BA0 /* SetupPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPermissionsView.swift; sourceTree = "<group>"; };
 		5FD33DC0280CBED5009E9FBB /* ChatWithUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWithUserResponse.swift; sourceTree = "<group>"; };
 		5FD33DC2280CC315009E9FBB /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		5FE3180B2809ED8A007F7816 /* BigButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButtonStyle.swift; sourceTree = "<group>"; };
 		5FE31826280A2151007F7816 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5FE31829280A2197007F7816 /* FirestoreUsersClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsersClient.swift; sourceTree = "<group>"; };
-		5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataStore.swift; sourceTree = "<group>"; };
+		5FE3183F280ADAF4007F7816 /* EnterUserDataFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataFeature.swift; sourceTree = "<group>"; };
 		5FE31841280ADB02007F7816 /* EnterUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserDataView.swift; sourceTree = "<group>"; };
 		5FF264D1281F1155000FD185 /* Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Push.swift; sourceTree = "<group>"; };
 		5FF264D328218B11000FD185 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 		5F727FA92807621300FABF26 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				5F727FAA2807623200FABF26 /* OnboardingStore.swift */,
+				5F727FAA2807623200FABF26 /* OnboardingFeature.swift */,
 				5F9F4E482800434B00915572 /* OnboardingView.swift */,
 			);
 			path = Onboarding;
@@ -505,7 +505,7 @@
 		5F727FAC2807626100FABF26 /* EnterPhone */ = {
 			isa = PBXGroup;
 			children = (
-				5F727FB02807627F00FABF26 /* EnterPhoneStore.swift */,
+				5F727FB02807627F00FABF26 /* EnterPhoneFeature.swift */,
 				5DA8A75C27FF260700C2ECBA /* EnterPhoneView.swift */,
 			);
 			path = EnterPhone;
@@ -514,7 +514,7 @@
 		5F727FAD2807626600FABF26 /* EnterCode */ = {
 			isa = PBXGroup;
 			children = (
-				5F727FAE2807627100FABF26 /* EnterCodeStore.swift */,
+				5F727FAE2807627100FABF26 /* EnterCodeFeature.swift */,
 				5D35EC842800473400624717 /* EnterCodeView.swift */,
 			);
 			path = EnterCode;
@@ -625,9 +625,9 @@
 		5F9F4E4127FF4F5600915572 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				5FA7D86C28057B8600AA48B5 /* LoginScreenProvider.swift */,
-				5FA7D863280435FF00AA48B5 /* LoginStore.swift */,
-				5F727FB2280762D800FABF26 /* LoginView.swift */,
+				5FA7D86C28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift */,
+				5FA7D863280435FF00AA48B5 /* LoginFlowCoordinator.swift */,
+				5F727FB2280762D800FABF26 /* LoginFlowView.swift */,
 				5F727FA92807621300FABF26 /* Onboarding */,
 				5F727FAC2807626100FABF26 /* EnterPhone */,
 				5F727FAD2807626600FABF26 /* EnterCode */,
@@ -723,7 +723,7 @@
 		5FBCF9F3281B10DA00734BA0 /* SetupPermissions */ = {
 			isa = PBXGroup;
 			children = (
-				5FBCF9F4281B133200734BA0 /* SetupPermissionsStore.swift */,
+				5FBCF9F4281B133200734BA0 /* SetupPermissionsFeature.swift */,
 				5FBCF9F7281B134200734BA0 /* SetupPermissionsView.swift */,
 			);
 			path = SetupPermissions;
@@ -779,7 +779,7 @@
 		5FE3183E280ADADC007F7816 /* EnterUserData */ = {
 			isa = PBXGroup;
 			children = (
-				5FE3183F280ADAF4007F7816 /* EnterUserDataStore.swift */,
+				5FE3183F280ADAF4007F7816 /* EnterUserDataFeature.swift */,
 				5FE31841280ADB02007F7816 /* EnterUserDataView.swift */,
 			);
 			path = EnterUserData;
@@ -1046,7 +1046,7 @@
 				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */,
 				5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */,
-				5F727FB3280762D800FABF26 /* LoginView.swift in Sources */,
+				5F727FB3280762D800FABF26 /* LoginFlowView.swift in Sources */,
 				5FB6DA9E281722B20037C38B /* HeaderDescriptionView.swift in Sources */,
 				5FB6DAA528183AB30037C38B /* StorageClient.swift in Sources */,
 				5F9DFC94280B1C7800E73206 /* Publisher+Ext.swift in Sources */,
@@ -1061,7 +1061,7 @@
 				5FB6DA932817211E0037C38B /* SafeAreaInsets+Environment.swift in Sources */,
 				5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */,
 				5DCD57AF280C6BA500186FE2 /* ChatNavigationView.swift in Sources */,
-				5FA7D864280435FF00AA48B5 /* LoginStore.swift in Sources */,
+				5FA7D864280435FF00AA48B5 /* LoginFlowCoordinator.swift in Sources */,
 				5D4CF9EB2809ED7900A1B705 /* ChatListStore.swift in Sources */,
 				5D7EAF43289D93AB00A7FC2B /* GetLastMessagesResponse.swift in Sources */,
 				5FF264D2281F1155000FD185 /* Push.swift in Sources */,
@@ -1077,15 +1077,15 @@
 				5D37F21F28207506000027BE /* MessageResponse.swift in Sources */,
 				5FB6DAB22818AAD90037C38B /* Photo.swift in Sources */,
 				5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */,
-				5FA7D86D28057B8600AA48B5 /* LoginScreenProvider.swift in Sources */,
+				5FA7D86D28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift in Sources */,
 				5FBCF9F1281AF58F00734BA0 /* PushNotificationClientLive.swift in Sources */,
 				5FD33DC3280CC315009E9FBB /* UserClient.swift in Sources */,
 				5DA8A75B27FF260700C2ECBA /* OwlApp.swift in Sources */,
 				5FBCF9EF281AF14000734BA0 /* FirebaseMessagingDelegate.swift in Sources */,
 				5DCD57A0280C423300186FE2 /* ChatsListPrivateItem.swift in Sources */,
 				5DCD57B2280C9D8D00186FE2 /* ChatMessageStore.swift in Sources */,
-				5F727FAF2807627100FABF26 /* EnterCodeStore.swift in Sources */,
-				5FE31840280ADAF4007F7816 /* EnterUserDataStore.swift in Sources */,
+				5F727FAF2807627100FABF26 /* EnterCodeFeature.swift in Sources */,
+				5FE31840280ADAF4007F7816 /* EnterUserDataFeature.swift in Sources */,
 				5DCD57A5280C42A200186FE2 /* MessageRequest.swift in Sources */,
 				5FD33DC9280DBE8E009E9FBB /* ProfileStore.swift in Sources */,
 				5F71A663280C60210024F44A /* NewPrivateChatStore.swift in Sources */,
@@ -1101,7 +1101,7 @@
 				5F9DFC8B280B165500E73206 /* SignInUserType.swift in Sources */,
 				5FF264E22822BC8B000FD185 /* UserDefaultsClientLive.swift in Sources */,
 				5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */,
-				5F727FB12807627F00FABF26 /* EnterPhoneStore.swift in Sources */,
+				5F727FB12807627F00FABF26 /* EnterPhoneFeature.swift in Sources */,
 				5F9DFC89280B156600E73206 /* UserUpdate.swift in Sources */,
 				5FD33DC1280CBED5009E9FBB /* ChatWithUserResponse.swift in Sources */,
 				5F727FB52807632300FABF26 /* AppStore.swift in Sources */,
@@ -1110,7 +1110,7 @@
 				5FBCF9F8281B134200734BA0 /* SetupPermissionsView.swift in Sources */,
 				5FB6DA95281721690037C38B /* ScrollViewDelegate.swift in Sources */,
 				5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */,
-				5FBCF9F5281B133200734BA0 /* SetupPermissionsStore.swift in Sources */,
+				5FBCF9F5281B133200734BA0 /* SetupPermissionsFeature.swift in Sources */,
 				5FA683A4289C2234002DFEDF /* UserDefaultsClientUnimplemented.swift in Sources */,
 				5F727FC1280765B000FABF26 /* SignIn.swift in Sources */,
 				5F727FBD2807647300FABF26 /* MainStore.swift in Sources */,
@@ -1118,7 +1118,7 @@
 				5FE3182A280A2197007F7816 /* FirestoreUsersClient.swift in Sources */,
 				5FF264E82822BDB7000FD185 /* FirestoreUsersClientLive.swift in Sources */,
 				5FBCF9D928193F0600734BA0 /* EditProfileStore.swift in Sources */,
-				5F727FAB2807623200FABF26 /* OnboardingStore.swift in Sources */,
+				5F727FAB2807623200FABF26 /* OnboardingFeature.swift in Sources */,
 				5FA683A2289C2180002DFEDF /* UserClientUnimplemented.swift in Sources */,
 				5D35EC7D27FF7AF400624717 /* FirebaseClient.swift in Sources */,
 				5DCD57BA280E185200186FE2 /* AdaptiveStack.swift in Sources */,
@@ -1188,7 +1188,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1242,7 +1242,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1275,7 +1275,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1313,7 +1313,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

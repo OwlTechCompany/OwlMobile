@@ -3,6 +3,7 @@ disabled_rules:
   # - force_try
   - for_where
   - large_tuple
+  - multiple_closures_with_trailing_closure
 
 included: # paths to include during linting. `--path` is ignored if present.
   - Owl

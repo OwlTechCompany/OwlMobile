@@ -16,7 +16,7 @@ struct AppView: View {
         Group {
             IfLetStore(
                 store.scope(state: \App.State.login, action: App.Action.login),
-                then: LoginView.init
+                then: LoginFlowView.init
             )
             IfLetStore(
                 store.scope(state: \App.State.main, action: App.Action.main),
