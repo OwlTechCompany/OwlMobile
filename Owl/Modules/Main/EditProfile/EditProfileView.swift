@@ -10,61 +10,67 @@ import ComposableArchitecture
 import SDWebImageSwiftUI
 
 struct EditProfileView: View {
-
+    
     private enum Field: Int, CaseIterable {
         case firstName
         case lastName
     }
-
-    var store: Store<EditProfile.State, EditProfile.Action>
+    
+    let store: StoreOf<EditProfileFeature>
+    // TODO: Maybe use ViewState
+    @ObservedObject private var viewStore: ViewStoreOf<EditProfileFeature>
     @FocusState private var focusedField: Field?
-
+    
+    init(store: StoreOf<EditProfileFeature>) {
+        self.store = store
+        self.viewStore = ViewStore(store, observe: { $0 })
+    }
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
-            GeometryReader { proxy in
-
-                ScrollView(.vertical, showsIndicators: false) {
-
-                    VStack(spacing: 50.0) {
-
-                        imageSelectView(viewStore: viewStore)
-
-                        textFields(viewStore: viewStore)
-
-                        Spacer()
-
-                        Button(
-                            action: { viewStore.send(.save) },
-                            label: { Text("Save") }
-                        )
-                        .buttonStyle(BigButtonStyle())
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                    }
-                    .padding(20)
-                    .frame(minHeight: proxy.size.height)
+        GeometryReader { proxy in
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                
+                VStack(spacing: 50.0) {
+                    
+                    imageSelectView
+                    
+                    textFields
+                    
+                    Spacer()
+                    
+                    Button(
+                        action: { viewStore.send(.save) },
+                        label: { Text("Save") }
+                    )
+                    .buttonStyle(BigButtonStyle())
+                    .frame(minWidth: 0, maxWidth: .infinity)
                 }
-            }
-            .disabled(viewStore.isLoading)
-            .overlay(viewStore.isLoading ? Loader() : nil)
-            .alert(
-                self.store.scope(state: \.alert),
-                dismiss: .dismissAlert
-            )
-            .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
-                ImagePicker(
-                    sourceType: .photoLibrary,
-                    selectedImage: viewStore.binding(\.$selectedImage)
-                )
+                .padding(20)
+                .frame(minHeight: proxy.size.height)
             }
         }
+        .disabled(viewStore.isLoading)
+        .overlay(viewStore.isLoading ? Loader() : nil)
+        .alert(
+            self.store.scope(state: \.alert),
+            dismiss: .dismissAlert
+        )
+        .sheet(isPresented: viewStore.binding(\.$showImagePicker)) {
+            ImagePicker(
+                sourceType: .photoLibrary,
+                selectedImage: viewStore.binding(\.$selectedImage)
+            )
+        }
+        
         .background(
             Color(UIColor.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
         )
         .navigationBarTitleDisplayMode(.inline)
     }
-
-    func imageSelectView(viewStore: ViewStore<EditProfile.State, EditProfile.Action>) -> some View {
+    
+    var imageSelectView: some View {
         ZStack(alignment: .bottomTrailing) {
             Group {
                 if let selectedImage = viewStore.selectedImage {
@@ -85,21 +91,21 @@ struct EditProfileView: View {
             .frame(width: 100, height: 100)
             .cornerRadius(50)
             .onTapGesture { viewStore.send(.showImagePicker) }
-
+            
             Image(systemName: "pencil.circle.fill")
                 .offset(x: 5, y: 5)
                 .font(.system(size: 24.0))
                 .foregroundColor(Asset.Colors.accentColor.swiftUIColor)
         }
     }
-
-    func textFields(viewStore: ViewStore<EditProfile.State, EditProfile.Action>) -> some View {
+    
+    var textFields: some View {
         VStack(spacing: 24) {
             TextField("Your first name", text: viewStore.binding(\.$firstName))
                 .textContentType(.givenName)
                 .focused($focusedField, equals: .firstName)
                 .onSubmit { focusedField = .lastName }
-
+            
             TextField("Your last name", text: viewStore.binding(\.$lastName))
                 .textContentType(.familyName)
                 .focused($focusedField, equals: .lastName)
@@ -123,12 +129,12 @@ struct EditProfileView: View {
 // MARK: - Preview
 
 struct EditProfileView_Previews: PreviewProvider {
-
+    
     static let userClient = UserClient.live()
-
+    
     static var previews: some View {
         EditProfileView(store: Store(
-            initialState: EditProfile.State(
+            initialState: EditProfileFeature.State(
                 user: User(
                     uid: "",
                     phoneNumber: "",
@@ -137,11 +143,7 @@ struct EditProfileView_Previews: PreviewProvider {
                     photo: .placeholder
                 )
             ),
-            reducer: EditProfile.reducer,
-            environment: EditProfile.Environment(
-                firestoreUsersClient: .live(),
-                storageClient: .live()
-            )
+            reducer: EditProfileFeature()
         ))
     }
 }

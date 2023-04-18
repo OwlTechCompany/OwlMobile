@@ -22,7 +22,7 @@ struct Main: ReducerProtocol {
         static func initialState(user: User) -> State {
             State(routes: [
                 .root(
-                    .chatList(ChatList.State(user: user, chats: [], chatsData: [])),
+                    .chatList(ChatListFeature.State(user: user, chats: [], chatsData: [])),
                     embedInNavigationView: true
                 )
             ])
@@ -49,14 +49,14 @@ struct Main: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .routeAction(_, .chatList(.newPrivateChat)):
-                state.routes.presentSheet(.newPrivateChat(NewPrivateChat.State()), embedInNavigationView: true)
+                state.routes.presentSheet(.newPrivateChat(NewPrivateChatFeature.State()), embedInNavigationView: true)
                 return .none
 
             case .routeAction(_, .chatList(.openProfile)):
                 guard let firestoreUser = userClient.firestoreUser.value else {
                     return EffectPublisher(value: .delegate(.logout))
                 }
-                let profileState = Profile.State(user: firestoreUser)
+                let profileState = ProfileFeature.State(user: firestoreUser)
                 state.routes.push(.profile(profileState))
                 return .none
 
@@ -82,7 +82,7 @@ struct Main: ReducerProtocol {
                 guard let firestoreUser = userClient.firestoreUser.value else {
                     return EffectPublisher(value: .delegate(.logout))
                 }
-                let editProfileState = EditProfile.State(user: firestoreUser)
+                let editProfileState = EditProfileFeature.State(user: firestoreUser)
                 state.routes.push(.editProfile(editProfileState))
                 return .none
 

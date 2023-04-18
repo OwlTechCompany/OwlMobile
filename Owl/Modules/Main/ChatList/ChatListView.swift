@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct ChatListView: View {
 
-    var store: Store<ChatList.State, ChatList.Action>
+    let store: StoreOf<ChatListFeature>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -19,7 +19,7 @@ struct ChatListView: View {
                     ForEachStore(
                         self.store.scope(
                             state: \.chats,
-                            action: ChatList.Action.chats(id:action:)
+                            action: ChatListFeature.Action.chats(id:action:)
                         ),
                         content: { ChatListCellView(store: $0) }
                     )
@@ -55,12 +55,9 @@ struct ChatListView: View {
 // MARK: - Preview
 
 struct ChatListView_Previews: PreviewProvider {
-
-    static let userClient = UserClient.live()
-
     static var previews: some View {
         ChatListView(store: Store(
-            initialState: ChatList.State(
+            initialState: ChatListFeature.State(
                 user: User(
                     uid: "",
                     phoneNumber: "",
@@ -69,17 +66,11 @@ struct ChatListView_Previews: PreviewProvider {
                     photo: .placeholder
                 ),
                 chats: .init(
-                    arrayLiteral:
-                        ChatListCell.State(model: MockedDataClient.chatsListPrivateItem)
+                    arrayLiteral: ChatListCellFeature.State(model: MockedDataClient.chatsListPrivateItem)
                 ),
                 chatsData: []
             ),
-            reducer: ChatList.reducer,
-            environment: ChatList.Environment(
-                authClient: .live(),
-                chatsClient: .live(),
-                userClient: userClient
-            )
+            reducer: ChatListFeature()
         ))
     }
 }

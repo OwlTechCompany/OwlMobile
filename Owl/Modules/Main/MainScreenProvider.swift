@@ -10,16 +10,8 @@ import TCACoordinators
 
 extension Main {
 
-    struct ScreenProvider {
-
-        // TODO: Remove after migration Main.ScreenProvider to ReducerProtocol
-        @Dependency(\.authClient) var authClient
-        @Dependency(\.userClient) var userClient
-        @Dependency(\.firestoreChatsClient) var firestoreChatsClient
-        @Dependency(\.firestoreUsersClient) var firestoreUsersClient
-        @Dependency(\.storageClient) var storageClient
-
-    }
+    struct ScreenProvider { }
+    
 }
 
 extension Main.ScreenProvider: ReducerProtocol {
@@ -49,11 +41,11 @@ extension Main.ScreenProvider: ReducerProtocol {
     // MARK: - State handling
 
     enum State: Equatable, Identifiable {
-        case chatList(ChatList.State)
+        case chatList(ChatListFeature.State)
         case chat(Chat.State)
-        case newPrivateChat(NewPrivateChat.State)
-        case profile(Profile.State)
-        case editProfile(EditProfile.State)
+        case newPrivateChat(NewPrivateChatFeature.State)
+        case profile(ProfileFeature.State)
+        case editProfile(EditProfileFeature.State)
 
         var id: String {
             switch self {
@@ -78,65 +70,28 @@ extension Main.ScreenProvider: ReducerProtocol {
     // MARK: - Action handling
 
     enum Action: Equatable {
-        case chatList(ChatList.Action)
+        case chatList(ChatListFeature.Action)
         case chat(Chat.Action)
-        case newPrivateChat(NewPrivateChat.Action)
-        case profile(Profile.Action)
-        case editProfile(EditProfile.Action)
+        case newPrivateChat(NewPrivateChatFeature.Action)
+        case profile(ProfileFeature.Action)
+        case editProfile(EditProfileFeature.Action)
     }
 
     var body: some ReducerProtocol<State, Action> {
-        Scope(
-            state: /State.chatList,
-            action: /Action.chatList
-        ) {
-            Reduce(
-                ChatList.reducer,
-                environment: ChatList.Environment(
-                    authClient: authClient,
-                    chatsClient: firestoreChatsClient,
-                    userClient: userClient
-                )
-            )
+        Scope(state: /State.chatList, action: /Action.chatList) {
+            ChatListFeature()
         }
 
-        Scope(
-            state: /State.newPrivateChat,
-            action: /Action.newPrivateChat
-        ) {
-            Reduce(
-                NewPrivateChat.reducer,
-                environment: NewPrivateChat.Environment(
-                    userClient: userClient,
-                    chatsClient: firestoreChatsClient,
-                    firestoreUsersClient: firestoreUsersClient
-                )
-            )
+        Scope(state: /State.newPrivateChat, action: /Action.newPrivateChat) {
+            NewPrivateChatFeature()
         }
-
-        Scope(
-            state: /State.profile,
-            action: /Action.profile
-        ) {
-            Reduce(
-                Profile.reducer,
-                environment: Profile.Environment(
-                    userClient: userClient
-                )
-            )
+        
+        Scope(state: /State.profile, action: /Action.profile) {
+            ProfileFeature()
         }
-
-        Scope(
-            state: /State.editProfile,
-            action: /Action.editProfile
-        ) {
-            Reduce(
-                EditProfile.reducer,
-                environment: EditProfile.Environment(
-                    firestoreUsersClient: firestoreUsersClient,
-                    storageClient: storageClient
-                )
-            )
+        
+        Scope(state: /State.editProfile, action: /Action.editProfile) {
+            EditProfileFeature()
         }
     }
 

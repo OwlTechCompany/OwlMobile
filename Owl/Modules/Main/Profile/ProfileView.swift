@@ -12,7 +12,7 @@ import UIKit
 
 struct ProfileView: View {
 
-    var store: Store<Profile.State, Profile.Action>
+    let store: StoreOf<ProfileFeature>
 
     @ObservedObject var delegate = ScrollViewDelegate()
     @State var animationState = ProfileAnimationState()
@@ -203,12 +203,9 @@ struct ProfileView: View {
 // MARK: - Preview
 
 struct ProfileView_Previews: PreviewProvider {
-
-    static let userClient = UserClient.live()
-
     static var previews: some View {
         ProfileView(store: Store(
-            initialState: Profile.State(
+            initialState: ProfileFeature.State(
                 user: User(
                     uid: "",
                     phoneNumber: "",
@@ -217,8 +214,7 @@ struct ProfileView_Previews: PreviewProvider {
                     photo: .placeholder
                 )
             ),
-            reducer: Profile.reducer,
-            environment: Profile.Environment(userClient: userClient)
+            reducer: ProfileFeature()
         ))
     }
 }
