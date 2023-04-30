@@ -17,8 +17,8 @@ struct LoginFlowView: View {
             root: {
                 OnboardingView(store: store.scope(state: \.onboarding, action: LoginFlowCoordinator.Action.onboarding))
             },
-            destination: {
-                switch $0 {
+            destination: { path in
+                switch path {
                 case .enterPhone:
                     CaseLet(
                         state: /LoginFlowCoordinator.Path.State.enterPhone,

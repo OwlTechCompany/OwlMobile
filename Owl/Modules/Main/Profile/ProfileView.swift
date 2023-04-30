@@ -17,7 +17,11 @@ struct ProfileView: View {
     @ObservedObject var delegate = ScrollViewDelegate()
     @State var animationState = ProfileAnimationState()
     @Environment(\.presentationMode) var presentationMode
-
+    
+    init(store: StoreOf<ProfileFeature>) {
+        self.store = store
+    }
+    
     var body: some View {
         WithViewStore(store) { viewStore in
             ScrollView {

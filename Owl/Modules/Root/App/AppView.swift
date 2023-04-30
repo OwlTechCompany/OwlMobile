@@ -20,7 +20,7 @@ struct AppView: View {
             )
             IfLetStore(
                 store.scope(state: \App.State.main, action: App.Action.main),
-                then: MainView.init
+                then: MainFlowView.init
             )
         }
     }

@@ -16,7 +16,7 @@ struct App: ReducerProtocol {
     struct State: Equatable {
         var appDelegate: AppDelegateStore.State = AppDelegateStore.State()
         var login: LoginFlowCoordinator.State?
-        var main: Main.State?
+        var main: MainFlowCoordinator.State?
 
         mutating func set(_ currentState: CurrentState) {
             switch currentState {
@@ -25,7 +25,7 @@ struct App: ReducerProtocol {
                 self.main = .none
 
             case let .main(user):
-                self.main = .initialState(user: user)
+                self.main = .init(user: user)
                 self.login = .none
             }
         }
@@ -41,7 +41,7 @@ struct App: ReducerProtocol {
     enum Action: Equatable {
         case appDelegate(AppDelegateStore.Action)
         case login(LoginFlowCoordinator.Action)
-        case main(Main.Action)
+        case main(MainFlowCoordinator.Action)
 
         case subscribeOnUserChange
         case signOut
@@ -109,7 +109,7 @@ struct App: ReducerProtocol {
                 switch pushRoute {
                 case let .openChat(chatsListPrivateItem):
                     let chatState = ChatFeature.State(model: chatsListPrivateItem)
-                    state.main?.routes.push(.chat(chatState))
+                    state.main?.path.append(.chat(chatState))
                 }
                 return .none
 
@@ -131,7 +131,7 @@ struct App: ReducerProtocol {
             case .signOut:
                 state.set(.login)
                 authClient.signOut()
-                return EffectPublisher.cancel(id: Main.ListenersId())
+                return EffectPublisher.cancel(id: MainFlowCoordinator.ListenersId())
 
             case .appDelegate:
                 return .none
@@ -152,7 +152,7 @@ struct App: ReducerProtocol {
         .ifLet(
             \State.main,
             action: /Action.main,
-            then: { Main() }
+            then: { MainFlowCoordinator() }
         )
     }
 

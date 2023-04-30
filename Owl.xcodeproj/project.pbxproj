@@ -19,7 +19,7 @@
 		5D37F21F28207506000027BE /* MessageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D37F21E28207506000027BE /* MessageResponse.swift */; };
 		5D4CF9EB2809ED7900A1B705 /* ChatListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EA2809ED7900A1B705 /* ChatListFeature.swift */; };
 		5D4CF9ED2809ED9200A1B705 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */; };
-		5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */; };
+		5D4CF9EF2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9EE2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift */; };
 		5D4CF9F1280A0BED00A1B705 /* ChatListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */; };
 		5D4CF9F5280A1C1600A1B705 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F4280A1C1600A1B705 /* ChatView.swift */; };
 		5D4CF9F7280A1C2400A1B705 /* ChatFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4CF9F6280A1C2400A1B705 /* ChatFeature.swift */; };
@@ -56,7 +56,7 @@
 		5F727FB3280762D800FABF26 /* LoginFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB2280762D800FABF26 /* LoginFlowView.swift */; };
 		5F727FB52807632300FABF26 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB42807632300FABF26 /* AppStore.swift */; };
 		5F727FB72807638300FABF26 /* AppDelegateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FB62807638300FABF26 /* AppDelegateStore.swift */; };
-		5F727FBD2807647300FABF26 /* MainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FBC2807647300FABF26 /* MainStore.swift */; };
+		5F727FBD2807647300FABF26 /* MainFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FBC2807647300FABF26 /* MainFlowCoordinator.swift */; };
 		5F727FC1280765B000FABF26 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F727FC0280765B000FABF26 /* SignIn.swift */; };
 		5F9DFC89280B156600E73206 /* UserUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC88280B156600E73206 /* UserUpdate.swift */; };
 		5F9DFC8B280B165500E73206 /* SignInUserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DFC8A280B165500E73206 /* SignInUserType.swift */; };
@@ -65,7 +65,7 @@
 		5F9F4E3A27FF464200915572 /* SwiftGen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */; };
 		5F9F4E3D27FF4CBA00915572 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E3C27FF4CBA00915572 /* AppView.swift */; };
 		5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4327FF502F00915572 /* AppDelegate.swift */; };
-		5F9F4E4727FF52C100915572 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4627FF52C100915572 /* MainView.swift */; };
+		5F9F4E4727FF52C100915572 /* MainFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E4627FF52C100915572 /* MainFlowView.swift */; };
 		5F9F4E492800434B00915572 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F4E482800434B00915572 /* OnboardingView.swift */; };
 		5FA683A0289C2115002DFEDF /* AuthClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA6839F289C2115002DFEDF /* AuthClientUnimplemented.swift */; };
 		5FA683A2289C2180002DFEDF /* UserClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683A1289C2180002DFEDF /* UserClientUnimplemented.swift */; };
@@ -157,7 +157,7 @@
 		5D37F21E28207506000027BE /* MessageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageResponse.swift; sourceTree = "<group>"; };
 		5D4CF9EA2809ED7900A1B705 /* ChatListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListFeature.swift; sourceTree = "<group>"; };
 		5D4CF9EC2809ED9200A1B705 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
-		5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenProvider.swift; sourceTree = "<group>"; };
+		5D4CF9EE2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainFlowCoordinator+Path.swift"; sourceTree = "<group>"; };
 		5D4CF9F0280A0BED00A1B705 /* ChatListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCellView.swift; sourceTree = "<group>"; };
 		5D4CF9F4280A1C1600A1B705 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		5D4CF9F6280A1C2400A1B705 /* ChatFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatFeature.swift; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 		5F727FB2280762D800FABF26 /* LoginFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlowView.swift; sourceTree = "<group>"; };
 		5F727FB42807632300FABF26 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		5F727FB62807638300FABF26 /* AppDelegateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateStore.swift; sourceTree = "<group>"; };
-		5F727FBC2807647300FABF26 /* MainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainStore.swift; sourceTree = "<group>"; };
+		5F727FBC2807647300FABF26 /* MainFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlowCoordinator.swift; sourceTree = "<group>"; };
 		5F727FC0280765B000FABF26 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		5F9DFC88280B156600E73206 /* UserUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUpdate.swift; sourceTree = "<group>"; };
 		5F9DFC8A280B165500E73206 /* SignInUserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUserType.swift; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 		5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftGen+Ext.swift"; sourceTree = "<group>"; };
 		5F9F4E3C27FF4CBA00915572 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		5F9F4E4327FF502F00915572 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5F9F4E4627FF52C100915572 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5F9F4E4627FF52C100915572 /* MainFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlowView.swift; sourceTree = "<group>"; };
 		5F9F4E482800434B00915572 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5FA6839F289C2115002DFEDF /* AuthClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683A1289C2180002DFEDF /* UserClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClientUnimplemented.swift; sourceTree = "<group>"; };
@@ -677,9 +677,9 @@
 		5F9F4E4527FF52B800915572 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				5D4CF9EE2809EF1D00A1B705 /* MainScreenProvider.swift */,
-				5F727FBC2807647300FABF26 /* MainStore.swift */,
-				5F9F4E4627FF52C100915572 /* MainView.swift */,
+				5D4CF9EE2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift */,
+				5F727FBC2807647300FABF26 /* MainFlowCoordinator.swift */,
+				5F9F4E4627FF52C100915572 /* MainFlowView.swift */,
 				5D4CF9F3280A1C0000A1B705 /* Chat */,
 				5D4CF9E92809ED4D00A1B705 /* ChatList */,
 				5F71A661280C60070024F44A /* NewPrivateChat */,
@@ -1089,7 +1089,7 @@
 				5F9DFC91280B1C4C00E73206 /* DocumentReference+Ext.swift in Sources */,
 				5FE31827280A2151007F7816 /* User.swift in Sources */,
 				5FE3180C2809ED8A007F7816 /* BigButtonStyle.swift in Sources */,
-				5D4CF9EF2809EF1D00A1B705 /* MainScreenProvider.swift in Sources */,
+				5D4CF9EF2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift in Sources */,
 				5D35EC872803204E00624717 /* View+Ext.swift in Sources */,
 				5F9F4E4427FF502F00915572 /* AppDelegate.swift in Sources */,
 				5FF264D428218B11000FD185 /* JSONDecoder.swift in Sources */,
@@ -1108,7 +1108,7 @@
 				5D35EC8128001E1100624717 /* PushNotificationClient.swift in Sources */,
 				5FF264EA2822BE21000FD185 /* StorageClientLive.swift in Sources */,
 				5FB6DAAF2818A8300037C38B /* UINavigationController+BackGesture.swift in Sources */,
-				5F9F4E4727FF52C100915572 /* MainView.swift in Sources */,
+				5F9F4E4727FF52C100915572 /* MainFlowView.swift in Sources */,
 				5D4CF9F7280A1C2400A1B705 /* ChatFeature.swift in Sources */,
 				5FBCF9DD2819D76E00734BA0 /* UserQuery.swift in Sources */,
 				5FD33DCB280DBE98009E9FBB /* ProfileView.swift in Sources */,
@@ -1168,7 +1168,7 @@
 				5FBCF9F5281B133200734BA0 /* SetupPermissionsFeature.swift in Sources */,
 				5FA683A4289C2234002DFEDF /* UserDefaultsClientUnimplemented.swift in Sources */,
 				5F727FC1280765B000FABF26 /* SignIn.swift in Sources */,
-				5F727FBD2807647300FABF26 /* MainStore.swift in Sources */,
+				5F727FBD2807647300FABF26 /* MainFlowCoordinator.swift in Sources */,
 				5DA8A77F27FF33E100C2ECBA /* Assets.swift in Sources */,
 				5FE3182A280A2197007F7816 /* FirestoreUsersClient.swift in Sources */,
 				5FF264E82822BDB7000FD185 /* FirestoreUsersClientLive.swift in Sources */,

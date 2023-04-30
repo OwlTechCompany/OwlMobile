@@ -79,7 +79,7 @@ struct ChatFeature: Reducer {
                 chatsClient.openedChatId.send(state.chatID)
                 return chatsClient.getLastMessages()
                     .catchToEffect(Action.getLastMessages)
-                    .cancellable(id: Main.ListenersId())
+                    .cancellable(id: MainFlowCoordinator.ListenersId())
 
             case .sendMessage:
                 let newMessage = NewMessage(
@@ -98,7 +98,7 @@ struct ChatFeature: Reducer {
                 guard !state.oldMessages.isEmpty else {
                     return chatsClient.getLastMessages()
                         .catchToEffect(Action.getLastMessages)
-                        .cancellable(id: Main.ListenersId())
+                        .cancellable(id: MainFlowCoordinator.ListenersId())
                 }
                 return .none
 

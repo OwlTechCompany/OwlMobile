@@ -39,7 +39,7 @@ struct ProfileFeature: Reducer {
                         .compactMap { $0 }
                         .sink { subscriber.send(.updateUser($0)) }
                 }
-                .cancellable(id: Main.ListenersId())
+                .cancellable(id: MainFlowCoordinator.ListenersId())
                 
             case let .updateUser(user):
                 state.user = user

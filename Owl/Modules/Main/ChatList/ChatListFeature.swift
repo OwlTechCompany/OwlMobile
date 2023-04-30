@@ -55,7 +55,7 @@ struct ChatListFeature: Reducer {
                             .sink { subscriber.send(.updateUser($0)) }
                     }
                 )
-                .cancellable(id: Main.ListenersId())
+                .cancellable(id: MainFlowCoordinator.ListenersId())
 
             case let .updateUser(user):
                 state.user = user
