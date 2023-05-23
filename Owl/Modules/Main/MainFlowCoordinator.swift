@@ -49,35 +49,10 @@ struct MainFlowCoordinator: Reducer {
                 state.path.append(.chat(.init(model: chatsListPrivateItem)))
                 return .none
 
-
-//            case .chatList(.newPrivateChat):
-//                // TODO: What to do here?
-////                state.routes.presentSheet(.newPrivateChat(NewPrivateChatFeature.State()), embedInNavigationView: true)
-//                return .none
-//
-//            case .chatList(.openProfile):
-//                guard let firestoreUser = userClient.firestoreUser.value else {
-//                    return .send(.delegate(.logout))
-//                }
-//                let profileState = ProfileFeature.State(user: firestoreUser)
-//                state.path.append(.profile(profileState))
-//                return .none
-//
-//            case let .chatList(.open(chat)):
-
-
             case .path(.element(_, .chat(.navigation(.back)))):
                 state.path.removeLast()
                 return .none
-
-//            case let .path(.element(_, .newPrivateChat(.openChat(item)))):
-//                // TODO: What here?
-//                return .none
-//                return EffectPublisher.routeWithDelaysIfUnsupported(state.routes) { provider in
-//                    provider.dismiss()
-//                    provider.push(.chat(.init(model: item)))
-//                }
-
+                
             case .path(.element(_, .profile(.close))):
                 state.path.removeLast()
                 return .none

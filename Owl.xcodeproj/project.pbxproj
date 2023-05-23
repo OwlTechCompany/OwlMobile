@@ -76,8 +76,6 @@
 		5FA683AC289C238A002DFEDF /* StorageClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */; };
 		5FA683AE289C25FE002DFEDF /* FirebaseClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */; };
 		5FA7D864280435FF00AA48B5 /* LoginFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D863280435FF00AA48B5 /* LoginFlowCoordinator.swift */; };
-		5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86828057ADB00AA48B5 /* Routable.swift */; };
-		5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */; };
 		5FA7D86D28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7D86C28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift */; };
 		5FB6DA932817211E0037C38B /* SafeAreaInsets+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA922817211E0037C38B /* SafeAreaInsets+Environment.swift */; };
 		5FB6DA95281721690037C38B /* ScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB6DA94281721690037C38B /* ScrollViewDelegate.swift */; };
@@ -217,8 +215,6 @@
 		5FA683AB289C238A002DFEDF /* StorageClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA683AD289C25FE002DFEDF /* FirebaseClientUnimplemented.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClientUnimplemented.swift; sourceTree = "<group>"; };
 		5FA7D863280435FF00AA48B5 /* LoginFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlowCoordinator.swift; sourceTree = "<group>"; };
-		5FA7D86828057ADB00AA48B5 /* Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
-		5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedRouterState+Ext.swift"; sourceTree = "<group>"; };
 		5FA7D86C28057B8600AA48B5 /* LoginFlowCoordinator+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginFlowCoordinator+Path.swift"; sourceTree = "<group>"; };
 		5FB6DA922817211E0037C38B /* SafeAreaInsets+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafeAreaInsets+Environment.swift"; sourceTree = "<group>"; };
 		5FB6DA94281721690037C38B /* ScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDelegate.swift; sourceTree = "<group>"; };
@@ -627,7 +623,6 @@
 				5FB6DAAD2818A8160037C38B /* UIKit */,
 				5F9DFC92280B1C6D00E73206 /* Combine */,
 				5F9DFC8E280B1C3700E73206 /* Firebase */,
-				5FA7D86728057AC700AA48B5 /* TCACoordinator */,
 				5F9F4E3927FF464200915572 /* SwiftGen+Ext.swift */,
 				5D35EC862803204D00624717 /* View+Ext.swift */,
 				5D35EC88280323C100624717 /* Collection+Ext.swift */,
@@ -685,15 +680,6 @@
 				5FBCF9D728193EF300734BA0 /* EditProfile */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		5FA7D86728057AC700AA48B5 /* TCACoordinator */ = {
-			isa = PBXGroup;
-			children = (
-				5FA7D86828057ADB00AA48B5 /* Routable.swift */,
-				5FA7D86A28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift */,
-			);
-			path = TCACoordinator;
 			sourceTree = "<group>";
 		};
 		5FB6DA962817220E0037C38B /* SubViews */ = {
@@ -1094,7 +1080,6 @@
 				5FF264D628228075000FD185 /* PushRoute.swift in Sources */,
 				5FF264E52822BD3B000FD185 /* ValidationClientLive.swift in Sources */,
 				5FB6DAA228182FB70037C38B /* ImagePicker.swift in Sources */,
-				5FA7D86B28057B2600AA48B5 /* IdentifiedRouterState+Ext.swift in Sources */,
 				5D7EAF3E289D934100A7FC2B /* FirestoreChatsClientLive.swift in Sources */,
 				5DEA0FF12810B8F9000F1C20 /* NewMessage.swift in Sources */,
 				5F727FB3280762D800FABF26 /* LoginFlowView.swift in Sources */,
@@ -1181,7 +1166,6 @@
 				5FD33DC6280DBA8C009E9FBB /* SearchBar.swift in Sources */,
 				5D35EC8E28076EDF00624717 /* Loader.swift in Sources */,
 				5F71A669280C612A0024F44A /* NewPrivateChatCellView.swift in Sources */,
-				5FA7D86928057ADB00AA48B5 /* Routable.swift in Sources */,
 				5FB6DA982817221A0037C38B /* UserImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

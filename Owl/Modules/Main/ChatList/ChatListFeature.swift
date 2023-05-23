@@ -31,19 +31,16 @@ struct ChatListFeature: Reducer {
         
         enum Delegate: Equatable {
             case openProfile
-//            case openNewPrivateChat
             case openChat(ChatsListPrivateItem)
         }
     }
     
     struct Destination: Reducer {
         enum State: Equatable {
-//            case profile(ProfileFeature.State)
             case newPrivateChat(NewPrivateChatFeature.State)
         }
         
         enum Action: Equatable {
-//            case profile(ProfileFeature.Action)
             case newPrivateChat(NewPrivateChatFeature.Action)
         }
         
@@ -51,9 +48,6 @@ struct ChatListFeature: Reducer {
             Scope(state: /State.newPrivateChat, action: /Action.newPrivateChat) {
                 NewPrivateChatFeature()
             }
-//            Scope(state: /State.profile, action: /Action.profile) {
-//                ProfileFeature()
-//            }
         }
     }
     
@@ -125,79 +119,3 @@ struct ChatListFeature: Reducer {
     }
 
 }
-
-//struct ChatListCoordinator: Reducer {
-//    struct State: Equatable {
-//        var feature: ChatListFeature.State
-//        @PresentationState var destination: Destination.State?
-//        
-//        init(user: User) {
-//            self.feature = .init(user: user, chats: [], chatsData: [])
-//        }
-//    }
-//    
-//    
-//    enum Action: Equatable {
-//        case feature(ChatListFeature.Action)
-//        case delegate(Delegate)
-//        enum Delegate: Equatable {
-//            case openProfile
-//        }
-//    }
-//    
-//    @Dependency(\.userClient) var userClient
-//    
-//    var body: some Reducer<State, Action> {
-//        Scope(state: \.feature, action: /Action.feature) {
-//            ChatListFeature()
-//        }
-//                
-//        Reduce<State, Action> { state, action in
-//            switch action {
-//            case .feature(.delegate(.openNewPrivateChat)):
-//                state.destination = .newPrivateChat(.init())
-//                return .none
-//            
-//            case .feature(.delegate(.openProfile)):
-//                return .send(.delegate(.openProfile))
-////                guard let firestoreUser = userClient.firestoreUser.value else {
-////                    return .none
-////                }
-////                let profileState = ProfileFeature.State(user: firestoreUser)
-////                state.destination = .profile(profileState)
-////                return .none
-//                
-//            case .destination:
-//                return .none
-//                
-//            case .feature:
-//                return .none
-//                
-//            case .delegate:
-//                return .none
-//            }
-//        }
-//        .ifLet(\.$destination, action: /Action.destination) {
-//            Destination()
-//        }
-//    }
-//    
-//}
-//
-//struct ChatListCoordinatorView: View {
-//    let store: StoreOf<ChatListCoordinator>
-//    
-//    var body: some View {
-//        ChatListView(store: store.scope(state: \.feature, action: { .feature($0) }))
-//
-////            .navigationDestination(store: <#T##Store<PresentationState<State>, PresentationAction<Action>>#>, destination: <#T##(Store<State, Action>) -> Destination#>)
-////            .navigationDestination(
-////                store: self.store.scope(state: \.$destination, action: ChatListCoordinator.Action.destination),
-////                state: /ChatListCoordinator.Destination.State.profile,
-////                action: ChatListCoordinator.Destination.Action.profile
-////            ) { store in
-////                ProfileView(store: store)
-////            }
-//        // Or this need to modify path somehow
-//    }
-//}

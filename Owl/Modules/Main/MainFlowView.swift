@@ -12,7 +12,6 @@ struct MainFlowView: View {
     let store: StoreOf<MainFlowCoordinator>
     
     var body: some View {
-        EmptyView()
         NavigationStackStore(
             store.scope(state: \.path, action: MainFlowCoordinator.Action.path),
             root: {
@@ -44,13 +43,6 @@ struct MainFlowView: View {
                         action: MainFlowCoordinator.Path.Action.editProfile,
                         then: EditProfileView.init
                     )
-                    
-//                case .newPrivateChat:
-//                    CaseLet(
-//                        state: /MainFlowCoordinator.Path.State.newPrivateChat,
-//                        action: MainFlowCoordinator.Path.Action.newPrivateChat,
-//                        then: NewPrivateChatView.init
-//                    )
                 }
             }
         )
