@@ -19,7 +19,7 @@ struct ChatView: View {
     @State var keyboard = Keyboard.initialValue
 
     @FocusState private var focusedField: Field?
-    @Environment(\.safeAreaInsets) var safeAreaInsets
+    @Dependency(\.safeAreaInsets) var safeAreaInsets
 
     let store: StoreOf<ChatFeature>
 
