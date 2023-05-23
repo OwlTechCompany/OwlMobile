@@ -88,12 +88,14 @@ struct NewPrivateChatFeature: Reducer {
                 let opponent = state.users.first(where: { $0.uid == userId })!
                 let privateChatCreate = PrivateChatCreate(
                     createdBy: firestoreUser.uid,
-                    members: [
+                    membersIDs: [
                         firestoreUser.uid,
                         userId
                     ],
-                    user1: firestoreUser,
-                    user2: opponent
+                    members: [
+                        firestoreUser,
+                        opponent
+                    ]
                 )
                 return chatsClient.createPrivateChat(privateChatCreate)
                     .catchToEffect(Action.createPrivateChatResult)

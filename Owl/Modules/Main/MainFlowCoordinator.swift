@@ -46,6 +46,7 @@ struct MainFlowCoordinator: Reducer {
                 return .none
                 
             case let .chatList(.delegate(.openChat(chatsListPrivateItem))):
+                state.chatList.destination = .none
                 state.path.append(.chat(.init(model: chatsListPrivateItem)))
                 return .none
 

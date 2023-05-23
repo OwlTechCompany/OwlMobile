@@ -41,7 +41,7 @@ fileprivate extension FirestoreChatsClient {
             return EffectPublisher(error: NSError())
         }
         return Collection.chats
-            .whereField("members", arrayContains: authUser.uid)
+            .whereField("membersIDs", arrayContains: authUser.uid)
             .order(by: "updatedAt", descending: true)
             .snapshotPublisher()
             .tryMap { snapshot in
@@ -61,7 +61,7 @@ fileprivate extension FirestoreChatsClient {
         let usersReversed: [String] = users.reversed()
         
         return Collection.chats
-            .whereField("members", in: [users, usersReversed])
+            .whereField("membersIDs", in: [users, usersReversed])
             .getDocuments()
             .tryMap { snapshot -> ChatWithUserResponse in
                 if let document = snapshot.documents.first {
