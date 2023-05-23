@@ -155,10 +155,7 @@ platform :ios do
     keychain_password = TEMP_KEYCHAIN_PASSWORD
     ensure_temp_keychain(keychain_name, keychain_password)
 
-    latest_release = firebase_app_distribution_get_latest_release(
-      app: "#{FIREBASE_APP_ID_STAGING}",
-      firebase_cli_token: "#{FIREBASE_CLI_TOKEN}",
-    )
+    latest_release = 0
     increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
 
     match(
