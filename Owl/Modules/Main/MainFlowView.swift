@@ -16,7 +16,12 @@ struct MainFlowView: View {
         NavigationStackStore(
             store.scope(state: \.path, action: MainFlowCoordinator.Action.path),
             root: {
-                ChatListView(store: store.scope(state: \.chatList, action: MainFlowCoordinator.Action.chatList))
+                ChatListView(
+                    store: store.scope(
+                        state: \.chatList,
+                        action: MainFlowCoordinator.Action.chatList
+                    )
+                )
             },
             destination: { path in
                 switch path {
@@ -32,6 +37,7 @@ struct MainFlowView: View {
                         action: MainFlowCoordinator.Path.Action.profile,
                         then: ProfileView.init
                     )
+                    
                 case .editProfile:
                     CaseLet(
                         state: /MainFlowCoordinator.Path.State.editProfile,
@@ -39,12 +45,12 @@ struct MainFlowView: View {
                         then: EditProfileView.init
                     )
                     
-                case .newPrivateChat:
-                    CaseLet(
-                        state: /MainFlowCoordinator.Path.State.newPrivateChat,
-                        action: MainFlowCoordinator.Path.Action.newPrivateChat,
-                        then: NewPrivateChatView.init
-                    )
+//                case .newPrivateChat:
+//                    CaseLet(
+//                        state: /MainFlowCoordinator.Path.State.newPrivateChat,
+//                        action: MainFlowCoordinator.Path.Action.newPrivateChat,
+//                        then: NewPrivateChatView.init
+//                    )
                 }
             }
         )

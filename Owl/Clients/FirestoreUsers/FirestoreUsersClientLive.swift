@@ -40,7 +40,6 @@ fileprivate extension FirestoreUsersClient {
             photo: .placeholder
         )
         let documentRef = collection.document(authUser.uid)
-
         return documentRef.getDocument()
             .flatMap { snapshot -> AnyPublisher<SignInUserType, Error> in
                 switch snapshot.exists {

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
       "state" : {
-        "revision" : "882ac01eb7ef9e36d4467eb4b1151e74fcef85ab",
-        "version" : "0.9.1"
+        "revision" : "0625932976b3ae23949f6b816d13bd97f3b40b7c",
+        "version" : "0.10.0"
       }
     },
     {
@@ -25,15 +25,6 @@
       "state" : {
         "revision" : "ee016a6774edca5ffc50c39855783d1add6ca0fc",
         "version" : "10.8.1"
-      }
-    },
-    {
-      "identity" : "flowstacks",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
-      "state" : {
-        "revision" : "8d1bc577fcab0c09d599f1f2f6747db2d15f84f4",
-        "version" : "0.3.0"
       }
     },
     {
@@ -140,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-clocks",
       "state" : {
-        "revision" : "20b25ca0dd88ebfb9111ec937814ddc5a8880172",
-        "version" : "0.2.0"
+        "revision" : "f9acfa1a45f4483fe0f2c434a74e6f68f865d12d",
+        "version" : "0.3.0"
       }
     },
     {
@@ -159,7 +150,7 @@
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
         "branch" : "prerelease/1.0",
-        "revision" : "50236aba830680ab594abd01d5bf81284cf97966"
+        "revision" : "55e278e44d642ea0220fb3a7a4d87937adaa0d33"
       }
     },
     {
@@ -167,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-custom-dump",
       "state" : {
-        "revision" : "84b30e1af72e0ffe6dfbfe39d53b8173caacf224",
-        "version" : "0.10.2"
+        "revision" : "505aa98716275fbd045d8f934fee3337c82ffbd3",
+        "version" : "0.10.3"
       }
     },
     {
@@ -176,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-dependencies",
       "state" : {
-        "revision" : "98650d886ec950b587d671261f06d6b59dec4052",
-        "version" : "0.4.1"
+        "revision" : "25c9b6789b4b7ada649a3808e6d8de1489082a33",
+        "version" : "0.5.0"
       }
     },
     {
@@ -214,15 +205,6 @@
       "state" : {
         "revision" : "47dd574b900ba5ba679f56ea00d4d282fc7305a6",
         "version" : "0.7.1"
-      }
-    },
-    {
-      "identity" : "tcacoordinators",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ddanilyuk/TCACoordinators",
-      "state" : {
-        "branch" : "main",
-        "revision" : "b38ead43aaacd6b340bf0b36a47d708c1cb1b558"
       }
     },
     {

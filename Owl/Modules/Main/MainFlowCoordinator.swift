@@ -18,7 +18,7 @@ struct MainFlowCoordinator: Reducer {
 
         init(user: User) {
             path = StackState()
-            chatList = ChatListFeature.State(user: user, chats: [], chatsData: [])
+            chatList = ChatListFeature.State(user: user)
         }
     }
     
@@ -33,38 +33,46 @@ struct MainFlowCoordinator: Reducer {
     }
 
     @Dependency(\.userClient) var userClient
-
-    var body: some ReducerOf<Self> {
-        Scope(state: \State.chatList, action: /Action.chatList) {
-            ChatListFeature()
-        }
-
+    
+    var core: some Reducer<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .chatList(.newPrivateChat):
-                // TODO: What to do here?
-//                state.routes.presentSheet(.newPrivateChat(NewPrivateChatFeature.State()), embedInNavigationView: true)
-                return .none
-
-            case .chatList(.openProfile):
+            case .chatList(.delegate(.openProfile)):
                 guard let firestoreUser = userClient.firestoreUser.value else {
-                    return EffectPublisher(value: .delegate(.logout))
+                    return .send(.delegate(.logout))
                 }
                 let profileState = ProfileFeature.State(user: firestoreUser)
                 state.path.append(.profile(profileState))
                 return .none
-
-            case let .chatList(.open(chat)):
-                state.path.append(.chat(.init(model: chat)))
+                
+            case let .chatList(.delegate(.openChat(chatsListPrivateItem))):
+                state.path.append(.chat(.init(model: chatsListPrivateItem)))
                 return .none
+
+
+//            case .chatList(.newPrivateChat):
+//                // TODO: What to do here?
+////                state.routes.presentSheet(.newPrivateChat(NewPrivateChatFeature.State()), embedInNavigationView: true)
+//                return .none
+//
+//            case .chatList(.openProfile):
+//                guard let firestoreUser = userClient.firestoreUser.value else {
+//                    return .send(.delegate(.logout))
+//                }
+//                let profileState = ProfileFeature.State(user: firestoreUser)
+//                state.path.append(.profile(profileState))
+//                return .none
+//
+//            case let .chatList(.open(chat)):
+
 
             case .path(.element(_, .chat(.navigation(.back)))):
                 state.path.removeLast()
                 return .none
 
-            case let .path(.element(_, .newPrivateChat(.openChat(item)))):
-                // TODO: What here?
-                return .none
+//            case let .path(.element(_, .newPrivateChat(.openChat(item)))):
+//                // TODO: What here?
+//                return .none
 //                return EffectPublisher.routeWithDelaysIfUnsupported(state.routes) { provider in
 //                    provider.dismiss()
 //                    provider.push(.chat(.init(model: item)))
@@ -76,7 +84,7 @@ struct MainFlowCoordinator: Reducer {
 
             case .path(.element(_, .profile(.edit))):
                 guard let firestoreUser = userClient.firestoreUser.value else {
-                    return EffectPublisher(value: .delegate(.logout))
+                    return .send(.delegate(.logout))
                 }
                 let editProfileState = EditProfileFeature.State(user: firestoreUser)
                 state.path.append(.editProfile(editProfileState))
@@ -87,7 +95,7 @@ struct MainFlowCoordinator: Reducer {
                 return .none
 
             case .path(.element(_, .profile(.logout))):
-                return EffectPublisher(value: .delegate(.logout))
+                return .send(.delegate(.logout))
 
             case .delegate:
                 return .none
@@ -99,7 +107,14 @@ struct MainFlowCoordinator: Reducer {
                 return .none
             }
         }
-        .forEach(\.path, action: /Action.path) {
+    }
+    
+    var body: some ReducerOf<Self> {
+        Scope(state: \State.chatList, action: /Action.chatList) {
+            ChatListFeature()
+        }
+        
+        core.forEach(\.path, action: /Action.path) {
             Path()
         }
     }

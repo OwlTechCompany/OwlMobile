@@ -133,7 +133,6 @@
 		5FF264E82822BDB7000FD185 /* FirestoreUsersClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264E72822BDB7000FD185 /* FirestoreUsersClientLive.swift */; };
 		5FF264EA2822BE21000FD185 /* StorageClientLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF264E92822BE21000FD185 /* StorageClientLive.swift */; };
 		DBA2125B28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA2125A28B659080012BC5F /* FirestoreChatsClientUnimplemented.swift */; };
-		DBDFADA329EF333C00F9A3DE /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = DBDFADA229EF333C00F9A3DE /* TCACoordinators */; };
 		DFA8F7B878F1A1582243426F /* Pods_Owl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04636015FACA7B079E7B9551 /* Pods_Owl.framework */; };
 /* End PBXBuildFile section */
 
@@ -275,7 +274,6 @@
 			files = (
 				5FE3C2FA289B18F20069A461 /* FirebaseMessaging in Frameworks */,
 				5FB6DAAA28186FB50037C38B /* SDWebImageSwiftUI in Frameworks */,
-				DBDFADA329EF333C00F9A3DE /* TCACoordinators in Frameworks */,
 				5FE3C2EE289B18F20069A461 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				5FD33DE8280F5172009E9FBB /* Introspect in Frameworks */,
 				5FE3C2F6289B18F20069A461 /* FirebaseFirestoreCombine-Community in Frameworks */,
@@ -680,8 +678,8 @@
 				5D4CF9EE2809EF1D00A1B705 /* MainFlowCoordinator+Path.swift */,
 				5F727FBC2807647300FABF26 /* MainFlowCoordinator.swift */,
 				5F9F4E4627FF52C100915572 /* MainFlowView.swift */,
-				5D4CF9F3280A1C0000A1B705 /* Chat */,
 				5D4CF9E92809ED4D00A1B705 /* ChatList */,
+				5D4CF9F3280A1C0000A1B705 /* Chat */,
 				5F71A661280C60070024F44A /* NewPrivateChat */,
 				5FD33DC7280DBE6D009E9FBB /* Profile */,
 				5FBCF9D728193EF300734BA0 /* EditProfile */,
@@ -932,7 +930,6 @@
 				5FE3C2F9289B18F20069A461 /* FirebaseMessaging */,
 				5FE3C2FB289B18F20069A461 /* FirebaseStorage */,
 				5FE3C2FD289B18F20069A461 /* FirebaseStorageCombine-Community */,
-				DBDFADA229EF333C00F9A3DE /* TCACoordinators */,
 			);
 			productName = Owl;
 			productReference = 5DA8A75727FF260700C2ECBA /* Owl.app */;
@@ -967,7 +964,6 @@
 				5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				5FE3C2EC289B18F20069A461 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				DBDFADA129EF333C00F9A3DE /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
 			projectDirPath = "";
@@ -1641,14 +1637,6 @@
 				minimumVersion = 10.0.0;
 			};
 		};
-		DBDFADA129EF333C00F9A3DE /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ddanilyuk/TCACoordinators";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1711,11 +1699,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5FE3C2EC289B18F20069A461 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
-		};
-		DBDFADA229EF333C00F9A3DE /* TCACoordinators */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DBDFADA129EF333C00F9A3DE /* XCRemoteSwiftPackageReference "TCACoordinators" */;
-			productName = TCACoordinators;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

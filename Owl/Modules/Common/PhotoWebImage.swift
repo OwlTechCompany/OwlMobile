@@ -20,7 +20,7 @@ struct PhotoWebImage: View {
     var isThumbnail: Bool
 
     var body: some View {
-        Group {
+        ZStack {
             switch photo {
             case let .url(url):
                 WebImage(

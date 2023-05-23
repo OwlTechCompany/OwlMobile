@@ -29,7 +29,7 @@ struct ProfileAnimationState {
     var isPlaceholderPhoto: Bool = true
 
     var smallPhotoMaxY: CGFloat {
-        return ProfilePhotoState.small.height + safeAreaInsets.top + smallPhotoTopPadding
+        return ProfilePhotoState.small.height + 44 + smallPhotoTopPadding
     }
 
     var stackViewHeight: CGFloat {
