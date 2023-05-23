@@ -9,23 +9,23 @@ import ComposableArchitecture
 import FirebaseAuth
 import UserNotifications
 
-struct App {
+struct App: ReducerProtocol {
 
     // MARK: - State
 
     struct State: Equatable {
-        var appDelegate: AppDelegate.State = AppDelegate.State()
-        var login: Login.State?
-        var main: Main.State?
+        var appDelegate: AppDelegateStore.State = AppDelegateStore.State()
+        var login: LoginFlowCoordinator.State?
+        var main: MainFlowCoordinator.State?
 
         mutating func set(_ currentState: CurrentState) {
             switch currentState {
             case .login:
-                self.login = .initialState
+                self.login = .init()
                 self.main = .none
 
             case let .main(user):
-                self.main = .initialState(user: user)
+                self.main = .init(user: user)
                 self.login = .none
             }
         }
@@ -39,195 +39,120 @@ struct App {
     // MARK: - Action
 
     enum Action: Equatable {
-        case appDelegate(AppDelegate.Action)
-        case login(Login.Action)
-        case main(Main.Action)
+        case appDelegate(AppDelegateStore.Action)
+        case login(LoginFlowCoordinator.Action)
+        case main(MainFlowCoordinator.Action)
 
         case subscribeOnUserChange
         case signOut
         case handlePushRoute(Result<PushRoute, NSError>)
     }
 
-    // MARK: - Environment
+    @Dependency(\.userClient) var userClient
+    @Dependency(\.authClient) var authClient
+    @Dependency(\.firestoreUsersClient) var firestoreUsersClient
+    @Dependency(\.pushNotificationClient) var pushNotificationClient
 
-    struct Environment {
-        let firebaseClient: FirebaseClient
-        let userClient: UserClient
-        let authClient: AuthClient
-        let userDefaultsClient: UserDefaultsClient
-        let validationClient: ValidationClient
-        let firestoreUsersClient: FirestoreUsersClient
-        let chatsClient: FirestoreChatsClient
-        let storageClient: StorageClient
-        let pushNotificationClient: PushNotificationClient
-
-        static var live: Self {
-            let userDefaultsClient = UserDefaultsClient.live()
-            let userClient = UserClient.live(userDefaults: userDefaultsClient)
-            return Self(
-                firebaseClient: .live(),
-                userClient: userClient,
-                authClient: .live(),
-                userDefaultsClient: userDefaultsClient,
-                validationClient: .live(),
-                firestoreUsersClient: .live(userClient: userClient),
-                chatsClient: .live(userClient: userClient),
-                storageClient: .live(userClient: userClient),
-                pushNotificationClient: .live()
-            )
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \State.appDelegate, action: /Action.appDelegate) {
+            AppDelegateStore()
         }
-    }
 
-    // MARK: - Reducer
+        Reduce { state, action in
+            switch action {
+            case .appDelegate(.didFinishLaunching):
+                if userClient.authUser.value != nil,
+                   let user = userClient.firestoreUser.value {
+                    state.set(.main(user))
+                    return EffectPublisher(value: .subscribeOnUserChange)
 
-    static var reducer = Reducer<State, Action, Environment>.combine(
-        AppDelegate.reducer
-            .pullback(
-                state: \State.appDelegate,
-                action: /Action.appDelegate,
-                environment: { $0.appDelegate }
-            ),
+                } else {
+                    state.set(.login)
+                    return .none
+                }
 
-        Login.reducer
-            .optional()
-            .pullback(
-                state: \State.login,
-                action: /Action.login,
-                environment: { $0.login }
-            ),
+            case .login(.delegate(.loginSuccess)):
+                if let user = userClient.firestoreUser.value {
+                    state.set(.main(user))
+                    return EffectPublisher(value: .subscribeOnUserChange)
 
-        Main.reducer
-            .optional()
-            .pullback(
-                state: \State.main,
-                action: /Action.main,
-                environment: { $0.main }
-            ),
+                } else {
+                    return .none
+                }
 
-        reducerCore
-    ).debug()
+            case .main(.delegate(.logout)):
+                return EffectPublisher.concatenate(
+                    firestoreUsersClient
+                        .updateMe(UserUpdate(fcmToken: ""))
+                        .fireAndForget(),
+                    EffectPublisher(value: .signOut)
+                )
 
-    static var reducerCore = Reducer<State, Action, Environment> { state, action, environment in
-        switch action {
-        case .appDelegate(.didFinishLaunching):
-            if environment.userClient.authUser.value != nil,
-               let user = environment.userClient.firestoreUser.value {
-                state.set(.main(user))
-                return Effect(value: .subscribeOnUserChange)
+            case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
+                let action = response.actionIdentifier
+                if action == UNNotificationDefaultActionIdentifier {
+                    return pushNotificationClient
+                        .handleDidReceiveResponse(
+                            response,
+                            completionHandler
+                        )
+                        .mapError { $0 as NSError }
+                        .catchToEffect(Action.handlePushRoute)
+                } else {
+                    return .none
+                }
 
-            } else {
-                state.set(.login)
+            case let .handlePushRoute(.success(pushRoute)):
+                guard userClient.firestoreUser.value != nil else {
+                    return .none
+                }
+                switch pushRoute {
+                case let .openChat(chatsListPrivateItem):
+                    let chatState = ChatFeature.State(model: chatsListPrivateItem)
+                    state.main?.path.append(.chat(chatState))
+                }
                 return .none
-            }
 
-        case .login(.delegate(.loginSuccess)):
-            if let user = environment.userClient.firestoreUser.value {
-                state.set(.main(user))
-                return Effect(value: .subscribeOnUserChange)
-                
-            } else {
+            case .handlePushRoute(.failure):
                 return .none
-            }
 
-        case .main(.delegate(.logout)):
-            return Effect.concatenate(
-                environment.firestoreUsersClient
-                    .updateMe(UserUpdate(fcmToken: ""))
-                    .fireAndForget(),
-                Effect(value: .signOut)
-            )
-
-        case let .appDelegate(.userNotificationCenterDelegate(.didReceiveResponse(response, completionHandler))):
-            let action = response.actionIdentifier
-            if action == UNNotificationDefaultActionIdentifier {
-                return environment.pushNotificationClient
-                    .handleDidReceiveResponse(
-                        response,
-                        completionHandler
-                    )
-                    .mapError { $0 as NSError }
-                    .catchToEffect(Action.handlePushRoute)
-            } else {
-                return .none
-            }
-
-        case let .handlePushRoute(.success(pushRoute)):
-            guard environment.userClient.firestoreUser.value != nil else {
-                return .none
-            }
-            switch pushRoute {
-            case let .openChat(chatsListPrivateItem):
-                let chatState = Chat.State(model: chatsListPrivateItem)
-                state.main?.routes.push(.chat(chatState))
-            }
-            return .none
-
-        case let .handlePushRoute(.failure(error)):
-            return .none
-
-        case .subscribeOnUserChange:
-            return Effect.run { subscriber in
-                environment.userClient
-                    .firestoreUser
-                    .removeDuplicates()
-                    .sink { user in
-                        guard user == nil else {
-                            return
+            case .subscribeOnUserChange:
+                return EffectPublisher.run { subscriber in
+                    userClient.firestoreUser
+                        .removeDuplicates()
+                        .sink { user in
+                            guard user == nil else {
+                                return
+                            }
+                            subscriber.send(.signOut)
                         }
-                        subscriber.send(.signOut)
-                    }
+                }
+
+            case .signOut:
+                state.set(.login)
+                authClient.signOut()
+                return EffectPublisher.cancel(id: MainFlowCoordinator.ListenersId())
+
+            case .appDelegate:
+                return .none
+
+            case .login:
+                return .none
+
+            case .main:
+                return .none
             }
-
-        case .signOut:
-            state.set(.login)
-            environment.authClient.signOut()
-            return Effect.cancel(id: Main.ListenersId())
-
-        case .appDelegate:
-            return .none
-
-        case .login:
-            return .none
-
-        case .main:
-            return .none
         }
-    }
-}
-
-// MARK: App.Environment + Extensions
-
-extension App.Environment {
-
-    var appDelegate: AppDelegate.Environment {
-        AppDelegate.Environment(
-            firebaseClient: firebaseClient,
-            userClient: userClient,
-            authClient: authClient,
-            firestoreUserClient: firestoreUsersClient,
-            pushNotificationClient: pushNotificationClient,
-            firestoreChatsClient: chatsClient
+        // TODO: Move to IfLetReducer if possible
+        .ifLet(
+            \State.login,
+            action: /Action.login,
+            then: { LoginFlowCoordinator() }
         )
-    }
-
-    var login: Login.Environment {
-        Login.Environment(
-            authClient: authClient,
-            userDefaultsClient: userDefaultsClient,
-            validationClient: validationClient,
-            firestoreUsersClient: firestoreUsersClient,
-            storageClient: storageClient,
-            pushNotificationClient: pushNotificationClient
-        )
-    }
-
-    var main: Main.Environment {
-        Main.Environment(
-            userClient: userClient,
-            authClient: authClient,
-            chatsClient: chatsClient,
-            firestoreUsersClient: firestoreUsersClient,
-            storageClient: storageClient
+        .ifLet(
+            \State.main,
+            action: /Action.main,
+            then: { MainFlowCoordinator() }
         )
     }
 

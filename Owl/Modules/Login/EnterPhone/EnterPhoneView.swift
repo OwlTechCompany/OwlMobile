@@ -9,30 +9,30 @@ import SwiftUI
 import ComposableArchitecture
 
 struct EnterPhoneView: View {
-
+    
     private enum Field: Int, CaseIterable {
         case phoneNumber
     }
-
-    var store: Store<EnterPhone.State, EnterPhone.Action>
+    
+    let store: StoreOf<EnterPhoneFeature>
     @FocusState private var focusedField: Field?
-
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: 50) {
                 Spacer()
-
+                
                 VStack(spacing: 16.0) {
                     Text("Enter Phone")
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
-
+                    
                     Text("We will send you SMS to this number to confirm your identity.")
                         .font(.system(size: 14, weight: .regular))
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                         .ignoresSafeArea(.keyboard)
                 }
-
+                
                 TextField("Phone number", text: viewStore.binding(\.$phoneNumber))
                     .focused($focusedField, equals: .phoneNumber)
                     .textFieldStyle(PlainTextFieldStyle())
@@ -54,9 +54,9 @@ struct EnterPhoneView: View {
                             focusedField = .phoneNumber
                         }
                     }
-
+                
                 Spacer()
-
+                
                 Button(
                     action: { viewStore.send(.sendPhoneNumber) },
                     label: { Text("Send code") }
@@ -72,7 +72,7 @@ struct EnterPhoneView: View {
                 : nil
             )
             .alert(
-                self.store.scope(state: \.alert),
+                store.scope(state: \.alert),
                 dismiss: .dismissAlert
             )
         }
@@ -89,13 +89,11 @@ struct EnterPhoneView: View {
 struct EnterPhoneNumber_Previews: PreviewProvider {
     static var previews: some View {
         EnterPhoneView(store: Store(
-            initialState: EnterPhone.State(phoneNumber: "+380992177560", isLoading: false),
-            reducer: EnterPhone.reducer,
-            environment: EnterPhone.Environment(
-                authClient: .live(),
-                userDefaultsClient: .live(),
-                phoneValidation: ValidationClient.live().phoneValidation
-            )
+            initialState: EnterPhoneFeature.State(
+                phoneNumber: "+38099217756",
+                isLoading: false
+            ),
+            reducer: EnterPhoneFeature()
         ))
     }
 }

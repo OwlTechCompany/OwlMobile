@@ -14,8 +14,22 @@ struct FirestoreUsersClient {
 
     static var collection = FirebaseClient.firestore.collection("users")
 
-    var setMeIfNeeded: () -> Effect<SignInUserType, NSError>
-    var updateMe: (UserUpdate) -> Effect<Bool, NSError>
-    var users: (UserQuery) -> Effect<[User], NSError>
+    var setMeIfNeeded: () -> EffectPublisher<SignInUserType, NSError>
+    var updateMe: (UserUpdate) -> EffectPublisher<Bool, NSError>
+    var users: (UserQuery) -> EffectPublisher<[User], NSError>
+
+}
+
+extension DependencyValues {
+
+    var firestoreUsersClient: FirestoreUsersClient {
+        get { self[FirestoreUsersClientKey.self] }
+        set { self[FirestoreUsersClientKey.self] = newValue }
+    }
+
+    enum FirestoreUsersClientKey: DependencyKey {
+        static var testValue = FirestoreUsersClient.unimplemented
+        static let liveValue = FirestoreUsersClient.live()
+    }
 
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Dependencies
 
 struct ProfileAnimationState {
 
@@ -19,8 +20,8 @@ struct ProfileAnimationState {
         textSize + subTextSize + textBottomPadding
     }
 
-    @Environment(\.safeAreaInsets) var safeAreaInsets
-
+    @Dependency(\.safeAreaInsets) var safeAreaInsets
+    
     // MARK: - Variables
 
     var offset: CGFloat = .zero
@@ -29,7 +30,7 @@ struct ProfileAnimationState {
     var isPlaceholderPhoto: Bool = true
 
     var smallPhotoMaxY: CGFloat {
-        return ProfilePhotoState.small.height + safeAreaInsets.top + smallPhotoTopPadding
+        return ProfilePhotoState.small.height + 44 + smallPhotoTopPadding
     }
 
     var stackViewHeight: CGFloat {

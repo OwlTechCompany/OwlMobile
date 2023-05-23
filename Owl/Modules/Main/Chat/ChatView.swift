@@ -11,6 +11,7 @@ import Introspect
 import UIKit
 import Combine
 
+// TODO: This view needs refactor
 struct ChatView: View {
 
     @State var isFirstUpdate: Bool = true
@@ -18,11 +19,11 @@ struct ChatView: View {
     @State var keyboard = Keyboard.initialValue
 
     @FocusState private var focusedField: Field?
-    @Environment(\.safeAreaInsets) var safeAreaInsets
+    @Dependency(\.safeAreaInsets) var safeAreaInsets
 
-    let store: Store<Chat.State, Chat.Action>
+    let store: StoreOf<ChatFeature>
 
-    init(store: Store<Chat.State, Chat.Action>) {
+    init(store: StoreOf<ChatFeature>) {
         self.store = store
 
         UITextView.appearance().backgroundColor = .clear
@@ -36,7 +37,7 @@ struct ChatView: View {
                     ChatNavigationView(
                         store: store.scope(
                             state: \.navigation,
-                            action: Chat.Action.navigation
+                            action: ChatFeature.Action.navigation
                         )
                     )
 
@@ -51,7 +52,7 @@ struct ChatView: View {
                                 ForEachStore(
                                     self.store.scope(
                                         state: \.messages,
-                                        action: Chat.Action.messages(id:action:)
+                                        action: ChatFeature.Action.messages(id:action:)
                                     ),
                                     content: {
                                         ChatMessageView(store: $0)
@@ -183,9 +184,8 @@ struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             ChatView(store: Store(
-                initialState: .init(model: MockedDataClient.chatsListPrivateItem),
-                reducer: Chat.reducer,
-                environment: Chat.Environment(chatsClient: .live(userClient: .live(userDefaults: .live())))
+                initialState: ChatFeature.State(model: MockedDataClient.chatsListPrivateItem),
+                reducer: ChatFeature()
             ))
         }
     }

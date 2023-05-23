@@ -9,11 +9,10 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ChatNavigationView: View {
-    let store: Store<ChatNavigation.State, ChatNavigation.Action>
+    let store: StoreOf<ChatNavigationFeature>
 
     var body: some View {
-
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
             ZStack {
                 Color.clear.background(.ultraThinMaterial)
                     .ignoresSafeArea(.container, edges: .top)
@@ -57,9 +56,8 @@ struct ChatNavigationView: View {
 struct ChatNavigationView_Previews: PreviewProvider {
     static var previews: some View {
         ChatNavigationView(store: Store(
-            initialState: .init(model: MockedDataClient.chatsListPrivateItem),
-            reducer: ChatNavigation.reducer,
-            environment: .init()
+            initialState: ChatNavigationFeature.State(model: MockedDataClient.chatsListPrivateItem),
+            reducer: ChatNavigationFeature()
         ))
     }
 }

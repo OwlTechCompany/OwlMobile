@@ -36,9 +36,9 @@ final class UserNotificationCenterDelegate: NSObject, UNUserNotificationCenterDe
         }
     }
 
-    let subscriber: Effect<Event, Never>.Subscriber
+    let subscriber: EffectPublisher<Event, Never>.Subscriber
 
-    init(subscriber: Effect<Event, Never>.Subscriber) {
+    init(subscriber: EffectPublisher<Event, Never>.Subscriber) {
         self.subscriber = subscriber
     }
 

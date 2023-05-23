@@ -21,12 +21,26 @@ struct FirestoreChatsClient {
     // Let's store openedChatId here for now.
     var openedChatId: CurrentValueSubject<String?, Never>
 
-    var getChats: () -> Effect<[ChatsListPrivateItem], NSError>
-    var chatWithUser: (_ uid: String) -> Effect<ChatWithUserResponse, NSError>
-    var createPrivateChat: (PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError>
+    var getChats: () -> EffectPublisher<[ChatsListPrivateItem], NSError>
+    var chatWithUser: (_ uid: String) -> EffectPublisher<ChatWithUserResponse, NSError>
+    var createPrivateChat: (PrivateChatCreate) -> EffectPublisher<ChatsListPrivateItem, NSError>
 
-    var getLastMessages: () -> Effect<GetLastMessagesResponse, NSError>
-    var subscribeForNewMessages: (DocumentSnapshot) -> Effect<[MessageResponse], NSError>
-    var getPaginatedMessages: (DocumentSnapshot) -> Effect<GetPaginatedMessagesResponse, NSError>
-    var sendMessage: (NewMessage) -> Effect<Bool, NSError>
+    var getLastMessages: () -> EffectPublisher<GetLastMessagesResponse, NSError>
+    var subscribeForNewMessages: (DocumentSnapshot) -> EffectPublisher<[MessageResponse], NSError>
+    var getPaginatedMessages: (DocumentSnapshot) -> EffectPublisher<GetPaginatedMessagesResponse, NSError>
+    var sendMessage: (NewMessage) -> EffectPublisher<Bool, NSError>
+}
+
+extension DependencyValues {
+
+    var firestoreChatsClient: FirestoreChatsClient {
+        get { self[FirestoreChatsClientKey.self] }
+        set { self[FirestoreChatsClientKey.self] = newValue }
+    }
+
+    enum FirestoreChatsClientKey: DependencyKey {
+        static var testValue = FirestoreChatsClient.unimplemented
+        static var liveValue = FirestoreChatsClient.live()
+    }
+
 }

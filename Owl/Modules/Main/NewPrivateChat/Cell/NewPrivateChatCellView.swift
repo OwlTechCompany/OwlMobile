@@ -10,11 +10,11 @@ import ComposableArchitecture
 
 struct NewPrivateChatCellView: View {
 
-    let store: Store<NewPrivateChatCell.State, NewPrivateChatCell.Action>
+    let store: StoreOf<NewPrivateChatCellFeature>
 
     var body: some View {
-        WithViewStore(self.store) { viewStore in
-
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            
             HStack(alignment: .center, spacing: 16) {
 
                 Image(uiImage: viewStore.image)
@@ -54,14 +54,13 @@ struct NewPrivateChatCellView: View {
 struct NewPrivateChatCellView_Previews: PreviewProvider {
     static var previews: some View {
         NewPrivateChatCellView(store: Store(
-            initialState: NewPrivateChatCell.State(
+            initialState: NewPrivateChatCellFeature.State(
                 id: "",
                 image: Asset.Images.owlBlack.image,
                 fullName: "Denys Danyliuk",
                 phoneNumber: "+380992177560"
             ),
-            reducer: NewPrivateChatCell.reducer,
-            environment: NewPrivateChatCell.Environment()
+            reducer: NewPrivateChatCellFeature()
         ))
     }
 }

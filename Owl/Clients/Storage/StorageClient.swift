@@ -11,6 +11,7 @@ import Firebase
 import FirebaseStorage
 import FirebaseStorageCombineSwift
 import CoreGraphics
+import XCTestDynamicOverlay
 
 struct StorageClient {
 
@@ -20,5 +21,19 @@ struct StorageClient {
     }
 
     var compressionQuality: CGFloat
-    var setMyPhoto: (Data) -> Effect<URL, NSError>
+    var setMyPhoto: (Data) -> EffectPublisher<URL, NSError>
+}
+
+extension DependencyValues {
+
+    var storageClient: StorageClient {
+        get { self[StorageClientKey.self] }
+        set { self[StorageClientKey.self] = newValue }
+    }
+
+    enum StorageClientKey: DependencyKey {
+        static var testValue = StorageClient.unimplemented
+        static let liveValue = StorageClient.live()
+    }
+
 }

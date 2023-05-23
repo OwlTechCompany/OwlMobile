@@ -11,14 +11,20 @@ import FirebaseMessaging
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
 
+    let store: StoreOf<App> = {
+        Store(
+            initialState: App.State(),
+            reducer: App()
+        )
+    }()
+
     // MARK: - Store
 
-    lazy var appDelegateStore = OwlApp.store.scope(
-        state: \App.State.appDelegate,
-        action: App.Action.appDelegate
-    )
-    lazy var viewStore: ViewStore<State, Action> = ViewStore(
-        appDelegateStore,
+    lazy var viewStore: ViewStoreOf<AppDelegateStore> = ViewStore(
+        store.scope(
+            state: \App.State.appDelegate,
+            action: App.Action.appDelegate
+        ),
         removeDuplicates: ==
     )
 

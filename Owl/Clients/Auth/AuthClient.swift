@@ -12,12 +12,26 @@ import FirebaseAuthCombineSwift
 
 struct AuthClient {
 
-    var verifyPhoneNumber: (String) -> Effect<String, NSError>
-    var setAPNSToken: (Data) -> Effect<Void, Never>
+    var verifyPhoneNumber: (String) -> EffectPublisher<String, NSError>
+    var setAPNSToken: (Data) -> EffectPublisher<Void, Never>
     var handleIfAuthNotification: (DidReceiveRemoteNotificationModel) -> Void
-    var signIn: (SignIn) -> Effect<AuthDataResult, NSError>
+    var signIn: (SignIn) -> EffectPublisher<AuthDataResult, NSError>
     var signOut: () -> Void
     
+}
+
+extension DependencyValues {
+
+    var authClient: AuthClient {
+        get { self[AuthClientKey.self] }
+        set { self[AuthClientKey.self] = newValue }
+    }
+
+    enum AuthClientKey: DependencyKey {
+        static var testValue = AuthClient.unimplemented
+        static let liveValue = AuthClient.live()
+    }
+
 }
 
 // MARK: - Test Phones

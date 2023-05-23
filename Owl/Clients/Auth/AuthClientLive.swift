@@ -28,7 +28,7 @@ fileprivate extension AuthClient {
 
     static func verifyPhoneNumber(
         phoneNumber: String
-    ) -> Effect<String, NSError> {
+    ) -> EffectPublisher<String, NSError> {
         if AuthClient.testPhones.contains(phoneNumber) {
             FirebaseClient.auth.settings?.isAppVerificationDisabledForTesting = true
         }
@@ -38,8 +38,8 @@ fileprivate extension AuthClient {
             .eraseToEffect()
     }
 
-    static func setAPNSToken(deviceToken: Data) -> Effect<Void, Never> {
-        Effect.fireAndForget {
+    static func setAPNSToken(deviceToken: Data) -> EffectPublisher<Void, Never> {
+        EffectPublisher.fireAndForget {
             FirebaseClient.auth.setAPNSToken(deviceToken, type: .unknown)
         }
     }
@@ -52,7 +52,7 @@ fileprivate extension AuthClient {
         }
     }
 
-    static func signIn(signInModel: SignIn) -> Effect<AuthDataResult, NSError> {
+    static func signIn(signInModel: SignIn) -> EffectPublisher<AuthDataResult, NSError> {
         let credential = FirebaseClient.phoneAuthProvider.credential(
             withVerificationID: signInModel.verificationID,
             verificationCode: signInModel.verificationCode

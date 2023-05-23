@@ -10,10 +10,10 @@ import ComposableArchitecture
 
 struct ChatListCellView: View {
 
-    let store: Store<ChatListCell.State, ChatListCell.Action>
+    let store: StoreOf<ChatListCellFeature>
 
     var body: some View {
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack(alignment: .top, spacing: 16) {
                 PhotoWebImage(photo: viewStore.photo, placeholderName: viewStore.chatName, isThumbnail: true)
                     .frame(width: 56, height: 56)
@@ -90,7 +90,7 @@ private extension ChatListCellView {
     }
 }
 
-private extension ChatListCell.State {
+private extension ChatListCellFeature.State {
 
     var unreadMessagesWidth: CGFloat {
         let numbersCount = String(unreadMessagesNumber).count
@@ -116,9 +116,8 @@ private extension ChatListCell.State {
 struct ChatListCellView_Previews: PreviewProvider {
     static var previews: some View {
         ChatListCellView(store: Store(
-            initialState: ChatListCell.State(model: MockedDataClient.chatsListPrivateItem),
-            reducer: ChatListCell.reducer,
-            environment: ChatListCell.Environment()
+            initialState: ChatListCellFeature.State(model: MockedDataClient.chatsListPrivateItem),
+            reducer: ChatListCellFeature()
         ))
     }
 }

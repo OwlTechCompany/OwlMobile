@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
+import Dependencies
 
-private struct SafeAreaInsetsKey: EnvironmentKey {
-
+private struct SafeAreaInsetsKey: DependencyKey {
     static var keyWindow: UIWindow? {
         UIApplication.shared.connectedScenes
             .first(where: { $0 is UIWindowScene })
@@ -16,20 +16,19 @@ private struct SafeAreaInsetsKey: EnvironmentKey {
             .first(where: \.isKeyWindow)
     }
 
-    static var defaultValue: EdgeInsets {
+    static var liveValue: EdgeInsets {
         (keyWindow?.safeAreaInsets ?? .zero).insets
     }
 }
 
-extension EnvironmentValues {
-
+extension DependencyValues {
     var safeAreaInsets: EdgeInsets {
-        self[SafeAreaInsetsKey.self]
+        get { self[SafeAreaInsetsKey.self] }
+        set { self[SafeAreaInsetsKey.self] = newValue }
     }
 }
 
 private extension UIEdgeInsets {
-
     var insets: EdgeInsets {
         EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
     }

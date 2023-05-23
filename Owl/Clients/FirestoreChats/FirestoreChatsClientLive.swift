@@ -17,9 +17,9 @@ enum FirestoreChatsClientError: Error {
 
 extension FirestoreChatsClient {
     
-    static func live(userClient: UserClient) -> Self {
+    static func live() -> Self {
         let openedChatId = CurrentValueSubject<String?, Never>(nil)
-        
+        @Dependency(\.userClient) var userClient
         return FirestoreChatsClient(
             openedChatId: openedChatId,
             getChats: { getChats(userClient: userClient) },
@@ -36,9 +36,9 @@ extension FirestoreChatsClient {
 
 fileprivate extension FirestoreChatsClient {
     
-    static func getChats(userClient: UserClient) -> Effect<[ChatsListPrivateItem], NSError> {
+    static func getChats(userClient: UserClient) -> EffectPublisher<[ChatsListPrivateItem], NSError> {
         guard let authUser = userClient.authUser.value else {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
         return Collection.chats
             .whereField("members", arrayContains: authUser.uid)
@@ -53,9 +53,9 @@ fileprivate extension FirestoreChatsClient {
             .eraseToEffect()
     }
     
-    static func chatWithUser(_ uid: String, userClient: UserClient) -> Effect<ChatWithUserResponse, NSError> {
+    static func chatWithUser(_ uid: String, userClient: UserClient) -> EffectPublisher<ChatWithUserResponse, NSError> {
         guard let authUser = userClient.authUser.value else {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
         let users = [uid, authUser.uid]
         let usersReversed: [String] = users.reversed()
@@ -75,7 +75,7 @@ fileprivate extension FirestoreChatsClient {
             .eraseToEffect()
     }
     
-    static func createPrivateChat(_ privateChatRequest: PrivateChatCreate) -> Effect<ChatsListPrivateItem, NSError> {
+    static func createPrivateChat(_ privateChatRequest: PrivateChatCreate) -> EffectPublisher<ChatsListPrivateItem, NSError> {
         let newDocument = Collection.chats.document()
         
         // Update id of PrivateChatRequest
@@ -91,9 +91,9 @@ fileprivate extension FirestoreChatsClient {
             .eraseToEffect()
     }
     
-    static func getLastMessages(chatId: CurrentValueSubject<String?, Never>) -> Effect<GetLastMessagesResponse, NSError> {
+    static func getLastMessages(chatId: CurrentValueSubject<String?, Never>) -> EffectPublisher<GetLastMessagesResponse, NSError> {
         guard let chatID = chatId.value else {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
         
         return Collection.chatsMessages.document(chatID).collection("messages")
@@ -126,9 +126,9 @@ fileprivate extension FirestoreChatsClient {
     static func subscribeForNewMessages(
         _ snapshot: DocumentSnapshot,
         chatId: CurrentValueSubject<String?, Never>
-    ) -> Effect<[MessageResponse], NSError> {
+    ) -> EffectPublisher<[MessageResponse], NSError> {
         guard let chatID = chatId.value else {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
         
         return Collection.chatsMessages.document(chatID).collection("messages")
@@ -147,9 +147,9 @@ fileprivate extension FirestoreChatsClient {
     static func getPaginatedMessages(
         _ snapshot: DocumentSnapshot,
         chatId: CurrentValueSubject<String?, Never>
-    ) -> Effect<GetPaginatedMessagesResponse, NSError> {
+    ) -> EffectPublisher<GetPaginatedMessagesResponse, NSError> {
         guard let chatID = chatId.value else {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
         
         return Collection.chatsMessages.document(chatID).collection("messages")
@@ -170,7 +170,7 @@ fileprivate extension FirestoreChatsClient {
             .eraseToEffect()
     }
     
-    static func sendMessage(_ request: NewMessage) -> Effect<Bool, NSError> {
+    static func sendMessage(_ request: NewMessage) -> EffectPublisher<Bool, NSError> {
         let batch = FirebaseClient.firestore.batch()
         
         let newDocument = Collection.chatsMessages.document(request.chatId).collection("messages").document()
@@ -195,7 +195,7 @@ fileprivate extension FirestoreChatsClient {
                 .mapError { $0 as NSError }
                 .eraseToEffect()
         } catch {
-            return Effect(error: NSError())
+            return EffectPublisher(error: NSError())
         }
     }
     

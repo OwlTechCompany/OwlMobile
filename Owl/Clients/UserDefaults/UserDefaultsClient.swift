@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import ComposableArchitecture
 
+// TODO: Use userDefaults from KPIHub
 struct UserDefaultsClient {
 
     var setVerificationID: (String) -> Void
@@ -26,4 +28,18 @@ extension UserDefaultsClient {
         case user
     }
 
+}
+
+extension DependencyValues {
+
+    var userDefaultsClient: UserDefaultsClient {
+        get { self[UserDefaultsKey.self] }
+        set { self[UserDefaultsKey.self] = newValue }
+    }
+
+    enum UserDefaultsKey: DependencyKey {
+        static var testValue = UserDefaultsClient.unimplemented
+        static let liveValue = UserDefaultsClient.live()
+    }
+    
 }

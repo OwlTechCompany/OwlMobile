@@ -9,45 +9,66 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ChatListView: View {
-
-    var store: Store<ChatList.State, ChatList.Action>
-
+    struct ViewState: Equatable {
+        let user: User
+        
+        init(state: ChatListFeature.State) {
+            self.user = state.user
+        }
+    }
+    
+    private let store: StoreOf<ChatListFeature>
+    @StateObject private var viewStore: ViewStore<ViewState, ChatListFeature.Action>
+    
+    init(store: StoreOf<ChatListFeature>) {
+        self.store = store
+        self._viewStore = StateObject(wrappedValue: ViewStore(store, observe: ViewState.init))
+    }
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack {
-                List {
-                    ForEachStore(
-                        self.store.scope(
-                            state: \.chats,
-                            action: ChatList.Action.chats(id:action:)
-                        ),
-                        content: { ChatListCellView(store: $0) }
-                    )
-                }
-                .listStyle(.plain)
+        VStack {
+            List {
+                ForEachStore(
+                    store.scope(
+                        state: \.chats,
+                        action: ChatListFeature.Action.chats(id:action:)
+                    ),
+                    content: { ChatListCellView(store: $0) }
+                )
             }
-            .navigationTitle("Owl")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    PhotoWebImage(user: viewStore.user, useResize: true)
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        .modifier(ShadowModifier())
-                        .onTapGesture { viewStore.send(.openProfile) }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button("Private chat", action: { viewStore.send(.newPrivateChat) })
-                        Button("Group", action: {})
-                            .disabled(true)
-                    } label: {
-                        Label("", systemImage: "square.and.pencil")
-                    }
-                    .padding()
-                }
+            .listStyle(.plain)
+        }
+        .navigationTitle("Owl")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                PhotoWebImage(user: viewStore.user, useResize: true)
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    .modifier(ShadowModifier())
+                    .onTapGesture { viewStore.send(.profileButtonTapped) }
             }
-            .onAppear { viewStore.send(.onAppear) }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button("Private chat", action: { viewStore.send(.newPrivateChatButtonTapped) })
+                    Button("Group", action: {})
+                        .disabled(true)
+                } label: {
+                    Label("", systemImage: "square.and.pencil")
+                }
+                .padding()
+            }
+        }
+        .onAppear { viewStore.send(.onAppear) }
+        .sheet(
+            store: store.scope(state: \.$destination, action: ChatListFeature.Action.destination),
+            state: /ChatListFeature.Destination.State.newPrivateChat,
+            action: ChatListFeature.Destination.Action.newPrivateChat
+        ) { store in
+            NavigationStack {
+                NewPrivateChatView(store: store)
+                    .navigationTitle("New private chat")
+            }
         }
     }
 }
@@ -55,12 +76,9 @@ struct ChatListView: View {
 // MARK: - Preview
 
 struct ChatListView_Previews: PreviewProvider {
-
-    static let userClient = UserClient.live(userDefaults: .live())
-
     static var previews: some View {
         ChatListView(store: Store(
-            initialState: ChatList.State(
+            initialState: ChatListFeature.State(
                 user: User(
                     uid: "",
                     phoneNumber: "",
@@ -69,17 +87,11 @@ struct ChatListView_Previews: PreviewProvider {
                     photo: .placeholder
                 ),
                 chats: .init(
-                    arrayLiteral:
-                        ChatListCell.State(model: MockedDataClient.chatsListPrivateItem)
+                    arrayLiteral: ChatListCellFeature.State(model: MockedDataClient.chatsListPrivateItem)
                 ),
                 chatsData: []
             ),
-            reducer: ChatList.reducer,
-            environment: ChatList.Environment(
-                authClient: .live(),
-                chatsClient: .live(userClient: userClient),
-                userClient: userClient
-            )
+            reducer: ChatListFeature()
         ))
     }
 }

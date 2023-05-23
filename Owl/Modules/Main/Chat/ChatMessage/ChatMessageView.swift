@@ -11,12 +11,11 @@ import Firebase
 
 struct ChatMessageView: View {
 
-    let store: Store<ChatMessage.State, ChatMessage.Action>
+    let store: StoreOf<ChatMessageFeature>
 
     @State private var isHStack: Bool = true
 
     var body: some View {
-
         WithViewStore(self.store) { viewStore in
             VStack {
 
@@ -76,7 +75,7 @@ private extension ChatMessageView {
 
 }
 
-private extension ChatMessage.State {
+private extension ChatMessageFeature.State {
 
     var alignment: Alignment {
         switch type {
@@ -118,31 +117,29 @@ struct ChatMessageView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ChatMessageView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: ChatMessageFeature.State(
                         id: "",
                         text: "I love you - - - - - - -",
                         sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentByMe
                     ),
-                    reducer: ChatMessage.reducer,
-                    environment: ChatMessage.Environment()
+                    reducer: ChatMessageFeature()
                 )
             )
 
             // swiftlint:disable line_length
             ChatMessageView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: ChatMessageFeature.State(
                         id: "",
                         text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.\n\nEaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
                         sentAt: Date(),
                         sentBy: "D. D.",
                         type: .sentForMe
                     ),
-                    reducer: ChatMessage.reducer,
-                    environment: ChatMessage.Environment()
+                    reducer: ChatMessageFeature()
                 )
             )
         }

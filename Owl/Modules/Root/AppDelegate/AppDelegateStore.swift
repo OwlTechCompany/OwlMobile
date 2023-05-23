@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 import Firebase
 
-extension AppDelegate {
+struct AppDelegateStore: ReducerProtocol {
 
     // MARK: - State
 
@@ -26,111 +26,106 @@ extension AppDelegate {
         case firebaseMessagingDelegate(FirebaseMessagingDelegate.Event)
     }
 
-    // MARK: - Environment
-
-    struct Environment {
-        let firebaseClient: FirebaseClient
-        let userClient: UserClient
-        let authClient: AuthClient
-        let firestoreUserClient: FirestoreUsersClient
-        let pushNotificationClient: PushNotificationClient
-        let firestoreChatsClient: FirestoreChatsClient
-    }
+    @Dependency(\.firebaseClient) var firebaseClient
+    @Dependency(\.userClient) var userClient
+    @Dependency(\.authClient) var authClient
+    @Dependency(\.firestoreUsersClient) var firestoreUsersClient
+    @Dependency(\.pushNotificationClient) var pushNotificationClient
+    @Dependency(\.firestoreChatsClient) var firestoreChatsClient
 
     // MARK: - Reducer
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, environment in
-        switch action {
-        case .didFinishLaunching:
-            environment.firebaseClient.setup()
-            environment.userClient.setup()
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { _, action in
+            switch action {
+            case .didFinishLaunching:
+                firebaseClient.setup()
+                userClient.setup()
 
-            let userNotificationCenterDelegateEffect = environment
-                .pushNotificationClient
-                .userNotificationCenterDelegate
-                .map(Action.userNotificationCenterDelegate)
+                let userNotificationCenterDelegateEffect = pushNotificationClient
+                    .userNotificationCenterDelegate
+                    .map(Action.userNotificationCenterDelegate)
 
-            let firebaseMessagingDelegateEffect = environment
-                .pushNotificationClient
-                .firebaseMessagingDelegate
-                .map(Action.firebaseMessagingDelegate)
+                let firebaseMessagingDelegateEffect = pushNotificationClient
+                    .firebaseMessagingDelegate
+                    .map(Action.firebaseMessagingDelegate)
 
-            // Register for notifications on startup
-            let setupPushNotificationEffect: Effect<AppDelegate.Action, Never> = environment
-                .pushNotificationClient
-                .getNotificationSettings
-                .receive(on: DispatchQueue.main)
-                .flatMap { settings in
-                    settings.authorizationStatus == .authorized
-                        ? environment.pushNotificationClient.requestAuthorization([.alert, .sound])
+                // Register for notifications on startup
+                let setupPushNotificationEffect: EffectPublisher<AppDelegateStore.Action, Never> = pushNotificationClient
+                    .getNotificationSettings
+                    .receive(on: DispatchQueue.main)
+                    .flatMap { settings in
+                        settings.authorizationStatus == .authorized
+                        ? pushNotificationClient.requestAuthorization([.alert, .sound])
                         : .none
-                }
-                .receive(on: DispatchQueue.main)
-                .flatMap { isSucceed -> Effect<Never, Never> in
-                    isSucceed
-                        ? environment.pushNotificationClient.register()
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .flatMap { isSucceed -> EffectPublisher<Never, Never> in
+                        isSucceed
+                        ? pushNotificationClient.register()
                         : .none
-                }
-                .receive(on: DispatchQueue.main)
-                .eraseToEffect()
-                .fireAndForget()
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .fireAndForget()
 
-            return .merge(
-                userNotificationCenterDelegateEffect,
-                firebaseMessagingDelegateEffect,
-                setupPushNotificationEffect
-            )
-
-        case let .userNotificationCenterDelegate(.willPresentNotification(notification, completionHandler)):
-            return environment.pushNotificationClient
-                .handlePushNotification(
-                    notification,
-                    completionHandler,
-                    environment.firestoreChatsClient.openedChatId.value
+                return .merge(
+                    userNotificationCenterDelegateEffect,
+                    firebaseMessagingDelegateEffect,
+                    setupPushNotificationEffect
                 )
-                .fireAndForget()
 
-        case .userNotificationCenterDelegate:
-            return .none
+            case let .userNotificationCenterDelegate(.willPresentNotification(notification, completionHandler)):
+                return pushNotificationClient
+                    .handlePushNotification(
+                        notification,
+                        completionHandler,
+                        firestoreChatsClient.openedChatId.value
+                    )
+                    .fireAndForget()
 
-        case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):
-            return Effect(value: .sendFCMToken(token: fcmToken))
+            case .userNotificationCenterDelegate:
+                return .none
 
-        case let .didRegisterForRemoteNotifications(.success(data)):
-            return .merge(
-                environment.authClient
-                    .setAPNSToken(data)
-                    .fireAndForget(),
+            case let .firebaseMessagingDelegate(.didReceiveRegistrationToken(_, fcmToken)):
+                return EffectPublisher(value: .sendFCMToken(token: fcmToken))
 
-                Effect.concatenate(
-                    environment.pushNotificationClient
+            case let .didRegisterForRemoteNotifications(.success(data)):
+                return .merge(
+                    authClient
                         .setAPNSToken(data)
                         .fireAndForget(),
 
-                    environment.pushNotificationClient
-                        .currentFCMToken()
-                        .ignoreFailure()
-                        .flatMap { Effect(value: .sendFCMToken(token: $0)) }
-                        .eraseToEffect()
-                )
-            )
+                    EffectPublisher.concatenate(
+                        pushNotificationClient
+                            .setAPNSToken(data)
+                            .fireAndForget(),
 
-        case let .sendFCMToken(token):
-            guard let fcmToken = token else {
+                        pushNotificationClient
+                            .currentFCMToken()
+                            .ignoreFailure()
+                            .flatMap { EffectPublisher(value: .sendFCMToken(token: $0)) }
+                            .eraseToEffect()
+                    )
+                )
+
+            case let .sendFCMToken(token):
+                guard let fcmToken = token else {
+                    return .none
+                }
+                let userUpdate = UserUpdate(fcmToken: fcmToken)
+                return firestoreUsersClient
+                    .updateMe(userUpdate)
+                    .fireAndForget()
+
+            case .didRegisterForRemoteNotifications(.failure):
+                return .none
+
+            case let .didReceiveRemoteNotification(model):
+                authClient.handleIfAuthNotification(model)
+                model.completionHandler(.newData)
                 return .none
             }
-            let userUpdate = UserUpdate(fcmToken: fcmToken)
-            return environment.firestoreUserClient
-                .updateMe(userUpdate)
-                .fireAndForget()
-
-        case let .didRegisterForRemoteNotifications(.failure(error)):
-            return .none
-
-        case let .didReceiveRemoteNotification(model):
-            environment.authClient.handleIfAuthNotification(model)
-            model.completionHandler(.newData)
-            return .none
         }
     }
 

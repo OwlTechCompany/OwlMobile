@@ -8,10 +8,3 @@
 import SwiftUI
 
 typealias Colors = Asset.Colors
-
-extension ColorAsset {
-
-    var swiftUIColor: SwiftUI.Color {
-        SwiftUI.Color(self.color)
-    }
-}

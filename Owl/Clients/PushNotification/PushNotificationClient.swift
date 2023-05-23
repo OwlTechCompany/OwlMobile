@@ -13,23 +13,23 @@ import UserNotifications
 
 struct PushNotificationClient {
 
-    var getNotificationSettings: Effect<Settings, Never>
-    var requestAuthorization: (UNAuthorizationOptions) -> Effect<Bool, NSError>
-    var setAPNSToken: (Data) -> Effect<Void, Never>
-    var register: () -> Effect<Never, Never>
-    var currentFCMToken: () -> Effect<String, NSError>
+    var getNotificationSettings: EffectPublisher<Settings, Never>
+    var requestAuthorization: (UNAuthorizationOptions) -> EffectPublisher<Bool, NSError>
+    var setAPNSToken: (Data) -> EffectPublisher<Void, Never>
+    var register: () -> EffectPublisher<Never, Never>
+    var currentFCMToken: () -> EffectPublisher<String, NSError>
     var handlePushNotification: (
         PushNotificationClient.Notification,
         _ completionHandler: @escaping (UNNotificationPresentationOptions) -> Void,
         _ openedChatId: String?
-    ) -> Effect<Void, NSError>
+    ) -> EffectPublisher<Void, NSError>
     var handleDidReceiveResponse: (
         PushNotificationClient.Response,
         _ completionHandler: @escaping () -> Void
-    ) -> Effect<PushRoute, NSError>
+    ) -> EffectPublisher<PushRoute, NSError>
 
-    var userNotificationCenterDelegate: Effect<UserNotificationCenterDelegate.Event, Never>
-    var firebaseMessagingDelegate: Effect<FirebaseMessagingDelegate.Event, Never>
+    var userNotificationCenterDelegate: EffectPublisher<UserNotificationCenterDelegate.Event, Never>
+    var firebaseMessagingDelegate: EffectPublisher<FirebaseMessagingDelegate.Event, Never>
 }
 
 extension PushNotificationClient {
@@ -74,6 +74,20 @@ extension PushNotificationClient.Settings {
 
     init(rawValue: UNNotificationSettings) {
         self.authorizationStatus = rawValue.authorizationStatus
+    }
+
+}
+
+extension DependencyValues {
+
+    var pushNotificationClient: PushNotificationClient {
+        get { self[PushNotificationClientKey.self] }
+        set { self[PushNotificationClientKey.self] = newValue }
+    }
+
+    enum PushNotificationClientKey: DependencyKey {
+        static var testValue = PushNotificationClient.unimplemented
+        static var liveValue = PushNotificationClient.live()
     }
 
 }

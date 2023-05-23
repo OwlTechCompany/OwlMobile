@@ -8,9 +8,7 @@
 import Foundation
 import Combine
 import Firebase
-import FirebaseFirestoreSwift
-import FirebaseFirestoreCombineSwift
-import FirebaseAuthCombineSwift
+import ComposableArchitecture
 
 struct UserClient {
 
@@ -18,4 +16,18 @@ struct UserClient {
     var firestoreUser: CurrentValueSubject<User?, Never>
     var setup: () -> Void
     
+}
+
+extension DependencyValues {
+
+    var userClient: UserClient {
+        get { self[UserClientKey.self] }
+        set { self[UserClientKey.self] = newValue }
+    }
+
+    enum UserClientKey: DependencyKey {
+        static var testValue = UserClient.unimplemented
+        static let liveValue = UserClient.live()
+    }
+
 }
