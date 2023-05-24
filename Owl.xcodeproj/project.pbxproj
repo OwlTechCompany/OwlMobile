@@ -136,8 +136,10 @@
 
 /* Begin PBXFileReference section */
 		04636015FACA7B079E7B9551 /* Pods_Owl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Owl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		096E845A39D2D80D92AE1E10 /* Pods-Owl.release development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release development.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release development.xcconfig"; sourceTree = "<group>"; };
 		0CD7CE47722D8DCE6BF5A625 /* Pods-Owl.release production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release production.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release production.xcconfig"; sourceTree = "<group>"; };
 		2146603D5889302AABCCF9A9 /* Pods-Owl.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.release staging.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.release staging.xcconfig"; sourceTree = "<group>"; };
+		3527670ED4070AA625FD9B39 /* Pods-Owl.debug development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug development.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug development.xcconfig"; sourceTree = "<group>"; };
 		3C212D9F728C9920679542A2 /* Pods-Owl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Owl.debug.xcconfig"; path = "Target Support Files/Pods-Owl/Pods-Owl.debug.xcconfig"; sourceTree = "<group>"; };
 		5D35EC7927FF7A0B00624717 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D35EC7C27FF7AF400624717 /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
@@ -296,6 +298,8 @@
 				6FF27E96CCA8C13852ED97FF /* Pods-Owl.debug staging.xcconfig */,
 				0CD7CE47722D8DCE6BF5A625 /* Pods-Owl.release production.xcconfig */,
 				2146603D5889302AABCCF9A9 /* Pods-Owl.release staging.xcconfig */,
+				3527670ED4070AA625FD9B39 /* Pods-Owl.debug development.xcconfig */,
+				096E845A39D2D80D92AE1E10 /* Pods-Owl.release development.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -947,8 +951,8 @@
 			mainGroup = 5DA8A74E27FF260700C2ECBA;
 			packageReferences = (
 				5DA8A77327FF2B1100C2ECBA /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect.git" */,
+				5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI.git" */,
 				5FE3C2EC289B18F20069A461 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 5DA8A75827FF260700C2ECBA /* Products */;
@@ -1561,6 +1565,200 @@
 			};
 			name = "Release Staging";
 		};
+		DB67D13F2A1E97EB00A69476 /* Debug Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E528E247BE0086CB1B /* Staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug Development";
+		};
+		DB67D1402A1E97EB00A69476 /* Debug Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3527670ED4070AA625FD9B39 /* Pods-Owl.debug development.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 30;
+				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
+				DEVELOPMENT_TEAM = M92VXVU7J9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl.staging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug Development";
+		};
+		DB67D1412A1E97F300A69476 /* Release Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DB770E528E247BE0086CB1B /* Staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release Development";
+		};
+		DB67D1422A1E97F300A69476 /* Release Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 096E845A39D2D80D92AE1E10 /* Pods-Owl.release development.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Owl/Owl.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 30;
+				DEVELOPMENT_ASSET_PATHS = "\"Owl/Preview Content\"";
+				DEVELOPMENT_TEAM = M92VXVU7J9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Owl/Configs/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "We need to access your media library";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access your camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.owl.tech.Owl.staging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release Development";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1569,8 +1767,10 @@
 			buildConfigurations = (
 				5DA8A76327FF260900C2ECBA /* Debug Production */,
 				5DB770E128E240230086CB1B /* Debug Staging */,
+				DB67D13F2A1E97EB00A69476 /* Debug Development */,
 				5DA8A76427FF260900C2ECBA /* Release Production */,
 				5DB770E328E2403F0086CB1B /* Release Staging */,
+				DB67D1412A1E97F300A69476 /* Release Development */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Release Production";
@@ -1580,8 +1780,10 @@
 			buildConfigurations = (
 				5DA8A76627FF260900C2ECBA /* Debug Production */,
 				5DB770E228E240230086CB1B /* Debug Staging */,
+				DB67D1402A1E97EB00A69476 /* Debug Development */,
 				5DA8A76727FF260900C2ECBA /* Release Production */,
 				5DB770E428E2403F0086CB1B /* Release Staging */,
+				DB67D1422A1E97F300A69476 /* Release Development */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Release Production";
@@ -1597,7 +1799,7 @@
 				kind = branch;
 			};
 		};
-		5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+		5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
 			requirement = {
@@ -1605,7 +1807,7 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+		5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
 			requirement = {
@@ -1631,12 +1833,12 @@
 		};
 		5FB6DAA928186FB50037C38B /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			package = 5FB6DAA828186FB50037C38B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI.git" */;
 			productName = SDWebImageSwiftUI;
 		};
 		5FD33DE7280F5172009E9FBB /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			package = 5FD33DE6280F5171009E9FBB /* XCRemoteSwiftPackageReference "SwiftUI-Introspect.git" */;
 			productName = Introspect;
 		};
 		5FE3C2ED289B18F20069A461 /* FirebaseAnalyticsWithoutAdIdSupport */ = {

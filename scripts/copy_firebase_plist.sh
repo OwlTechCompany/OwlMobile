@@ -3,7 +3,7 @@
 if [ "${CONFIGURATION}" == "Debug Production" ] || [ "${CONFIGURATION}" == "Release Production" ]
 then
     SCHEME="Production"
-elif [ "${CONFIGURATION}" == "Debug Staging" ] || [ "${CONFIGURATION}" == "Release Staging" ]
+elif [ "${CONFIGURATION}" == "Debug Staging" ] || [ "${CONFIGURATION}" == "Release Staging" ] || [ "${CONFIGURATION}" == "Debug Development" ] || [ "${CONFIGURATION}" == "Release Development" ]
 then
     SCHEME="Staging"
 else
